@@ -12,7 +12,13 @@ $(function () {
 //头部点击下拉
 $(function () {
   $(".header-sub").click(function () {
-    $(".sub-down").slideToggle();
+    if ($('.sub-down').css('display') == 'none') {
+      $('.sub-down').show()
+      return false;
+    } else {
+      $('.sub-down').hide()
+      return false;
+    }
   });
 
 });
