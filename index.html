@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
   <meta charset="UTF-8">
   <meta name="description" property="og:description" content="" />
-  <title>Title</title>
-  <link rel="stylesheet" href="css/animate.min.css">
-  <link rel="stylesheet" href="js/syalert/syalert.min.css">
-  <link rel="stylesheet" href="css/swiper.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/jquery-1.10.2.min.js"></script>
-  <script src="js/baseAPI.js"></script>
-  <script src="js/swiper.min.js"></script>
-  <script src="js/syalert/syalert.min.js"></script>
+  <title>玻坡摸佛</title>
+
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
 </head>
 
 <body>
@@ -33,14 +34,6 @@
       </div>
       <div class="swiper-pagination"></div>
     </div>
-    <script>
-      var swiper = new Swiper(".mySwiper", {
-        pagination: {
-          el: ".swiper-pagination",
-        },
-        autoplay: true
-      });
-    </script>
     <!--index-side start-->
     <div class="index-side">
       <div class="index-side-box">
@@ -856,16 +849,29 @@
       </div>
     </div>
   </div>
+
+  <script>
+    new Swiper(".mySwiper", {
+      pagination: {
+        el: ".swiper-pagination",
+      },
+      autoplay: true
+    });
+  </script>
+
   <script>
     function ok (id) {
       syalert.syhide(id);
     };
   </script>
+
+  <script src="/js/baseAPI.js"></script>
   <script src="js/common.js"></script>
+
   <script>
     $(function () {
-      $(".headerpage").load("/head/header.html")
-      $(".footerpage").load("/head/footer.html")
+      $(".headerpage").load("/templates/header.html")
+      $(".footerpage").load("/templates/footer.html")
       $('meta[property="og:description"]').attr('content', "2222");// SEO
     })
   </script>

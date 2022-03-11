@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/animate.min.css">
+    <link rel="stylesheet" href="js/syalert/syalert.min.css">
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="js/date/jedate.css">
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/swiper.min.js"></script>
+    <script src="js/syalert/syalert.min.js"></script>
+    <script src="js/date/jedate.js"></script>
+</head>
+<body>
+<!--main-header start-->
+<div class="main-header">
+    <!--header-top start-->
+    <div class="header-top">
+        <div class="w-1200 clearfix">
+            <div class="top-fl fl">
+                <div class="top-welcome fl">欢迎您来到玻坡摸佛</div>
+                <div class="top-nav fl">
+                    <a href="">发布榜文</a>
+                    <a href="">发起直播</a>
+                    <a href="">发布比赛</a>
+                </div>
+            </div>
+            <div class="top-fr fr">
+                <div class="top-nav fl">
+                    <a href="">榜文管理</a>
+                    <a href="">赛事管理</a>
+                    <a href="">消息中心</a>
+                </div>
+                <div class="top-person fr">
+                    <div class="top-person-img clearfix">
+                        <img src="images/index13.png">
+                        <span class="name">棋王1245</span>
+                    </div>
+                    <div class="top-person-down">
+                        <div class="down-hd clearfix">
+                            <img class="img" src="images/index5.png">
+                            <div class="txt">
+                                <div class="t">棋王1245</div>
+                                <div class="c"><img src="images/VIP.png"></div>
+                            </div>
+                            <button class="top-quit fr">退出</button>
+                        </div>
+                        <div class="down-bd">
+                            <div class="down-bd-box">
+                                <span class="prev">上一张</span>
+                                <dl id="roll">
+
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon11.jpg">
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon12.jpg">
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon13.jpg">
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon11.jpg">
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon11.jpg">
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon11.jpg">
+                                        </a>
+                                    </dd>
+
+                                </dl>
+                                <span class="next">下一张</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--header-top end-->
+    <!--header start-->
+    <div class="header w-1200 clearfix">
+        <div class="header-logo fl">
+            <a href="index.html"><img src="images/logo.png"></a>
+        </div>
+        <div class="center-nav fl">
+            <ul class="nav">
+                <li><a href="">网站首页</a> </li>
+                <li class="current"><a href="">个人中心</a> </li>
+                <li>
+                    <a href="">账户设置<i class="icon"></i></a>
+                    <div class="nav-sub">
+                        <a href="">个人信息</a>
+                        <a href="">密码修改</a>
+                        <a href="">实名认证</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--header-search start-->
+        <div class="header-search fr">
+            <div class="search-select fl">
+                <select class="select">
+                    <option>榜文</option>
+                </select>
+            </div>
+            <div class="search-input fl">
+                <input type="text" class="input" placeholder="请输入关键词">
+            </div>
+            <button class="search-btn fr">搜索</button>
+        </div>
+        <!--header-search end-->
+    </div>
+    <!--header end-->
+</div>
+<!--main-header end-->
+<!--center-container start-->
+<div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+        <!--center-side start-->
+        <div class="center-side fl">
+            <div class="center-side-box">
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">我要直播</div>
+                    <div class="center-side-li"><a href="CenterLive.html">发起直播</a> </div>
+                    <div class="center-side-li"><a href="CenterLive1.html">我的直播</a> </div>
+                    <div class="center-side-li"><a href="CenterLive-我预约的.html">我预约的</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">榜文管理</div>
+                    <div class="center-side-li"><a href="CenterRank.html">发布榜文</a> </div>
+                    <div class="center-side-li"><a href="CenterRank2.html">我发布的榜文</a> </div>
+                    <div class="center-side-li"><a href="CenterRank3.html">我的应榜</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">赛事管理</div>
+                    <div class="center-side-li active"><a href="CenterMatch.html">发布赛事</a> </div>
+                    <div class="center-side-li"><a href="CenterMatch5.html">我发布的赛事</a> </div>
+                    <div class="center-side-li"><a href="CenterMatch6.html">我参加的赛事</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">订单管理</div>
+                    <div class="center-side-li"><a href="CenterOrder.html">发榜订单</a> </div>
+                    <div class="center-side-li"><a href="CenterOrder2.html">应榜订单</a> </div>
+                    <div class="center-side-li"><a href="CenterOrder3.html">发布赛事订单</a> </div>
+                    <div class="center-side-li"><a href="CenterOrder4.html">报名参赛订单</a> </div>
+                    <div class="center-side-li"><a href="CenterOrder5.html">会员购买订单</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">广告中心</div>
+                    <div class="center-side-li"><a href="CenterAsd.html">广告购买</a> </div>
+                    <div class="center-side-li"><a href="AsdOrder.html">广告订单</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">我的钱包</div>
+                    <div class="center-side-li"><a href="CenterWallet.html">账户余额</a> </div>
+                    <div class="center-side-li"><a href="CenterBank.html">银行卡管理</a> </div>
+                    <div class="center-side-li"><a href="CenterWalletP.html">支付密码</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">会员中心</div>
+                    <div class="center-side-li"><a href="CenterMember.html">开通会员</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">我的收藏</div>
+                    <div class="center-side-li"><a href="CenterCollect.html">我的收藏</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">设置中心</div>
+                    <div class="center-side-li"><a href="CenterSet.html">个人信息</a> </div>
+                    <div class="center-side-li"><a href="CenterSetR.html">实名认证</a> </div>
+                    <div class="center-side-li"><a href="CenterPassword.html">密码修改</a> </div>
+                    <div class="center-side-li"><a href="CenterPhone.html">手机修改</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">消息中心</div>
+                    <div class="center-side-li"><a href="CenterNews.html">系统通知</a> </div>
+                    <div class="center-side-li"><a href="CenterNews.html">个人消息</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">发票申请</div>
+                    <div class="center-side-li"><a href="CenterBill.html">发票申请</a> </div>
+                </div>
+                <!--center-side-item end-->
+            </div>
+        </div>
+        <!--center-side end-->
+        <!--center-content start-->
+        <div class="center-content fr">
+            <!--center-inner start-->
+            <div class="center-inner">
+                <div class="center-inner-tit">发布赛事</div>
+                <!--publish-head start-->
+                <div class="publish-head">
+                    <div class="content clearfix flex flex-center">
+                        <div class="head-li li1 w150 on">
+                            <div class="t">1.设置赛事公告信息</div>
+                            <div class="icon"></div>
+                        </div>
+                        <div class="head-line"></div>
+                        <div class="head-li w150 li2 on">
+                            <div class="t">2.设置赛事比赛方法</div>
+                            <div class="icon"></div>
+                        </div>
+                        <div class="head-line"></div>
+                        <div class="head-li w150 li3">
+                            <div class="t">3.设置赛事奖励</div>
+                            <div class="icon"></div>
+                        </div>
+                    </div>
+                </div>
+                <!--publish-head end-->
+                <!--publish-content start-->
+                <div class="publish-content">
+                    <!--publish-stage start-->
+                    <div class="publish-stage clearfix">
+                        <div class="stage-li on fl">第一阶段</div>
+                        <div class="stage-li fl">第二阶段</div>
+                        <div class="stage-li fl">第三阶段</div>
+                    </div>
+                    <!--publish-stage end-->
+                    <!--publish-item start-->
+                    <div class="publish-item clearfix">
+                        <div class="label"><span class="color-red">*</span> 阶段名称：</div>
+                        <div class="con">
+                            <div class="stage-t">第1阶段</div>
+                        </div>
+                    </div>
+                    <!--publish-item end-->
+                    <!--publish-item start-->
+                    <div class="publish-item clearfix">
+                        <div class="label"><span class="color-red">*</span>阶段时间：</div>
+                        <div class="con">
+                            <div class="bor clearfix">
+                                <input type="text" class="input w280 fl" id="startDate" placeholder="开始时间">
+                                <span class="date-mid fl">至</span>
+                                <input type="text" class="input w280 fr" id="endDate" placeholder="结束时间">
+                            </div>
+                        </div>
+                    </div>
+                    <!--publish-item end-->
+                    <script>
+                        jeDate("#startDate",{
+                            // isinitVal: true,
+                            format: "YYYY-MM-DD"
+                        });
+                        jeDate("#endDate",{
+                            // isinitVal: true,
+                            format: "YYYY-MM-DD"
+                        });
+                    </script>
+                    <!--publish-item start-->
+                    <div class="publish-item clearfix">
+                        <div class="label"><span class="color-red">*</span> 比赛制度：</div>
+                        <div class="con">
+                            <div class="item-radio clearfix">
+                                <div class="checkbox-li fl">
+                                    <input class="check-in" type="checkbox" >
+                                    <span class="check-s">淘汰赛：</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="1" checked>
+                                    <span class="span">单败淘汰</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="1">
+                                    <span class="span">双败淘汰</span>
+                                </div>
+                            </div>
+                            <div class="item-radio clearfix">
+                                <div class="checkbox-li fl">
+                                    <input class="check-in" type="checkbox" >
+                                    <span class="check-s">循环赛：</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="2" checked>
+                                    <span class="span">单循环赛</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="3">
+                                    <span class="span">双循环赛</span>
+                                </div>
+                            </div>
+                            <!--publish-gray start-->
+                            <div class="publish-gray item-radio clearfix">
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="3">
+                                    <span class="span">贝格尔法</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="3">
+                                    <span class="span">顺时针转法</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="3">
+                                    <span class="span">蛇形编排</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="3">
+                                    <span class="span">逆时针转法</span>
+                                </div>
+                            </div>
+                            <!--publish-gray end-->
+                            <div class="item-radio clearfix">
+                                <div class="checkbox-li fl">
+                                    <input class="check-in" type="checkbox" >
+                                    <span class="check-s">其他赛制：</span>
+                                </div>
+                                <div class="item-b fl">
+                                    <input type="text" class="input" placeholder="请输入备注内容">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--publish-item end-->
+                    <!--publish-item start-->
+                    <div class="publish-item clearfix">
+                        <div class="label"><span class="color-red">*</span> 分组数：</div>
+                        <div class="con">
+                            <input type="text" class="input w400" placeholder="请输入分组数">
+                            <span class="stage-c">组</span>
+                        </div>
+                    </div>
+                    <!--publish-item end-->
+                    <!--publish-item start-->
+                    <div class="publish-item clearfix">
+                        <div class="label"><span class="color-red">*</span> 每组晋级/ 淘汰人数：</div>
+                        <div class="con">
+                            <select class="select w190">
+                                <option>请选择</option>
+                            </select>
+                            <input type="text" class="input w400" placeholder="请设置人数">
+                            <span class="stage-c">人</span>
+                        </div>
+                    </div>
+                    <!--publish-item end-->
+                    <!--publish-item start-->
+                    <div class="publish-item clearfix">
+                        <div class="label"><span class="color-red">*</span> 台数：</div>
+                        <div class="con">
+                            <input type="text" class="input w400" placeholder="请输入台数">
+                            <span class="stage-c">台</span>
+                        </div>
+                    </div>
+                    <!--publish-item end-->
+                    <!--publish-item start-->
+                    <div class="publish-item clearfix">
+                        <div class="label"><span class="color-red">*</span> 比赛形式：</div>
+                        <div class="con">
+                            <div class="stage-t">选手规则</div>
+                            <div class="item-radio clearfix">
+                                <div class="stage-c fl">参赛选手分组：</div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="3" checked>
+                                    <span class="span">按种子分组</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="3">
+                                    <span class="span">随机分组</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="3">
+                                    <span class="span">同队或同单位限制</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="3">
+                                    <span class="span">地区分组</span>
+                                </div>
+                            </div>
+                            <div class="item-radio clearfix">
+                                <div class="stage-c fl">参赛选手参赛号：</div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="4" checked>
+                                    <span class="span">按等级分</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="4">
+                                    <span class="span">按技术水平</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="4">
+                                    <span class="span">随机分号</span>
+                                </div>
+                            </div>
+                            <div class="item-b">
+                                说明
+                                <input type="text" class="input" placeholder="补充说明（备注线上游戏平台）">
+                            </div>
+                            <div class="item-radio clearfix">
+                                <div class="stage-c fl">种子选手数量：</div>
+                                <div class="item-b fl">
+                                    <input type="text" class="input w160" placeholder="请输入种子数量">
+                                    <span class="stage-c">人</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="5" checked>
+                                    <span class="span">按等级分</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="5">
+                                    <span class="span">按技术水平</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="5">
+                                    <span class="span">指定<i class="color-gray"> （指定原则见《赛事规则》）</i></span>
+                                </div>
+                            </div>
+                            <div class="stage-t">先后手</div>
+                            <div class="item-radio clearfix">
+                                <div class="stage-c fl">首轮：</div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="6" checked>
+                                    <span class="span">猜先</span>
+                                </div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="6">
+                                    <span class="span">按约定</span>
+                                </div>
+                                <div class="stage-c fl">其余轮次：</div>
+                                <div class="radio-li fl">
+                                    <input class="radio" type="radio" name="7">
+                                    <span class="span">按约定</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--publish-item end-->
+                    <!--publish-item start-->
+                    <div class="publish-item clearfix">
+                        <div class="label"><span class="color-red">*</span> 设置计分规则：</div>
+                        <div class="con">
+                            <div class="stage-t">个人赛：</div>
+                            <div class="item-b mar-r15">
+                                每台赛局数
+                                <input type="text" class="input w160" placeholder="请输入">
+                                局
+                            </div>
+                            <div class="clearfix">
+                                <div class="item-b fl mar-r15">
+                                    胜
+                                    <input type="text" class="input w160" placeholder="请输入">
+                                    分
+                                </div>
+                                <div class="item-b fl mar-r15">
+                                    平
+                                    <input type="text" class="input w160" placeholder="请输入">
+                                    分
+                                </div>
+                                <div class="item-b fl mar-r15">
+                                    负
+                                    <input type="text" class="input w160" placeholder="请输入">
+                                    分
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <div class="item-b fl mar-r15">
+                                    弃权
+                                    <input type="text" class="input w160" placeholder="请输入">
+                                    分
+                                </div>
+                                <div class="item-b fl mar-r15">
+                                    犯规
+                                    <input type="text" class="input w160" placeholder="请输入">
+                                    分
+                                </div>
+                            </div>
+                            <div class="stage-c">平分名次排列：优先级从左到右排列</div>
+                            <div class="item-select">
+                                <select class="select">
+                                    <option>积分</option>
+                                </select>
+                                <select class="select">
+                                    <option>违规</option>
+                                </select>
+                                <select class="select">
+                                    <option>并列</option>
+                                </select>
+                                <select class="select">
+                                    <option>选择</option>
+                                </select>
+                                <select class="select">
+                                    <option>选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--publish-item end-->
+
+
+
+                    <div class="publish-bottom">
+                        <button class="publish-btn" onclick="location='CenterMatch3.html'">下一步</button>
+                    </div>
+                </div>
+                <!--publish-content end-->
+            </div>
+            <!--center-inner end-->
+        </div>
+        <!--center-content end-->
+    </div>
+    <!--main-center end-->
+</div>
+<!--center-container end-->
+<!--main-footer start-->
+<div class="main-footer">
+    <div class="footer">
+        <div class="w-1200 clearfix">
+            <div class="foot-logo fl">
+                <img src="images/logo.png">
+            </div>
+            <div class="foot-nav fl">
+                <div class="li fl">
+                    <div class="a"><a href="">赛事频道</a> </div>
+                    <div class="a"><a href="">发布赛事</a> </div>
+                    <div class="a"><a href="">热门选手</a> </div>
+                    <div class="a"><a href="">激战中赛事</a> </div>
+                    <div class="a"><a href="">报名中赛事</a> </div>
+                </div>
+                <div class="li fl">
+                    <div class="a"><a href="">榜文大厅</a> </div>
+                    <div class="a"><a href="">发布榜文</a> </div>
+                    <div class="a"><a href="">学习榜文</a> </div>
+                    <div class="a"><a href="">教课榜文</a> </div>
+                </div>
+                <div class="li fl">
+                    <div class="a"><a href="">直播频道</a> </div>
+                    <div class="a"><a href="">发起直播</a> </div>
+                    <div class="a"><a href="">热播赛事</a> </div>
+                    <div class="a"><a href="">热播课程</a> </div>
+                    <div class="a"><a href="">直播预告</a> </div>
+                </div>
+                <div class="li fl">
+                    <div class="a"><a href="">个人中心</a> </div>
+                    <div class="a"><a href="">我的赛事</a> </div>
+                    <div class="a"><a href="">我的直播</a> </div>
+                    <div class="a"><a href="">我的应榜</a> </div>
+                    <div class="a"><a href="">账户余额</a> </div>
+                    <div class="a"><a href="">开通会员</a> </div>
+                </div>
+                <div class="li fl">
+                    <p>北京玻坡摸佛网络有限公司</p>
+                    <p>北京市丰台区</p>
+                    <p>13612455829</p>
+                    <p>ibopomofo@126.com</p>
+                </div>
+            </div>
+            <div class="foot-wx fr">
+                <div class="wx"><img src="images/wx.png"></div>
+                <p>扫描关注公众号</p>
+            </div>
+        </div>
+    </div>
+    <div class="foot-bottom">
+        <div class="foot-quick">
+            <a href="">关于我们</a> | <a href="">支付方式</a> | <a href="">联系方式</a> | <a href="">客服中心</a> | <a href="">网站地图</a>
+        </div>
+        <div class="foot-copy">Copyight 北京玻坡摸佛网络有限公司 版权所有 京公网安备11010602007481号 </div>
+    </div>
+</div>
+<!--main-footer end-->
+<script src="js/common.js"></script>
+</body>
+</html>
