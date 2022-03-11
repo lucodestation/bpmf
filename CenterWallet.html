@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/animate.min.css">
+    <link rel="stylesheet" href="js/syalert/syalert.min.css">
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="js/date/jedate.css">
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/swiper.min.js"></script>
+    <script src="js/syalert/syalert.min.js"></script>
+    <script src="js/date/jedate.js"></script>
+    <script src="js/upload/imgFileupload.js"></script>
+    <script src="js/upload/upload.js"></script>
+</head>
+<body>
+<!--main-header start-->
+<div class="main-header">
+    <!--header-top start-->
+    <div class="header-top">
+        <div class="w-1200 clearfix">
+            <div class="top-fl fl">
+                <div class="top-welcome fl">欢迎您来到玻坡摸佛</div>
+                <div class="top-nav fl">
+                    <a href="">发布榜文</a>
+                    <a href="">发起直播</a>
+                    <a href="">发布比赛</a>
+                </div>
+            </div>
+            <div class="top-fr fr">
+                <div class="top-nav fl">
+                    <a href="">榜文管理</a>
+                    <a href="">赛事管理</a>
+                    <a href="">消息中心</a>
+                </div>
+                <div class="top-person fr">
+                    <div class="top-person-img clearfix">
+                        <img src="images/index13.png">
+                        <span class="name">棋王1245</span>
+                    </div>
+                    <div class="top-person-down">
+                        <div class="down-hd clearfix">
+                            <img class="img" src="images/index5.png">
+                            <div class="txt">
+                                <div class="t">棋王1245</div>
+                                <div class="c"><img src="images/VIP.png"></div>
+                            </div>
+                            <button class="top-quit fr">退出</button>
+                        </div>
+                        <div class="down-bd">
+                            <div class="down-bd-box">
+                                <span class="prev">上一张</span>
+                                <dl id="roll">
+
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon11.jpg">
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon12.jpg">
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon13.jpg">
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon11.jpg">
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon11.jpg">
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a class="down-bd-a" href="">
+                                            <img src="images/icon11.jpg">
+                                        </a>
+                                    </dd>
+
+                                </dl>
+                                <span class="next">下一张</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--header-top end-->
+    <!--header start-->
+    <div class="header w-1200 clearfix">
+        <div class="header-logo fl">
+            <a href="index.html"><img src="images/logo.png"></a>
+        </div>
+        <div class="center-nav fl">
+            <ul class="nav">
+                <li><a href="">网站首页</a> </li>
+                <li class="current"><a href="">个人中心</a> </li>
+                <li>
+                    <a href="">账户设置<i class="icon"></i></a>
+                    <div class="nav-sub">
+                        <a href="">个人信息</a>
+                        <a href="">密码修改</a>
+                        <a href="">实名认证</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--header-search start-->
+        <div class="header-search fr">
+            <div class="search-select fl">
+                <select class="select">
+                    <option>榜文</option>
+                </select>
+            </div>
+            <div class="search-input fl">
+                <input type="text" class="input" placeholder="请输入关键词">
+            </div>
+            <button class="search-btn fr">搜索</button>
+        </div>
+        <!--header-search end-->
+    </div>
+    <!--header end-->
+</div>
+<!--main-header end-->
+<!--center-container start-->
+<div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+        <!--center-side start-->
+        <div class="center-side fl">
+            <div class="center-side-box">
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">我要直播</div>
+                    <div class="center-side-li"><a href="CenterLive.html">发起直播</a> </div>
+                    <div class="center-side-li"><a href="CenterLive1.html">我的直播</a> </div>
+                    <div class="center-side-li"><a href="CenterLive-我预约的.html">我预约的</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">榜文管理</div>
+                    <div class="center-side-li"><a href="CenterRank.html">发布榜文</a> </div>
+                    <div class="center-side-li"><a href="CenterRank2.html">我发布的榜文</a> </div>
+                    <div class="center-side-li"><a href="CenterRank3.html">我的应榜</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">赛事管理</div>
+                    <div class="center-side-li"><a href="CenterMatch.html">发布赛事</a> </div>
+                    <div class="center-side-li"><a href="CenterMatch5.html">我发布的赛事</a> </div>
+                    <div class="center-side-li"><a href="CenterMatch6.html">我参加的赛事</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">订单管理</div>
+                    <div class="center-side-li"><a href="CenterOrder.html">发榜订单</a> </div>
+                    <div class="center-side-li"><a href="CenterOrder2.html">应榜订单</a> </div>
+                    <div class="center-side-li"><a href="CenterOrder3.html">发布赛事订单</a> </div>
+                    <div class="center-side-li"><a href="CenterOrder4.html">报名参赛订单</a> </div>
+                    <div class="center-side-li"><a href="CenterOrder5.html">会员购买订单</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">广告中心</div>
+                    <div class="center-side-li"><a href="CenterAsd.html">广告购买</a> </div>
+                    <div class="center-side-li"><a href="AsdOrder.html">广告订单</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">我的钱包</div>
+                    <div class="center-side-li active"><a href="CenterWallet.html">账户余额</a> </div>
+                    <div class="center-side-li"><a href="CenterBank.html">银行卡管理</a> </div>
+                    <div class="center-side-li"><a href="CenterWalletP.html">支付密码</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">会员中心</div>
+                    <div class="center-side-li"><a href="CenterMember.html">开通会员</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">我的收藏</div>
+                    <div class="center-side-li"><a href="CenterCollect.html">我的收藏</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">设置中心</div>
+                    <div class="center-side-li"><a href="CenterSet.html">个人信息</a> </div>
+                    <div class="center-side-li"><a href="CenterSetR.html">实名认证</a> </div>
+                    <div class="center-side-li"><a href="CenterPassword.html">密码修改</a> </div>
+                    <div class="center-side-li"><a href="CenterPhone.html">手机修改</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">消息中心</div>
+                    <div class="center-side-li"><a href="CenterNews.html">系统通知</a> </div>
+                    <div class="center-side-li"><a href="CenterNews.html">个人消息</a> </div>
+                </div>
+                <!--center-side-item end-->
+                <!--center-side-item start-->
+                <div class="center-side-item">
+                    <div class="center-side-tit">发票申请</div>
+                    <div class="center-side-li"><a href="CenterBill.html">发票申请</a> </div>
+                </div>
+                <!--center-side-item end-->
+            </div>
+        </div>
+        <!--center-side end-->
+        <!--center-content start-->
+        <div class="center-content fr">
+            <!--center-inner start-->
+            <div class="center-inner  m-b-20">
+                <div class="center-inner-tit">我的钱包</div>
+                <!--wallet-head start-->
+                <div class="wallet-head clearfix">
+                    <div class="head-one fl">
+                        <div class="price">56.20</div>
+                        <div class="name m-b-15 m-t-15">账户余额</div>
+                        <a class="wallet-head-red mar-auto" href="CenterWalletD.html">钱包明细</a>
+                    </div>
+                    <div class="head-two fl m-l-40">
+                        <a class="wallet-head-btn m-t-20" href="javascript:void(0);" onClick="syalert.syopen('purse_charge')">充值</a>
+                        <a class="wallet-head-btn m-t-10" href="javascript:void(0);" onClick="syalert.syopen('purse_money')">提现</a>
+                    </div>
+                    <div class="head-three fr">
+                        <div class="price">5</div>
+                        <div class="name m-b-15 m-t-15">我银行卡</div>
+                        <a class="wallet-head-btn mar-auto" href="javascript:void(0);" onClick="syalert.syopen('add_bank')">+新增绑卡</a>
+                    </div>
+                    <div class="head-three fr">
+                        <div class="price">100.00</div>
+                        <div class="name m-b-15 m-t-15">我的保证金</div>
+                        <a class="wallet-head-btn mar-auto" href="javascript:void(0);" onClick="syalert.syopen('purse_money')">提现</a>
+                    </div>
+                    <div class="head-three fr">
+                        <div class="price">18.20</div>
+                        <div class="name m-b-15 m-t-15">托管金额</div>
+                        <a class="wallet-head-btn mar-auto" href="CenterDeposit.html">查看详情</a>
+                    </div>
+                </div>
+                <!--wallet-head end-->
+            </div>
+            <!--center-inner end-->
+
+            <!--center-inner start-->
+            <div class="center-inner">
+                <div class="center-inner-tit">我的账单<span class="tip-6">(平台消费统计)</span> </div>
+                <!--center-inner-content start-->
+                <div class="center-inner-content">
+                    <!--center-inner-form start-->
+                    <div class="center-inner-form wallet-search clearfix">
+                        <div class="form-bor">
+                            <select class="select w130">
+                                <option>111</option>
+                            </select>
+                        </div>
+                        <div class="form-bor m-l-20">
+                            <input type="text" class="input jeinput w130" id="dateS" placeholder="开始时间">
+                        </div>
+                        <div class="form-bor m-l-20">
+                            <input type="text" class="input jeinput w130" id="dateE" placeholder="结束时间">
+                        </div>
+                        <button class="form-btn m-l-20">查询</button>
+                    </div>
+                    <!--center-inner-form end-->
+                    <script>
+                        jeDate("#dateS",{
+                            format: "MM-DD-YYYY"
+                        });
+                        jeDate("#dateE",{
+                            format: "MM-DD-YYYY"
+                        });
+                    </script>
+                    <!--wallet-table-wrap start-->
+                    <div class="wallet-table-wrap">
+                        <table class="wallet-table">
+                            <tr>
+                                <th>时间</th>
+                                <th>收支类型</th>
+                                <th>使用途径</th>
+                                <th>金额（元）</th>
+                                <th>支付方式</th>
+                                <th>操作</th>
+                            </tr>
+                            <tr>
+                                <td>2021-10-15 15:02</td>
+                                <td>支出</td>
+                                <td>充值钱包</td>
+                                <td>100.00</td>
+                                <td>微信</td>
+                                <td>
+                                    <a class="color-orange"  href="javascript:void(0);" onClick="syalert.syopen('purse_detail')">查看详情</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2021-10-15 15:02</td>
+                                <td>支出</td>
+                                <td>充值钱包</td>
+                                <td>100.00</td>
+                                <td>微信</td>
+                                <td>
+                                    <a class="color-orange"  href="javascript:void(0);" onClick="syalert.syopen('purse_detail')">查看详情</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2021-10-15 15:02</td>
+                                <td>支出</td>
+                                <td>充值钱包</td>
+                                <td>100.00</td>
+                                <td>微信</td>
+                                <td>
+                                    <a class="color-orange"  href="javascript:void(0);" onClick="syalert.syopen('purse_detail')">查看详情</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!--wallet-table-wrap end-->
+                </div>
+                <!--center-inner-content end-->
+            </div>
+            <!--center-inner end-->
+        </div>
+        <!--center-content end-->
+    </div>
+    <!--main-center end-->
+</div>
+<!--center-container end-->
+<!--main-footer start-->
+<div class="main-footer">
+    <div class="footer">
+        <div class="w-1200 clearfix">
+            <div class="foot-logo fl">
+                <img src="images/logo.png">
+            </div>
+            <div class="foot-nav fl">
+                <div class="li fl">
+                    <div class="a"><a href="">赛事频道</a> </div>
+                    <div class="a"><a href="">发布赛事</a> </div>
+                    <div class="a"><a href="">热门选手</a> </div>
+                    <div class="a"><a href="">激战中赛事</a> </div>
+                    <div class="a"><a href="">报名中赛事</a> </div>
+                </div>
+                <div class="li fl">
+                    <div class="a"><a href="">榜文大厅</a> </div>
+                    <div class="a"><a href="">发布榜文</a> </div>
+                    <div class="a"><a href="">学习榜文</a> </div>
+                    <div class="a"><a href="">教课榜文</a> </div>
+                </div>
+                <div class="li fl">
+                    <div class="a"><a href="">直播频道</a> </div>
+                    <div class="a"><a href="">发起直播</a> </div>
+                    <div class="a"><a href="">热播赛事</a> </div>
+                    <div class="a"><a href="">热播课程</a> </div>
+                    <div class="a"><a href="">直播预告</a> </div>
+                </div>
+                <div class="li fl">
+                    <div class="a"><a href="">个人中心</a> </div>
+                    <div class="a"><a href="">我的赛事</a> </div>
+                    <div class="a"><a href="">我的直播</a> </div>
+                    <div class="a"><a href="">我的应榜</a> </div>
+                    <div class="a"><a href="">账户余额</a> </div>
+                    <div class="a"><a href="">开通会员</a> </div>
+                </div>
+                <div class="li fl">
+                    <p>北京玻坡摸佛网络有限公司</p>
+                    <p>北京市丰台区</p>
+                    <p>13612455829</p>
+                    <p>ibopomofo@126.com</p>
+                </div>
+            </div>
+            <div class="foot-wx fr">
+                <div class="wx"><img src="images/wx.png"></div>
+                <p>扫描关注公众号</p>
+            </div>
+        </div>
+    </div>
+    <div class="foot-bottom">
+        <div class="foot-quick">
+            <a href="">关于我们</a> | <a href="">支付方式</a> | <a href="">联系方式</a> | <a href="">客服中心</a> | <a href="">网站地图</a>
+        </div>
+        <div class="foot-copy">Copyight 北京玻坡摸佛网络有限公司 版权所有 京公网安备11010602007481号 </div>
+    </div>
+</div>
+<!--main-footer end-->
+<!--充值弹出 -->
+<div class="sy-alert purse-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="purse_charge">
+    <div class="purse-col-content">
+        <div class="bond-close" onClick="ok('purse_charge')"></div>
+        <div class="bond-tit m-b-25">充值</div>
+        <div class="purse-col clearfix">
+            <div class="label">充值金额：</div>
+            <div class="col-r">
+                <div class="purse-input"><input class="input" type="text" placeholder="请输入金额"></div>
+            </div>
+        </div>
+        <div class="purse-col clearfix">
+            <div class="label">充值方式：</div>
+            <div class="col-r">
+                <div class="col-radio fl m-r-40">
+                    <input class="radio" type="radio" name="1" checked>
+                    <span>微信</span>
+                </div>
+                <div class="col-radio fl">
+                    <input class="radio" type="radio" name="1">
+                    <span>支付宝</span>
+                </div>
+            </div>
+        </div>
+        <button class="publish-btn mar-auto m-t-40 m-b-40" onClick="ok('purse_charge')||syalert.syopen('alert2')">提交</button>
+    </div>
+</div>
+<!--提现弹出 -->
+<div class="sy-alert purse-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="purse_money">
+    <div class="purse-col-content">
+        <div class="bond-close" onClick="syalert.syhide('purse_money')"></div>
+        <div class="bond-tit m-b-25">提现</div>
+        <div class="purse-col clearfix">
+            <div class="label">账户余额：</div>
+            <div class="col-r">
+                <span class="color-red f-24 line-48">￥1200.00</span>
+            </div>
+        </div>
+        <div class="purse-col clearfix">
+            <div class="label">提现金额：</div>
+            <div class="col-r">
+                <div class="purse-input"><input class="input" type="text" placeholder="请输入金额"></div>
+            </div>
+        </div>
+        <div class="purse-col clearfix">
+            <div class="label">选择银行
+                卡：</div>
+            <div class="col-r">
+                <div class="purse-input">
+                    <select class="select">
+                        <option>交通银行124563</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="purse-col clearfix">
+            <div class="label">支付密码：</div>
+            <div class="col-r">
+                <div class="purse-input"><input class="input" type="text" placeholder="请输入支付密码"></div>
+            </div>
+        </div>
+        <div class="purse-col text-r"><a class="color-6 f-16" href="">忘记密码？</a> </div>
+        <button class="publish-btn mar-auto m-t-50 m-b-40">提交</button>
+    </div>
+</div>
+<!--钱包明细弹出 -->
+<div class="sy-alert purse-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="purse_detail">
+    <div class="purse-pop-content">
+        <div class="bond-close" onClick="syalert.syhide('purse_detail')"></div>
+        <div class="bond-tit m-b-25">明细详情</div>
+        <div class="purse-item clearfix">
+            <div class="label">收支类型</div>
+            <div class="c">支出</div>
+        </div>
+        <div class="purse-item clearfix">
+            <div class="label">金额（元）</div>
+            <div class="c">100元</div>
+        </div>
+        <div class="purse-item clearfix">
+            <div class="label">使用途径</div>
+            <div class="c">报名费报名费报名费报名费报名费报名费报名费报名费报名费报名费报名费报名费报名费报名费报名费报名费报名费报名费报名费</div>
+        </div>
+        <div class="purse-item clearfix">
+            <div class="label">具体类型</div>
+            <div class="c">三星杯决赛</div>
+        </div>
+        <div class="purse-item clearfix">
+            <div class="label">支付方式</div>
+            <div class="c">支付宝</div>
+        </div>
+        <div class="purse-item clearfix">
+            <div class="label">支付时间</div>
+            <div class="c">2021.12.08</div>
+        </div>
+        <button class="publish-btn mar-auto m-t-35">确定</button>
+    </div>
+</div>
+<!--微信支付弹窗-->
+<div class="sy-alert wallet-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert2">
+    <div class="wallet-con">
+        <div class="wallet-close" onClick="ok('alert2')"></div>
+        <div class="t">微信支付</div>
+        <div class="money">支付金额：<span class="price color-red">￥100.00</span> </div>
+        <div class="con clearfix">
+            <div class="wx-g">
+                <img src="images/pub3.jpg">
+                <div class="tip">请使用微信“扫一扫”,扫描二维码支付</div>
+            </div>
+            <div class="wx-i">
+                <img src="images/pub1.jpg">
+            </div>
+        </div>
+    </div>
+</div>
+<!--支付宝支付弹窗-->
+<div class="sy-alert wallet-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert3">
+    <div class="wallet-con">
+        <div class="wallet-close" onClick="syalert.syhide('alert3')"></div>
+        <div class="t">支付宝支付</div>
+        <div class="money">支付金额：<span class="price color-red">￥100.00</span> </div>
+        <div class="con clearfix">
+            <div class="wx-g">
+                <img src="images/pub3.jpg">
+                <div class="tip">请使用支付宝“扫一扫”,扫描二维码支付</div>
+            </div>
+            <div class="wx-i">
+                <img src="images/pub1.jpg">
+            </div>
+        </div>
+    </div>
+</div>
+<!--钱包支付弹窗-->
+<div class="sy-alert wallet-pop w850 animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert1">
+    <div class="wallet-con">
+        <div class="wallet-close" onClick="syalert.syhide('alert1')"></div>
+        <div class="t">钱包支付</div>
+        <div class="wallet-mid">
+            <div class="wallet-label">输入支付密码<a  class="wallet-a fr color-gray" href="">忘记密码？</a> </div>
+            <div class="wallet-input">
+                <input class="input" type="text">
+            </div>
+        </div>
+        <div class="wallet-bottom">
+            <button class="wallet-btn">确定</button>
+        </div>
+    </div>
+</div>
+<!--添加银行卡弹出 start-->
+<div class="sy-alert bank-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="add_bank">
+    <div class="bank-pop-content">
+        <div class="bond-close" onClick="ok('add_bank')"></div>
+        <div class="bond-tit">添加银行卡</div>
+        <!--center-set start-->
+        <div class="center-set m-t-40">
+            <!--set-item start-->
+            <div class="set-item clearfix">
+                <div class="label">姓名：</div>
+                <div class="item-r">
+                    <div class="set-bor w548">
+                        <input class="input" type="text" placeholder="请填写本人姓名">
+                    </div>
+                </div>
+            </div>
+            <!--set-item end-->
+            <!--set-item start-->
+            <div class="set-item clearfix">
+                <div class="label">银行卡卡号：</div>
+                <div class="item-r">
+                    <div class="set-bor w548">
+                        <input class="input" type="text" placeholder="请输入银行卡卡号">
+                    </div>
+                </div>
+            </div>
+            <!--set-item end-->
+            <!--set-item start-->
+            <div class="set-item clearfix">
+                <div class="label">所属开户行：</div>
+                <div class="item-r">
+                    <div class="set-bor w548">
+                        <input class="input" type="text" placeholder="请输入开户银行" value="">
+                    </div>
+                </div>
+            </div>
+            <!--set-item end-->
+            <!--set-item start-->
+            <div class="set-item clearfix">
+                <div class="label">手机号码：</div>
+                <div class="item-r">
+                    <div class="set-bor w548">
+                        <input class="input" type="text" placeholder="" value="150****6589">
+                    </div>
+                </div>
+            </div>
+            <!--set-item end-->
+            <!--set-item start-->
+            <div class="set-item clearfix">
+                <div class="label">验证码：</div>
+                <div class="item-r">
+                    <div class="set-bor w548">
+                        <input class="input" type="text" placeholder="请输入短信验证码">
+                        <button class="center-set-code">获取验证码</button>
+                    </div>
+                </div>
+            </div>
+            <!--set-item end-->
+            <div class="set-bot text-c">
+                <button class="center-set-btn">提交</button>
+            </div>
+        </div>
+        <!--center-set end-->
+    </div>
+
+</div>
+<!--添加银行卡弹出 end-->
+<script>
+    function ok(id){
+        syalert.syhide(id);
+    };
+</script>
+<script src="js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+.ca_clearfix:before,.ca_clearfix:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+
+.ca_date {
+    width: 100%;
+    overflow: hidden;
+    margin: auto;
+    display: block;
+    height: 100%;
+}
+
+.ca_header {
+    margin: 0 auto;
+    height: 50px;
+    text-align: center;
+}
+
+.ca_header>div {
+    float: left;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+
+
+
+
+.ca_header>.ca_nian>a,
+.ca_header>.ca_nian>div {
+    float: right;
+}
+
+.ca_header>div>*,
+.ca_header>div {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.ca_header>div>a {
+    background: rgb(63, 196, 230);
+    color: white;
+    width: 30px;
+    font-size: 18px;
+    float: left;
+    cursor: pointer;
+}
+
+.ca_header>div>div {
+    float: left;
+    width: 60px;
+    text-align: center;
+    border-top: 1px solid darkgray;
+    border-bottom: 1px solid darkgray;
+    box-sizing: border-box;
+}
+.ca_table{
+    height:calc(100% - 50px);
+}
+.ca_table span {
+    /*border-radius: 50%;*/
+    text-align: center;
+    color: #666666;
+    width: 14.28%;
+    font-size: 14px;
+    display: block;
+    float: left;
+    box-sizing: border-box;
+    cursor:auto;
+}
+
+.ca_table>table {
+    width: 100%;
+}
+
+.ca_thead span{
+    height: 60px;
+}
+
+.ca_table .ca_tbody>div>span.light {
+    background: #FF7F17 !important;
+    color: #ffffff;
+    /* border: 1px solid  rgb(63, 196, 230); */
+    transform: scale(1);
+    border-radius:100%;
+    transition: all 0.3s cubic-bezier(.55, .06, .68, .19) 0s;
+}
+
+.ca_table .ca_tbody>div>span.light a{color:#fff;}
+.ca_table .ca_tbody>div>span.choose {
+    color: #ffffff;
+    transform: scale(1);
+    transition: all 0.5s ease 0s;
+}
+
+.ca_table .ca_tbody span {
+	text-align: left;
+    color: #5C5B5B;
+    box-sizing: border-box;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.ca_table .ca_tbody span a{
+	display: block;line-height:30px;
+}
+.ca_event_div{
+    cursor: pointer;
+}
+
+.ca_event{margin:0 5px;}
+.ca_event_div{display:flex;justify-content:center;margin-top:-10px;}
+.ca_event_div .ca_event .mm{display:inline-block;width:6px;height:6px;border-radius:100%;background:#FFD303;overflow:hidden;text-indent:-9999px;padding:0px;}
+.ca_event_div .ca_event .ml{display:inline-block;width:6px;height:6px;border-radius:100%;background:#3C96FB;overflow:hidden;text-indent:-9999px;padding:0px;}
+.ca_table .ca_tbody span{text-align:center;padding:0px;}
+#ca_yue_jian{width:20px;height:20px;margin-right:15px;cursor:pointer;}
+#ca_yue_jian img{display:block;width:20px;height:20px;}
+#ca_yue_jia{width:20px;height:20px;margin-left:15px;cursor:pointer}
+#ca_yue_jia img{display:block;width:20px;height:20px;}
