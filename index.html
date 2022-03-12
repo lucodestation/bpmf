@@ -13,6 +13,7 @@
     <script src="/plugins/jquery.min.js"></script>
     <script src="/plugins/swiper/swiper.min.js"></script>
     <script src="/plugins/syalert/syalert.min.js"></script>
+    <script src="/plugins/vue.min.js"></script>
 
     <script src="/utils/baseAPI.js"></script>
   </head>
@@ -901,31 +902,10 @@
     </div>
 
     <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/plugins/axios.min.js"></script>
     <script src="/utils/request.js"></script>
 
-    <script>
-      new Swiper('.mySwiper', {
-        pagination: {
-          el: '.swiper-pagination',
-        },
-        autoplay: true,
-      })
-    </script>
-
-    <script>
-      function ok(id) {
-        syalert.syhide(id)
-      }
-    </script>
-
-    <script src="js/common.js"></script>
-
-    <script>
-      $(function () {
-        $('.public-header').load('/components/PublicHeader.html')
-        $('.public-footer').load('/components/PublicFooter.html')
-        $('meta[property="og:description"]').attr('content', '2222') // SEO
-      })
-    </script>
+    <script src="/js/common.js"></script>
+    <script src="/js/index.js"></script>
   </body>
 </html>

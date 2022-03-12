@@ -1,20 +1,53 @@
-console.log('hehe')
+const baseURL = 'http://bpmf.duowencaiwu.com'
 
-const wait = (time) => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve()
-    }, time);
-  })
-}
+const request = axios.create({
+  baseURL, // url = base url + request url
+  // withCredentials: true, // send cookies when cross-domain requests
+  timeout: 5 * 1000, // request timeout
+})
 
-const foo = async () =>{
-  await wait(2000)
-  const arr = [1, 2, 3]
-  console.log(arr.includes(2))
-  console.log(...arr)
-}
+// 请求拦截器
+request.interceptors.request.use(
+  config => {
+    console.log('请求拦截器', config)
+    // 只要有 token 就带着
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers.token = token
+      if (config.method.toLowerCase === 'get') {
+        config.params = {
+          ...config.params,
+          token,
+        }
+      } else {
+        config.data = {
+          ...config.data,
+          token,
+        }
+      }
+    }
 
-foo()
+    return config
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)
 
+// 响应拦截器
+request.interceptors.response.use(
+  response => {
+    console.log('响应拦截器', response)
+    const data = response.data
 
+    return data
+  },
+  error => {
+    if (status === 401) {
+    } else if (status >= 500) {
+    } else {
+    }
+
+    return Promise.reject(error)
+  }
+)

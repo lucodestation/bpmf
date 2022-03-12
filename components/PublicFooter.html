@@ -1,5 +1,5 @@
 <!--main-footer start-->
-<div class="main-footer">
+<div id="publicFooter" class="main-footer">
   <div class="footer">
     <div class="w-1200 clearfix">
       <div class="foot-logo fl">
@@ -35,14 +35,14 @@
           <div class="a"><a href="">开通会员</a></div>
         </div>
         <div class="li fl">
-          <p id="comAddress">北京玻坡摸佛网络有限公司</p>
-          <p>北京市丰台区</p>
-          <p>13612455829</p>
-          <p>ibopomofo@126.com</p>
+          <p>{{siteInfo.com_name}}</p>
+          <p>{{siteInfo.com_address}}</p>
+          <p>{{siteInfo.com_tel}}</p>
+          <p>{{siteInfo.com_email}}</p>
         </div>
       </div>
       <div class="foot-wx fr">
-        <div class="wx"><img src="/images/wx.png" /></div>
+        <div class="wx"><img :src="siteInfo.account_code" /></div>
         <p>扫描关注公众号</p>
       </div>
     </div>
@@ -55,15 +55,17 @@
   </div>
 </div>
 <!--main-footer end-->
+
+<script src="/js/PublicFooter.js"></script>
 <script>
-  $(function () {
-    $.ajax({
-      method: 'POST',
-      url: baseUrl + '/api/Index/comInfo',
-      success: function (res) {
-        $('#comAddress').html(res.data.com_address)
-        $('.foot-wx .wx').html('<img src="' + res.data.account_code + '">')
-      },
-    })
-  })
+  // $(function () {
+  //   $.ajax({
+  //     method: 'POST',
+  //     url: baseUrl + '/api/Index/comInfo',
+  //     success: function (res) {
+  //       $('#comAddress').html(res.data.com_address)
+  //       $('.foot-wx .wx').html('<img src="' + res.data.account_code + '">')
+  //     },
+  //   })
+  // })
 </script>
