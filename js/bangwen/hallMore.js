@@ -43,27 +43,89 @@ new Vue({
     el: '#app',
     data: function () {
         return {
-            bangList: [], // 教课榜文列表
+            cateList: [],
+            cateId: '',
+            navList: [{ id: '', title: '全部' }, { id: 1, title: '教课' }, { id: 2, title: '学课' }],
+            type: '',
+            payList: [{ id: '', title: '不限' }, { id: 1, title: '一次付清' }, { id: 2, title: '多次付清' }],
+            payId: '',
+            winList: [{ id: '', title: '不限' }, { id: 1, title: '单人中榜' }, { id: 2, title: '多人中榜' }],
+            winId: '',
+            sortList: [{ id: '', title: '默认' }, { id: 1, title: '最新' }, { id: 2, title: '酬金从高到低排' }, { id: 3, title: '酬金从低到高排' },],
+            sortId: '',
+            bangList: [],
         };
     },
     created: function () {
         return __awaiter(this, void 0, void 0, function () {
             var res;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, request({
                             method: 'POST',
-                            url: '/api/Bangwen/list',
-                            data: { page: 1, pagenum: 7, type: 1 },
+                            url: '/api/Bangwen/cate',
                         })];
                     case 1:
                         res = _a.sent();
-                        if (res) {
-                            this.bangList = res.data.data;
+                        if (res.code == 200) {
+                            this.cateList = res.data;
+                            this.cateList.unshift({ id: '', name: '全部' });
                         }
+                        setTimeout(function () {
+                            _this.onBangwenlist();
+                        }, 500);
                         return [2 /*return*/];
                 }
             });
         });
     },
+    methods: {
+        // 点击筛选分类
+        onCateClick: function (e) {
+            this.cateId = e;
+            this.onBangwenlist();
+        },
+        // 点击服务模式
+        onNavClick: function (e) {
+            this.type = e;
+            this.onBangwenlist();
+        },
+        // 点击支付方式
+        onPayClick: function (e) {
+            this.payId = e;
+            this.onBangwenlist();
+        },
+        // 点击中榜模式
+        onWinClick: function (e) {
+            this.winId = e;
+            this.onBangwenlist();
+        },
+        // 点击排序
+        onSortClick: function (e) {
+            this.sortId = e;
+            this.onBangwenlist();
+        },
+        // 列表数据
+        onBangwenlist: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var res;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Bangwen/list',
+                                data: { page: 1, pagenum: 7, b_id: this.cateId, type: this.type, pay_num_type: this.payId, win_type: this.winId, is_trustee: '', min: '', max: '', sort: this.sortId },
+                            })];
+                        case 1:
+                            res = _a.sent();
+                            if (res.code == 200) {
+                                this.bangList = res.data.data;
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        }
+    }
 });

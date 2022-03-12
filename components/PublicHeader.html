@@ -1,17 +1,78 @@
 <!--main-header start-->
-<div class="main-header">
+<div class="main-header" id="Header">
   <!--header-top start-->
   <div class="header-top">
     <div class="w-1200 clearfix">
       <div class="top-fl fl">
         <div class="top-welcome fl">欢迎您来到玻坡摸佛</div>
         <div class="top-nav fl">
-          <a href="">发布榜文</a>
+          <a href="/hallList/edithall.html">发布榜文</a>
           <a href="">发起直播</a>
           <a href="">发布比赛</a>
         </div>
       </div>
-      <div class="top-fr fr">
+      <div class="top-fr fr" v-if="userShow">
+        <div class="top-nav fl">
+          <a href="">榜文管理</a>
+          <a href="">赛事管理</a>
+          <a href="">消息中心</a>
+        </div>
+        <div class="top-person fr">
+          <div class="top-person-img clearfix">
+            <img src="../images/index13.png" />
+            <span class="name">棋王1245</span>
+          </div>
+          <div class="top-person-down">
+            <div class="down-hd clearfix">
+              <img class="img" src="../images/index5.png" />
+              <div class="txt">
+                <div class="t">棋王1245</div>
+                <div class="c"><img src="../images/VIP.png" /></div>
+              </div>
+              <button class="top-quit fr">退出</button>
+            </div>
+            <div class="down-bd">
+              <div class="down-bd-box">
+                <span class="prev">上一张</span>
+                <dl id="roll">
+                  <dd>
+                    <a class="down-bd-a" href="">
+                      <img src="../images/icon11.jpg" />
+                    </a>
+                  </dd>
+                  <dd>
+                    <a class="down-bd-a" href="">
+                      <img src="../images/icon12.jpg" />
+                    </a>
+                  </dd>
+                  <dd>
+                    <a class="down-bd-a" href="">
+                      <img src="../images/icon13.jpg" />
+                    </a>
+                  </dd>
+                  <dd>
+                    <a class="down-bd-a" href="">
+                      <img src="../images/icon11.jpg" />
+                    </a>
+                  </dd>
+                  <dd>
+                    <a class="down-bd-a" href="">
+                      <img src="../images/icon11.jpg" />
+                    </a>
+                  </dd>
+                  <dd>
+                    <a class="down-bd-a" href="">
+                      <img src="../images/icon11.jpg" />
+                    </a>
+                  </dd>
+                </dl>
+                <span class="next">下一张</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="top-fr fr" v-else>
         <div class="top-nav fl">
           <a href="">消息中心</a>
         </div>
@@ -27,16 +88,16 @@
   <!--header start-->
   <div class="header w-1200 clearfix">
     <div class="header-logo fl">
-      <a href="/"><img src="/images/logo.png" /></a>
+      <a href="/index.html"><img src="/images/logo.png" /></a>
     </div>
     <div class="header-nav fl">
       <ul class="nav">
-        <li class="current"><a href="/index.html">首页</a></li>
-        <li><a href="/bangwen/index.html">榜文大厅</a></li>
+        <li :class="homeShow?'current':''"><a href="/index.html">首页</a></li>
+        <li :class="hallShow?'current':''"><a href="/bangwen/index.html">榜文大厅</a></li>
         <li><a href="3赛事频道.html">赛事频道</a></li>
-        <li><a href="4直播频道.html">直播频道</a></li>
-        <li><a href="合作吧.html">合作吧</a></li>
-        <li><a href="帮助中心.html">帮助中心</a></li>
+        <li><a href="/competition/competition.html">直播频道</a></li>
+        <li :class="cooperationShow?'current':''"><a href="/cooperation/cooperation.html">合作吧</a></li>
+        <li :class="helpShow?'current':''"><a href="/help/help.html">帮助中心</a></li>
       </ul>
     </div>
     <!--header-search start-->
@@ -56,8 +117,8 @@
     <div class="header-sub fr">
       <span class="span-name">我要发布</span>
       <div class="sub-down">
-        <a class="sub-down-a" href="发布榜文.html">发布榜文</a>
-        <a class="sub-down-a" href="发布比赛个人.html">发布赛事</a>
+        <a class="sub-down-a" href="/hallList/edithall.html">发布榜文</a>
+        <a class="sub-down-a" href="/annunciation/releaseCompetition.html">发布赛事</a>
         <a class="sub-down-a" href="发布直播.html">发布直播</a>
       </div>
     </div>
@@ -66,3 +127,74 @@
   <!--header end-->
 </div>
 <!--main-header end-->
+<!-- 登录弹窗 -->
+<div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+  id="alert1">
+  <div class="index-login-hd clearfix">
+    <div class="login-li on">密码登录</div>
+    <div class="login-li">短信登录</div>
+  </div>
+  <div class="index-login-bd">
+    <div class="login-box active">
+      <div class="login-item">
+        <input class="input password" v-model="mobile" type="text" placeholder="请输入手机号" />
+      </div>
+      <div class="login-item">
+        <i data-show="1" class="eye-icon eye-open"></i>
+        <input name="" v-model="pwd" type="password" class="input mima_dd" placeholder="请输入登录密码" />
+        <input name="" v-model="pwd" type="text" class="input mima_wz" style="display: none" placeholder="请输入登录密码" />
+      </div>
+      <div class="login-forget clearfix">
+        <a class="color-orange" href="/register.html">立即注册</a>
+        <a class="color-gray fr" href="/password1.html">忘记密码？</a>
+      </div>
+      <div class="login-bottom">
+        <button class="login-btn" @click="onLogin">立即登录</button>
+      </div>
+    </div>
+    <div class="login-box">
+      <div class="login-item">
+        <input class="input" v-model="mobile" type="text" placeholder="请输入手机号" />
+      </div>
+      <div class="login-item">
+        <input class="input" v-model="code" type="text" placeholder="请输入验证码" />
+        <button class="ver-btn" @click="onCode" v-if="codeTxt=='获取验证码'">{{codeTxt}}</button>
+        <button class="ver-btn" v-else>{{codeTxt}}</button>
+      </div>
+      <div class="login-forget clearfix">
+        <a class="color-orange" href="/register.html">立即注册</a>
+        <a class="color-gray fr" href="/password1.html">忘记密码？</a>
+      </div>
+      <div class="login-bottom">
+        <button class="login-btn" @click="onCodeLogin">立即登录</button>
+      </div>
+    </div>
+  </div>
+  <div class="index-login-other">
+    <div class="tit">第三方登录</div>
+    <div class="wx">
+      <a href="javascript:void(0)" onClick="syalert.syopen('alert2')||ok('alert1')"><img src="images/icon-wx.png" /></a>
+    </div>
+  </div>
+</div>
+<!-- 微信登录弹窗 -->
+<div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+  id="alert2">
+  <div class="login-wx">
+    <div class="wx-close" onClick="ok('alert2')"></div>
+    <div class="wx-tit">微信扫码登录</div>
+    <div class="wx-img"><img src="images/wx.png" /></div>
+    <div class="wx-tip">用手机APP扫下方二维码登录，扫码后在手机 上点击“确认授权”即可</div>
+    <div class="wx-bot clearfix">
+      <a class="wx-btn fl" href="javascript:void(0);" onClick="syalert.syopen('alert1')||ok('alert2')">密码登录</a>
+      <a class="wx-btn fr" href="javascript:void(0);" onClick="syalert.syopen('alert1')||ok('alert2')">短信登录</a>
+    </div>
+  </div>
+</div>
+<script src="/js/common.js"></script>
+<script src="/js/components/PublicHeader.js"></script>
+<script>
+  function ok (id) {
+    syalert.syhide(id)
+  }
+</script>

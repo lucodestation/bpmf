@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <title>榜文大厅 - 玻坡摸佛</title>
 
-    <link rel="stylesheet" href="/plugins/animate.min.css" />
-    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
-    <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
-    <link rel="stylesheet" href="/css/style.css" />
+<head>
+  <meta charset="UTF-8" />
+  <title>榜文大厅 - 玻坡摸佛</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css">
 
-    <script src="/plugins/jquery.min.js"></script>
-    <script src="/plugins/swiper/swiper.min.js"></script>
-    <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jsencrypt.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
 
-    <script src="/utils/baseAPI.js"></script>
-  </head>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
 
-  <body>
-    <!-- 公共头部 -->
-    <div class="headerpage"></div>
-
-    <!--main-header end-->
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <div id="app">
     <!--cooper-banner start-->
     <div class="cooper-banner w-1200">
       <div id="certify">
@@ -161,26 +167,29 @@
         </div>
         <!--index-sec2-asd end-->
         <!--index-sec2-item start-->
-        <div class="index-sec2-item">
+        <div class="index-sec2-item" v-for="item in bangList" :key="item.id">
           <div class="bor">
             <a href="榜文大厅教棋更多详情.html">
-              <div class="img-w"><img src="/images/index41.png" /></div>
+              <div class="img-w"><img :src="item.image"></div>
               <div class="li-h clearfix">
-                <span class="hs">五子棋</span>
-                <div class="ht">五子棋潜龙棋局怎么破解</div>
+                <span class="hs">{{item.name}}</span>
+                <div class="ht">{{item.title}}</div>
               </div>
               <div class="li-tags">
-                <span class="gs">一次付清</span>
-                <span class="gs">单人中榜</span>
-                <span class="gs">不托管</span>
+                <span class="gs" v-if="item.pay_num_type==1">一次付清</span>
+                <span class="gs" v-else>多次付清</span>
+                <span class="gs" v-if="item.win_type==1">单人中榜</span>
+                <span class="gs" v-else>多人中榜</span>
+                <span class="gs" v-if="item.is_trustee==1">托管</span>
+                <span class="gs" v-else>不托管</span>
               </div>
-              <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
-              <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
-              <div class="li-price">酬金：<span class="price">￥15263</span></div>
+              <div class="li-date">任务周期：<span>{{item.task_start_time}}至{{item.task_end_time}}</span></div>
+              <div class="li-date">报名截止日期：<span>{{item.signup_end_time}}</span></div>
+              <div class="li-price">酬金：<span class="price">￥{{item.total_money}}</span></div>
               <div class="li-c clearfix">
                 <div class="li-private fl">
-                  <img src="/images/index22.png" />
-                  <div class="name">赛亚</div>
+                  <img :src="item.avatar">
+                  <div class="name">{{item.nickname}}</div>
                 </div>
                 <div class="last fr">教课</div>
               </div>
@@ -189,62 +198,56 @@
         </div>
         <!--index-sec2-item end-->
       </div>
-      <a class="rank-more" href="榜文大厅-教棋更多.html">查看更多 ></a>
+      <a class="rank-more" href="./hallMore.html">查看更多 ></a>
     </div>
     <!--index-sec2 end-->
+  </div>
 
-    <!-- 公共底部 -->
-    <div class="footerpage"></div>
-
-    <script src="js/common.js"></script>
-
-    <script>
-      certifySwiper = new Swiper('#certify .swiper-container', {
-        watchSlidesProgress: true,
-        slidesPerView: 'auto',
-        centeredSlides: true,
-        loop: true,
-        loopedSlides: 3,
-        autoplay: 5000, //可选选项，自动滑动
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-        on: {
-          progress: function (progress) {
-            for (i = 0; i < this.slides.length; i++) {
-              var slide = this.slides.eq(i)
-              var slideProgress = this.slides[i].progress
-              modify = 1
-              if (Math.abs(slideProgress) > 1) {
-                modify = (Math.abs(slideProgress) - 1) * 0.3 + 1
-              }
-              translate = slideProgress * modify * 430 + 'px'
-              scale = 1 - Math.abs(slideProgress) / 3
-              zIndex = 999 - Math.abs(Math.round(10 * slideProgress))
-              slide.transform('translateX(' + translate + ') scale(' + scale + ')')
-              slide.css('zIndex', zIndex)
-              slide.css('opacity', 1)
-              if (Math.abs(slideProgress) > 1) {
-                slide.css('opacity', 0)
-              }
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/bangwen/index.js"></script>
+  <script>
+    certifySwiper = new Swiper('#certify .swiper-container', {
+      watchSlidesProgress: true,
+      slidesPerView: 'auto',
+      centeredSlides: true,
+      loop: true,
+      loopedSlides: 3,
+      autoplay: 5000, //可选选项，自动滑动
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      on: {
+        progress: function (progress) {
+          for (i = 0; i < this.slides.length; i++) {
+            var slide = this.slides.eq(i)
+            var slideProgress = this.slides[i].progress
+            modify = 1
+            if (Math.abs(slideProgress) > 1) {
+              modify = (Math.abs(slideProgress) - 1) * 0.3 + 1
             }
-          },
-          setTransition: function (transition) {
-            for (var i = 0; i < this.slides.length; i++) {
-              var slide = this.slides.eq(i)
-              slide.transition(transition)
+            translate = slideProgress * modify * 430 + 'px'
+            scale = 1 - Math.abs(slideProgress) / 3
+            zIndex = 999 - Math.abs(Math.round(10 * slideProgress))
+            slide.transform('translateX(' + translate + ') scale(' + scale + ')')
+            slide.css('zIndex', zIndex)
+            slide.css('opacity', 1)
+            if (Math.abs(slideProgress) > 1) {
+              slide.css('opacity', 0)
             }
-          },
+          }
         },
-      })
-    </script>
+        setTransition: function (transition) {
+          for (var i = 0; i < this.slides.length; i++) {
+            var slide = this.slides.eq(i)
+            slide.transition(transition)
+          }
+        },
+      },
+    })
+  </script>
+</body>
 
-    <script>
-      $(function () {
-        $('.headerpage').load('/components/header.html')
-        $('.footerpage').load('/components/footer.html')
-      })
-    </script>
-  </body>
 </html>
