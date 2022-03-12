@@ -19,7 +19,7 @@
 
   <body>
     <!-- 公共头部 -->
-    <div class="headerpage"></div>
+    <header class="public-header"></header>
 
     <!--index-banner start-->
     <div class="index-banner">
@@ -836,7 +836,7 @@
     <!--index-sec3 end-->
 
     <!-- 公共底部 -->
-    <div class="footerpage"></div>
+    <footer class="public-footer"></footer>
 
     <!-- 登录弹窗 -->
     <div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert1">
@@ -900,6 +900,9 @@
       </div>
     </div>
 
+    <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/utils/request.js"></script>
+
     <script>
       new Swiper('.mySwiper', {
         pagination: {
@@ -919,8 +922,8 @@
 
     <script>
       $(function () {
-        $('.headerpage').load('/components/header.html')
-        $('.footerpage').load('/components/footer.html')
+        $('.public-header').load('/components/PublicHeader.html')
+        $('.public-footer').load('/components/PublicFooter.html')
         $('meta[property="og:description"]').attr('content', '2222') // SEO
       })
     </script>

@@ -27,3 +27,40 @@
   - [https://jquery.cuishifeng.cn/](https://jquery.cuishifeng.cn/)
 - syalert - jQuery 弹框插件
   - 没有官网
+
+## TS 自动转 JS
+
+1. 全局安装 TS
+
+```bash
+$ npm install -g typescript
+```
+
+2. 创建 `tsconfig.json`
+
+```bash
+$ tsc --init
+```
+
+创建后将 `"target": "es2016",` 改为 `"target": "es5",`
+
+3. 监视 TS
+
+VSCode 终端 -> 运行任务 -> typescript -> tsc:监视 - tsconfig.json
+
+> TS 转成 ES5 语法的 JS 只是转换了 箭头函数、解构等语法，但还不支持 promise、includes 等，需再引入 babel-polyfill.js
+
+## 命名规范
+
+### HTML
+
+- class
+  - 短横线
+- id
+  - 小驼峰
+
+### js
+
+- 事件名
+  - handleXxxXxx
+
