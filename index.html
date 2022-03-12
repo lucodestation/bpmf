@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" property="og:description" content="" />
-    <title>玻坡摸佛</title>
 
-    <link rel="stylesheet" href="/plugins/animate.min.css" />
-    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
-    <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
-    <link rel="stylesheet" href="/css/style.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" property="og:description" content="" />
+  <title>玻坡摸佛</title>
 
-    <script src="/plugins/jquery.min.js"></script>
-    <script src="/plugins/swiper/swiper.min.js"></script>
-    <script src="/plugins/syalert/syalert.min.js"></script>
-    <script src="/plugins/vue.min.js"></script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
 
-    <script src="/plugins/babel-polyfill.min.js"></script>
-    <script src="/plugins/axios.min.js"></script>
-    <script src="/utils/request.js"></script>
-  </head>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
 
-  <body>
-    <!-- 公共头部 -->
-    <header class="public-header"></header>
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
 
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <div id="app">
     <!--index-banner start-->
     <div class="index-banner">
       <div class="swiper mySwiper">
@@ -86,8 +88,10 @@
     <!--index-notice start-->
     <div class="index-notice w-1200 clearfix">
       <div class="icon fl"></div>
-      <div class="t fl"><a href="">最近由于疫情影响暂停平台线下比赛业务最近由于疫情影响暂停平台线下比赛业务最近由于疫情影响暂停平台线下比赛业务！</a></div>
-      <a class="index-more fr" href="平台公告.html">点击更多</a>
+      <div class="t fl" v-for="item in newsList" :key="item.id">
+        <a :href="'/news/newsView.html?id='+item.id">{{item.title}}</a>
+      </div>
+      <a class="index-more fr" href="/news/index.html">点击更多</a>
     </div>
     <!--index-notice end-->
     <!--index-sec1 start-->
@@ -756,47 +760,17 @@
     <div class="index-sec3 w-1200">
       <div class="index-sec2-title clearfix">
         <h2 class="tt fl">玻说坡话</h2>
-        <a class="index-more fr" href="">点击更多</a>
+        <a class="index-more fr" href="/boPoList/index.html">点击更多</a>
       </div>
       <div class="index-sec3-content clearfix">
-        <div class="index-sec3-dl">
+        <div class="index-sec3-dl" v-for="item in articleList" :key="item.id">
           <div class="dt">
-            <a href=""><img src="images/index51.png" /></a>
+            <a :href="'/boPoList/bopoView.html?id='+item.id"><img :src="item.image" /></a>
           </div>
           <div class="dd">
-            <div class="dd-t"><a href="">我是谁——玻坡摸佛</a></div>
-            <div class="dd-c">我是谁，从哪里来，到哪里去。所谓简就是繁，简单到极其复杂，成为哲学领域恒久日新的话题，此题恒久远</div>
-            <div class="dd-d">发布时间：2021-11-24 14:48:40</div>
-          </div>
-        </div>
-        <div class="index-sec3-dl">
-          <div class="dt">
-            <a href=""><img src="images/index51.png" /></a>
-          </div>
-          <div class="dd">
-            <div class="dd-t"><a href="">我是谁——玻坡摸佛</a></div>
-            <div class="dd-c">我是谁，从哪里来，到哪里去。所谓简就是繁，简单到极其复杂，成为哲学领域恒久日新的话题，此题恒久远</div>
-            <div class="dd-d">发布时间：2021-11-24 14:48:40</div>
-          </div>
-        </div>
-        <div class="index-sec3-dl">
-          <div class="dt">
-            <a href=""><img src="images/index51.png" /></a>
-          </div>
-          <div class="dd">
-            <div class="dd-t"><a href="">我是谁——玻坡摸佛</a></div>
-            <div class="dd-c">我是谁，从哪里来，到哪里去。所谓简就是繁，简单到极其复杂，成为哲学领域恒久日新的话题，此题恒久远</div>
-            <div class="dd-d">发布时间：2021-11-24 14:48:40</div>
-          </div>
-        </div>
-        <div class="index-sec3-dl">
-          <div class="dt">
-            <a href=""><img src="images/index51.png" /></a>
-          </div>
-          <div class="dd">
-            <div class="dd-t"><a href="">我是谁——玻坡摸佛</a></div>
-            <div class="dd-c">我是谁，从哪里来，到哪里去。所谓简就是繁，简单到极其复杂，成为哲学领域恒久日新的话题，此题恒久远</div>
-            <div class="dd-d">发布时间：2021-11-24 14:48:40</div>
+            <div class="dd-t"><a :href="'/boPoList/bopoView.html?id='+item.id">{{item.title}}</a></div>
+            <div class="dd-c">{{item.descri}}</div>
+            <div class="dd-d">发布时间：{{item.addtime}}</div>
           </div>
         </div>
       </div>
@@ -806,104 +780,88 @@
     <div class="index-sec3 w-1200">
       <div class="index-sec2-title clearfix">
         <h2 class="tt fl">合作机构</h2>
-        <a class="index-more fr" href="">点击更多</a>
+        <!-- <a class="index-more fr" href="">点击更多</a> -->
       </div>
       <ul class="index-sec3-ul clearfix">
-        <li>
-          <a href="">
-            <img src="images/index61.jpg" />
-          </a>
-        </li>
-        <li>
-          <a href="">
-            <img src="images/index62.jpg" />
-          </a>
-        </li>
-        <li>
-          <a href="">
-            <img src="images/index63.jpg" />
-          </a>
-        </li>
-        <li>
-          <a href="">
-            <img src="images/index64.jpg" />
-          </a>
-        </li>
-        <li>
-          <a href="">
-            <img src="images/index65.jpg" />
-          </a>
+        <li v-for="item in partnerList" :key="item.id">
+          <!-- <a href=""> -->
+          <img :src="item.image" />
+          <!-- </a> -->
         </li>
       </ul>
     </div>
     <!--index-sec3 end-->
+  </div>
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
 
-    <!-- 公共底部 -->
-    <footer class="public-footer"></footer>
-
-    <!-- 登录弹窗 -->
-    <div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert1">
-      <div class="index-login-hd clearfix">
-        <div class="login-li on">密码登录</div>
-        <div class="login-li">短信登录</div>
-      </div>
-      <div class="index-login-bd">
-        <div class="login-box active">
-          <div class="login-item">
-            <input class="input password" type="text" placeholder="请输入手机号" />
-          </div>
-          <div class="login-item">
-            <i data-show="1" class="eye-icon eye-open"></i>
-            <input name="" type="password" class="input mima_dd" placeholder="请输入登录密码" />
-            <input name="" type="text" class="input mima_wz" style="display: none" placeholder="请输入登录密码" />
-          </div>
-          <div class="login-forget clearfix">
-            <a class="color-orange" href="register.html">立即注册</a>
-            <a class="color-gray fr" href="password1.html">忘记密码？</a>
-          </div>
-          <div class="login-bottom">
-            <button class="login-btn" onClick="ok('alert1')">立即登录</button>
-          </div>
+  <!-- 登录弹窗 -->
+  <div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+    id="alert1">
+    <div class="index-login-hd clearfix">
+      <div class="login-li on">密码登录</div>
+      <div class="login-li">短信登录</div>
+    </div>
+    <div class="index-login-bd">
+      <div class="login-box active">
+        <div class="login-item">
+          <input class="input password" type="text" placeholder="请输入手机号" />
         </div>
-        <div class="login-box">
-          <div class="login-item">
-            <input class="input" type="text" placeholder="请输入手机号" />
-          </div>
-          <div class="login-item">
-            <input class="input" type="text" placeholder="请输入验证码" />
-            <span class="ver-btn">获取验证码</span>
-          </div>
-          <div class="login-forget clearfix">
-            <a class="color-orange" href="register.html">立即注册</a>
-            <a class="color-gray fr" href="password1.html">忘记密码？</a>
-          </div>
-          <div class="login-bottom">
-            <button class="login-btn" onClick="ok('alert1')">立即登录</button>
-          </div>
+        <div class="login-item">
+          <i data-show="1" class="eye-icon eye-open"></i>
+          <input name="" type="password" class="input mima_dd" placeholder="请输入登录密码" />
+          <input name="" type="text" class="input mima_wz" style="display: none" placeholder="请输入登录密码" />
+        </div>
+        <div class="login-forget clearfix">
+          <a class="color-orange" href="register.html">立即注册</a>
+          <a class="color-gray fr" href="password1.html">忘记密码？</a>
+        </div>
+        <div class="login-bottom">
+          <button class="login-btn" onClick="ok('alert1')">立即登录</button>
         </div>
       </div>
-      <div class="index-login-other">
-        <div class="tit">第三方登录</div>
-        <div class="wx">
-          <a href="javascript:void(0)" onClick="syalert.syopen('alert2')||ok('alert1')"><img src="images/icon-wx.png" /></a>
+      <div class="login-box">
+        <div class="login-item">
+          <input class="input" type="text" placeholder="请输入手机号" />
+        </div>
+        <div class="login-item">
+          <input class="input" type="text" placeholder="请输入验证码" />
+          <span class="ver-btn">获取验证码</span>
+        </div>
+        <div class="login-forget clearfix">
+          <a class="color-orange" href="register.html">立即注册</a>
+          <a class="color-gray fr" href="password1.html">忘记密码？</a>
+        </div>
+        <div class="login-bottom">
+          <button class="login-btn" onClick="ok('alert1')">立即登录</button>
         </div>
       </div>
     </div>
-    <!-- 微信登录弹窗 -->
-    <div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert2">
-      <div class="login-wx">
-        <div class="wx-close" onClick="ok('alert2')"></div>
-        <div class="wx-tit">微信扫码登录</div>
-        <div class="wx-img"><img src="images/wx.png" /></div>
-        <div class="wx-tip">用手机APP扫下方二维码登录，扫码后在手机 上点击“确认授权”即可</div>
-        <div class="wx-bot clearfix">
-          <a class="wx-btn fl" href="javascript:void(0);" onClick="syalert.syopen('alert1')||ok('alert2')">密码登录</a>
-          <a class="wx-btn fr" href="javascript:void(0);" onClick="syalert.syopen('alert1')||ok('alert2')">短信登录</a>
-        </div>
+    <div class="index-login-other">
+      <div class="tit">第三方登录</div>
+      <div class="wx">
+        <a href="javascript:void(0)" onClick="syalert.syopen('alert2')||ok('alert1')"><img
+            src="images/icon-wx.png" /></a>
       </div>
     </div>
+  </div>
+  <!-- 微信登录弹窗 -->
+  <div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+    id="alert2">
+    <div class="login-wx">
+      <div class="wx-close" onClick="ok('alert2')"></div>
+      <div class="wx-tit">微信扫码登录</div>
+      <div class="wx-img"><img src="images/wx.png" /></div>
+      <div class="wx-tip">用手机APP扫下方二维码登录，扫码后在手机 上点击“确认授权”即可</div>
+      <div class="wx-bot clearfix">
+        <a class="wx-btn fl" href="javascript:void(0);" onClick="syalert.syopen('alert1')||ok('alert2')">密码登录</a>
+        <a class="wx-btn fr" href="javascript:void(0);" onClick="syalert.syopen('alert1')||ok('alert2')">短信登录</a>
+      </div>
+    </div>
+  </div>
 
-    <script src="/js/common.js"></script>
-    <script src="/js/index.js"></script>
-  </body>
+  <script src="/js/common.js"></script>
+  <script src="/js/index.js"></script>
+</body>
+
 </html>

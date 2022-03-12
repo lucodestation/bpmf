@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>平台公告</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--inner-position start-->
+  <div class="inner-position w-1200">
+    <a href="/index.html">首页</a>
+    <span>&lt;</span>
+    <a class="current" href="/news/index.html"> 平台公告</a>
+  </div>
+  <!--inner-position end-->
+  <!--main-notice start-->
+  <div class="main-notice w-1200" id="app">
+    <div class="notice-hd">平台公告</div>
+    <!--notice-item start-->
+    <div class="notice-item clearfix" v-for="item in newsList" :key="item.id">
+      <a :href="'./newsView.html?id='+item.id">
+        <div class="img">
+          <img :src="item.image">
+        </div>
+        <div class="txt">
+          <div class="t">{{item.title}}</div>
+          <div class="c">{{item.descri}}</div>
+          <div class="d">时间：{{item.addtime}}<span class="tip">平台公告</span> </div>
+        </div>
+      </a>
+    </div>
+    <!--notice-item end-->
+    <!--main-pages start-->
+    <div class="main-pages">
+      <a class="pages-a" href="">首页</a>
+      <a class="pages-a" href="">上一页</a>
+      <a class="pages-a" href="">1</a>
+      <a class="pages-a" href="">2</a>
+      <a class="pages-a" href="">3</a>
+      <span class="pages-s">. . .</span>
+      <a class="pages-a" href="">下一页</a>
+      <span class="pages-s">共100页</span>
+      <span class="pages-s">到第</span>
+      <input class="pages-input" type="text" value="12">
+      <span class="pages-s">页</span>
+      <a class="pages-a" href="">尾页</a>
+    </div>
+    <!--main-pages end-->
+  </div>
+  <!--main-notice end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/news/index.js"></script>
+</body>
+
+</html>
