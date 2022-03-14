@@ -4,31 +4,33 @@
   <head>
     <meta charset="UTF-8" />
     <title>发布比赛 - 玻坡摸佛</title>
-    <link rel="stylesheet" href="/plugins/animate.min.css" />
-    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
-    <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
-    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
+    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
     <link rel="stylesheet" href="/css/style.css" />
 
+    <script src="/plugins/babel-polyfill.min.js"></script>
     <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/jsencrypt.js"></script>
     <script src="/plugins/jquery.min.js"></script>
-    <script src="/plugins/swiper/swiper.min.js"></script>
     <script src="/plugins/syalert/syalert.min.js"></script>
     <script src="/plugins/vue.min.js"></script>
-    <script src="/plugins/babel-polyfill.min.js"></script>
+
     <script src="/plugins/axios.min.js"></script>
     <script src="/utils/request.js"></script>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <style>
+      /* 临时 */
       .temp-pre {
         position: fixed;
         top: 0;
         right: 0;
         bottom: 0;
-        background: rgba(255 255 255 / 0.5);
+        background: rgba(255 255 255);
         overflow: scroll;
         max-width: 500px;
+        opacity: 0.7;
+        z-index: 10000;
       }
 
       /* 隐藏时间选择控件不需要的分、秒 */
@@ -96,11 +98,11 @@
     <!-- 公共容器/页面主要内容 -->
     <div id="app" class="publish-container">
       <!-- 临时 -->
-      <pre class="temp-pre layui-code">
+      <!-- <pre class="temp-pre layui-code">
+        <div>{{formData}}</div>
         <div>{{coverImage}}</div>
         <div>{{affixList}}</div>
-
-      </pre>
+      </pre> -->
       <!-- <pre class="temp-pre">{{competitionCateList}}</pre> -->
       <!-- 面包屑导航 -->
       <div class="inner-position w-1200">

@@ -25,7 +25,7 @@ request.interceptors.request.use(function (config) {
     var token = localStorage.getItem('token');
     if (token) {
         config.headers.token = token;
-        if (config.method.toLowerCase === 'get') {
+        if (config.method.toLowerCase() === 'get' || !config.method) {
             config.params = __assign(__assign({}, config.params), { token: token });
         }
         else {
@@ -42,6 +42,8 @@ request.interceptors.response.use(function (response) {
     var data = response.data;
     return data;
 }, function (error) {
+    console.log('响应拦截器 error', response);
+    var status = error.response.status;
     if (status === 401) {
     }
     else if (status >= 500) {

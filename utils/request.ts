@@ -16,7 +16,7 @@ request.interceptors.request.use(
     const token = localStorage.getItem('token')
     if (token) {
       config.headers.token = token
-      if (config.method.toLowerCase === 'get') {
+      if (config.method.toLowerCase() === 'get' || !config.method) {
         config.params = {
           ...config.params,
           token,
@@ -45,6 +45,8 @@ request.interceptors.response.use(
     return data
   },
   (error) => {
+    console.log('响应拦截器 error', response)
+    const { status } = error.response
     if (status === 401) {
     } else if (status >= 500) {
     } else {
