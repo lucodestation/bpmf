@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>榜文大厅-详情</title>
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <script src="/plugins/date/jedate.js"></script>
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jsencrypt.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--rank-container start-->
+  <div class="rank-container">
+    <!--inner-position start-->
+    <div class="inner-position w-1200">
+      <a href="">首页 </a>
+      <span>
+        < </span>
+          <a href=""> 榜文大厅 </a>
+          <span>
+            < </span>
+              <a class="current" href=""> 平台公告</a>
+    </div>
+    <!--inner-position end-->
+    <!--rank-detail start-->
+    <div class="rank-detail w-1200">
+      <div class="content clearfix">
+        <!--rank-detail-fl start-->
+        <div class="rank-detail-fl fl">
+          <!--rank-detail-hd start-->
+          <div class="rank-detail-hd clearfix">
+            <div class="img fl"><img src="/images/rank16.png"></div>
+            <div class="txt">
+              <div class="t">
+                <span class="t-tip">学棋</span>
+                围棋潜龙棋局怎么破解？
+              </div>
+              <div class="t-price">
+                酬金：<span class="price">￥15263</span>
+              </div>
+              <div class="t-tags">
+                <span class="tag">一次付清</span>
+                <span class="tag">单人中榜</span>
+                <span class="tag">不托管</span>
+              </div>
+              <div class="t-bot">
+                <a class="rank-detail-btn fl non" href="javascript:void(0);">我要应榜</a>
+                <span class="t-bot-c fl">已应榜：6人</span>
+              </div>
+            </div>
+          </div>
+          <!--rank-detail-hd end-->
+          <!--rank-detail-bd start-->
+          <div class="rank-detail-bd">
+            <div class="bd-title clearfix">
+              <span class="t">榜文详情</span>
+              <div class="fr">
+                <a class="rank-collect fl" href="">收藏</a>
+                <a class="rank-share fl" href="">分享</a>
+                <a class="rank-ju fl" href="javascript:void(0);" onClick="syalert.syopen('alert2')">举报</a>
+              </div>
+            </div>
+            <div class="bd-article">
+              <div class="bd-article-li clearfix">
+                <div class="label">榜文类型：</div>
+                <div class="c">学棋</div>
+              </div>
+              <div class="bd-article-li clearfix">
+                <div class="label">服务分类：</div>
+                <div class="c">象棋</div>
+              </div>
+              <div class="bd-article-li clearfix">
+                <div class="label">酬金金额：</div>
+                <div class="c">1000元</div>
+              </div>
+              <div class="bd-article-li clearfix">
+                <div class="label">酬金托管：</div>
+                <div class="c">一次支付</div>
+              </div>
+              <div class="bd-article-li clearfix">
+                <div class="label">中榜模式：</div>
+                <div class="c">多次中榜3人</div>
+              </div>
+              <div class="bd-article-li clearfix">
+                <div class="label">应榜截止日期：</div>
+                <div class="c">2021-04-25</div>
+              </div>
+              <div class="bd-article-li clearfix">
+                <div class="label">任务起止日期：</div>
+                <div class="c">2021-04-25 至 2021-04-29</div>
+              </div>
+              <div class="bd-article-li clearfix">
+                <div class="label">榜文详情：</div>
+                <div class="c">围棋的棋盘上有纵横十九条线，361个交差点，有黑白两个颜色的棋子，以围棋围住的地盘大小决定胜
+                  负。棋盘可分为九个部分，每个部分上都有一个星点，中间星为天元，执黑子的人先下，黑白棋子轮流
+                  下，落子后不能悔棋。</div>
+              </div>
+              <div class="bd-article-li clearfix">
+                <div class="label">附近下载：</div>
+                <div class="c">点击下载附近</div>
+              </div>
+              <div class="bd-article-c">
+                <a href="">文件3.png</a>
+                <a href="">文件2.word</a>
+                <a href="">文件3.png</a>
+              </div>
+            </div>
+          </div>
+          <!--rank-detail-bd end-->
+        </div>
+        <!--rank-detail-fl end-->
+        <!--rank-detail-fr start-->
+        <div class="rank-detail-fr fr">
+          <!--fr-hd start-->
+          <div class="fr-hd clearfix">
+            <img class="h-img" src="/images/index51.png">
+            <div class="txt">
+              <div class="name">棋王24512</div>
+              <div class="ren"><img src="/images/rank15.png"></div>
+            </div>
+          </div>
+          <!--fr-hd end-->
+          <!--fr-mid start-->
+          <div class="fr-mid clearfix">
+            <div class="mid-tit">榜文动态</div>
+            <div class="con clearfix">
+              <div class="li">
+                <div class="t color-gray">浏览</div>
+                <div class="num">7</div>
+              </div>
+              <div class="li">
+                <div class="t color-gray">报名人数</div>
+                <div class="num">7</div>
+              </div>
+              <div class="li">
+                <div class="t color-gray">收藏</div>
+                <div class="num">7</div>
+              </div>
+            </div>
+          </div>
+          <!--fr-mid end-->
+          <!--fr-bot start-->
+          <div class="fr-bot">
+            <div class="tit">应榜名单</div>
+            <div class="c">
+              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
+              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
+              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
+              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
+              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
+              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
+              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
+              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
+            </div>
+          </div>
+          <!--fr-bot end-->
+        </div>
+        <!--rank-detail-fr end-->
+      </div>
+    </div>
+    <!--rank-detail end-->
+    <!--rank-recommend start-->
+    <div class="rank-recommend w-1200">
+      <div class="rank-title">榜文推荐</div>
+      <div class="index-sec2-content  clearfix">
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="/images/index41.png"></div>
+            </a>
+            <div class="li-h clearfix">
+              <span class="hs">五子棋</span>
+              <div class="ht">五子棋潜龙棋局怎么破解五子棋潜龙棋局怎么破解</div>
+            </div>
+            <div class="li-tags">
+              <span class="gs">一次付清</span>
+              <span class="gs">单人中榜</span>
+              <span class="gs">不托管</span>
+            </div>
+            <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
+            <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
+            <div class="li-price">酬金：<span class="price">￥15263</span></div>
+            <div class="li-c clearfix">
+              <div class="li-private fl">
+                <img src="/images/index22.png">
+                <div class="name">赛亚</div>
+              </div>
+              <div class="last fr">学棋</div>
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="/images/index41.png"></div>
+            </a>
+            <div class="li-h clearfix">
+              <span class="hs">五子棋</span>
+              <div class="ht">五子棋潜龙棋局怎么破解</div>
+            </div>
+            <div class="li-tags">
+              <span class="gs">一次付清</span>
+              <span class="gs">单人中榜</span>
+              <span class="gs">不托管</span>
+            </div>
+            <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
+            <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
+            <div class="li-price">酬金：<span class="price">￥15263</span></div>
+            <div class="li-c clearfix">
+              <div class="li-private fl">
+                <img src="/images/index22.png">
+                <div class="name">赛亚</div>
+              </div>
+              <div class="last fr">学棋</div>
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="/images/index41.png"></div>
+            </a>
+            <div class="li-h clearfix">
+              <span class="hs">五子棋</span>
+              <div class="ht">五子棋潜龙棋局怎么破解</div>
+            </div>
+            <div class="li-tags">
+              <span class="gs">一次付清</span>
+              <span class="gs">单人中榜</span>
+              <span class="gs">不托管</span>
+            </div>
+            <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
+            <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
+            <div class="li-price">酬金：<span class="price">￥15263</span></div>
+            <div class="li-c clearfix">
+              <div class="li-private fl">
+                <img src="/images/index22.png">
+                <div class="name">赛亚</div>
+              </div>
+              <div class="last fr">学棋</div>
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="/images/index41.png"></div>
+            </a>
+            <div class="li-h clearfix">
+              <span class="hs">五子棋</span>
+              <div class="ht">五子棋潜龙棋局怎么破解</div>
+            </div>
+            <div class="li-tags">
+              <span class="gs">一次付清</span>
+              <span class="gs">单人中榜</span>
+              <span class="gs">不托管</span>
+            </div>
+            <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
+            <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
+            <div class="li-price">酬金：<span class="price">￥15263</span></div>
+            <div class="li-c clearfix">
+              <div class="li-private fl">
+                <img src="/images/index22.png">
+                <div class="name">赛亚</div>
+              </div>
+              <div class="last fr">学棋</div>
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+      </div>
+    </div>
+    <!--rank-recommend end-->
+  </div>
+  <!--rank-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <!-- 我要应榜弹窗 -->
+  <div class="sy-alert rank-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+    id="alert1">
+    <div class="rank-pop-content">
+      <div class="bond-close" onClick="ok('alert1')"></div>
+      <div class="tit">我要应榜</div>
+      <!--rank-pop-item start-->
+      <div class="publish-item clearfix">
+        <div class="label">我要报价：</div>
+        <div class="con">
+          <div class="input-w">
+            <input type="text" class="input" placeholder="">
+          </div>
+        </div>
+      </div>
+      <!--rank-pop-item end-->
+      <!--rank-pop-item start-->
+      <div class="publish-item clearfix">
+        <div class="label">支付方式：</div>
+        <div class="con">
+          <div class="input-w">
+            <select class="select">
+              <option>一次付清</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!--rank-pop-item end-->
+      <!--publish-item start-->
+      <div class="publish-item clearfix">
+        <div class="label">任务周期：</div>
+        <div class="item-fr">
+          <div class="date fl">2021-09-25</div>
+          <div class="date-line fl"></div>
+          <div class="date fl">2021-10-25</div>
+        </div>
+      </div>
+      <!--publish-item end-->
+      <!--publish-item start-->
+      <div class="publish-item clearfix">
+        <div class="label">应榜描述：</div>
+        <div class="con">
+          <div class="detail-text">
+            <textarea class="text" rows="3" placeholder="请介绍自己，方便发榜者了解，提高应榜效率"></textarea>
+          </div>
+        </div>
+      </div>
+      <!--publish-item end-->
+      <!--publish-item start-->
+      <div class="publish-item clearfix">
+        <div class="label">应榜附件：</div>
+        <div class="con">
+          <div class="pop-up">
+            <input type="file" class="up-file">
+            <span class="up-s">选择文件</span>
+          </div>
+          <div class="pop-up-tip">※上传文件，支持PDF、Word的格式，大小不超过2M</div>
+        </div>
+      </div>
+      <!--publish-item end-->
+      <div class="publish-check">
+        <div class="check fl">
+          <input class="check-input" type="checkbox">
+          <span class="check-s"></span>
+        </div>
+        <span>我已阅读并同意</span>
+        <a class="color-orange" href="">《玻坡摸佛榜文（需求）规则》</a>
+      </div>
+      <div class="publish-bottom">
+        <button class="publish-btn">提交</button>
+      </div>
+    </div>
+  </div>
+  <!-- 举报内容弹窗 -->
+  <div class="sy-alert rank-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+    id="alert2">
+    <div class="rank-pop-content">
+      <div class="bond-close" onClick="ok('alert2')"></div>
+      <div class="tit">举报内容</div>
+
+      <!--publish-item start-->
+      <div class="publish-item clearfix">
+        <div class="label">填写内容：</div>
+        <div class="con">
+          <div class="detail-text">
+            <textarea class="text" rows="5" placeholder=" 请输入"></textarea>
+          </div>
+        </div>
+      </div>
+      <!--publish-item end-->
+      <div class="publish-bottom">
+        <button class="publish-btn">立即发布</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    function ok (id) {
+      syalert.syhide(id);
+    };
+  </script>
+  <script src="/js/common.js"></script>
+  <script src="/js/bangwen/hallView.js"></script>
+</body>
+
+</html>

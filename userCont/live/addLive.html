@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>发起直播</title>
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <script src="/plugins/date/jedate.js"></script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jsencrypt.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <div class="public-user"></div>
+      <!--center-content start-->
+      <div class="center-content fr">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit">发起直播</div>
+          <!--publish-content start-->
+          <div class="publish-content">
+            <!--publish-item start-->
+            <div class="publish-item clearfix">
+              <div class="label"><span class="color-red">*</span> 设置直播种类：</div>
+              <div class="con">
+                <div class="publish-tags clearfix">
+                  <div class="tag">
+                    <input type="radio" class="tag-radio" name="1" checked>
+                    <span class="tag-s">课程直播</span>
+                  </div>
+                  <div class="tag">
+                    <input type="radio" class="tag-radio" name="1">
+                    <span class="tag-s">赛事直播</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--publish-item end-->
+            <!--publish-item start-->
+            <div class="publish-item clearfix">
+              <div class="label"><span class="color-red">*</span> 设置进入权限：</div>
+              <div class="con">
+                <div class="publish-tags clearfix">
+                  <div class="tag">
+                    <input type="radio" class="tag-radio radio-juris" value="1" name="juris" checked>
+                    <span class="tag-s">申请进入</span>
+                  </div>
+                  <div class="tag">
+                    <input type="radio" class="tag-radio radio-juris" value="2" name="juris">
+                    <span class="tag-s">全网公开</span>
+                  </div>
+                  <div class="tag">
+                    <input type="radio" class="tag-radio radio-juris" value="3" name="juris">
+                    <span class="tag-s">会员公开</span>
+                  </div>
+                  <div class="tag">
+                    <input type="radio" class="tag-radio radio-juris" value="4" name="juris">
+                    <span class="tag-s">设置密码</span>
+                  </div>
+                </div>
+                <div class="center-live-input">
+                  <input type="text" class="input w340" placeholder="请设置6位数进房密码">
+                </div>
+              </div>
+            </div>
+            <!--设置密码显示不显示-->
+            <script>
+              $(function () {
+                // 默认选中“通过”，隐藏2
+                $(".center-live-input").hide();
+                // 根据"radio的1和2展示不同的内容
+                $(".radio-juris[name='juris']").change(function () {
+                  var num = $('input:radio[name="juris"]:checked').val();
+                  if (num == 4) {
+                    $(".center-live-input").show();
+                  } else {
+                    $(".center-live-input").hide();
+                  }
+                });
+              })
+            </script>
+            <!--publish-item end-->
+            <!--publish-item start-->
+            <div class="publish-item clearfix">
+              <div class="label"><span class="color-red">*</span>设置棋类型：</div>
+              <div class="con">
+                <div class="live-bor w420">
+                  <select class="select rate-100">
+                    <option>选择棋类型</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!--publish-item end-->
+            <!--publish-item start-->
+            <div class="publish-item clearfix">
+              <div class="label"><span class="color-red">*</span>直播讲解主题：</div>
+              <div class="con">
+                <div class="live-bor">
+                  <input type="text" class="input rate-100" placeholder="请用20个字描述直播讲解主题">
+                </div>
+              </div>
+            </div>
+            <!--publish-item end-->
+            <!--publish-item start-->
+            <div class="publish-item clearfix">
+              <div class="label"><span class="color-red">*</span>直播讲解时间：</div>
+              <div class="con">
+                <div class="bor clearfix">
+                  <input type="text" class="input w285 fl" id="startDate" placeholder="开始时间">
+                  <span class="date-mid fl">至</span>
+                  <input type="text" class="input w285 fr" id="endDate" placeholder="结束时间">
+                </div>
+              </div>
+            </div>
+            <script>
+              jeDate("#startDate", {
+                format: "YYYY-MM-DD"
+              });
+              jeDate("#endDate", {
+                format: "YYYY-MM-DD"
+              });
+            </script>
+            <!--publish-item end-->
+            <!--publish-item start-->
+            <div class="publish-item clearfix">
+              <div class="label">直播讲解时长：</div>
+              <div class="con">
+                <div class="c-tip">--</div>
+              </div>
+            </div>
+            <!--publish-item end-->
+            <!--publish-item start-->
+            <div class="publish-item clearfix">
+              <div class="label"><span class="color-red">*</span>直播讲解描述：</div>
+              <div class="con">
+                <div class="detail-text">
+                  <textarea class="text" rows="5" placeholder="请描述直播内容"></textarea>
+                </div>
+              </div>
+            </div>
+            <!--publish-item end-->
+            <!--publish-item start-->
+            <div class="publish-item clearfix">
+              <div class="label"><span class="color-red">*</span>上传直播封面：</div>
+              <div class="con">
+                <!--头像start-->
+                <div class="publish-up-head">
+                  <div id="drop_area">
+                    <div class="preview">
+                      <img src="/images/trans.png" class="img-responsive" alt="" title="">
+                      <div class="txt text-c">
+                        <div class="t">上传直播封面</div>
+                        <div class="c">16:9 例如320x180，支持
+                          png、jpg格式，不超过2M</div>
+                      </div>
+
+                    </div>
+                  </div>
+                  <script src="/plugins/singleUp.js"></script>
+                  <script type="text/javascript">
+                    var dragImgUpload = new DragImgUpload("#drop_area", {
+                      callback: function (files) {
+                        //回调函数，可以传递给后台等等
+                        var file = files[0];
+                        console.log(file.name);
+                      }
+                    })
+                  </script>
+                </div>
+                <!--头像end-->
+              </div>
+            </div>
+            <!--publish-item end-->
+            <div class="publish-check">
+              <div class="check fl">
+                <input class="check-input" type="checkbox">
+                <span class="check-s"></span>
+              </div>
+              <span>本人已阅读并熟悉玻坡摸佛开房讲解协议，作为讲解者，本人承诺本房间符合玻坡摸佛开房讲解协议要求，遵守国家相关法律
+                法规，并对本承诺负全责。</span>
+            </div>
+            <div class="publish-bottom">
+              <button class="publish-btn" onClick="syalert.syopen('alert2')">提交申请</button>
+            </div>
+          </div>
+          <!--publish-content end-->
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <!--开启直播弹出-->
+  <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+    id="alert2">
+    <div class="bond-content">
+      <div class="bond-close" onClick="ok('alert2')"></div>
+      <div class="bond-tit">开启直播</div>
+      <!--bond-item start-->
+      <div class="bond-item clearfix">
+        <div class="label">推流地址：</div>
+        <div class="item-r">
+          <div class="bor">
+            <div class="text">https://modao.cc/app/ebd1f2b12a1e8240c8fc24e414392c6a6
+              9923ee0#screen=skv0dyoplgu0278</div>
+            <div class="copy">复制地址</div>
+          </div>
+        </div>
+      </div>
+      <!--bond-item end-->
+      <div class="bond-mtip">请复制地址后到推流平台</div>
+      <div class="bond-mtip">关闭后可到-个人中心-我的的直播-重新开启直播</div>
+      <div class="bond-bottom">
+        <button class="bond-btn" onclick="location='CenterLive1.html'">确认</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    function ok (id) {
+      syalert.syhide(id);
+    };
+  </script>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/live/addLive.js"></script>
+</body>
+
+</html>

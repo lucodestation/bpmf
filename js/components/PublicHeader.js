@@ -61,7 +61,7 @@ new Vue({
         this.homeShow = url == 'index' ? true : false;
         this.cooperationShow = url == 'cooperate/index' ? true : url == 'cooperate/cooperateView' ? true : false;
         this.helpShow = url == 'help/index' ? true : url == 'help/helpView' ? true : false;
-        this.hallShow = url == 'bangwen/index' ? true : url == 'hallList/hallMore' ? true : url == 'hallList/edithall' ? true : false;
+        this.hallShow = url == 'bangwen/index' ? true : url == 'bangwen/hallMore' ? true : url == 'hallList/edithall' ? true : false;
     },
     methods: {
         // 退出

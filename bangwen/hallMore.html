@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>榜文大厅</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="stylesheet" href="/plugins/animate.min.css" />
   <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
@@ -113,7 +113,7 @@
           <!--index-sec2-item start-->
           <div class="index-sec2-item" v-for="item in bangList" :key="item.id">
             <div class="bor">
-              <a href="榜文大厅教棋更多详情.html">
+              <a :href="'./hallView.html?id='+item.id">
                 <div class="img-w"><img :src="item.image"></div>
                 <div class="li-h clearfix">
                   <span class="hs">{{item.name}}</span>
