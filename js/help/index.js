@@ -35,9 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-function ok(id) {
-    syalert.syhide(id);
-}
 $(function () {
     $('.public-header').load('/components/PublicHeader.html');
     $('.public-footer').load('/components/PublicFooter.html');
@@ -46,62 +43,59 @@ new Vue({
     el: '#app',
     data: function () {
         return {
-            newsList: [],
-            articleList: [],
-            partnerList: [], // 合作机构
+            helpList: [],
+            ArticleList: [],
+            navId: ''
         };
     },
     created: function () {
         return __awaiter(this, void 0, void 0, function () {
-            var res, ress, articleList, partnerList;
+            var res;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, request({
                             method: 'POST',
-                            url: '/api/Index/noticeList',
-                            data: { page: 1, pagenum: 1 },
+                            url: '/api/Index/helpCate',
                         })];
                     case 1:
                         res = _a.sent();
-                        if (res) {
-                            this.newsList = res.data.data;
+                        if (res.code == 200) {
+                            this.helpList = res.data;
+                            this.navId = res.data[0].child[0].id;
                         }
-                        return [4 /*yield*/, request({
-                                method: 'POST',
-                                url: '/api/Index/eighteen',
-                            })
-                            // 玻说坡话列表
-                        ];
-                    case 2:
-                        ress = _a.sent();
-                        return [4 /*yield*/, request({
-                                method: 'POST',
-                                url: '/api/Index/articleList',
-                                data: { page: 1, pagenum: 4 },
-                            })];
-                    case 3:
-                        articleList = _a.sent();
-                        if (articleList) {
-                            this.articleList = articleList.data.data;
-                        }
-                        return [4 /*yield*/, request({
-                                method: 'POST',
-                                url: '/api/Index/partner',
-                            })];
-                    case 4:
-                        partnerList = _a.sent();
-                        if (partnerList) {
-                            this.partnerList = partnerList.data;
-                        }
-                        new Swiper('.mySwiper', {
-                            pagination: {
-                                el: '.swiper-pagination',
-                            },
-                            autoplay: true,
-                        });
+                        setTimeout(function () {
+                            _this.ongetHelpArticle();
+                        }, 500);
                         return [2 /*return*/];
                 }
             });
         });
     },
+    methods: {
+        onClick: function (id) {
+            this.navId = id;
+            this.ongetHelpArticle();
+        },
+        ongetHelpArticle: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var res;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Index/getHelpArticle',
+                                data: { c_id: this.navId, page: 1, pagenum: 4 },
+                            })];
+                        case 1:
+                            res = _a.sent();
+                            if (res.code == 200) {
+                                this.ArticleList = res.data.data;
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        }
+    }
 });

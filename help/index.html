@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>帮助中心</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css">
+
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jsencrypt.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+  <style>
+    .help-side-item .c {
+      cursor: pointer;
+    }
+
+    .help-side-item .active {
+      color: #FF7F17;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--help-container start-->
+  <div class="help-container" id="app">
+    <!--inner-position start-->
+    <div class="inner-position w-1200">
+      <a href="./index.html">帮助中心</a>
+    </div>
+    <!--inner-position end-->
+    <!--main-help start-->
+    <div class="main-help w-1200 clearfix">
+      <!--help-side start-->
+      <div class="help-side fl">
+        <div class="help-side-item" v-for="item in helpList" :key="item.id">
+          <div class="t">{{item.name}}</div>
+          <div class="c">
+            <div v-for="items in item.child" :key="items.id" :class="navId==items.id?'active':''"
+              @click="onClick(items.id)">
+              {{items.name}}</div>
+          </div>
+        </div>
+      </div>
+      <!--help-side end-->
+      <!--help-content start-->
+      <div class="help-content">
+        <h2 class="help-tit">常见问题</h2>
+        <a class="help-item" v-for="item in ArticleList" :key="item.id" :href="'./helpView.html?id='+item.id">
+          <div class="t">{{item.title}}</div>
+          <div class="c">{{item.descri}}</div>
+        </a>
+      </div>
+      <!--help-content end-->
+    </div>
+    <!--main-help end-->
+  </div>
+  <!--help-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/help/index.js"></script>
+</body>
+
+</html>

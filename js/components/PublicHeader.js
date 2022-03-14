@@ -51,16 +51,26 @@ new Vue({
         };
     },
     created: function () {
-        this.userShow = localStorage.getItem('token') ? true : false;
+        if (localStorage.getItem('token')) {
+            this.userShow = localStorage.getItem('token') ? true : false;
+        }
         var url = window.location.pathname.substr(1); //获取当前页面url
         var url1 = url.substr(0, 8);
         url = url.substr(0, url.length - 5);
         this.userHeadShow = url1 == 'userCont' ? true : false;
         this.homeShow = url == 'index' ? true : false;
-        this.cooperationShow = url == 'cooperation/cooperation' ? true : url == 'cooperation/cooperation-view' ? true : false;
-        this.helpShow = url == 'help/help' ? true : url == 'help/help-view' ? true : false;
+        this.cooperationShow = url == 'cooperate/index' ? true : url == 'cooperate/cooperateView' ? true : false;
+        this.helpShow = url == 'help/index' ? true : url == 'help/helpView' ? true : false;
         this.hallShow = url == 'bangwen/index' ? true : url == 'hallList/hallMore' ? true : url == 'hallList/edithall' ? true : false;
     },
+    methods: {
+        // 退出
+        onSignout: function () {
+            localStorage.clear();
+            sessionStorage.clear();
+            location.href = '/index.html';
+        }
+    }
 });
 // 登录
 new Vue({

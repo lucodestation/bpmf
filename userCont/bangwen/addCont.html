@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>发布榜文</title>
   <link rel="stylesheet" href="/plugins/date/jedate.css">
   <script src="/plugins/date/jedate.js"></script>
   <script src="/plugins/upload/imgFileupload.js"></script>
@@ -25,13 +25,31 @@
 
   <script src="/plugins/axios.min.js"></script>
   <script src="/utils/request.js"></script>
+  <style>
+    .temp-pre {
+      position: fixed;
+      top: 0;
+      right: 0;
+      background: rgba(255 255 255 / 0.5);
+    }
+
+    .publish-content .pay-l {
+      display: flex;
+    }
+
+    .w140 {
+      width: 140px;
+    }
+  </style>
 </head>
 
 <body>
   <!-- 公共头部 -->
   <header class="public-header"></header>
   <!--center-container start-->
-  <div class="center-container">
+  <div class="center-container" id="app">
+    <!-- 临时 -->
+    <pre class="temp-pre">{{formData}}</pre>
     <!--main-center start-->
     <div class="main-center w-1200 clearfix">
       <div class="public-user"></div>
@@ -82,8 +100,8 @@
               <div class="label">发布类型：</div>
               <div class="con">
                 <div class="live-bor w420">
-                  <select class="select rate-100">
-                    <option>教课</option>
+                  <select class="select rate-100" v-model="formData.type">
+                    <option :value="item.id" v-for="item in typeList">{{item.name}}</option>
                   </select>
                 </div>
               </div>
@@ -94,7 +112,7 @@
               <div class="label">发布标题：</div>
               <div class="con">
                 <div class="live-bor">
-                  <input type="text" class="input rate-100" placeholder="请输入发布内容标题">
+                  <input type="text" v-model="formData.title" class="input rate-100" placeholder="请输入发布内容标题" />
                 </div>
               </div>
             </div>
@@ -104,8 +122,8 @@
               <div class="label">服务分类：</div>
               <div class="con">
                 <div class="live-bor w420">
-                  <select class="select rate-100">
-                    <option>象棋</option>
+                  <select class="select rate-100" v-model="formData.b_id">
+                    <option :value="item.id" v-for="item in cateList">{{item.name}}</option>
                   </select>
                 </div>
               </div>
@@ -116,7 +134,7 @@
               <div class="label">酬金额度：</div>
               <div class="con">
                 <div class="live-bor w420">
-                  <input type="text" class="input rate-100" placeholder="请输入金额">
+                  <input type="text" v-model="totalMoney" class="input rate-100" placeholder="请输入金额" />
                 </div>
               </div>
             </div>
@@ -126,8 +144,8 @@
               <div class="label">酬金托管：</div>
               <div class="con">
                 <div class="live-bor w420">
-                  <select class="select rate-100">
-                    <option>不托管</option>
+                  <select class="select rate-100" v-model="formData.is_trustee">
+                    <option :value="item.id" v-for="item in trusteeList">{{item.name}}</option>
                   </select>
                 </div>
               </div>
@@ -138,37 +156,31 @@
               <div class="label">支付方式：</div>
               <div class="con">
                 <div class="live-bor w420 fl">
-                  <select class="select rate-100" id="hideselect">
-                    <option value="1">一次性付清</option>
-                    <option value="2">多次支付</option>
+                  <select class="select rate-100" v-model="formData.pay_num_type" @change="getpaynumSelected">
+                    <option :value="item.id" v-for="item in payList">{{item.name}}</option>
                   </select>
                 </div>
-                <div class="more-pay">
+                <div class="more-pay" v-if="formData.pay_num_type==2">
                   <div class="pay-l fl">
                     <div class="live-bor">
-                      <select class="select w160">
-                        <option>3</option>
+                      <select class="select w140" v-model="formData.pay_num" @change="getCouponSelected">
+                        <option :value="item" v-for="item in num">{{item}}次</option>
                       </select>
                     </div>
                   </div>
                   <div class="pay-l fl">
                     <div class="live-bor">
-                      <select class="select w160">
-                        <option>自定义金额</option>
+                      <select class="select w140" v-model="formData.more_type">
+                        <option :value="item.id" v-for="item in moreList">{{item.name}}</option>
                       </select>
                     </div>
                   </div>
-                  <div class="pay-l fl">
-                    <span class="pay-name">第1次</span>
-                    <input type="text" class="input w170" placeholder="请输入金额">
-                  </div>
-                  <div class="pay-l fl">
-                    <span class="pay-name">第2次</span>
-                    <input type="text" class="input w170" placeholder="请输入金额">
-                  </div>
-                  <div class="pay-l fl">
-                    <span class="pay-name">第3次</span>
-                    <input type="text" class="input w170" placeholder="请输入金额">
+                  <div class="pay-l fl" v-for="item,i in ordeList" :key="item">
+                    <span class="pay-name">第{{item.id}}次</span>
+                    <input type="text" v-if="formData.more_type==1" readonly class="input w140" v-model="item.num"
+                      placeholder="请输入金额" />
+                    <input type="text" v-if="formData.more_type==2" class="input w140" v-model="item.num"
+                      placeholder="请输入金额" />
                   </div>
                 </div>
 
@@ -192,10 +204,14 @@
             <div class="publish-item clearfix">
               <div class="label">中榜模式：</div>
               <div class="con">
-                <div class="live-bor w420">
-                  <select class="select rate-100">
-                    <option>单人中榜</option>
+                <div class="live-bor w420 fl">
+                  <select class="select rate-100" v-model="formData.win_type">
+                    <option :value="item.id" v-for="item in winList">{{item.name}}</option>
                   </select>
+                </div>
+                <div class="pay-l fl" v-if="formData.win_type==2" style="align-items: center;">
+                  <input class="input w170" v-model="formData.win_num" type="number" min='2' placeholder="请输入人数"
+                    style="margin-right: 10px;">人
                 </div>
               </div>
             </div>
@@ -207,50 +223,34 @@
                 时间：</div>
               <div class="con">
                 <div class="date-input fl">
-                  <input type="text" class="input w315" id="startDate" placeholder="YYYY-MM-DD">
+                  <input id="signUpStartDate" type="text" :value="formData.task_start_time" class="input w315"
+                    placeholder="YYYY-MM-DD" />
                 </div>
                 <div class="item-line fl"></div>
                 <div class="date-input fl">
-                  <input type="text" class="input w315" id="endDate" placeholder="YYYY-MM-DD">
+                  <input type="text" class="input w315" :value="formData.task_end_time" id="signUpEndDate"
+                    placeholder="YYYY-MM-DD" />
                 </div>
               </div>
             </div>
             <!--publish-item end-->
-            <script>
-              jeDate("#startDate", {
-                isinitVal: true,
-                format: "YYYY-MM-DD"
-              });
-              jeDate("#endDate", {
-                isinitVal: true,
-                format: "YYYY-MM-DD"
-              });
-            </script>
             <!--publish-item start-->
             <div class="publish-item clearfix">
               <div class="label">截止报名
                 时间：</div>
               <div class="con">
                 <div class="date-input fl">
-                  <input type="text" class="input w315" id="startDate1" placeholder="YYYY-MM-DD">
+                  <input type="text" class="input w315" :value="formData.signup_start_time" id="startDate1"
+                    placeholder="YYYY-MM-DD" />
                 </div>
                 <div class="item-line fl"></div>
                 <div class="date-input fl">
-                  <input type="text" class="input w315" id="endDate2" placeholder="YYYY-MM-DD">
+                  <input type="text" class="input w315" :value="formData.signup_end_time" id="endDate2"
+                    placeholder="YYYY-MM-DD" />
                 </div>
               </div>
             </div>
             <!--publish-item end-->
-            <script>
-              jeDate("#startDate1", {
-                isinitVal: true,
-                format: "YYYY-MM-DD"
-              });
-              jeDate("#endDate2", {
-                isinitVal: true,
-                format: "YYYY-MM-DD"
-              });
-            </script>
             <!--publish-item start-->
             <div class="publish-item clearfix">
               <div class="label">
@@ -266,7 +266,8 @@
               <div class="label">榜文详情：</div>
               <div class="con">
                 <div class="detail-text">
-                  <textarea class="text" rows="5" placeholder="请输入详细描述，例如：详细讲解围棋布局套路，常见套路分解"></textarea>
+                  <textarea class="text" v-model="formData.detail" rows="5"
+                    placeholder="请输入详细描述，例如：详细讲解围棋布局套路，常见套路分解"></textarea>
                 </div>
               </div>
             </div>
@@ -339,7 +340,7 @@
               <div class="label">手机号：</div>
               <div class="con">
                 <div class="live-bor w420">
-                  <input type="text" class="input rate-100" placeholder="请输入已认证的手机号">
+                  <input type="text" v-model="formData.mobile" class="input rate-100" placeholder="请输入已认证的手机号">
                 </div>
               </div>
             </div>
@@ -349,7 +350,7 @@
               <div class="label">QQ号：</div>
               <div class="con">
                 <div class="live-bor w420">
-                  <input type="text" class="input rate-100" placeholder="请输QQ号">
+                  <input type="text" v-model="formData.qq" class="input rate-100" placeholder="请输QQ号">
                 </div>
               </div>
             </div>
@@ -359,7 +360,7 @@
               <div class="label">邮箱号：</div>
               <div class="con">
                 <div class="live-bor w420">
-                  <input type="text" class="input rate-100" placeholder="请输入邮箱">
+                  <input type="text" v-model="formData.email" class="input rate-100" placeholder="请输入邮箱">
                 </div>
               </div>
             </div>
@@ -373,7 +374,7 @@
               <a class="color-orange" href="">《玻坡摸佛榜文（需求）规则》</a>
             </div>
             <div class="publish-bottom">
-              <button class="publish-btn" onClick="syalert.syopen('alert2')">提交</button>
+              <button class="publish-btn" @click="onBtnClick">提交</button>
             </div>
           </div>
           <!--publish-content end-->

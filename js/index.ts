@@ -1,9 +1,3 @@
-new Swiper('.mySwiper', {
-  pagination: {
-    el: '.swiper-pagination',
-  },
-  autoplay: true,
-})
 function ok(id) {
   syalert.syhide(id)
 }
@@ -16,8 +10,8 @@ new Vue({
   data() {
     return {
       newsList: [],// 平台公告
-      articleList:[],// 玻说坡话列表
-      partnerList:[],// 合作机构
+      articleList: [],// 玻说坡话列表
+      partnerList: [],// 合作机构
     }
   },
   async created() {
@@ -52,6 +46,13 @@ new Vue({
     if (partnerList) {
       this.partnerList = partnerList.data
     }
+
+    new Swiper('.mySwiper', {
+      pagination: {
+        el: '.swiper-pagination',
+      },
+      autoplay: true,
+    })
   },
 })
 

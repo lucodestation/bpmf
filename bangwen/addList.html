@@ -185,7 +185,7 @@
                 <option :value="item.id" v-for="item in winList">{{item.name}}</option>
               </select>
             </div>
-            <div class="pay-l fl" v-if="formData.win_type==2">
+            <div class="pay-l fl" v-if="formData.win_type==2" style="align-items: center;">
               <input class="input w170" v-model="formData.win_num" type="number" min='2' placeholder="请输入人数"
                 style="margin-right: 10px;">人
             </div>
