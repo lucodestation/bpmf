@@ -59,14 +59,13 @@ new Vue({
         // 获取赛事类型列表
         request({
             url: '/api/Competition/get_category_list',
-            success: function (result) {
-                console.log('赛事类型列表', result);
-                if (+result.code == 200) {
-                    _this.competitionCateList = result.data;
-                }
-                else {
-                }
-            },
+        }).then(function (result) {
+            console.log('赛事类型列表', result);
+            if (+result.code == 200) {
+                _this.competitionCateList = result.data;
+            }
+            else {
+            }
         });
         // 初始化日期时间选择器
         // 初始化报名开始时间
@@ -359,9 +358,8 @@ new Vue({
             var errorArr = new Set();
             for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
                 var item = files_1[_i];
-                console.log(item);
-                var filesNameList = this.affixList.map(function (i) { return i.name; });
-                // 禁止添加同名文件
+                var filesNameList = this.affixList.length ? this.affixList.map(function (i) { return i.name; }) : [];
+                // （如果不存在文件名）禁止添加同名文件
                 if (!filesNameList.includes(item.name)) {
                     if (!['png', 'jpg', 'jpeg', 'webp', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
                         errorArr.add(util.getExtensionName(item.name));
@@ -384,7 +382,9 @@ new Vue({
                     btn: ['重新选择'],
                 });
             }
-            tempArr.length = 5 - this.affixList.length;
+            if (this.affixList.length > 5) {
+                tempArr.length = 5 - this.affixList.length;
+            }
             (_a = this.affixList).push.apply(_a, tempArr);
             element.value = '';
         },

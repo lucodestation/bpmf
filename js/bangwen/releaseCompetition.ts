@@ -53,13 +53,12 @@ new Vue({
     // 获取赛事类型列表
     request({
       url: '/api/Competition/get_category_list',
-      success: (result) => {
-        console.log('赛事类型列表', result)
-        if (+result.code == 200) {
-          this.competitionCateList = result.data
-        } else {
-        }
-      },
+    }).then((result) => {
+      console.log('赛事类型列表', result)
+      if (+result.code == 200) {
+        this.competitionCateList = result.data
+      } else {
+      }
     })
 
     // 初始化日期时间选择器
@@ -347,9 +346,8 @@ new Vue({
       const tempArr = []
       const errorArr = new Set()
       for (const item of files) {
-        console.log(item)
-        const filesNameList = this.affixList.map((i) => i.name)
-        // 禁止添加同名文件
+        const filesNameList = this.affixList.length ? this.affixList.map((i) => i.name) : []
+        // （如果不存在文件名）禁止添加同名文件
         if (!filesNameList.includes(item.name)) {
           if (!['png', 'jpg', 'jpeg', 'webp', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
             errorArr.add(util.getExtensionName(item.name))
@@ -372,7 +370,9 @@ new Vue({
         })
       }
 
-      tempArr.length = 5 - this.affixList.length
+      if (this.affixList.length > 5) {
+        tempArr.length = 5 - this.affixList.length
+      }
       this.affixList.push(...tempArr)
       element.value = ''
     },
