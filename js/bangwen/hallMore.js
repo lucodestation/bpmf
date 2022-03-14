@@ -51,6 +51,12 @@ new Vue({
             payId: '',
             winList: [{ id: '', title: '不限' }, { id: 1, title: '单人中榜' }, { id: 2, title: '多人中榜' }],
             winId: '',
+            trusteeList: [{ id: '', title: '不限' }, { id: 1, title: '托管' }, { id: 2, title: '不托管' }],
+            trusteeId: '',
+            minList: [{ id: '', title: '不限', min: '', max: '' }, { id: 1, title: '100以下', min: '0', max: '100' }, { id: 2, title: '100-500', min: '100', max: '500' }, { id: 3, title: '500-1000', min: '500', max: '1000' }],
+            minId: '',
+            min: '',
+            max: '',
             sortList: [{ id: '', title: '默认' }, { id: 1, title: '最新' }, { id: 2, title: '酬金从高到低排' }, { id: 3, title: '酬金从低到高排' },],
             sortId: '',
             bangList: [],
@@ -101,6 +107,18 @@ new Vue({
             this.winId = e;
             this.onBangwenlist();
         },
+        // 点击酬金托管
+        onTrustClick: function (e) {
+            this.trusteeId = e;
+            this.onBangwenlist();
+        },
+        // 点击酬金额度
+        onMinClick: function (e) {
+            this.minId = e.id;
+            this.min = e.min;
+            this.max = e.max;
+            this.onBangwenlist();
+        },
         // 点击排序
         onSortClick: function (e) {
             this.sortId = e;
@@ -115,7 +133,7 @@ new Vue({
                         case 0: return [4 /*yield*/, request({
                                 method: 'POST',
                                 url: '/api/Bangwen/list',
-                                data: { page: 1, pagenum: 7, b_id: this.cateId, type: this.type, pay_num_type: this.payId, win_type: this.winId, is_trustee: '', min: '', max: '', sort: this.sortId },
+                                data: { page: 1, pagenum: 7, b_id: this.cateId, type: this.type, pay_num_type: this.payId, win_type: this.winId, is_trustee: this.trusteeId, min: this.min, max: this.max, sort: this.sortId },
                             })];
                         case 1:
                             res = _a.sent();

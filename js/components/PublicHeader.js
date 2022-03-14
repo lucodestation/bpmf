@@ -46,15 +46,16 @@ new Vue({
             cooperationShow: false,
             homeShow: false,
             helpShow: false,
-            hallShow: false, // 榜文大厅是否选中
+            hallShow: false,
+            userHeadShow: false, // 个人中心头部
         };
     },
     created: function () {
         this.userShow = localStorage.getItem('token') ? true : false;
         var url = window.location.pathname.substr(1); //获取当前页面url
-        var url1 = url.substr(0, 4);
+        var url1 = url.substr(0, 8);
         url = url.substr(0, url.length - 5);
-        console.log(url);
+        this.userHeadShow = url1 == 'userCont' ? true : false;
         this.homeShow = url == 'index' ? true : false;
         this.cooperationShow = url == 'cooperation/cooperation' ? true : url == 'cooperation/cooperation-view' ? true : false;
         this.helpShow = url == 'help/help' ? true : url == 'help/help-view' ? true : false;

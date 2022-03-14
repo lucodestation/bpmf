@@ -1,3 +1,4 @@
+<script src="/plugins/jquery.min.js"></script>
 <!--main-header start-->
 <div class="main-header" id="Header">
   <!--header-top start-->
@@ -6,7 +7,7 @@
       <div class="top-fl fl">
         <div class="top-welcome fl">欢迎您来到玻坡摸佛</div>
         <div class="top-nav fl">
-          <a href="/hallList/edithall.html">发布榜文</a>
+          <a href="/bangwen/addList.html">发布榜文</a>
           <a href="">发起直播</a>
           <a href="">发布比赛</a>
         </div>
@@ -19,16 +20,17 @@
         </div>
         <div class="top-person fr">
           <div class="top-person-img clearfix">
-            <img src="../images/index13.png" />
+            <img src="/images/index13.png" />
             <span class="name">棋王1245</span>
           </div>
           <div class="top-person-down">
             <div class="down-hd clearfix">
-              <img class="img" src="../images/index5.png" />
-              <div class="txt">
-                <div class="t">棋王1245</div>
-                <div class="c"><img src="../images/VIP.png" /></div>
-              </div>
+              <a href="/userCont/bangwen/addCont.html"> <img class="img" src="/images/index5.png" />
+                <div class="txt">
+                  <div class="t">棋王1245</div>
+                  <div class="c"><img src="/images/VIP.png" /></div>
+                </div>
+              </a>
               <button class="top-quit fr">退出</button>
             </div>
             <div class="down-bd">
@@ -37,32 +39,32 @@
                 <dl id="roll">
                   <dd>
                     <a class="down-bd-a" href="">
-                      <img src="../images/icon11.jpg" />
+                      <img src="/images/icon11.jpg" />
                     </a>
                   </dd>
                   <dd>
                     <a class="down-bd-a" href="">
-                      <img src="../images/icon12.jpg" />
+                      <img src="/images/icon12.jpg" />
                     </a>
                   </dd>
                   <dd>
                     <a class="down-bd-a" href="">
-                      <img src="../images/icon13.jpg" />
+                      <img src="/images/icon13.jpg" />
                     </a>
                   </dd>
                   <dd>
                     <a class="down-bd-a" href="">
-                      <img src="../images/icon11.jpg" />
+                      <img src="/images/icon11.jpg" />
                     </a>
                   </dd>
                   <dd>
                     <a class="down-bd-a" href="">
-                      <img src="../images/icon11.jpg" />
+                      <img src="/images/icon11.jpg" />
                     </a>
                   </dd>
                   <dd>
                     <a class="down-bd-a" href="">
-                      <img src="../images/icon11.jpg" />
+                      <img src="/images/icon11.jpg" />
                     </a>
                   </dd>
                 </dl>
@@ -85,8 +87,42 @@
     </div>
   </div>
   <!--header-top end-->
-  <!--header start-->
-  <div class="header w-1200 clearfix">
+  <!--个人中心头部-->
+  <div class="header w-1200 clearfix" v-if="userHeadShow">
+    <div class="header-logo fl">
+      <a href="/index.html"><img src="/images/logo.png"></a>
+    </div>
+    <div class="center-nav fl">
+      <ul class="nav">
+        <li><a href="/index.html">网站首页</a> </li>
+        <li class="current"><a href="">个人中心</a> </li>
+        <li>
+          <a href="">账户设置<i class="icon"></i></a>
+          <div class="nav-sub">
+            <a href="">个人信息</a>
+            <a href="">密码修改</a>
+            <a href="/userCont/setup/realName.html">实名认证</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!--header-search start-->
+    <div class="header-search fr">
+      <div class="search-select fl">
+        <select class="select">
+          <option>榜文</option>
+        </select>
+      </div>
+      <div class="search-input fl">
+        <input type="text" class="input" placeholder="请输入关键词">
+      </div>
+      <button class="search-btn fr">搜索</button>
+    </div>
+    <!--header-search end-->
+  </div>
+  <!--个人中心头部-->
+  <!--外面-->
+  <div class="header w-1200 clearfix" v-else>
     <div class="header-logo fl">
       <a href="/index.html"><img src="/images/logo.png" /></a>
     </div>
@@ -117,14 +153,14 @@
     <div class="header-sub fr">
       <span class="span-name">我要发布</span>
       <div class="sub-down">
-        <a class="sub-down-a" href="/hallList/edithall.html">发布榜文</a>
+        <a class="sub-down-a" href="/bangwen/addList.html">发布榜文</a>
         <a class="sub-down-a" href="/annunciation/releaseCompetition.html">发布赛事</a>
         <a class="sub-down-a" href="发布直播.html">发布直播</a>
       </div>
     </div>
     <!--header-sub end-->
   </div>
-  <!--header end-->
+  <!--外面-->
 </div>
 <!--main-header end-->
 <!-- 登录弹窗 -->
@@ -173,7 +209,8 @@
   <div class="index-login-other">
     <div class="tit">第三方登录</div>
     <div class="wx">
-      <a href="javascript:void(0)" onClick="syalert.syopen('alert2')||ok('alert1')"><img src="images/icon-wx.png" /></a>
+      <a href="javascript:void(0)" onClick="syalert.syopen('alert2')||ok('alert1')"><img
+          src="/images/icon-wx.png" /></a>
     </div>
   </div>
 </div>
@@ -183,7 +220,7 @@
   <div class="login-wx">
     <div class="wx-close" onClick="ok('alert2')"></div>
     <div class="wx-tit">微信扫码登录</div>
-    <div class="wx-img"><img src="images/wx.png" /></div>
+    <div class="wx-img"><img src="/images/wx.png" /></div>
     <div class="wx-tip">用手机APP扫下方二维码登录，扫码后在手机 上点击“确认授权”即可</div>
     <div class="wx-bot clearfix">
       <a class="wx-btn fl" href="javascript:void(0);" onClick="syalert.syopen('alert1')||ok('alert2')">密码登录</a>

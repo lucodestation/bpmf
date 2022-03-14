@@ -1,5 +1,3 @@
-console.log('publicfooter js')
-
 new Vue({
   el: '#publicFooter',
   data() {

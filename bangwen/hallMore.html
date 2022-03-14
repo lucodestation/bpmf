@@ -80,9 +80,8 @@
         <div class="rank-hd clearfix">
           <div class="label fl">酬金托管：</div>
           <div class="con">
-            <a class="rank-hd-a active" href="">不限</a>
-            <a class="rank-hd-a " href="">已托管</a>
-            <a class="rank-hd-a" href="">未托管</a>
+            <div v-for="item in trusteeList" :key="item.id" :class="item.id==trusteeId?'active':''" class="rank-hd-a"
+              @click="onTrustClick(item.id)">{{item.title}}</div>
           </div>
         </div>
         <!--rank-hd end-->
@@ -90,10 +89,8 @@
         <div class="rank-hd clearfix">
           <div class="label fl">酬金额度：</div>
           <div class="con">
-            <a class="rank-hd-a active" href="">不限</a>
-            <a class="rank-hd-a " href="">100以下</a>
-            <a class="rank-hd-a" href="">100-500</a>
-            <a class="rank-hd-a" href="">500-1000</a>
+            <div v-for="item in minList" :key="item.id" :class="item.id==minId?'active':''" class="rank-hd-a"
+              @click="onMinClick(item)">{{item.title}}</div>
           </div>
         </div>
         <!--rank-hd end-->
