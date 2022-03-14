@@ -26,7 +26,8 @@
           </div>
           <div class="top-person-down">
             <div class="down-hd clearfix">
-              <a href="/userCont/bangwen/addCont.html"> <img class="img" src="/images/index5.png" />
+              <a href="/userCont/bangwen/addCont.html">
+                <img class="img" src="/images/index5.png" />
                 <div class="txt">
                   <div class="t">棋王1245</div>
                   <div class="c"><img src="/images/VIP.png" /></div>
@@ -91,12 +92,12 @@
   <!--个人中心头部-->
   <div class="header w-1200 clearfix" v-if="userHeadShow">
     <div class="header-logo fl">
-      <a href="/index.html"><img src="/images/logo.png"></a>
+      <a href="/index.html"><img src="/images/logo.png" /></a>
     </div>
     <div class="center-nav fl">
       <ul class="nav">
-        <li><a href="/index.html">网站首页</a> </li>
-        <li class="current"><a href="">个人中心</a> </li>
+        <li><a href="/index.html">网站首页</a></li>
+        <li class="current"><a href="">个人中心</a></li>
         <li>
           <a href="">账户设置<i class="icon"></i></a>
           <div class="nav-sub">
@@ -115,7 +116,7 @@
         </select>
       </div>
       <div class="search-input fl">
-        <input type="text" class="input" placeholder="请输入关键词">
+        <input type="text" class="input" placeholder="请输入关键词" />
       </div>
       <button class="search-btn fr">搜索</button>
     </div>
@@ -153,10 +154,12 @@
     <!--header-sub start-->
     <div class="header-sub fr">
       <span class="span-name">我要发布</span>
-      <div class="sub-down">
-        <a class="sub-down-a" href="/bangwen/addList.html">发布榜文</a>
-        <a class="sub-down-a" href="/annunciation/releaseCompetition.html">发布赛事</a>
-        <a class="sub-down-a" href="发布直播.html">发布直播</a>
+      <div class="sub-down-wrap">
+        <div class="sub-down">
+          <a class="sub-down-a" href="/bangwen/addList.html">发布榜文</a>
+          <a class="sub-down-a" href="/bangwen/releaseCompetition.html">发布赛事</a>
+          <a class="sub-down-a" href="发布直播.html">发布直播</a>
+        </div>
       </div>
     </div>
     <!--header-sub end-->
@@ -165,8 +168,7 @@
 </div>
 <!--main-header end-->
 <!-- 登录弹窗 -->
-<div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
-  id="alert1">
+<div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert1">
   <div class="index-login-hd clearfix">
     <div class="login-li on">密码登录</div>
     <div class="login-li">短信登录</div>
@@ -210,14 +212,12 @@
   <div class="index-login-other">
     <div class="tit">第三方登录</div>
     <div class="wx">
-      <a href="javascript:void(0)" onClick="syalert.syopen('alert2')||ok('alert1')"><img
-          src="/images/icon-wx.png" /></a>
+      <a href="javascript:void(0)" onClick="syalert.syopen('alert2')||ok('alert1')"><img src="/images/icon-wx.png" /></a>
     </div>
   </div>
 </div>
 <!-- 微信登录弹窗 -->
-<div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
-  id="alert2">
+<div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert2">
   <div class="login-wx">
     <div class="wx-close" onClick="ok('alert2')"></div>
     <div class="wx-tit">微信扫码登录</div>
@@ -232,7 +232,7 @@
 <script src="/js/common.js"></script>
 <script src="/js/components/PublicHeader.js"></script>
 <script>
-  function ok (id) {
+  function ok(id) {
     syalert.syhide(id)
   }
 </script>

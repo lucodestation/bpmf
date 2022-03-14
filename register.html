@@ -1,105 +1,104 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/jquery.min.js"></script>
+    <script src="/plugins/vue.min.js"></script>
+    <!-- <script src="/plugins/jsencrypt.js"></script> -->
+    <script src="http://tools.jb51.net/static/api/rsa_encode/js/jsencrypt.js"></script>
+    <script src="/plugins/axios.min.js"></script>
+    <script src="/utils/request.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <link rel="stylesheet" href="/plugins/layui/css/layui.css">
-  <link rel="stylesheet" href="css/style.css">
-  <script src="/plugins/babel-polyfill.min.js"></script>
-  <script src="/plugins/layui/layui.js"></script>
-  <script src="/plugins/jquery.min.js"></script>
-  <script src="/plugins/vue.min.js"></script>
-  <script src="/plugins/jsencrypt.js"></script>
-  <script src="/plugins/axios.min.js"></script>
-  <script src="/utils/request.js"></script>
-</head>
-
-<body>
-  <!--main-header start-->
-  <div class="main-header">
-    <!--header-top start-->
-    <div class="header-top">
-      <div class="w-1200 clearfix">
-        <div class="top-fl fl">
-          <div class="top-welcome fl">欢迎您来到玻坡摸佛</div>
-        </div>
-        <div class="top-fr fr">
-          <div class="top-login">
-            <a class="log-a" href="/index.html">网站首页</a>
+  <body>
+    <!--main-header start-->
+    <div class="main-header">
+      <!--header-top start-->
+      <div class="header-top">
+        <div class="w-1200 clearfix">
+          <div class="top-fl fl">
+            <div class="top-welcome fl">欢迎您来到玻坡摸佛</div>
+          </div>
+          <div class="top-fr fr">
+            <div class="top-login">
+              <a class="log-a" href="/index.html">网站首页</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <!--header-top end-->
-    <div class="header w-1200 clearfix">
-      <div class="header-logo fl">
-        <a href="index.html"><img src="images/logo.png"></a>
-      </div>
-    </div>
-  </div>
-  <!--main-header end-->
-  <!--register-container start-->
-  <div class="register-container" id="app">
-    <div class="w-1200">
-      <div class="register-content">
-        <div class="register-hd">已有玻坡摸佛账户？<a class="color-orange" href="">快去登录</a> </div>
-        <div class="register-title">网站注册</div>
-        <!--register-bd start-->
-        <div class="register-bd">
-          <!--register-item start-->
-          <div class="register-item">
-            <div class="label">手机号</div>
-            <div class="bor">
-              <input type="text" v-model="mobile" maxlength="11" class="input" placeholder="请输入手机号" />
-            </div>
-          </div>
-          <!--register-item end-->
-          <!--register-item start-->
-          <div class="register-item">
-            <div class="label">验证码</div>
-            <div class="bor">
-              <input type="text" v-model="code" class="input" placeholder="请输入验证码" />
-              <button class="register-verify" @click="onCode" v-if="codeTxt=='获取验证码'">{{codeTxt}}</button>
-              <button class="register-verify" v-else>{{codeTxt}}</button>
-            </div>
-          </div>
-          <!--register-item end-->
-          <!--register-item start-->
-          <div class="register-item">
-            <div class="label">设置密码</div>
-            <div class="bor">
-              <input type="password" v-model="pwd" class="input" placeholder="请输入密码（密码长度8~20个字符）" />
-            </div>
-          </div>
-          <!--register-item end-->
-          <!--register-item start-->
-          <div class="register-item">
-            <div class="label">请确认密码</div>
-            <div class="bor">
-              <input type="password" v-model="pwd2" class="input" placeholder="请再次输入密码" />
-            </div>
-          </div>
-          <!--register-item end-->
-          <div class="register-check clearfix">
-            <div class="check-input fl"><input type="checkbox" class="check" /><span class="span"></span></div>
-            我已认真阅读并同意<a class="color-orange" href="">《玻坡摸佛用户注册协议》</a>和<a class="color-orange" href="">《玻坡摸佛平台协议》</a>
-          </div>
-          <!--register-bot start-->
-          <div class="register-bot">
-            <button class="register-btn" @click="onClick">确定</button>
-          </div>
-          <!--register-bot end-->
+      <!--header-top end-->
+      <div class="header w-1200 clearfix">
+        <div class="header-logo fl">
+          <a href="index.html"><img src="images/logo.png" /></a>
         </div>
-        <!--register-bd end-->
       </div>
     </div>
-  </div>
-  <!--register-container end-->
-  <!-- 公共底部 -->
-  <footer class="public-footer"></footer>
-  <script src="/js/register.js"></script>
-</body>
-
+    <!--main-header end-->
+    <!--register-container start-->
+    <div class="register-container" id="app">
+      <div class="w-1200">
+        <div class="register-content">
+          <div class="register-hd">已有玻坡摸佛账户？<a class="color-orange" href="">快去登录</a></div>
+          <div class="register-title">网站注册</div>
+          <!--register-bd start-->
+          <div class="register-bd">
+            <!--register-item start-->
+            <div class="register-item">
+              <div class="label">手机号</div>
+              <div class="bor">
+                <input type="text" v-model="mobile" class="input" placeholder="请输入手机号" />
+              </div>
+            </div>
+            <!--register-item end-->
+            <!--register-item start-->
+            <div class="register-item">
+              <div class="label">验证码</div>
+              <div class="bor">
+                <input type="text" v-model="code" class="input" placeholder="请输入验证码" />
+                <button class="register-verify" @click="onCode" v-if="codeTxt=='获取验证码'">{{codeTxt}}</button>
+                <button class="register-verify" v-else>{{codeTxt}}</button>
+              </div>
+            </div>
+            <!--register-item end-->
+            <!--register-item start-->
+            <div class="register-item">
+              <div class="label">设置密码</div>
+              <div class="bor">
+                <input type="password" v-model="pwd" class="input" placeholder="请输入密码（密码长度8~20个字符）" />
+              </div>
+            </div>
+            <!--register-item end-->
+            <!--register-item start-->
+            <div class="register-item">
+              <div class="label">请确认密码</div>
+              <div class="bor">
+                <input type="password" v-model="pwd2" class="input" placeholder="请再次输入密码" />
+              </div>
+            </div>
+            <!--register-item end-->
+            <div class="register-check clearfix">
+              <div class="check-input fl"><input type="checkbox" class="check" /><span class="span"></span></div>
+              我已认真阅读并同意<a class="color-orange" href="">《玻坡摸佛用户注册协议》</a>和<a class="color-orange" href="">《玻坡摸佛平台协议》</a>
+            </div>
+            <!--register-bot start-->
+            <div class="register-bot">
+              <button class="register-btn" @click="onClick">确定</button>
+            </div>
+            <!--register-bot end-->
+          </div>
+          <!--register-bd end-->
+        </div>
+      </div>
+    </div>
+    <!--register-container end-->
+    <!-- 公共底部 -->
+    <footer class="public-footer"></footer>
+    <script src="/js/register.js"></script>
+  </body>
 </html>

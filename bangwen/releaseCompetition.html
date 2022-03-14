@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<!-- 发布比赛 -->
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>发布比赛 - 玻坡摸佛</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/jsencrypt.js"></script>
+    <script src="/plugins/jquery.min.js"></script>
+    <script src="/plugins/syalert/syalert.min.js"></script>
+    <script src="/plugins/vue.min.js"></script>
+
+    <script src="/plugins/axios.min.js"></script>
+    <script src="/utils/request.js"></script>
+    <script src="/utils/util.js"></script>
+    <style>
+      /* 临时 */
+      .temp-pre {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255 255 255);
+        overflow: scroll;
+        max-width: 500px;
+        opacity: 0.7;
+        z-index: 10000;
+      }
+
+      /* 隐藏时间选择控件不需要的分、秒 */
+      /* 隐藏分 */
+      .laydate-time-list > li:nth-child(2) ol li {
+        display: none;
+      }
+      /* 显示 00 分和 30 分*/
+      .laydate-time-list > li:nth-child(2) ol li:nth-child(1),
+      .laydate-time-list > li:nth-child(2) ol li:nth-child(31) {
+        display: list-item;
+      }
+      /* 隐藏秒 */
+      .laydate-time-list > li:nth-child(3) ol li {
+        display: none;
+      }
+
+      /* 日期时间选择器（触发打开日期时间选择器的元素） */
+      .date-time-picker {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #999;
+      }
+      .date-time-picker .date-time {
+        color: #333;
+      }
+
+      /* 隐藏 layui 文件选择后显示的文件名称 */
+      .layui-upload-choose {
+        display: none;
+      }
+
+      /* 附件列表 */
+      .affix-list {
+        /* background: pink; */
+        color: #666;
+      }
+      .affix-list .affix-item {
+        /* background: #eee; */
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+      }
+      .affix-list .affix-item .close-icon {
+        width: 16px;
+        height: 16px;
+        margin: 0 10px;
+        transform: rotate(45deg);
+        background: url('/images/pub31.png') no-repeat center;
+        background-size: 100% 100%;
+        cursor: pointer;
+      }
+      .affix-list .affix-item .close-icon:hover {
+        background: url('/images/bank4.png') no-repeat center;
+        background-size: 100% 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 公共头部 -->
+    <header class="public-header"></header>
+
+    <!-- 公共容器/页面主要内容 -->
+    <div id="app" class="publish-container">
+      <!-- 临时 -->
+      <pre class="temp-pre layui-code">
+        <!-- 表单数据 -->
+        <!-- <div>{{formData}}</div> -->
+        <!-- 封面图 -->
+        <div>{{coverImage}}</div>
+        <!-- 附件列表 -->
+        <div>{{affixList}}</div>
+      </pre>
+      <!-- <pre class="temp-pre">{{competitionCateList}}</pre> -->
+      <!-- 面包屑导航 -->
+      <div class="inner-position w-1200">
+        <a href="/">首页</a>
+        <!-- <span> < </span> -->
+        <span> &lt; </span>
+        <span class="current">发布比赛</span>
+      </div>
+
+      <!-- 发布赛事步骤 -->
+      <div class="publish-head w-1200">
+        <div class="content clearfix">
+          <div class="head-li li1 on">
+            <div class="t">1.设置赛事公告信息</div>
+            <div class="icon"></div>
+          </div>
+          <div class="head-line"></div>
+          <div class="head-li li2">
+            <div class="t">2.设置赛事比赛方法</div>
+            <div class="icon"></div>
+          </div>
+          <div class="head-line"></div>
+          <div class="head-li li3">
+            <div class="t">3.设置赛事奖励</div>
+            <div class="icon"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="publish-main w-1200">
+        <h1 class="publish-tit">发布比赛</h1>
+        <!-- 主要内容 -->
+        <div class="publish-content">
+          <div class="item-tit">赛事分类</div>
+
+          <!-- 赛事种类 -->
+          <div class="publish-item clearfix">
+            <div class="label">赛事种类：</div>
+            <div class="con">
+              <div class="item-radio clearfix">
+                <div class="radio-li fl" @click="formData.competition_type = 0">
+                  <input class="radio" type="radio" name="competitionType" :checked="formData.competition_type === 0" />
+                  <span class="span">个人赛</span>
+                </div>
+                <div class="radio-li fl" @click="formData.competition_type = 1">
+                  <input class="radio" type="radio" name="competitionType" :checked="formData.competition_type === 1" />
+                  <span class="span">团队赛</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 赛事类型 -->
+          <div class="publish-item clearfix">
+            <div class="label">赛事类型：</div>
+            <div class="con">
+              <div class="item-radio clearfix">
+                <div class="radio-li fl" v-for="(item, index) in competitionCateList" :key="index" @click="formData.category_id = item.id">
+                  <input class="radio" type="radio" name="competitionCate" :checked="item.id === formData.category_id" />
+                  <span class="span">{{item.category_name}}</span>
+                </div>
+
+                <div class="radio-input fl" v-if="formData.category_id === 5">
+                  <input type="text" class="input" placeholder="说明" v-model.trim="formData.category_memo" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="item-tit">赛事描述</div>
+
+          <!-- 赛事名称 -->
+          <div class="publish-item clearfix">
+            <div class="label">赛事名称：</div>
+            <div class="con">
+              <input type="text" class="input w400" placeholder="请输入赛事名称" v-model.trim="formData.competition_name" />
+            </div>
+          </div>
+
+          <!-- 比赛阶段总数 -->
+          <div class="publish-item clearfix">
+            <div class="label">比赛阶段总数：</div>
+            <div class="con">
+              <input class="input w400" type="number" min="1" max="5" step="1" minlength="1" maxlength="1" placeholder="请输入比赛阶段总数(1~5的整数)" v-model.trim.number="formData.stage" />
+            </div>
+          </div>
+
+          <!-- 是否采用队员总分制 -->
+          <div class="publish-item clearfix">
+            <div class="label">是否采用队员总分制：</div>
+            <div class="con">
+              <div class="item-radio clearfix">
+                <div class="radio-li fl" @click="handleCheckedTotalPoints(0)">
+                  <input class="radio" type="radio" name="competitionTotalPoints" :checked="formData.is_total_points === 0" />
+                  <span class="span">否</span>
+                </div>
+                <div class="radio-li fl" @click="handleCheckedTotalPoints(1)">
+                  <input class="radio" type="radio" name="competitionTotalPoints" :checked="formData.is_total_points === 1" />
+                  <span class="span">是</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 比赛方式 -->
+          <div class="publish-item clearfix">
+            <div class="label">比赛方式：</div>
+            <div class="con">
+              <div class="item-radio clearfix">
+                <div class="radio-li fl" @click="formData.way = 0">
+                  <input class="radio" type="radio" name="competitionWay" :checked="formData.way === 0" />
+                  <span class="span">线下场地</span>
+                </div>
+              </div>
+              <div class="item-radio clearfix">
+                <div class="radio-li fl" @click="formData.way = 1">
+                  <input class="radio" type="radio" name="competitionWay" :checked="formData.way === 1" />
+                  <span class="span">线上游戏平台</span>
+                </div>
+                <div class="radio-input fl" v-if="formData.way === 1">
+                  <input type="text" class="input" placeholder="补充说明（备注线上游戏平台）" v-model.trim="formData.way_memo" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 赛事种类 -->
+          <div class="publish-item clearfix">
+            <div class="label">赛事种类：</div>
+            <div class="con">
+              <div class="item-radio clearfix">
+                <div class="radio-li fl" @click="formData.join_type = 1">
+                  <input class="radio" type="radio" name="5" :checked="formData.join_type === 1" />
+                  <span class="span">自由参与</span>
+                </div>
+                <div class="radio-li fl" @click="formData.join_type = 2">
+                  <input class="radio" type="radio" name="5" :checked="formData.join_type === 2" />
+                  <span class="span">批准参与</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 报名起止时间 -->
+          <div class="publish-item clearfix">
+            <div class="label">报名起止时间：</div>
+            <div class="con">
+              <div class="bor clearfix">
+                <div id="signUpStartDate" class="date-time-picker input w400 fl">
+                  <span class="date-time" v-if="formData.a_b_t">{{formData.a_b_t}}</span>
+                  <span v-else>{{'开始时间'}}</span>
+                </div>
+                <!-- <input id="signUpStartDate" type="text" :value="formData.a_b_t" class="input w400 fl" placeholder="YYYY-MM-DD" /> -->
+
+                <span class="date-mid fl">至</span>
+
+                <div id="signUpEndDate" class="date-time-picker input w400 fl">
+                  <span class="date-time" v-if="formData.a_e_t">{{formData.a_e_t}}</span>
+                  <span v-else>{{'结束时间'}}</span>
+                </div>
+                <!-- <input id="signUpEndDate" type="text" :value="formData.a_e_t" class="input w400 fr" placeholder="YYYY-MM-DD" :disabled="!formData.a_b_t" /> -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 比赛起止时间 -->
+          <div class="publish-item clearfix">
+            <div class="label">比赛起止时间：</div>
+            <div class="con">
+              <div class="bor clearfix">
+                <div id="competitionStartDate" class="date-time-picker input w400 fl">
+                  <span class="date-time" v-if="formData.c_b_t">{{formData.c_b_t}}</span>
+                  <span v-else>{{'开始时间'}}</span>
+                </div>
+                <!-- <input
+                  id="competitionStartDate"
+                  type="text"
+                  :value="formData.c_b_t"
+                  class="input w400 fl"
+                  placeholder="YYYY-MM-DD"
+                  :disabled="!formData.a_e_t"
+                /> -->
+
+                <span class="date-mid fl">至</span>
+
+                <div id="competitionEndDate" class="date-time-picker input w400 fl">
+                  <span class="date-time" v-if="formData.c_e_t">{{formData.c_e_t}}</span>
+                  <span v-else>{{'结束时间'}}</span>
+                </div>
+                <!-- <input id="competitionEndDate" type="text" :value="formData.c_e_t" class="input w400 fr" placeholder="YYYY-MM-DD" :disabled="!formData.c_b_t" /> -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 赛事描述 -->
+          <div class="publish-item clearfix">
+            <div class="label">赛事描述：</div>
+            <div class="con">
+              <div class="detail-text">
+                <textarea class="text" rows="5" placeholder="请描述活动内容" v-model="formData.description"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 上传封面图 -->
+          <div class="publish-item clearfix">
+            <div class="label"><i class="color-red">*</i>上传封面图：</div>
+            <div class="con">
+              <div class="item-tip">封面尺寸320*180px</div>
+              <div class="publish-up-head">
+                <div id="uploadCover">
+                  <img src="/images/pub21.png" v-if="!this.coverImage.url" />
+                  <img :src="this.coverImage.url" v-else />
+                </div>
+                <!-- <div>
+                  <input id="cover" type="file" accept=".png,.jpg,.jpeg,.webp" hidden />
+                  <label id="uploadCover" for="cover">
+                    <img src="/images/pub21.png" v-if="!this.coverImage.url" />
+                    <img :src="this.coverImage.url" v-else />
+                  </label>
+                </div> -->
+                <!-- <div>
+                  <div class="preview">
+                    <img src="/images/pub21.png" class="img-responsive" alt="" title="" />
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 上传附件 -->
+          <div class="publish-item clearfix">
+            <div class="label">上传附件</div>
+            <div class="con">
+              <div class="item-tip">注意：最多上传五个附件。每个附件不超过2M，仅支持png、jpg、pdf、word、excel格式</div>
+              <div class="cert-up clearfix">
+                <input id="affix" type="file" accept=".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple hidden handle @change="handleAffixFileChange" />
+                <div class="imgClick publish-load fl">
+                  <label for="affix">
+                    <img src="/images/pub22.png" />
+                  </label>
+                </div>
+                <div class="affix-list">
+                  <div class="affix-item" v-for="(item, index) in affixList">
+                    <span class="close-icon" @click="handleDeleteAffix(index)"></span>
+                    <span class="name">{{item.name}}</span>
+                  </div>
+                </div>
+                <!-- <input type="file" name="" id="" class="imgFiles" style="display: none" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" multiple />
+                <div class="imgAll publish-load-img fl">
+                  <ul></ul>
+                </div>
+                <div class="imgClick publish-load fl">
+                  <img src="/images/pub22.png" />
+                </div> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="item-tit">选择报名信息：<span class="tip">（参赛者报名填写的信息）</span></div>
+
+          <!-- 报名信息 -->
+          <div class="publish-item clearfix">
+            <div class="clearfix">
+              <div class="checkbox-li fl">
+                <input class="check-in" type="checkbox" checked disabled />
+                <span class="check-s"><i class="color-red">*</i>姓名</span>
+              </div>
+              <div class="checkbox-li fl">
+                <input class="check-in" type="checkbox" checked disabled />
+                <span class="check-s"><i class="color-red">*</i>比赛账号</span>
+              </div>
+              <div class="checkbox-li fl">
+                <input class="check-in" type="checkbox" checked disabled />
+                <span class="check-s"><i class="color-red">*</i>技术类别</span>
+              </div>
+              <div class="checkbox-li fl">
+                <input class="check-in" type="checkbox" checked disabled />
+                <span class="check-s"><i class="color-red">*</i>技术等级</span>
+              </div>
+              <div class="checkbox-li fl">
+                <input class="check-in" type="checkbox" checked disabled />
+                <span class="check-s"><i class="color-red">*</i>身份证明</span>
+              </div>
+              <div class="checkbox-li fl">
+                <input class="check-in" type="checkbox" checked disabled />
+                <span class="check-s"><i class="color-red">*</i>联系方式</span>
+              </div>
+              <div class="checkbox-li fl">
+                <input class="check-in" type="checkbox" checked disabled />
+                <span class="check-s"><i class="color-red">*</i>代表队</span>
+              </div>
+              <div class="checkbox-li fl">
+                <input class="check-in" type="checkbox" checked disabled />
+                <span class="check-s"><i class="color-red">*</i>所在区域</span>
+              </div>
+              <div class="checkbox-li fl">
+                <input class="check-in" type="checkbox" />
+                <span class="check-s">年龄</span>
+              </div>
+              <div class="checkbox-li fl">
+                <input class="check-in" type="checkbox" />
+                <span class="check-s">居住地址</span>
+              </div>
+              <div class="checkbox-li fl">
+                <input class="check-in" type="checkbox" />
+                <span class="check-s">自我介绍</span>
+              </div>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label"><span class="color-red">*</span> 联系方式：</div>
+            <div class="con">
+              <div class="clearfix">
+                <div class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" checked disabled />
+                  <span class="check-s">手机号</span>
+                </div>
+                <div class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" />
+                  <span class="check-s">QQ</span>
+                </div>
+                <div class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" />
+                  <span class="check-s">MSN</span>
+                </div>
+                <div class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" />
+                  <span class="check-s">SKYPE</span>
+                </div>
+                <div class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" />
+                  <span class="check-s">微信号</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label"><span class="color-red">*</span> 角色选择：</div>
+            <div class="con">
+              <div class="clearfix">
+                <div class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" />
+                  <span class="check-s">比赛选手</span>
+                </div>
+                <div class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" />
+                  <span class="check-s">裁判</span>
+                </div>
+                <div class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" />
+                  <span class="check-s">主裁判</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">报名费用：</div>
+            <div class="con">
+              <div class="item-radio clearfix">
+                <div class="radio-li fl">
+                  <input class="radio" type="radio" name="6" checked />
+                  <span class="span">无</span>
+                </div>
+                <div class="radio-li fl">
+                  <input class="radio" type="radio" name="6" />
+                  <span class="span">有</span>
+                </div>
+              </div>
+              <div class="item-b">每人(每队)<input type="text" class="input" placeholder="请输入报名费用" /></div>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label"><span class="color-red">*</span> 报名人数上限：</div>
+            <div class="con">
+              <div class="item-radio clearfix">
+                <div class="radio-li">
+                  <input class="radio" type="radio" name="7" checked />
+                  <span class="span">不限</span>
+                </div>
+              </div>
+              <div class="item-radio clearfix">
+                <div class="radio-li fl">
+                  <input class="radio" type="radio" name="7" checked />
+                  <span class="span">人数上限（个人赛）</span>
+                </div>
+                <div class="item-b fl"><input type="text" class="input" placeholder="请输入人数上限" />人</div>
+              </div>
+              <div class="tip color-gray">系统默认总人数最多不超过1万</div>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label"><span class="color-red">*</span> 团队添加：</div>
+            <div class="con">
+              <div class="item-radio clearfix">
+                <div class="radio-li fl">
+                  <input class="radio" type="radio" name="8" checked />
+                  <span class="span">组织者添加</span>
+                </div>
+                <div class="radio-li fl">
+                  <input class="radio" type="radio" name="8" />
+                  <span class="span">各队员自己填写</span>
+                </div>
+              </div>
+              <div class="tip color-gray">（参赛队员报名时选择的团队）</div>
+              <!--item-b start-->
+              <div class="item-b item-people">
+                1.<input type="text" class="input" placeholder="请输入团队名称" />
+                <button class="people-delete"></button>
+              </div>
+              <!--item-b end-->
+              <!--item-b start-->
+              <div class="item-b item-people">
+                2.<input type="text" class="input" placeholder="请输入团队名称" />
+                <button class="people-delete"></button>
+              </div>
+              <!--item-b end-->
+              <button class="add-people">添加团队</button>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <div class="publish-bottom">
+            <button class="publish-btn" @click="handleNextStep">下一步</button>
+          </div>
+        </div>
+        <!--publish-content end-->
+      </div>
+      <!--publish-main end-->
+    </div>
+
+    <!-- 公共底部 -->
+    <footer class="public-footer"></footer>
+
+    <script src="/js/bangwen/releaseCompetition.js"></script>
+  </body>
+</html>

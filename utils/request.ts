@@ -8,13 +8,15 @@ const request = axios.create({
 
 // 请求拦截器
 request.interceptors.request.use(
-  config => {
+  (config) => {
     console.log('请求拦截器', config)
+    console.log('config.params', config.params)
+    console.log('config.data', config.data)
     // 只要有 token 就带着
     const token = localStorage.getItem('token')
     if (token) {
       config.headers.token = token
-      if (config.method.toLowerCase === 'get') {
+      if (config.method.toLowerCase() === 'get' || !config.method) {
         config.params = {
           ...config.params,
           token,
@@ -29,20 +31,22 @@ request.interceptors.request.use(
 
     return config
   },
-  error => {
+  (error) => {
     return Promise.reject(error)
   }
 )
 
 // 响应拦截器
 request.interceptors.response.use(
-  response => {
+  (response) => {
     console.log('响应拦截器', response)
     const data = response.data
 
     return data
   },
-  error => {
+  (error) => {
+    console.log('响应拦截器 error', response)
+    const { status } = error.response
     if (status === 401) {
     } else if (status >= 500) {
     } else {

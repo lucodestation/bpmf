@@ -2,9 +2,9 @@
 <html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Title</title>
-  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <link rel="stylesheet" href="/plugins/date/jedate.css" />
   <script src="/plugins/date/jedate.js"></script>
   <script src="/plugins/upload/imgFileupload.js"></script>
 
@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
   <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
   <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/plugins/layui/css/layui.css">
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
 
   <script src="/plugins/babel-polyfill.min.js"></script>
   <script src="/plugins/layui/layui.js"></script>
@@ -185,9 +185,9 @@
                 <option :value="item.id" v-for="item in winList">{{item.name}}</option>
               </select>
             </div>
-            <div class="pay-l fl" v-if="formData.win_type==2" style="align-items: center;">
-              <input class="input w170" v-model="formData.win_num" type="number" min='2' placeholder="请输入人数"
-                style="margin-right: 10px;">人
+            <div class="pay-l fl" v-if="formData.win_type==2">
+              <input class="input w170" v-model="formData.win_num" type="number" min="2" placeholder="请输入人数"
+                style="margin-right: 10px" />人
             </div>
           </div>
         </div>
@@ -358,25 +358,22 @@
     <div class="bond-content">
       <div class="bond-close" onClick="ok('alert2')"></div>
       <div class="bond-tit">保证金</div>
-      <div class="bond-tip">
-        本平台发布任务，需要保证金，才能享有权益
-        支付后个人中心可查看，随时可退
-      </div>
-      <div class="bond-price">保证金：<span class="color-red">￥1000.00</span> </div>
+      <div class="bond-tip">本平台发布任务，需要保证金，才能享有权益 支付后个人中心可查看，随时可退</div>
+      <div class="bond-price">保证金：<span class="color-red">￥1000.00</span></div>
       <div class="bond-pay">
         <div class="t">选择支付方式</div>
         <div class="con clearfix">
           <div class="li">
-            <input type="radio" class="bond-radio" checked name="money">
-            <span class="radio-s"><img src="/images/pub14.png"></span>
+            <input type="radio" class="bond-radio" checked name="money" />
+            <span class="radio-s"><img src="/images/pub14.png" /></span>
           </div>
           <div class="li">
-            <input type="radio" class="bond-radio" name="money">
-            <span class="radio-s"><img src="/images/pub13.png"></span>
+            <input type="radio" class="bond-radio" name="money" />
+            <span class="radio-s"><img src="/images/pub13.png" /></span>
           </div>
           <div class="li">
-            <input type="radio" class="bond-radio" name="money">
-            <span class="radio-s"><img src="/images/pub19.png"></span>
+            <input type="radio" class="bond-radio" name="money" />
+            <span class="radio-s"><img src="/images/pub19.png" /></span>
           </div>
         </div>
       </div>
@@ -387,8 +384,8 @@
   </div>
   <script>
     function ok (id) {
-      syalert.syhide(id);
-    };
+      syalert.syhide(id)
+    }
   </script>
   <script src="/js/common.js"></script>
   <script src="/js/bangwen/addList.js"></script>
