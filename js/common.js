@@ -1,79 +1,74 @@
 //首页tab切换
 $(function () {
-  $(".index-tab-hd").on("click", "li", function () {
+  $('.index-tab-hd').on('click', 'li', function () {
     // 设index为当前点击
-    var index = $(this).index();
+    var index = $(this).index()
     // 点击添加样式利用siblings清除其他兄弟节点样式
-    $(this).addClass("on").siblings().removeClass("on");
+    $(this).addClass('on').siblings().removeClass('on')
     // 同理显示与隐藏
-    $(this).parents(".index-sec2-tab").find(".index-tab-bd .bd-box").eq(index).show().siblings().hide();
-  });
-});
-//头部点击下拉
-$(function () {
-  $(".header-sub").click(function () {
-    if ($('.sub-down').css('display') == 'none') {
-      $('.sub-down').show()
-      return false;
-    } else {
-      $('.sub-down').hide()
-      return false;
-    }
-  });
-
-});
+    $(this).parents('.index-sec2-tab').find('.index-tab-bd .bd-box').eq(index).show().siblings().hide()
+  })
+})
 
 //登录tab切换
 $(function () {
-  $(".index-login-hd  .login-li").off("click").on("click", function () {
-    var index = $(this).index();
-    $(this).addClass("on").siblings().removeClass("on");
-    $(".login-box").eq(index).addClass("active").siblings().removeClass("active");
-  });
-});
+  $('.index-login-hd  .login-li')
+    .off('click')
+    .on('click', function () {
+      var index = $(this).index()
+      $(this).addClass('on').siblings().removeClass('on')
+      $('.login-box').eq(index).addClass('active').siblings().removeClass('active')
+    })
+})
 
 //个人中心托管金额tab切换
 $(function () {
-  $(".common-tab  .tab-li").off("click").on("click", function () {
-    var index = $(this).index();
-    $(this).addClass("active").siblings().removeClass("active");
-    $(".common-content").eq(index).addClass("active").siblings().removeClass("active");
-  });
-});
+  $('.common-tab  .tab-li')
+    .off('click')
+    .on('click', function () {
+      var index = $(this).index()
+      $(this).addClass('active').siblings().removeClass('active')
+      $('.common-content').eq(index).addClass('active').siblings().removeClass('active')
+    })
+})
 
 //赛事详情
 $(function () {
-  $(".match-switch  .switch-li").off("click").on("click", function () {
-    var index = $(this).index();
-    $(this).addClass("on").siblings().removeClass("on");
-    $(".match-switch-box").eq(index).addClass("active").siblings().removeClass("active");
-  });
-});
+  $('.match-switch  .switch-li')
+    .off('click')
+    .on('click', function () {
+      var index = $(this).index()
+      $(this).addClass('on').siblings().removeClass('on')
+      $('.match-switch-box').eq(index).addClass('active').siblings().removeClass('active')
+    })
+})
 
 //登录密码显示隐藏
 $(function () {
   //查看密码
-  $(".eye-open").click(function () {
-    if ($(this).attr("data-show") == 1) {//明文
-      $(this).attr("data-show", "2");
-      $(this).addClass('eye-close');
-      $(this).removeClass('eye-open');
-      $(this).parent(".login-item").children(".mima_dd").hide();
-      $(this).parent(".login-item").children(".mima_wz").show();
-      $(this).parent(".login-item").children(".mima_wz").val($(this).parent(".login-item").children(".mima_dd").val());
-      return;
+  $('.eye-open').click(function () {
+    if ($(this).attr('data-show') == 1) {
+      //明文
+      $(this).attr('data-show', '2')
+      $(this).addClass('eye-close')
+      $(this).removeClass('eye-open')
+      $(this).parent('.login-item').children('.mima_dd').hide()
+      $(this).parent('.login-item').children('.mima_wz').show()
+      $(this).parent('.login-item').children('.mima_wz').val($(this).parent('.login-item').children('.mima_dd').val())
+      return
     }
-    if ($(this).attr("data-show") == 2) {//密文
-      $(this).attr("data-show", "1");
-      $(this).addClass('eye-open');
-      $(this).removeClass('eye-close');
-      $(this).parent(".login-item").children(".mima_dd").show();
-      $(this).parent(".login-item").children(".mima_wz").hide();
-      $(this).parent(".login-item").children(".mima_dd").val($(this).parent(".login-item").children(".mima_wz").val());
-      return;
+    if ($(this).attr('data-show') == 2) {
+      //密文
+      $(this).attr('data-show', '1')
+      $(this).addClass('eye-open')
+      $(this).removeClass('eye-close')
+      $(this).parent('.login-item').children('.mima_dd').show()
+      $(this).parent('.login-item').children('.mima_wz').hide()
+      $(this).parent('.login-item').children('.mima_dd').val($(this).parent('.login-item').children('.mima_wz').val())
+      return
     }
-  });
-});
+  })
+})
 //保证金弹窗关闭
 // $(function(){
 //     $(".bond-close").click(function(){
@@ -242,8 +237,6 @@ $(function () {
 
 // })(jQuery);
 
-
-
 // $(document).ready(function () {
 
 //   $("#roll").parallelRoll({
@@ -253,6 +246,3 @@ $(function () {
 //   });
 
 // });
-
-
-

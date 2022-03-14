@@ -250,6 +250,7 @@ body {
   font-size: 14px;
   padding: 0 5px;
 }
+/* 我要发布 */
 .header-sub {
   width: 120px;
   height: 40px;
@@ -267,21 +268,25 @@ body {
   margin: 0 5px 0 15px;
   background: url('../images/down-icon.png') no-repeat right center;
 }
-.sub-down {
+.header-sub .sub-down-wrap {
+  display: none;
+  padding-top: 4px;
+}
+.header-sub:hover .sub-down-wrap {
+  display: block;
+}
+.header-sub .sub-down {
   position: absolute;
   left: 0px;
   top: 44px;
   width: 100%;
-  background: #ff7f17;
   border-radius: 2px;
-  display: none;
   background: linear-gradient(-20deg, #fe9d4f, #ff7f17);
 }
 .sub-down-a {
   display: block;
   text-align: center;
   color: #fff;
-  margin: 0 15px;
 }
 .down-bd-box {
   overflow: hidden;

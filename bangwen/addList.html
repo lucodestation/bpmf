@@ -1,397 +1,382 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link rel="stylesheet" href="/plugins/date/jedate.css" />
+    <script src="/plugins/date/jedate.js"></script>
+    <script src="/plugins/upload/imgFileupload.js"></script>
 
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <link rel="stylesheet" href="/plugins/date/jedate.css">
-  <script src="/plugins/date/jedate.js"></script>
-  <script src="/plugins/upload/imgFileupload.js"></script>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/plugins/animate.min.css" />
+    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+    <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
 
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <link rel="stylesheet" href="/plugins/animate.min.css" />
-  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
-  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/plugins/layui/css/layui.css">
+    <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/jsencrypt.js"></script>
+    <script src="/plugins/jquery.min.js"></script>
+    <script src="/plugins/swiper/swiper.min.js"></script>
+    <script src="/plugins/syalert/syalert.min.js"></script>
+    <script src="/plugins/vue.min.js"></script>
 
-  <script src="/plugins/babel-polyfill.min.js"></script>
-  <script src="/plugins/layui/layui.js"></script>
-  <script src="/plugins/jsencrypt.js"></script>
-  <script src="/plugins/jquery.min.js"></script>
-  <script src="/plugins/swiper/swiper.min.js"></script>
-  <script src="/plugins/syalert/syalert.min.js"></script>
-  <script src="/plugins/vue.min.js"></script>
+    <script src="/plugins/axios.min.js"></script>
+    <script src="/utils/request.js"></script>
+    <style>
+      .temp-pre {
+        position: fixed;
+        top: 0;
+        right: 0;
+        background: rgba(255 255 255 / 0.5);
+      }
+    </style>
+  </head>
 
-  <script src="/plugins/axios.min.js"></script>
-  <script src="/utils/request.js"></script>
-  <style>
-    .temp-pre {
-      position: fixed;
-      top: 0;
-      right: 0;
-      background: rgba(255 255 255 / 0.5);
-    }
-  </style>
-</head>
-
-<body>
-  <!-- 公共头部 -->
-  <header class="public-header"></header>
-  <!--publish-container start-->
-  <div class="publish-container" id="app">
-    <!-- 临时 -->
-    <pre class="temp-pre">{{formData}}</pre>
-    <!--inner-position start-->
-    <div class="inner-position w-1200">
-      <a href="/index.html">首页</a>
-      <span>&lt; </span>
-      <a class="current" href="./addList.html"> 发布榜文</a>
-    </div>
-    <!--inner-position end-->
-    <!--publish-head start-->
-    <div class="publish-head w-1200">
-      <div class="content clearfix">
-        <div class="head-li li1">
-          <div class="t">1.榜文发布中</div>
-          <div class="icon"></div>
-        </div>
-        <div class="head-line"></div>
-        <div class="head-li li2">
-          <div class="t">2.榜文审核中</div>
-          <div class="icon"></div>
-        </div>
-        <div class="head-line"></div>
-        <div class="head-li li3">
-          <div class="t">3.应榜中</div>
-          <div class="icon"></div>
-        </div>
-        <div class="head-line"></div>
-        <div class="head-li li4">
-          <div class="t">4.应榜结束</div>
-          <div class="icon"></div>
-        </div>
-        <div class="head-line"></div>
-        <div class="head-li li5">
-          <div class="t">5.工作中</div>
-          <div class="icon"></div>
-        </div>
-        <div class="head-line"></div>
-        <div class="head-li li6">
-          <div class="t">6.任务结束</div>
-          <div class="icon"></div>
+  <body>
+    <!-- 公共头部 -->
+    <header class="public-header"></header>
+    <!--publish-container start-->
+    <div class="publish-container" id="app">
+      <!-- 临时 -->
+      <pre class="temp-pre">{{formData}}</pre>
+      <!--inner-position start-->
+      <div class="inner-position w-1200">
+        <a href="/index.html">首页</a>
+        <span>&lt; </span>
+        <a class="current" href="./addList.html"> 发布榜文</a>
+      </div>
+      <!--inner-position end-->
+      <!--publish-head start-->
+      <div class="publish-head w-1200">
+        <div class="content clearfix">
+          <div class="head-li li1">
+            <div class="t">1.榜文发布中</div>
+            <div class="icon"></div>
+          </div>
+          <div class="head-line"></div>
+          <div class="head-li li2">
+            <div class="t">2.榜文审核中</div>
+            <div class="icon"></div>
+          </div>
+          <div class="head-line"></div>
+          <div class="head-li li3">
+            <div class="t">3.应榜中</div>
+            <div class="icon"></div>
+          </div>
+          <div class="head-line"></div>
+          <div class="head-li li4">
+            <div class="t">4.应榜结束</div>
+            <div class="icon"></div>
+          </div>
+          <div class="head-line"></div>
+          <div class="head-li li5">
+            <div class="t">5.工作中</div>
+            <div class="icon"></div>
+          </div>
+          <div class="head-line"></div>
+          <div class="head-li li6">
+            <div class="t">6.任务结束</div>
+            <div class="icon"></div>
+          </div>
         </div>
       </div>
-    </div>
-    <!--publish-head end-->
-    <!--publish-main start-->
-    <div class="publish-main w-1200">
-      <h1 class="publish-tit">发布榜文</h1>
-      <!--publish-content start-->
-      <div class="publish-content">
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">发布类型：</div>
-          <div class="con">
-            <div class="live-bor w420">
-              <select class="select rate-100" v-model="formData.type">
-                <option :value="item.id" v-for="item in typeList">{{item.name}}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">发布标题：</div>
-          <div class="con">
-            <div class="live-bor">
-              <input type="text" v-model="formData.title" class="input rate-100" placeholder="请输入发布内容标题" />
-            </div>
-          </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">服务分类：</div>
-          <div class="con">
-            <div class="live-bor w420">
-              <select class="select rate-100" v-model="formData.b_id">
-                <option :value="item.id" v-for="item in cateList">{{item.name}}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">酬金额度：</div>
-          <div class="con">
-            <div class="live-bor w420">
-              <input type="text" v-model="totalMoney" class="input rate-100" placeholder="请输入金额" />
-            </div>
-          </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">酬金托管：</div>
-          <div class="con">
-            <div class="live-bor w420">
-              <select class="select rate-100" v-model="formData.is_trustee">
-                <option :value="item.id" v-for="item in trusteeList">{{item.name}}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">支付方式：</div>
-          <div class="con">
-            <div class="live-bor w420 fl">
-              <select class="select rate-100" v-model="formData.pay_num_type" @change="getpaynumSelected">
-                <option :value="item.id" v-for="item in payList">{{item.name}}</option>
-              </select>
-            </div>
-            <div class="more-pay" v-if="formData.pay_num_type==2">
-              <div class="pay-l fl">
-                <select class="select w170" v-model="formData.pay_num" @change="getCouponSelected">
-                  <option :value="item" v-for="item in num">{{item}}次</option>
+      <!--publish-head end-->
+      <!--publish-main start-->
+      <div class="publish-main w-1200">
+        <h1 class="publish-tit">发布榜文</h1>
+        <!--publish-content start-->
+        <div class="publish-content">
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">发布类型：</div>
+            <div class="con">
+              <div class="live-bor w420">
+                <select class="select rate-100" v-model="formData.type">
+                  <option :value="item.id" v-for="item in typeList">{{item.name}}</option>
                 </select>
               </div>
-              <div class="pay-l fl">
-                <select class="select w170" v-model="formData.more_type">
-                  <option :value="item.id" v-for="item in moreList">{{item.name}}</option>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">发布标题：</div>
+            <div class="con">
+              <div class="live-bor">
+                <input type="text" v-model="formData.title" class="input rate-100" placeholder="请输入发布内容标题" />
+              </div>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">服务分类：</div>
+            <div class="con">
+              <div class="live-bor w420">
+                <select class="select rate-100" v-model="formData.b_id">
+                  <option :value="item.id" v-for="item in cateList">{{item.name}}</option>
                 </select>
               </div>
-              <div class="pay-l fl" v-for="item,i in ordeList" :key="item">
-                <span class="pay-name">第{{item.id}}次</span>
-                <input type="text" v-if="formData.more_type==1" readonly class="input w170" v-model="item.num"
-                  placeholder="请输入金额" />
-                <input type="text" v-if="formData.more_type==2" class="input w170" v-model="item.num"
-                  placeholder="请输入金额" />
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">酬金额度：</div>
+            <div class="con">
+              <div class="live-bor w420">
+                <input type="text" v-model="totalMoney" class="input rate-100" placeholder="请输入金额" />
               </div>
             </div>
           </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">中榜模式：</div>
-          <div class="con">
-            <div class="live-bor w420 fl">
-              <select class="select rate-100" v-model="formData.win_type">
-                <option :value="item.id" v-for="item in winList">{{item.name}}</option>
-              </select>
-            </div>
-            <div class="pay-l fl" v-if="formData.win_type==2">
-              <input class="input w170" v-model="formData.win_num" type="number" min='2' placeholder="请输入人数"
-                style="margin-right: 10px;">人
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">酬金托管：</div>
+            <div class="con">
+              <div class="live-bor w420">
+                <select class="select rate-100" v-model="formData.is_trustee">
+                  <option :value="item.id" v-for="item in trusteeList">{{item.name}}</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
-        <!--publish-item end-->
-        <div class="item-tit">任务周期</div>
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">任务起止 时间：</div>
-          <div class="con">
-            <div class="date-input fl">
-              <input id="signUpStartDate" type="text" :value="formData.task_start_time" class="input w400"
-                placeholder="YYYY-MM-DD" />
-            </div>
-            <div class="item-line fl"></div>
-            <div class="date-input fl">
-              <input type="text" class="input w400" :value="formData.task_end_time" id="signUpEndDate"
-                placeholder="YYYY-MM-DD" />
-            </div>
-          </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">截止报名 时间：</div>
-          <div class="con">
-            <div class="date-input fl">
-              <input type="text" class="input w400" :value="formData.signup_start_time" id="startDate1"
-                placeholder="YYYY-MM-DD" />
-            </div>
-            <div class="item-line fl"></div>
-            <div class="date-input fl">
-              <input type="text" class="input w400" :value="formData.signup_end_time" id="endDate2"
-                placeholder="YYYY-MM-DD" />
-            </div>
-          </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">
-            <span class="item-tit">榜文详情</span>
-          </div>
-          <div class="con">
-            <div class="item-tip">注意：为保证隔热信息安全，减少骚扰，请不要透露个人联系方式！</div>
-          </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">榜文详情：</div>
-          <div class="con">
-            <div class="detail-text">
-              <textarea class="text" v-model="formData.detail" rows="5"
-                placeholder="请输入详细描述，例如：详细讲解围棋布局套路，常见套路分解"></textarea>
-            </div>
-          </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">上传封面</div>
-          <div class="con">
-            <div class="item-tip">封面尺寸320*180px</div>
-            <!--封面start-->
-            <div class="publish-up-head">
-              <div id="drop_area">
-                <div class="preview">
-                  <img src="/images/pub21.png" class="img-responsive" alt="" title="" />
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">支付方式：</div>
+            <div class="con">
+              <div class="live-bor w420 fl">
+                <select class="select rate-100" v-model="formData.pay_num_type" @change="getpaynumSelected">
+                  <option :value="item.id" v-for="item in payList">{{item.name}}</option>
+                </select>
+              </div>
+              <div class="more-pay" v-if="formData.pay_num_type==2">
+                <div class="pay-l fl">
+                  <select class="select w170" v-model="formData.pay_num" @change="getCouponSelected">
+                    <option :value="item" v-for="item in num">{{item}}次</option>
+                  </select>
+                </div>
+                <div class="pay-l fl">
+                  <select class="select w170" v-model="formData.more_type">
+                    <option :value="item.id" v-for="item in moreList">{{item.name}}</option>
+                  </select>
+                </div>
+                <div class="pay-l fl" v-for="item,i in ordeList" :key="item">
+                  <span class="pay-name">第{{item.id}}次</span>
+                  <input type="text" v-if="formData.more_type==1" readonly class="input w170" v-model="item.num" placeholder="请输入金额" />
+                  <input type="text" v-if="formData.more_type==2" class="input w170" v-model="item.num" placeholder="请输入金额" />
                 </div>
               </div>
-              <script src="/plugins/singleUp.js"></script>
-              <script type="text/javascript">
-                var dragImgUpload = new DragImgUpload('#drop_area', {
-                  callback: function (files) {
-                    //回调函数，可以传递给后台等等
-                    var file = files[0]
-                    console.log(file.name)
-                  },
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">中榜模式：</div>
+            <div class="con">
+              <div class="live-bor w420 fl">
+                <select class="select rate-100" v-model="formData.win_type">
+                  <option :value="item.id" v-for="item in winList">{{item.name}}</option>
+                </select>
+              </div>
+              <div class="pay-l fl" v-if="formData.win_type==2">
+                <input class="input w170" v-model="formData.win_num" type="number" min="2" placeholder="请输入人数" style="margin-right: 10px" />人
+              </div>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <div class="item-tit">任务周期</div>
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">任务起止 时间：</div>
+            <div class="con">
+              <div class="date-input fl">
+                <input id="signUpStartDate" type="text" :value="formData.task_start_time" class="input w400" placeholder="YYYY-MM-DD" />
+              </div>
+              <div class="item-line fl"></div>
+              <div class="date-input fl">
+                <input type="text" class="input w400" :value="formData.task_end_time" id="signUpEndDate" placeholder="YYYY-MM-DD" />
+              </div>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">截止报名 时间：</div>
+            <div class="con">
+              <div class="date-input fl">
+                <input type="text" class="input w400" :value="formData.signup_start_time" id="startDate1" placeholder="YYYY-MM-DD" />
+              </div>
+              <div class="item-line fl"></div>
+              <div class="date-input fl">
+                <input type="text" class="input w400" :value="formData.signup_end_time" id="endDate2" placeholder="YYYY-MM-DD" />
+              </div>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">
+              <span class="item-tit">榜文详情</span>
+            </div>
+            <div class="con">
+              <div class="item-tip">注意：为保证隔热信息安全，减少骚扰，请不要透露个人联系方式！</div>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">榜文详情：</div>
+            <div class="con">
+              <div class="detail-text">
+                <textarea class="text" v-model="formData.detail" rows="5" placeholder="请输入详细描述，例如：详细讲解围棋布局套路，常见套路分解"></textarea>
+              </div>
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">上传封面</div>
+            <div class="con">
+              <div class="item-tip">封面尺寸320*180px</div>
+              <!--封面start-->
+              <div class="publish-up-head">
+                <div id="drop_area">
+                  <div class="preview">
+                    <img src="/images/pub21.png" class="img-responsive" alt="" title="" />
+                  </div>
+                </div>
+                <script src="/plugins/singleUp.js"></script>
+                <script type="text/javascript">
+                  var dragImgUpload = new DragImgUpload('#drop_area', {
+                    callback: function (files) {
+                      //回调函数，可以传递给后台等等
+                      var file = files[0]
+                      console.log(file.name)
+                    },
+                  })
+                </script>
+              </div>
+              <!--封面end-->
+            </div>
+          </div>
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">上传附件</div>
+            <div class="con">
+              <div class="item-tip">注意：最多上传五个附件。每个附件不超过2M，仅支持png、jpg、pdf、word、excel格式</div>
+              <div class="cert-up clearfix">
+                <input type="file" name="" id="" class="imgFiles" style="display: none" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" multiple />
+                <div class="imgAll publish-load-img fl">
+                  <ul></ul>
+                </div>
+                <div class="imgClick publish-load fl">
+                  <img src="/images/pub22.png" />
+                </div>
+              </div>
+              <script>
+                var imgFile = new ImgUploadeFiles('.cert-up', function (e) {
+                  this.init({
+                    MH: 5800, //像素限制高度
+                    MW: 5900, //像素限制宽度
+                    callback: function (arr) {
+                      console.log(arr)
+                    },
+                  })
                 })
               </script>
             </div>
-            <!--封面end-->
           </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">上传附件</div>
-          <div class="con">
-            <div class="item-tip">注意：最多上传五个附件。每个附件不超过2M，仅支持png、jpg、pdf、word、excel格式</div>
-            <div class="cert-up clearfix">
-              <input type="file" name="" id="" class="imgFiles" style="display: none"
-                accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" multiple />
-              <div class="imgAll publish-load-img fl">
-                <ul></ul>
-              </div>
-              <div class="imgClick publish-load fl">
-                <img src="/images/pub22.png" />
+          <!--publish-item end-->
+          <div class="item-tit">联系方式（选填）<span class="tip">确保交易安全，防止受骗，请通过玻坡摸佛平台交易！</span></div>
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">手机号：</div>
+            <div class="con">
+              <div class="live-bor w420">
+                <input type="text" v-model="formData.mobile" class="input rate-100" placeholder="请输入已认证的手机号" />
               </div>
             </div>
-            <script>
-              var imgFile = new ImgUploadeFiles('.cert-up', function (e) {
-                this.init({
-                  MH: 5800, //像素限制高度
-                  MW: 5900, //像素限制宽度
-                  callback: function (arr) {
-                    console.log(arr)
-                  },
-                })
-              })
-            </script>
           </div>
-        </div>
-        <!--publish-item end-->
-        <div class="item-tit">联系方式（选填）<span class="tip">确保交易安全，防止受骗，请通过玻坡摸佛平台交易！</span></div>
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">手机号：</div>
-          <div class="con">
-            <div class="live-bor w420">
-              <input type="text" v-model="formData.mobile" class="input rate-100" placeholder="请输入已认证的手机号" />
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">QQ号：</div>
+            <div class="con">
+              <div class="live-bor w420">
+                <input type="text" v-model="formData.qq" class="input rate-100" placeholder="请输QQ号" />
+              </div>
             </div>
           </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">QQ号：</div>
-          <div class="con">
-            <div class="live-bor w420">
-              <input type="text" v-model="formData.qq" class="input rate-100" placeholder="请输QQ号" />
+          <!--publish-item end-->
+          <!--publish-item start-->
+          <div class="publish-item clearfix">
+            <div class="label">邮箱号：</div>
+            <div class="con">
+              <div class="live-bor w420">
+                <input type="text" v-model="formData.email" class="input rate-100" placeholder="请输入邮箱" />
+              </div>
             </div>
           </div>
-        </div>
-        <!--publish-item end-->
-        <!--publish-item start-->
-        <div class="publish-item clearfix">
-          <div class="label">邮箱号：</div>
-          <div class="con">
-            <div class="live-bor w420">
-              <input type="text" v-model="formData.email" class="input rate-100" placeholder="请输入邮箱" />
+          <!--publish-item end-->
+          <div class="publish-check">
+            <div class="check fl">
+              <input class="check-input" type="checkbox" />
+              <span class="check-s"></span>
             </div>
+            <span>我已阅读并同意</span>
+            <a class="color-orange" href="">《玻坡摸佛榜文（需求）规则》</a>
+          </div>
+          <div class="publish-bottom">
+            <button class="publish-btn" @click="onBtnClick">提交</button>
           </div>
         </div>
-        <!--publish-item end-->
-        <div class="publish-check">
-          <div class="check fl">
-            <input class="check-input" type="checkbox" />
-            <span class="check-s"></span>
-          </div>
-          <span>我已阅读并同意</span>
-          <a class="color-orange" href="">《玻坡摸佛榜文（需求）规则》</a>
-        </div>
-        <div class="publish-bottom">
-          <button class="publish-btn" @click="onBtnClick">提交</button>
-        </div>
+        <!--publish-content end-->
       </div>
-      <!--publish-content end-->
+      <!--publish-main end-->
     </div>
-    <!--publish-main end-->
-  </div>
-  <!--publish-container end-->
-  <!-- 公共底部 -->
-  <footer class="public-footer"></footer>
-  <!--保证金弹出-->
-  <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
-    id="alert2">
-    <div class="bond-content">
-      <div class="bond-close" onClick="ok('alert2')"></div>
-      <div class="bond-tit">保证金</div>
-      <div class="bond-tip">
-        本平台发布任务，需要保证金，才能享有权益
-        支付后个人中心可查看，随时可退
-      </div>
-      <div class="bond-price">保证金：<span class="color-red">￥1000.00</span> </div>
-      <div class="bond-pay">
-        <div class="t">选择支付方式</div>
-        <div class="con clearfix">
-          <div class="li">
-            <input type="radio" class="bond-radio" checked name="money">
-            <span class="radio-s"><img src="/images/pub14.png"></span>
-          </div>
-          <div class="li">
-            <input type="radio" class="bond-radio" name="money">
-            <span class="radio-s"><img src="/images/pub13.png"></span>
-          </div>
-          <div class="li">
-            <input type="radio" class="bond-radio" name="money">
-            <span class="radio-s"><img src="/images/pub19.png"></span>
+    <!--publish-container end-->
+    <!-- 公共底部 -->
+    <footer class="public-footer"></footer>
+    <!--保证金弹出-->
+    <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert2">
+      <div class="bond-content">
+        <div class="bond-close" onClick="ok('alert2')"></div>
+        <div class="bond-tit">保证金</div>
+        <div class="bond-tip">本平台发布任务，需要保证金，才能享有权益 支付后个人中心可查看，随时可退</div>
+        <div class="bond-price">保证金：<span class="color-red">￥1000.00</span></div>
+        <div class="bond-pay">
+          <div class="t">选择支付方式</div>
+          <div class="con clearfix">
+            <div class="li">
+              <input type="radio" class="bond-radio" checked name="money" />
+              <span class="radio-s"><img src="/images/pub14.png" /></span>
+            </div>
+            <div class="li">
+              <input type="radio" class="bond-radio" name="money" />
+              <span class="radio-s"><img src="/images/pub13.png" /></span>
+            </div>
+            <div class="li">
+              <input type="radio" class="bond-radio" name="money" />
+              <span class="radio-s"><img src="/images/pub19.png" /></span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="last-bottom">
-        <button class="bond-btn">确认并支付</button>
+        <div class="last-bottom">
+          <button class="bond-btn">确认并支付</button>
+        </div>
       </div>
     </div>
-  </div>
-  <script>
-    function ok (id) {
-      syalert.syhide(id);
-    };
-  </script>
-  <script src="/js/common.js"></script>
-  <script src="/js/bangwen/addList.js"></script>
-</body>
-
+    <script>
+      function ok(id) {
+        syalert.syhide(id)
+      }
+    </script>
+    <script src="/js/common.js"></script>
+    <script src="/js/bangwen/addList.js"></script>
+  </body>
 </html>

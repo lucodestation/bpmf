@@ -15,9 +15,9 @@ new Vue({
   el: '#app',
   data() {
     return {
-      newsList: [],// 平台公告
-      articleList:[],// 玻说坡话列表
-      partnerList:[],// 合作机构
+      newsList: [], // 平台公告
+      articleList: [], // 玻说坡话列表
+      partnerList: [], // 合作机构
     }
   },
   async created() {
@@ -54,4 +54,3 @@ new Vue({
     }
   },
 })
-
