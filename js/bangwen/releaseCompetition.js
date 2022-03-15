@@ -1,5 +1,16 @@
 "use strict";
 // 发布比赛
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -41,8 +52,8 @@ new Vue({
                 contact_info: '',
                 roles: '',
                 fee: '',
-                upper_limit: '',
-                team_where: '',
+                upper_limit: 0,
+                team_where: 1,
                 team_list: '', // team_where=1时必传此参数，团队列表，多个用英文逗号隔开
             },
             // 开始时间
@@ -52,6 +63,14 @@ new Vue({
             coverImage: {},
             // 附件列表
             affixList: [],
+            // 报名费用输入框是否显示
+            feeInputShow: true,
+            // 报名人数上限输入框是否显示
+            upperLimitInputShow: false,
+            // 添加团队名称列表是否显示
+            teamListShow: true,
+            // 团队名称列表
+            teamNameList: [{ id: 1, name: '' }],
         };
     },
     mounted: function () {
@@ -80,13 +99,38 @@ new Vue({
         this.initCoverImageFileChange();
     },
     methods: {
-        // 选择是否采用队员总分制
-        handleCheckedTotalPoints: function (value) {
-            console.log(value);
+        // 选择赛事分类-赛事种类（单选框）
+        handleSelectCompetitionType: function (event) {
+            var target = event.target || event.srcElement;
+            var value = target.value * 1;
+            this.formData.competition_type = value;
+        },
+        // 选择赛事类型（单选框）
+        handleSelectCompetitionCate: function (event) {
+            var target = event.target || event.srcElement;
+            var value = target.value * 1;
+            this.formData.category_id = value;
+        },
+        // 选择是否采用队员总分制（单选框）
+        handleSelectCompetitionTotalPointes: function (event) {
+            var target = event.target || event.srcElement;
+            var value = target.value * 1;
             this.formData.is_total_points = value;
             if (value === 1) {
                 this.formData.stage = 1;
             }
+        },
+        // 选择比赛方式（单选框）
+        handleSelectCompetitionWay: function (event) {
+            var target = event.target || event.srcElement;
+            var value = target.value * 1;
+            this.formData.way = value;
+        },
+        // 选择赛事描述-赛事种类（单选框）
+        handleSelectJoinType: function (event) {
+            var target = event.target || event.srcElement;
+            var value = target.value * 1;
+            this.formData.join_type = value;
         },
         // 初始化报名开始时间
         initSignUpStartDate: function () {
@@ -322,31 +366,14 @@ new Vue({
                         // console.log(index) //得到文件索引
                         // console.log(file) //得到文件对象
                         // console.log(result) //得到文件base64编码，比如图片
-                        var formData = new FormData();
-                        formData.append('file', file);
-                        console.log(formData);
                         _this.coverImage = {
                             file: file,
                             url: result,
                         };
+                        console.log(_this.coverImage);
                     });
                 },
             });
-            // const element = event.target || event.srcElement
-            // const files = element.files[0]
-            // console.log(files)
-            // if (!files.type.startsWith('image/')) {
-            //   console.log('请选择图片文件')
-            //   layer.msg('请选择图片文件', { icon: 2, time: 3000 })
-            //   element.value = ''
-            //   this.coverImage = ''
-            //   return
-            // }
-            // window.URL = window.URL || window.webkitURL
-            // const url = window.URL.createObjectURL(files)
-            // console.log(url)
-            // console.log(files)
-            // this.coverImage = files
         },
         // 选择附件
         handleAffixFileChange: function (event) {
@@ -387,20 +414,172 @@ new Vue({
             }
             (_a = this.affixList).push.apply(_a, tempArr);
             element.value = '';
+            console.log(__assign({}, this.affixList));
         },
         // 删除附件
         handleDeleteAffix: function (index) {
             this.affixList = this.affixList.filter(function (item, ind) { return index !== ind; });
         },
+        // 选择报名信息（复选框）（年龄、居住地址、自我介绍）
+        handleSelectApplyInfo: function (event) {
+            var target = event.target || event.srcElement;
+            var value = target.value;
+            var arr = this.formData.apply_info.split(',').filter(function (i) { return i !== ''; });
+            if (arr.includes(value)) {
+                // 已有则删除
+                arr = arr.filter(function (i) { return i !== value; });
+            }
+            else {
+                // 没有则添加
+                arr.push(value);
+            }
+            this.formData.apply_info = arr.toString();
+        },
+        // 选择联系方式（复选框）（QQ、MSN、SKYPE、微信号）
+        handleSelectContactInfo: function (event) {
+            var target = event.target || event.srcElement;
+            var value = target.value;
+            var arr = this.formData.contact_info.split(',').filter(function (i) { return i !== ''; });
+            if (arr.includes(value)) {
+                // 已有则删除
+                arr = arr.filter(function (i) { return i !== value; });
+            }
+            else {
+                // 没有则添加
+                arr.push(value);
+            }
+            this.formData.contact_info = arr.toString();
+        },
+        // 选择角色（复选框）（选手、裁判、主裁判）
+        handleSelectRoles: function (event) {
+            var target = event.target || event.srcElement;
+            var value = target.value;
+            var arr = this.formData.roles.split(',').filter(function (i) { return i !== ''; });
+            if (arr.includes(value)) {
+                // 已有则删除
+                arr = arr.filter(function (i) { return i !== value; });
+            }
+            else {
+                // 没有则添加
+                arr.push(value);
+            }
+            this.formData.roles = arr.toString();
+        },
+        // 选择报名费用（单选框）
+        handleSelectFee: function (event) {
+            var target = event.target || event.srcElement;
+            var value = target.value * 1;
+            if (value) {
+                // 有
+                this.feeInputShow = true;
+                this.formData.fee = '';
+            }
+            else {
+                // 无
+                this.feeInputShow = false;
+                this.formData.fee = 0;
+            }
+        },
+        // 选择报名人数上限（单选框）
+        handleSelectUpperLimit: function (event) {
+            var target = event.target || event.srcElement;
+            var value = target.value * 1;
+            if (value) {
+                // 有
+                this.upperLimitInputShow = true;
+                this.formData.upper_limit = '';
+            }
+            else {
+                // 无
+                this.upperLimitInputShow = false;
+                this.formData.upper_limit = 0;
+            }
+        },
+        // 选择添加团队（单选框）
+        handleSelectTeamWhere: function (event) {
+            var target = event.target || event.srcElement;
+            var value = target.value * 1;
+            if (value === 1) {
+                // 组织者添加
+                this.formData.team_where = 1;
+                this.teamListShow = true;
+            }
+            else if (value === 2) {
+                // 各队员自己添加
+                this.formData.team_where = 2;
+                this.teamListShow = false;
+            }
+        },
+        // 删除团队名称
+        handleDeleteTeamName: function (index) {
+            this.teamNameList.splice(index, 1);
+        },
+        // 添加团队名称
+        handleAddTeamName: function () {
+            var maxId = Math.max.apply(Math, this.teamNameList.map(function (i) { return i.id; }));
+            this.teamNameList.push({ id: maxId + 1, name: '' });
+        },
+        // 验证要提交的数据
+        _validateFormData: function () {
+            var arr = [];
+            if (this.formData.category_id === 5) {
+                arr.push({ label: '请输入赛事类型补充说明', validate: !this.formData.category_memo });
+            }
+            arr.push({ label: '请输入赛事名称', validate: !this.formData.competition_name });
+            if (this.formData.is_total_points) {
+                arr.push({ label: '队员总分制的比赛阶段总数必须为 1', validate: this.formData.stage !== 1 });
+            }
+            else {
+                arr.push({ label: '比赛阶段总数必须是 1~5 的整数（包括 1 和 5 ）', validate: ![1, 2, 3, 4, 5].includes(this.formData.stage) });
+            }
+            if (this.formData.way === 1) {
+                arr.push({ label: '请输入比赛方式补充说明', validate: !this.formData.way_memo });
+            }
+            arr.push({ label: '请选择报名开始时间', validate: !this.formData.a_b_t }, { label: '请选择报名结束时间', validate: !this.formData.a_e_t }, { label: '请选择比赛开始时间', validate: !this.formData.c_b_t }, { label: '请选择比赛结束时间', validate: !this.formData.c_e_t }, { label: '请输入赛事描述', validate: !this.formData.description.trim() }, { label: '请选择封面图', validate: !this.coverImage.url }, { label: '请选择附件', validate: !this.affixList.length }, { label: '请选择报名信息', validate: !this.formData.apply_info }, { label: '请选择联系方式', validate: !this.formData.contact_info }, { label: '请选择角色', validate: !this.formData.roles });
+            if (this.feeInputShow) {
+                arr.push({ label: '请输入报名费用', validate: !this.formData.fee }, { label: '报名费用必须大于 0', validate: this.formData.fee <= 0 });
+            }
+            if (this.upperLimitInputShow) {
+                arr.push({ label: '请输入报名人数上限', validate: !this.formData.upper_limit }, { label: '报名人数上限必须是大于 0 的整数', validate: this.formData.upper_limit <= 0 || this.formData.upper_limit % 1 !== 0 });
+            }
+            if (this.teamListShow) {
+                var tempArr = this.teamNameList.filter(function (i) { return i.name; });
+                arr.push({ label: '请输入团队名称', validate: !tempArr.length });
+            }
+            var errorArr = arr.filter(function (item) { return item.validate; });
+            if (errorArr.length) {
+                layer.msg(errorArr[0].label, { icon: 0, time: 3000 });
+            }
+            else {
+                return true;
+            }
+        },
         // 下一步
         handleNextStep: function (event) {
-            console.log('下一步 handleNextStep');
-            console.log('封面图', this.coverImage);
-            var formData = new FormData();
-            formData.append('file', this.coverImage.file);
-            console.log(formData);
-            // console.table({ ...this.formData })
-            // console.log([...this.competitionCateList])
+            if (!this._validateFormData())
+                return;
+            // if (this.formData.team_where === 1) {
+            //   this.formData.team_list = this.teamNameList
+            //     .filter((i) => i.name)
+            //     .map((i) => i.name)
+            //     .toString()
+            // }
+            // var formData = new FormData()
+            // formData.append('file', this.coverImage.file)
+            // console.log(formData.get('file'))
+            // console.log('OSS', OSS)
+            // const client = new OSS({
+            //   // yourRegion填写Bucket所在地域。以华东1（杭州）为例，yourRegion填写为oss-cn-hangzhou。
+            //   region: 'oss-cn-beijing',
+            //   // 从STS服务获取的临时访问密钥（AccessKey ID和AccessKey Secret）。
+            //   accessKeyId: 'LTAI4GDaFivfzrgrQxzncZHT',
+            //   accessKeySecret: 'OY9GL3QKj6D78EwkdojkZY132vbLEA',
+            //   // 从STS服务获取的安全令牌（SecurityToken）。
+            //   stsToken: 'yourSecurityToken',
+            //   // 填写Bucket名称。
+            //   bucket: 'bpmf',
+            // })
+            // // client.put('test.txt', formData).then((r) => console.log(r))
         },
     },
 });

@@ -16,8 +16,10 @@
     <script src="/plugins/jquery.min.js"></script>
     <script src="/plugins/syalert/syalert.min.js"></script>
     <script src="/plugins/vue.min.js"></script>
-
     <script src="/plugins/axios.min.js"></script>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/ali-oss/6.17.1/aliyun-oss-sdk.min.js"></script>
+
     <script src="/utils/request.js"></script>
     <script src="/utils/util.js"></script>
     <style>
@@ -65,6 +67,12 @@
         display: none;
       }
 
+      /*  */
+      .publish-up-head .cover-image {
+        width: 160px;
+        height: 160px;
+      }
+
       /* 附件列表 */
       .affix-list {
         /* background: pink; */
@@ -101,11 +109,13 @@
       <!-- 临时 -->
       <pre class="temp-pre layui-code">
         <!-- 表单数据 -->
-        <!-- <div>{{formData}}</div> -->
+        <div>{{formData}}</div>
         <!-- 封面图 -->
         <div>{{coverImage}}</div>
         <!-- 附件列表 -->
         <div>{{affixList}}</div>
+        <!-- 团队名称列表 -->
+        <div>{{teamNameList}}</div>
       </pre>
       <!-- <pre class="temp-pre">{{competitionCateList}}</pre> -->
       <!-- 面包屑导航 -->
@@ -147,14 +157,14 @@
             <div class="label">赛事种类：</div>
             <div class="con">
               <div class="item-radio clearfix">
-                <div class="radio-li fl" @click="formData.competition_type = 0">
-                  <input class="radio" type="radio" name="competitionType" :checked="formData.competition_type === 0" />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="competitionType" value="0" :checked="formData.competition_type === 0" @change="handleSelectCompetitionType" />
                   <span class="span">个人赛</span>
-                </div>
-                <div class="radio-li fl" @click="formData.competition_type = 1">
-                  <input class="radio" type="radio" name="competitionType" :checked="formData.competition_type === 1" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="competitionType" value="1" :checked="formData.competition_type === 1" @change="handleSelectCompetitionType" />
                   <span class="span">团队赛</span>
-                </div>
+                </label>
               </div>
             </div>
           </div>
@@ -164,10 +174,10 @@
             <div class="label">赛事类型：</div>
             <div class="con">
               <div class="item-radio clearfix">
-                <div class="radio-li fl" v-for="(item, index) in competitionCateList" :key="index" @click="formData.category_id = item.id">
-                  <input class="radio" type="radio" name="competitionCate" :checked="item.id === formData.category_id" />
+                <label class="radio-li fl" v-for="(item, index) in competitionCateList" :key="index">
+                  <input class="radio" type="radio" name="competitionCate" :value="item.id" :checked="item.id === formData.category_id" @change="handleSelectCompetitionCate" />
                   <span class="span">{{item.category_name}}</span>
-                </div>
+                </label>
 
                 <div class="radio-input fl" v-if="formData.category_id === 5">
                   <input type="text" class="input" placeholder="说明" v-model.trim="formData.category_memo" />
@@ -199,14 +209,14 @@
             <div class="label">是否采用队员总分制：</div>
             <div class="con">
               <div class="item-radio clearfix">
-                <div class="radio-li fl" @click="handleCheckedTotalPoints(0)">
-                  <input class="radio" type="radio" name="competitionTotalPoints" :checked="formData.is_total_points === 0" />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="competitionTotalPoints" value="0" :checked="formData.is_total_points === 0" @change="handleSelectCompetitionTotalPointes" />
                   <span class="span">否</span>
-                </div>
-                <div class="radio-li fl" @click="handleCheckedTotalPoints(1)">
-                  <input class="radio" type="radio" name="competitionTotalPoints" :checked="formData.is_total_points === 1" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="competitionTotalPoints" value="1" :checked="formData.is_total_points === 1" @change="handleSelectCompetitionTotalPointes" />
                   <span class="span">是</span>
-                </div>
+                </label>
               </div>
             </div>
           </div>
@@ -216,16 +226,16 @@
             <div class="label">比赛方式：</div>
             <div class="con">
               <div class="item-radio clearfix">
-                <div class="radio-li fl" @click="formData.way = 0">
-                  <input class="radio" type="radio" name="competitionWay" :checked="formData.way === 0" />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="competitionWay" value="0" :checked="formData.way === 0" @change="handleSelectCompetitionWay" />
                   <span class="span">线下场地</span>
-                </div>
+                </label>
               </div>
               <div class="item-radio clearfix">
-                <div class="radio-li fl" @click="formData.way = 1">
-                  <input class="radio" type="radio" name="competitionWay" :checked="formData.way === 1" />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="competitionWay" value="1" :checked="formData.way === 1" @change="handleSelectCompetitionWay" />
                   <span class="span">线上游戏平台</span>
-                </div>
+                </label>
                 <div class="radio-input fl" v-if="formData.way === 1">
                   <input type="text" class="input" placeholder="补充说明（备注线上游戏平台）" v-model.trim="formData.way_memo" />
                 </div>
@@ -238,14 +248,14 @@
             <div class="label">赛事种类：</div>
             <div class="con">
               <div class="item-radio clearfix">
-                <div class="radio-li fl" @click="formData.join_type = 1">
-                  <input class="radio" type="radio" name="5" :checked="formData.join_type === 1" />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="joinType" value="1" :checked="formData.join_type === 1" @change="handleSelectJoinType" />
                   <span class="span">自由参与</span>
-                </div>
-                <div class="radio-li fl" @click="formData.join_type = 2">
-                  <input class="radio" type="radio" name="5" :checked="formData.join_type === 2" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="joinType" value="2" :checked="formData.join_type === 2" @change="handleSelectJoinType" />
                   <span class="span">批准参与</span>
-                </div>
+                </label>
               </div>
             </div>
           </div>
@@ -319,7 +329,7 @@
               <div class="publish-up-head">
                 <div id="uploadCover">
                   <img src="/images/pub21.png" v-if="!this.coverImage.url" />
-                  <img :src="this.coverImage.url" v-else />
+                  <img class="cover-image" :src="this.coverImage.url" v-else />
                 </div>
                 <!-- <div>
                   <input id="cover" type="file" accept=".png,.jpg,.jpeg,.webp" hidden />
@@ -371,170 +381,167 @@
           <!-- 报名信息 -->
           <div class="publish-item clearfix">
             <div class="clearfix">
-              <div class="checkbox-li fl">
+              <label class="checkbox-li fl">
                 <input class="check-in" type="checkbox" checked disabled />
                 <span class="check-s"><i class="color-red">*</i>姓名</span>
-              </div>
-              <div class="checkbox-li fl">
+              </label>
+              <label class="checkbox-li fl">
                 <input class="check-in" type="checkbox" checked disabled />
                 <span class="check-s"><i class="color-red">*</i>比赛账号</span>
-              </div>
-              <div class="checkbox-li fl">
+              </label>
+              <label class="checkbox-li fl">
                 <input class="check-in" type="checkbox" checked disabled />
                 <span class="check-s"><i class="color-red">*</i>技术类别</span>
-              </div>
-              <div class="checkbox-li fl">
+              </label>
+              <label class="checkbox-li fl">
                 <input class="check-in" type="checkbox" checked disabled />
                 <span class="check-s"><i class="color-red">*</i>技术等级</span>
-              </div>
-              <div class="checkbox-li fl">
+              </label>
+              <label class="checkbox-li fl">
                 <input class="check-in" type="checkbox" checked disabled />
                 <span class="check-s"><i class="color-red">*</i>身份证明</span>
-              </div>
-              <div class="checkbox-li fl">
+              </label>
+              <label class="checkbox-li fl">
                 <input class="check-in" type="checkbox" checked disabled />
                 <span class="check-s"><i class="color-red">*</i>联系方式</span>
-              </div>
-              <div class="checkbox-li fl">
+              </label>
+              <label class="checkbox-li fl">
                 <input class="check-in" type="checkbox" checked disabled />
                 <span class="check-s"><i class="color-red">*</i>代表队</span>
-              </div>
-              <div class="checkbox-li fl">
+              </label>
+              <label class="checkbox-li fl">
                 <input class="check-in" type="checkbox" checked disabled />
                 <span class="check-s"><i class="color-red">*</i>所在区域</span>
-              </div>
-              <div class="checkbox-li fl">
-                <input class="check-in" type="checkbox" />
+              </label>
+              <label class="checkbox-li fl">
+                <input class="check-in" type="checkbox" name="applyInfo" value="1" @change="handleSelectApplyInfo" />
                 <span class="check-s">年龄</span>
-              </div>
-              <div class="checkbox-li fl">
-                <input class="check-in" type="checkbox" />
+              </label>
+              <label class="checkbox-li fl">
+                <input class="check-in" type="checkbox" name="applyInfo" value="2" @change="handleSelectApplyInfo" />
                 <span class="check-s">居住地址</span>
-              </div>
-              <div class="checkbox-li fl">
-                <input class="check-in" type="checkbox" />
+              </label>
+              <label class="checkbox-li fl">
+                <input class="check-in" type="checkbox" name="applyInfo" value="3" @change="handleSelectApplyInfo" />
                 <span class="check-s">自我介绍</span>
-              </div>
+              </label>
             </div>
           </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
+
+          <!-- 联系方式 -->
           <div class="publish-item clearfix">
             <div class="label"><span class="color-red">*</span> 联系方式：</div>
             <div class="con">
               <div class="clearfix">
-                <div class="checkbox-li fl">
+                <label class="checkbox-li fl">
                   <input class="check-in" type="checkbox" checked disabled />
                   <span class="check-s">手机号</span>
-                </div>
-                <div class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" />
+                </label>
+                <label class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" name="contactInfo" value="1" @change="handleSelectContactInfo" />
                   <span class="check-s">QQ</span>
-                </div>
-                <div class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" />
+                </label>
+                <label class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" name="contactInfo" value="2" @change="handleSelectContactInfo" />
                   <span class="check-s">MSN</span>
-                </div>
-                <div class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" />
+                </label>
+                <label class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" name="contactInfo" value="3" @change="handleSelectContactInfo" />
                   <span class="check-s">SKYPE</span>
-                </div>
-                <div class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" />
+                </label>
+                <label class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" name="contactInfo" value="4" @change="handleSelectContactInfo" />
                   <span class="check-s">微信号</span>
-                </div>
+                </label>
               </div>
             </div>
           </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
+
+          <!-- 角色选择 -->
           <div class="publish-item clearfix">
             <div class="label"><span class="color-red">*</span> 角色选择：</div>
             <div class="con">
               <div class="clearfix">
-                <div class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" />
+                <label class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" name="roles" value="1" @change="handleSelectRoles" />
                   <span class="check-s">比赛选手</span>
-                </div>
-                <div class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" />
+                </label>
+                <label class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" name="roles" value="2" @change="handleSelectRoles" />
                   <span class="check-s">裁判</span>
-                </div>
-                <div class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" />
+                </label>
+                <label class="checkbox-li fl">
+                  <input class="check-in" type="checkbox" name="roles" value="3" @change="handleSelectRoles" />
                   <span class="check-s">主裁判</span>
-                </div>
+                </label>
               </div>
             </div>
           </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
+
+          <!-- 报名费用 -->
           <div class="publish-item clearfix">
             <div class="label">报名费用：</div>
             <div class="con">
               <div class="item-radio clearfix">
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="6" checked />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="fee" value="0" :checked="!feeInputShow" @change="handleSelectFee" />
                   <span class="span">无</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="6" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="fee" value="1" :checked="feeInputShow" @change="handleSelectFee" />
                   <span class="span">有</span>
-                </div>
+                </label>
               </div>
-              <div class="item-b">每人(每队)<input type="text" class="input" placeholder="请输入报名费用" /></div>
+              <div class="item-b" v-if="feeInputShow">每人(每队)<input class="input" type="number" min="0.01" v-model.trim.number="formData.fee" placeholder="请输入报名费用" /></div>
             </div>
           </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
+
+          <!-- 报名人数上限 -->
           <div class="publish-item clearfix">
             <div class="label"><span class="color-red">*</span> 报名人数上限：</div>
             <div class="con">
               <div class="item-radio clearfix">
-                <div class="radio-li">
-                  <input class="radio" type="radio" name="7" checked />
+                <label class="radio-li">
+                  <input class="radio" type="radio" name="upperLimit" value="0" :checked="!upperLimitInputShow" @click="handleSelectUpperLimit" />
                   <span class="span">不限</span>
-                </div>
+                </label>
               </div>
               <div class="item-radio clearfix">
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="7" checked />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="upperLimit" value="1" :checked="upperLimitInputShow" @click="handleSelectUpperLimit" />
                   <span class="span">人数上限（个人赛）</span>
-                </div>
-                <div class="item-b fl"><input type="text" class="input" placeholder="请输入人数上限" />人</div>
+                </label>
+                <div class="item-b fl" v-if="upperLimitInputShow"><input class="input" type="number" min="1" v-model.trim.number="formData.upper_limit" placeholder="请输入人数上限" />人</div>
               </div>
               <div class="tip color-gray">系统默认总人数最多不超过1万</div>
             </div>
           </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
+
+          <!-- 团队添加 -->
           <div class="publish-item clearfix">
-            <div class="label"><span class="color-red">*</span> 团队添加：</div>
+            <div class="label"><span class="color-red">*</span>团队添加：</div>
             <div class="con">
               <div class="item-radio clearfix">
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="8" checked />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="teamWhere" value="1" @click="handleSelectTeamWhere" checked />
                   <span class="span">组织者添加</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="8" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="teamWhere" value="2" @click="handleSelectTeamWhere" />
                   <span class="span">各队员自己填写</span>
-                </div>
+                </label>
               </div>
               <div class="tip color-gray">（参赛队员报名时选择的团队）</div>
-              <!--item-b start-->
-              <div class="item-b item-people">
-                1.<input type="text" class="input" placeholder="请输入团队名称" />
-                <button class="people-delete"></button>
-              </div>
-              <!--item-b end-->
-              <!--item-b start-->
-              <div class="item-b item-people">
-                2.<input type="text" class="input" placeholder="请输入团队名称" />
-                <button class="people-delete"></button>
-              </div>
-              <!--item-b end-->
-              <button class="add-people">添加团队</button>
+
+              <!-- 输入团队名称 -->
+              <template v-if="teamListShow">
+                <div class="item-b item-people" v-for="(item, index) in teamNameList" :key="item.id">
+                  {{index + 1}}.<input type="text" class="input" placeholder="请输入团队名称" v-model.trim="teamNameList[index].name" />
+                  <button class="people-delete" @click="handleDeleteTeamName(index)"></button>
+                </div>
+
+                <button class="add-people" @click="handleAddTeamName">添加团队</button>
+              </template>
             </div>
           </div>
           <!--publish-item end-->
