@@ -56,7 +56,8 @@
     <!--center-side-item start-->
     <div class="center-side-item">
       <div class="center-side-tit">会员中心</div>
-      <div class="center-side-li" :class="CenterAside=='userCont/member/member'?'active':''"><a
+      <div class="center-side-li"
+        :class="CenterAside=='userCont/member/member'?'active':CenterAside=='userCont/member/pay'?'active':''"><a
           href="/userCont/member/member.html">开通会员</a> </div>
     </div>
     <!--center-side-item end-->

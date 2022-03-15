@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>会员中心-购买</title>
   <script src="/plugins/upload/upload.js"></script>
   <link rel="stylesheet" href="/plugins/date/jedate.css">
   <script src="/plugins/date/jedate.js"></script>
@@ -34,7 +34,7 @@
     <div class="main-center w-1200 clearfix">
       <div class="public-user"></div>
       <!--center-content start-->
-      <div class="center-content fr">
+      <div class="center-content fr" id="app">
         <!--center-inner start-->
         <div class="center-inner">
           <div class="center-inner-tit">购买会员</div>
@@ -44,9 +44,9 @@
             <div class="center-member">
               <!--member-head start-->
               <div class="member-head clearfix">
-                <div class="img"><img src="/images/index12.png"></div>
+                <div class="img"><img :src="userCont.avatar"></div>
                 <div class="txt">
-                  <div class="t">周杰儿<span class="txt-tip m-l-30">普通会员</span></div>
+                  <div class="t">{{userCont.de_nick}}<span class="txt-tip m-l-30">普通会员</span></div>
                   <div class="c">开通会员享受更多特权</div>
                 </div>
               </div>
@@ -55,42 +55,42 @@
                 <div class="bond-pay">
                   <div class="t">支付金额</div>
                   <div class="c m-t-15 w160">
-                    3个月经典VIP
-                    <span class="color-orange fr">60元</span>
+                    {{number}}个月{{title}}
+                    <span class="color-orange fr">{{month}}元</span>
                   </div>
                 </div>
                 <div class="bond-pay">
                   <div class="t w160">
                     实际支付
-                    <span class="color-orange fr">60元</span>
+                    <span class="color-orange fr">{{month}}元</span>
                   </div>
                 </div>
                 <div class="bond-pay">
-                  <div class="t">选择支付方式</div>
+                  <div class="t">支付方式</div>
                   <div class="con clearfix">
-                    <div class="li">
+                    <div class="li" @click="pay_type=1">
                       <input type="radio" class="bond-radio" checked name="money">
                       <span class="radio-s"><img src="/images/pub14.png"></span>
                     </div>
-                    <div class="li">
-                      <input type="radio" class="bond-radio" name="money">
-                      <span class="radio-s"><img src="/images/pub13.png"></span>
-                    </div>
-                    <div class="li">
+                    <div class="li" @click="pay_type=2">
                       <input type="radio" class="bond-radio" name="money">
                       <span class="radio-s"><img src="/images/pub19.png"></span>
+                    </div>
+                    <div class="li" @click="pay_type=3">
+                      <input type="radio" class="bond-radio" name="money">
+                      <span class="radio-s"><img src="/images/pub13.png"></span>
                     </div>
                   </div>
                 </div>
                 <div class="bond-pay">
-                  <div class="t">选支付密码</div>
+                  <div class="t">支付密码</div>
                   <div class="input-w m-t-20">
                     <input type="text" class="input" placeholder="请输入">
                   </div>
                 </div>
               </div>
               <div class="member-bot m-t-30">
-                <button class="center-set-btn">确定</button>
+                <button class="center-set-btn" @click="onBtnClick">确定</button>
               </div>
             </div>
             <!--center-member end-->

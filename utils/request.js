@@ -18,9 +18,9 @@ var request = axios.create({
 });
 // 请求拦截器
 request.interceptors.request.use(function (config) {
-    console.log('请求拦截器', config);
-    console.log('config.params', config.params);
-    console.log('config.data', config.data);
+    // console.log('请求拦截器', config)
+    // console.log('config.params', config.params)
+    // console.log('config.data', config.data)
     // 只要有 token 就带着
     var token = localStorage.getItem('token');
     if (token) {
@@ -38,11 +38,11 @@ request.interceptors.request.use(function (config) {
 });
 // 响应拦截器
 request.interceptors.response.use(function (response) {
-    console.log('响应拦截器', response);
+    // console.log('响应拦截器', response)
     var data = response.data;
     return data;
 }, function (error) {
-    console.log('响应拦截器 error', response);
+    // console.log('响应拦截器 error', response)
     var status = error.response.status;
     if (status === 401) {
     }

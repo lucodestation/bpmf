@@ -40,6 +40,9 @@ $(function () {
     $('.public-footer').load('/components/PublicFooter.html');
     $('.public-user').load('/components/CenterAside.html');
 });
+var encrypt = new JSEncrypt();
+//公钥.
+var publiukey = '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----';
 new Vue({
     el: '#app',
     data: function () {
@@ -47,12 +50,19 @@ new Vue({
             vipCont: '',
             number: '1',
             day: '',
-            type: 1, // 类型
+            type: 1,
+            userCont: '',
+            UnitPrice: '',
+            Totalprice: '',
+            one_type: '',
+            num: 1,
+            pay_type: '1',
+            pwd: '', // 支付密码
         };
     },
     created: function () {
         return __awaiter(this, void 0, void 0, function () {
-            var res, date1, date2, month;
+            var res, ress, date1, date2, month;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, request({
@@ -63,6 +73,15 @@ new Vue({
                         res = _a.sent();
                         if (res.code == 200) {
                             this.vipCont = res.data;
+                        }
+                        return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Vip/mineVip',
+                            })];
+                    case 2:
+                        ress = _a.sent();
+                        if (ress.code == 200) {
+                            this.userCont = ress.data;
                         }
                         date1 = new Date();
                         date2 = new Date(date1);
@@ -75,6 +94,114 @@ new Vue({
         });
     },
     methods: {
+        // 点击购买次数
+        ontqClick: function (e) {
+            this.one_type = e;
+            if (e == 1) {
+                this.UnitPrice = this.vipCont.onelive_money;
+                this.Totalprice = this.vipCont.onelive_money * this.num;
+            }
+            else if (e == 2) {
+                this.UnitPrice = this.vipCont.onebang_money;
+                this.Totalprice = this.vipCont.onebang_money * this.num;
+            }
+            else if (e == 3) {
+                this.UnitPrice = this.vipCont.onematch_money;
+                this.Totalprice = this.vipCont.onematch_money * this.num;
+            }
+            syalert.syopen('userNumber');
+        },
+        // 购买次数加
+        onAddClick: function () {
+            this.num++;
+            this.Totalprice = (this.UnitPrice * this.num).toFixed(2);
+        },
+        // 购买次数减
+        onJianClick: function () {
+            if (this.num > 1) {
+                this.num--;
+                this.Totalprice = (this.UnitPrice * this.num).toFixed(2);
+            }
+        },
+        // 购买次数确定
+        onPayClick: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var res, pwd, ress, ress, ress;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (this.pay_type == '1') {
+                                if (!this.pwd)
+                                    return [2 /*return*/, layer.msg('请输入密码')];
+                            }
+                            return [4 /*yield*/, request({
+                                    method: 'POST',
+                                    url: '/api/Vip/onNumRefer',
+                                    data: { one_type: this.one_type, num: this.num, pay_type: this.pay_type }
+                                })];
+                        case 1:
+                            res = _a.sent();
+                            if (!(res.code == 200)) return [3 /*break*/, 7];
+                            if (!(this.pay_type == '1')) return [3 /*break*/, 3];
+                            encrypt.setPublicKey(publiukey);
+                            pwd = encrypt.encrypt(this.pwd) //需要加密的内容
+                            ;
+                            return [4 /*yield*/, request({
+                                    method: 'POST',
+                                    url: '/api/Vip/numBalancePay',
+                                    data: { out_trade_no: res.data.out_trade_no, pay_pwd: pwd }
+                                })];
+                        case 2:
+                            ress = _a.sent();
+                            if (ress.code == 200) {
+                                layer.msg('支付成功');
+                                syalert.syhide('userNumber');
+                            }
+                            else {
+                                layer.msg(ress.msg);
+                            }
+                            _a.label = 3;
+                        case 3:
+                            if (!(this.pay_type == '2')) return [3 /*break*/, 5];
+                            return [4 /*yield*/, request({
+                                    method: 'POST',
+                                    url: '/api/Vip/numAliPay',
+                                    data: { out_trade_no: res.data.out_trade_no }
+                                })];
+                        case 4:
+                            ress = _a.sent();
+                            if (ress.code == 200) {
+                                // layer.msg('支付成功')
+                                // syalert.syhide('userNumber')
+                            }
+                            else {
+                                layer.msg(ress.msg);
+                            }
+                            _a.label = 5;
+                        case 5:
+                            if (!(this.pay_type == '3')) return [3 /*break*/, 7];
+                            return [4 /*yield*/, request({
+                                    method: 'POST',
+                                    url: '/api/Vip/numWxPay',
+                                    data: { out_trade_no: res.data.out_trade_no }
+                                })];
+                        case 6:
+                            ress = _a.sent();
+                            if (ress.code == 200) {
+                                // layer.msg('支付成功')
+                                location.href = ress.data.code_url;
+                                syalert.syhide('userNumber');
+                            }
+                            else {
+                                layer.msg(ress.msg);
+                            }
+                            _a.label = 7;
+                        case 7: return [2 /*return*/];
+                    }
+                });
+            });
+        },
+        // 时长加
         addClick: function () {
             this.number++;
             var date1 = new Date();
@@ -83,6 +210,7 @@ new Vue({
             var month = (date2.getMonth() + 1) >= 10 ? (date2.getMonth() + 1) : ('0' + (date2.getMonth() + 1));
             this.day = date2.getFullYear() + "-" + month + "-" + date2.getDate();
         },
+        // 时长减
         jianClick: function () {
             if (this.number > 1) {
                 this.number--;
@@ -92,6 +220,10 @@ new Vue({
                 var month = (date2.getMonth() + 1) >= 10 ? (date2.getMonth() + 1) : ('0' + (date2.getMonth() + 1));
                 this.day = date2.getFullYear() + "-" + month + "-" + date2.getDate();
             }
+        },
+        // 点击购买
+        onGoClick: function () {
+            location.href = './pay.html?number=' + this.number + '&type=' + this.type;
         }
     }
 });

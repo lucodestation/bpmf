@@ -46,10 +46,15 @@
             <div class="center-member">
               <!--member-head start-->
               <div class="member-head clearfix">
-                <div class="img"><img src="/images/index12.png"></div>
+                <div class="img"><img :src="userCont.avatar"></div>
                 <div class="txt">
-                  <div class="t">周杰儿<img class="txt-icon m-l-20" src="/images/VIP.png"> </div>
-                  <div class="c">普通会员</div>
+                  <div class="t">{{userCont.de_nick}}
+                    <img v-if="userCont.vip==1" class="txt-icon m-l-20" src="/images/VIP.png">
+                    <img v-if="userCont.vip==2" class="txt-icon m-l-20" src="/images/VIP2.png">
+                    <img v-if="userCont.vip==3" class="txt-icon m-l-20" src="/images/VIP3.png">
+                  </div>
+                  <div class="c" v-if="userCont.vip==0">普通会员</div>
+                  <div class="c" v-else>会员到期时间：{{userCont.vip_time}}</div>
                 </div>
               </div>
               <!--member-head end-->
@@ -61,25 +66,25 @@
                     <img class="icon" src="/images/me1.png">
                     <div class="c m-b-15 m-t-15">
                       <p>开播特权</p>
-                      <p>本月剩余{{vipCont.onelive_money}}次</p>
+                      <p>本月剩余{{userCont.live_num}}次</p>
                     </div>
-                    <button class="member-num-btn" onClick="syalert.syopen('alert1')">购买次数</button>
+                    <button class="member-num-btn" @click="ontqClick(1)">购买次数</button>
                   </li>
                   <li>
                     <img class="icon" src="/images/me2.png">
                     <div class="c m-b-15 m-t-15">
                       <p>发布榜文特权</p>
-                      <p>本月剩余{{vipCont.onebang_money}}次</p>
+                      <p>本月剩余{{userCont.bang_num}}次</p>
                     </div>
-                    <button class="member-num-btn" onClick="syalert.syopen('alert1')">购买次数</button>
+                    <button class="member-num-btn" @click="ontqClick(2)">购买次数</button>
                   </li>
                   <li>
                     <img class="icon" src="/images/me3.png">
                     <div class="c m-b-15 m-t-15">
                       <p>发布赛事特权</p>
-                      <p>本月剩余{{vipCont.onematch_money}}次</p>
+                      <p>本月剩余{{userCont.match_num}}次</p>
                     </div>
-                    <button class="member-num-btn" onClick="syalert.syopen('alert1')">购买次数</button>
+                    <button class="member-num-btn" @click="ontqClick(3)">购买次数</button>
                   </li>
                   <li>
                     <img class="icon" src="/images/me4.png">
@@ -192,7 +197,7 @@
               <!--member-box end-->
               <div class="member-date">购买后到期时间为：{{day}}</div>
               <div class="member-bot m-t-30">
-                <button class="center-set-btn" onclick="location='CenterMemberB.html'">立即购买</button>
+                <button class="center-set-btn" @click="onGoClick">立即购买</button>
               </div>
             </div>
             <!--center-member end-->
@@ -200,6 +205,53 @@
           <!--center-inner-content end-->
         </div>
         <!--center-inner end-->
+        <!--购买次数弹出start-->
+        <div class="sy-alert member-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+          id="userNumber">
+          <div class="member-pop-content">
+            <div class="bond-close" onClick="syalert.syhide('userNumber')"></div>
+            <div class="bond-tit">购买次数</div>
+            <div class="member-pop-item">开播单价：<span class="color-orange">{{UnitPrice}}元/次</span> </div>
+            <div class="member-pop-item clearfix">
+              <span class="fl"> 开播次数：</span>
+              <div class="member-pop-cal fl">
+                <button class="cal-btn fl" @click="onJianClick">-</button>
+                <input type="text" v-model="num" class="cal-input fl">
+                <button class="cal-btn orange fl" @click="onAddClick">+</button>
+              </div>
+            </div>
+            <div class="member-pop-item">总计金额：<span class="color-orange">{{Totalprice}}元</span> </div>
+            <div class="bond-pay">
+              <div class="t">支付方式</div>
+              <div class="con clearfix">
+                <div class="li" @click="pay_type=1">
+                  <input type="radio" class="bond-radio" checked name="money">
+                  <span class="radio-s"><img src="/images/pub14.png"></span>
+                </div>
+                <div class="li" @click="pay_type=2">
+                  <input type="radio" class="bond-radio" name="money">
+                  <span class="radio-s"><img src="/images/pub19.png"></span>
+                </div>
+                <div class="li" @click="pay_type=3">
+                  <input type="radio" class="bond-radio" name="money">
+                  <span class="radio-s"><img src="/images/pub13.png"></span>
+                </div>
+              </div>
+            </div>
+            <div class="bond-pay" v-if="pay_type==1">
+              <div class="t">支付密码</div>
+              <div class="con clearfix">
+                <div class="input-w m-t-20">
+                  <input type="password" class="input" v-model="pwd" placeholder="请输入支付密码">
+                </div>
+              </div>
+            </div>
+            <div class="last-bottom">
+              <button class="bond-btn" @click="onPayClick">确定</button>
+            </div>
+          </div>
+        </div>
+        <!--购买次数弹出end-->
       </div>
       <!--center-content end-->
     </div>
@@ -208,53 +260,6 @@
   <!--center-container end-->
   <!-- 公共底部 -->
   <footer class="public-footer"></footer>
-  <!--购买次数弹出start-->
-  <div class="sy-alert member-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
-    id="alert1">
-    <div class="member-pop-content">
-      <div class="bond-close" onClick="syalert.syhide('alert1')"></div>
-      <div class="bond-tit">购买次数</div>
-      <div class="member-pop-item">开播单价：<span class="color-orange">10元/次</span> </div>
-      <div class="member-pop-item clearfix">
-        <span class="fl"> 开播次数：</span>
-        <div class="member-pop-cal fl">
-          <button class="cal-btn fl">-</button>
-          <input type="text" value="5" class="cal-input fl">
-          <button class="cal-btn orange fl">+</button>
-        </div>
-      </div>
-      <div class="member-pop-item">总计金额：<span class="color-orange">50元</span> </div>
-      <div class="bond-pay">
-        <div class="t">选择支付方式</div>
-        <div class="con clearfix">
-          <div class="li">
-            <input type="radio" class="bond-radio" checked name="money">
-            <span class="radio-s"><img src="/images/pub14.png"></span>
-          </div>
-          <div class="li">
-            <input type="radio" class="bond-radio" name="money">
-            <span class="radio-s"><img src="/images/pub13.png"></span>
-          </div>
-          <div class="li">
-            <input type="radio" class="bond-radio" name="money">
-            <span class="radio-s"><img src="/images/pub19.png"></span>
-          </div>
-        </div>
-      </div>
-      <div class="bond-pay">
-        <div class="t">选支付密码</div>
-        <div class="con clearfix">
-          <div class="input-w m-t-20">
-            <input type="text" class="input" placeholder="请输入">
-          </div>
-        </div>
-      </div>
-      <div class="last-bottom">
-        <button class="bond-btn" onClick="syalert.syhide('alert1')">确定</button>
-      </div>
-    </div>
-  </div>
-  <!--购买次数弹出end-->
   <script src="/js/common.js"></script>
   <script src="/js/userCont/member/member.js"></script>
 </body>

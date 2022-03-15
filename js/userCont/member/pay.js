@@ -44,54 +44,87 @@ new Vue({
     el: '#app',
     data: function () {
         return {
-            vipCont: '',
-            number: '1',
-            day: '',
-            type: 1, // 类型
+            number: '',
+            type: '',
+            month: '',
+            title: '',
+            userCont: '',
+            pay_type: '1', // 支付方式 1余额，2支付宝，3微信
         };
     },
     created: function () {
         return __awaiter(this, void 0, void 0, function () {
-            var res, date1, date2, month;
+            var res, ress;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, request({
-                            method: 'POST',
-                            url: '/api/Vip/buyInfo',
-                        })];
+                    case 0:
+                        this.GetRequest();
+                        return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Vip/buyInfo',
+                            })];
                     case 1:
                         res = _a.sent();
                         if (res.code == 200) {
-                            this.vipCont = res.data;
+                            if (this.type == '1') {
+                                this.title = '经典VIP';
+                                this.month = this.number * res.data.vip1_money;
+                            }
+                            else if (this.type == '2') {
+                                this.title = '黄金VIP';
+                                this.month = this.number * res.data.vip2_money;
+                            }
+                            else if (this.type == '3') {
+                                this.title = '钻石VIP';
+                                this.month = this.number * res.data.vip3_money;
+                            }
                         }
-                        date1 = new Date();
-                        date2 = new Date(date1);
-                        date2.setDate(date1.getDate() + 30 * this.number);
-                        month = (date2.getMonth() + 1) >= 10 ? (date2.getMonth() + 1) : ('0' + (date2.getMonth() + 1));
-                        this.day = date2.getFullYear() + "-" + month + "-" + date2.getDate();
+                        return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Vip/mineVip',
+                            })];
+                    case 2:
+                        ress = _a.sent();
+                        if (ress.code == 200) {
+                            this.userCont = ress.data;
+                        }
                         return [2 /*return*/];
                 }
             });
         });
     },
     methods: {
-        addClick: function () {
-            this.number++;
-            var date1 = new Date();
-            var date2 = new Date(date1);
-            date2.setDate(date1.getDate() + 30 * this.number);
-            var month = (date2.getMonth() + 1) >= 10 ? (date2.getMonth() + 1) : ('0' + (date2.getMonth() + 1));
-            this.day = date2.getFullYear() + "-" + month + "-" + date2.getDate();
+        // 点击确定
+        onBtnClick: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var res;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Vip/balanceOnMonth',
+                                data: { type: this.type, num: this.number, pay_type: this.pay_type }
+                            })];
+                        case 1:
+                            res = _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            });
         },
-        jianClick: function () {
-            if (this.number > 1) {
-                this.number--;
-                var date1 = new Date();
-                var date2 = new Date(date1);
-                date2.setDate(date1.getDate() + 30 * this.number);
-                var month = (date2.getMonth() + 1) >= 10 ? (date2.getMonth() + 1) : ('0' + (date2.getMonth() + 1));
-                this.day = date2.getFullYear() + "-" + month + "-" + date2.getDate();
+        // 获取当前页面url
+        GetRequest: function () {
+            var url = location.search; //获取当前页面url
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                var strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+                }
             }
-        }
+            this.number = theRequest.number;
+            this.type = theRequest.type;
+        },
     }
 });
