@@ -43,12 +43,12 @@
               <div class="label"><span class="color-red">*</span> 设置直播种类：</div>
               <div class="con">
                 <div class="publish-tags clearfix">
-                  <div class="tag">
+                  <div class="tag" @click="formData.type=1">
                     <input type="radio" class="tag-radio" name="1" checked>
                     <span class="tag-s">课程直播</span>
                   </div>
-                  <div class="tag">
-                    <!-- <input type="radio" class="tag-radio" name="1"> -->
+                  <div class="tag" @click="formData.type=2">
+                    <input type="radio" class="tag-radio" name="1">
                     <span class="tag-s">赛事直播</span>
                   </div>
                 </div>
@@ -60,25 +60,25 @@
               <div class="label"><span class="color-red">*</span> 设置进入权限：</div>
               <div class="con">
                 <div class="publish-tags clearfix">
-                  <div class="tag">
-                    <!-- <input type="radio" class="tag-radio radio-juris" value="1" name="juris" checked> -->
+                  <div class="tag" @click="formData.join_type=1">
+                    <input type="radio" class="tag-radio radio-juris" value="1" name="juris" checked>
                     <span class="tag-s">申请进入</span>
                   </div>
-                  <div class="tag">
-                    <!-- <input type="radio" class="tag-radio radio-juris" value="2" name="juris"> -->
+                  <div class="tag" @click="formData.join_type=2">
+                    <input type="radio" class="tag-radio radio-juris" value="2" name="juris">
                     <span class="tag-s">全网公开</span>
                   </div>
-                  <div class="tag">
-                    <!-- <input type="radio" class="tag-radio radio-juris" value="3" name="juris"> -->
+                  <div class="tag" @click="formData.join_type=3">
+                    <input type="radio" class="tag-radio radio-juris" value="3" name="juris">
                     <span class="tag-s">会员公开</span>
                   </div>
-                  <div class="tag">
-                    <!-- <input type="radio" class="tag-radio radio-juris" value="4" name="juris"> -->
+                  <div class="tag" @click="formData.join_type=4">
+                    <input type="radio" class="tag-radio radio-juris" value="4" name="juris">
                     <span class="tag-s">设置密码</span>
                   </div>
                 </div>
                 <div class="center-live-input">
-                  <input type="text" class="input w340" placeholder="请设置6位数进房密码">
+                  <input type="password" class="input w340" v-model="formData.password" placeholder="请设置6位数进房密码">
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@
               <div class="label"><span class="color-red">*</span>直播讲解主题：</div>
               <div class="con">
                 <div class="live-bor">
-                  <input type="text" class="input rate-100" placeholder="请用20个字描述直播讲解主题">
+                  <input type="text" class="input rate-100"  v-model="formData.title" placeholder="请用20个字描述直播讲解主题">
                 </div>
               </div>
             </div>

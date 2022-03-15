@@ -9,8 +9,8 @@ new Vue({
     return {
       // 表单数据
       formData: {
-        type: '',// 1课程直播，2赛事直播
-        join_type: '',// 1申请进入（需要发布者审核），2全网公开，3会员公开，4设置密码
+        type: '1',// 1课程直播，2赛事直播
+        join_type: '1',// 1申请进入（需要发布者审核），2全网公开，3会员公开，4设置密码
         c_id: '',// 分类
         title: '',// 标题
         start_time: '',// 开始时间
@@ -22,15 +22,14 @@ new Vue({
       typeList: [{ id: 1, title: '课程直播' }, { id: 2, title: '赛事直播' }],
     }
   },
-  async created() {
-
+  created() {
+    this.onLiveCates()
   },
   methods: {
-    aa() {
+    async onLiveCates() {
       const res = await request({
         method: 'POST',
-        url: '/api/Live/push',
-        data: { page: 1, pagenum: 7, type: 1 },
+        url: '/api/Live/liveCates',
       })
       if (res) {
         this.bangList = res.data.data
