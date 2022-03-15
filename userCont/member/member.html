@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>开通会员</title>
+  <script src="/plugins/upload/upload.js"></script>
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/upload/imgFileupload.js"></script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css">
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jsencrypt.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <div class="public-user"></div>
+      <!--center-content start-->
+      <div class="center-content fr" id="app">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit">
+            会员中心
+          </div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <!--center-member start-->
+            <div class="center-member">
+              <!--member-head start-->
+              <div class="member-head clearfix">
+                <div class="img"><img src="/images/index12.png"></div>
+                <div class="txt">
+                  <div class="t">周杰儿<img class="txt-icon m-l-20" src="/images/VIP.png"> </div>
+                  <div class="c">普通会员</div>
+                </div>
+              </div>
+              <!--member-head end-->
+              <!--member-box start-->
+              <div class="member-box">
+                <div class="member-tit">我的特权</div>
+                <ul class="member-box-ul clearfix">
+                  <li>
+                    <img class="icon" src="/images/me1.png">
+                    <div class="c m-b-15 m-t-15">
+                      <p>开播特权</p>
+                      <p>本月剩余{{vipCont.onelive_money}}次</p>
+                    </div>
+                    <button class="member-num-btn" onClick="syalert.syopen('alert1')">购买次数</button>
+                  </li>
+                  <li>
+                    <img class="icon" src="/images/me2.png">
+                    <div class="c m-b-15 m-t-15">
+                      <p>发布榜文特权</p>
+                      <p>本月剩余{{vipCont.onebang_money}}次</p>
+                    </div>
+                    <button class="member-num-btn" onClick="syalert.syopen('alert1')">购买次数</button>
+                  </li>
+                  <li>
+                    <img class="icon" src="/images/me3.png">
+                    <div class="c m-b-15 m-t-15">
+                      <p>发布赛事特权</p>
+                      <p>本月剩余{{vipCont.onematch_money}}次</p>
+                    </div>
+                    <button class="member-num-btn" onClick="syalert.syopen('alert1')">购买次数</button>
+                  </li>
+                  <li>
+                    <img class="icon" src="/images/me4.png">
+                    <div class="c m-b-15 m-t-15">
+                      <p>更多特权享受</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <!--member-box end-->
+              <!--member-box start-->
+              <div class="member-box">
+                <div class="member-tit">会员购买</div>
+                <!--member-buy start-->
+                <div class="member-buy clearfix">
+                  <!--buy-item start-->
+                  <div class="buy-item m-r-20" @click="type = 1">
+                    <img class="t-icon" src="/images/me5.png">
+                    <input type="radio" class="buy-radio" checked name="1">
+                    <div class="con">
+                      <div class="t">经典VIP特权</div>
+                      <div class="c">
+                        <img class="icon" src="/images/me15.png">
+                        <span>开房直播分享技艺，{{vipCont.vip1_livenum}}次/月</span>
+                      </div>
+                      <div class="c">
+                        <img class="icon" src="/images/me16.png">
+                        <span>发布榜文，求学，收徒，{{vipCont.vip1_bangnum}}次/月</span>
+                      </div>
+                      <div class="c">
+                        <img class="icon" src="/images/me17.png">
+                        <span>组织赛事，{{vipCont.vip1_matchnum}}次/月</span>
+                      </div>
+                      <div class="c">
+                        <img class="icon" src="/images/me18.png">
+                        <span>更多特权享受</span>
+                      </div>
+                      <div class="price text-c">￥{{vipCont.vip1_money}}/月</div>
+                    </div>
+                  </div>
+                  <!--buy-item end-->
+                  <!--buy-item start-->
+                  <div class="buy-item orange m-r-20" @click="type = 2">
+                    <img class="t-icon" src="/images/me6.png">
+                    <input type="radio" class="buy-radio" name="1">
+                    <div class="con">
+                      <div class="t">黄金VIP特权</div>
+                      <div class="c">
+                        <img class="icon" src="/images/me15.png">
+                        <span>开房直播分享技艺，{{vipCont.vip2_livenum}}次/月</span>
+                      </div>
+                      <div class="c">
+                        <img class="icon" src="/images/me16.png">
+                        <span>发布榜文，求学，收徒，{{vipCont.vip2_bangnum}}次/月</span>
+                      </div>
+                      <div class="c">
+                        <img class="icon" src="/images/me17.png">
+                        <span>组织赛事，{{vipCont.vip2_matchnum}}次/月</span>
+                      </div>
+                      <div class="c">
+                        <img class="icon" src="/images/me18.png">
+                        <span>更多特权享受</span>
+                      </div>
+                      <div class="price text-c">￥{{vipCont.vip2_money}}/月</div>
+                    </div>
+                  </div>
+                  <!--buy-item end-->
+                  <!--buy-item start-->
+                  <div class="buy-item purple" @click="type = 3">
+                    <img class="t-icon" src="/images/me7.png">
+                    <input type="radio" class="buy-radio" name="1">
+                    <div class="con">
+                      <div class="t">钻石VIP特权</div>
+                      <div class="c">
+                        <img class="icon" src="/images/me15.png">
+                        <span>开房直播分享技艺，{{vipCont.vip3_livenum}}次/月</span>
+                      </div>
+                      <div class="c">
+                        <img class="icon" src="/images/me16.png">
+                        <span>发布榜文，求学，收徒，{{vipCont.vip3_bangnum}}次/月</span>
+                      </div>
+                      <div class="c">
+                        <img class="icon" src="/images/me17.png">
+                        <span>组织赛事，{{vipCont.vip3_matchnum}}次/月</span>
+                      </div>
+                      <div class="c">
+                        <img class="icon" src="/images/me18.png">
+                        <span>更多特权享受</span>
+                      </div>
+                      <div class="price text-c">￥{{vipCont.vip3_money}}/月</div>
+                    </div>
+                  </div>
+                  <!--buy-item end-->
+                </div>
+                <!--member-buy end-->
+              </div>
+              <!--member-box end-->
+              <!--member-box start-->
+              <div class="member-box">
+                <div class="member-tit">会员时长</div>
+                <div class="member-cal clearfix">
+                  <div class="cal-con fl">
+                    <button class="cal-con-btn" @click='jianClick'>-</button>
+                    <input class="cal-con-input" type="text" v-model="number" disabled>
+                    <button class="cal-con-btn" @click="addClick">+</button>
+                  </div>
+                  <div class="cal-tip fl m-l-20">个月</div>
+                </div>
+              </div>
+              <!--member-box end-->
+              <div class="member-date">购买后到期时间为：{{day}}</div>
+              <div class="member-bot m-t-30">
+                <button class="center-set-btn" onclick="location='CenterMemberB.html'">立即购买</button>
+              </div>
+            </div>
+            <!--center-member end-->
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <!--购买次数弹出start-->
+  <div class="sy-alert member-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+    id="alert1">
+    <div class="member-pop-content">
+      <div class="bond-close" onClick="syalert.syhide('alert1')"></div>
+      <div class="bond-tit">购买次数</div>
+      <div class="member-pop-item">开播单价：<span class="color-orange">10元/次</span> </div>
+      <div class="member-pop-item clearfix">
+        <span class="fl"> 开播次数：</span>
+        <div class="member-pop-cal fl">
+          <button class="cal-btn fl">-</button>
+          <input type="text" value="5" class="cal-input fl">
+          <button class="cal-btn orange fl">+</button>
+        </div>
+      </div>
+      <div class="member-pop-item">总计金额：<span class="color-orange">50元</span> </div>
+      <div class="bond-pay">
+        <div class="t">选择支付方式</div>
+        <div class="con clearfix">
+          <div class="li">
+            <input type="radio" class="bond-radio" checked name="money">
+            <span class="radio-s"><img src="/images/pub14.png"></span>
+          </div>
+          <div class="li">
+            <input type="radio" class="bond-radio" name="money">
+            <span class="radio-s"><img src="/images/pub13.png"></span>
+          </div>
+          <div class="li">
+            <input type="radio" class="bond-radio" name="money">
+            <span class="radio-s"><img src="/images/pub19.png"></span>
+          </div>
+        </div>
+      </div>
+      <div class="bond-pay">
+        <div class="t">选支付密码</div>
+        <div class="con clearfix">
+          <div class="input-w m-t-20">
+            <input type="text" class="input" placeholder="请输入">
+          </div>
+        </div>
+      </div>
+      <div class="last-bottom">
+        <button class="bond-btn" onClick="syalert.syhide('alert1')">确定</button>
+      </div>
+    </div>
+  </div>
+  <!--购买次数弹出end-->
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/member/member.js"></script>
+</body>
+
+</html>

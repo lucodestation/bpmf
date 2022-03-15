@@ -38,7 +38,7 @@
     <div class="main-center w-1200 clearfix">
       <div class="public-user"></div>
       <!--center-content start-->
-      <div class="center-content fr">
+      <div class="center-content fr" id="app">
         <!--center-inner start-->
         <div class="center-inner">
           <div class="center-inner-tit">实名认证</div>
@@ -52,7 +52,7 @@
                 <div class="label">姓名：</div>
                 <div class="item-r">
                   <div class="set-bor w548">
-                    <input class="input" type="text" placeholder="请填写本人姓名">
+                    <input class="input" type="text" v-model="formData.name" placeholder="请填写本人姓名">
                   </div>
                 </div>
               </div>
@@ -62,7 +62,7 @@
                 <div class="label">身份证号：</div>
                 <div class="item-r">
                   <div class="set-bor w548">
-                    <input class="input" type="text" placeholder="请输入银行卡号">
+                    <input class="input" type="text" v-model="formData.idcard" placeholder="请输入银行卡号">
                   </div>
                 </div>
               </div>
@@ -74,7 +74,10 @@
                   <!--身份证上传start-->
                   <div class="set-up-id clearfix">
                     <div class="set-id" id="id-1">
-                      <div class="preview"><img src="/images/set1.png" class="img-responsive" alt="" title=""> </div>
+                      <div class="preview" id='uploadCover' @click="initCoverImageFileChange">
+                        <img src="/images/set1.png" class="img-responsive" v-if="!formData.front_image" />
+                        <img :src="formData.front_image" class="img-responsive" v-else />
+                      </div>
                       <p class="tip">上传身份证正面</p>
                     </div>
                     <div class="set-id" id="id-2">

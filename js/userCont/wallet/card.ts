@@ -16,11 +16,28 @@ new Vue({
         code: '',// 验证码
       },
       codeTxt: '获取验证码',
-      second: 60
+      second: 60,
+      cardList: [],// 列表
+      title: '添加银行卡'
     }
   },
-  created() { },
+  created() {
+    this.onCardlist()
+  },
   methods: {
+    // 获取列表
+    async onCardlist() {
+      const res = await request({
+        method: 'POST',
+        url: '/api/Bankcard/list',
+      })
+      if (res.code == 200) {
+        res.data.map(item => {
+          item.num = item.number.substr(0, 4) + ' **** **** ' + item.number.substring(item.number.length - 3)
+        })
+        this.cardList = res.data
+      }
+    },
     // 获取验证码
     async onCode() {
       if (!this.formData.mobile) return layer.msg('请输入手机号')
@@ -41,28 +58,60 @@ new Vue({
         layer.msg(ress.msg)
       }
     },
+    // 编辑
+    onEditClick(item) {
+      this.formData.name = item.name
+      this.formData.number = item.number
+      this.formData.bank_name = item.bank_name
+      this.formData.mobile = item.mobile
+      this.formData.card_id = item.id
+      this.title = '编辑银行卡'
+      syalert.syopen('add_bank')
+    },
     // 提交
     async onAddClick() {
       if (!this.formData.name) return layer.msg('请输入姓名')
       if (!this.formData.number) return layer.msg('请输入银行卡号')
-      if (!this.formData.bank_name) return layer.msg('请输入开会银行')
-      if (!this.formData.code) return layer.msg('请输入短信验证码')
-      let data = {
-        name: this.formData.name,// 姓名
-        number: this.formData.number,// 卡号
-        bank_name: this.formData.bank_name,// 开户行
-        mobile: this.formData.mobile,// 手机号码
-        code: this.formData.code,// 验证码
+      if (this.formData.number) {
+        var reg_tel = /^([1-9]{1})(\d{15}|\d{16}|\d{18})$/
+        if (!reg_tel.test(this.formData.number)) return layer.msg('请输入正确的银行卡号')
       }
-      const res = await request({
-        method: 'POST',
-        url: '/api/Bankcard/add',
-        data: data,
-      })
-      if (res.code == 200) {
-
+      if (!this.formData.bank_name) return layer.msg('请输入开户银行')
+      if (!this.formData.code) return layer.msg('请输入短信验证码')
+      if (this.title == '添加银行卡') {
+        const res = await request({
+          method: 'POST',
+          url: '/api/Bankcard/add',
+          data: this.formData,
+        })
+        if (res.code == 200) {
+          this.onCardlist()
+          layer.msg('添加成功')
+          syalert.syhide('add_bank');
+        } else {
+          layer.msg(res.msg)
+        }
       } else {
-        layer.msg(res.msg)
+        const res = await request({
+          method: 'POST',
+          url: '/api/Bankcard/edit',
+          data: this.formData,
+        })
+        if (res.code == 200) {
+          this.onCardlist()
+          this.title = '添加银行卡'
+          layer.msg('编辑成功')
+          syalert.syhide('add_bank');
+        } else {
+          layer.msg(res.msg)
+        }
+      }
+      this.formData = {
+        name: '',// 姓名
+        number: '',// 卡号
+        bank_name: '',// 开户行
+        mobile: '',// 手机号码
+        code: '',// 验证码
       }
     },
     timeDown() {
@@ -78,5 +127,31 @@ new Vue({
         }
       }, 1000)
     },
+    // 删除银行卡
+    onDelClick(item) {
+      let that = this
+      layui.use('layer', function () {
+        layer.confirm('您确定要删除该银行卡吗?', {
+          btn: ['确定', '取消']//按钮
+        }, function (index) {
+          layer.close(index);
+          that.onDelete(item)
+        });
+      });
+    },
+    // 删除数据
+    async onDelete(item) {
+      const ress = await request({
+        method: 'POST',
+        url: '/api/Bankcard/delete',
+        data: { card_id: item.id }
+      })
+      if (ress.code == 200) {
+        layer.msg('删除成功')
+        this.onCardlist()
+      } else {
+        layer.msg(ress.msg)
+      }
+    }
   }
 })

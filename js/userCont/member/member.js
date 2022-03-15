@@ -44,37 +44,53 @@ new Vue({
     el: '#app',
     data: function () {
         return {
-            // 表单数据
-            formData: {
-                type: '',
-                join_type: '',
-                c_id: '',
-                title: '',
-                start_time: '',
-                end_time: '',
-                descri: '',
-                image: '',
-                password: '', // 密码进入，此值必传
-            },
-            typeList: [{ id: 1, title: '课程直播' }, { id: 2, title: '赛事直播' }],
+            vipCont: '',
+            number: '1',
+            day: '',
+            type: 1, // 类型
         };
     },
     created: function () {
         return __awaiter(this, void 0, void 0, function () {
+            var res, date1, date2, month;
             return __generator(this, function (_a) {
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request({
+                            method: 'POST',
+                            url: '/api/Vip/buyInfo',
+                        })];
+                    case 1:
+                        res = _a.sent();
+                        if (res.code == 200) {
+                            this.vipCont = res.data;
+                        }
+                        date1 = new Date();
+                        date2 = new Date(date1);
+                        date2.setDate(date1.getDate() + 30 * this.number);
+                        month = (date2.getMonth() + 1) >= 10 ? (date2.getMonth() + 1) : ('0' + (date2.getMonth() + 1));
+                        this.day = date2.getFullYear() + "-" + month + "-" + date2.getDate();
+                        return [2 /*return*/];
+                }
             });
         });
     },
     methods: {
-        aa: function () {
-            var res = yield request({
-                method: 'POST',
-                url: '/api/Live/push',
-                data: { page: 1, pagenum: 7, type: 1 },
-            });
-            if (res) {
-                this.bangList = res.data.data;
+        addClick: function () {
+            this.number++;
+            var date1 = new Date();
+            var date2 = new Date(date1);
+            date2.setDate(date1.getDate() + 30 * this.number);
+            var month = (date2.getMonth() + 1) >= 10 ? (date2.getMonth() + 1) : ('0' + (date2.getMonth() + 1));
+            this.day = date2.getFullYear() + "-" + month + "-" + date2.getDate();
+        },
+        jianClick: function () {
+            if (this.number > 1) {
+                this.number--;
+                var date1 = new Date();
+                var date2 = new Date(date1);
+                date2.setDate(date1.getDate() + 30 * this.number);
+                var month = (date2.getMonth() + 1) >= 10 ? (date2.getMonth() + 1) : ('0' + (date2.getMonth() + 1));
+                this.day = date2.getFullYear() + "-" + month + "-" + date2.getDate();
             }
         }
     }

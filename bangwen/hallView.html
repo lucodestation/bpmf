@@ -31,16 +31,14 @@
   <!-- 公共头部 -->
   <header class="public-header"></header>
   <!--rank-container start-->
-  <div class="rank-container">
+  <div class="rank-container" id="app">
     <!--inner-position start-->
     <div class="inner-position w-1200">
       <a href="">首页 </a>
-      <span>
-        < </span>
-          <a href=""> 榜文大厅 </a>
-          <span>
-            < </span>
-              <a class="current" href=""> 平台公告</a>
+      <span>&lt; </span>
+      <a href=""> 榜文大厅 </a>
+      <span>&lt;</span>
+      <a class="current" href=""> 平台公告</a>
     </div>
     <!--inner-position end-->
     <!--rank-detail start-->
@@ -50,19 +48,23 @@
         <div class="rank-detail-fl fl">
           <!--rank-detail-hd start-->
           <div class="rank-detail-hd clearfix">
-            <div class="img fl"><img src="/images/rank16.png"></div>
+            <div class="img fl"><img :src="newsCont.image"></div>
             <div class="txt">
               <div class="t">
-                <span class="t-tip">学棋</span>
-                围棋潜龙棋局怎么破解？
+                <span class="t-tip" v-if="newsCont.type==1">教课</span>
+                <span class="t-tip" v-if="newsCont.type==2">学课</span>
+                {{newsCont.title}}
               </div>
               <div class="t-price">
-                酬金：<span class="price">￥15263</span>
+                酬金：<span class="price">￥{{newsCont.total_money}}</span>
               </div>
               <div class="t-tags">
-                <span class="tag">一次付清</span>
-                <span class="tag">单人中榜</span>
-                <span class="tag">不托管</span>
+                <span class="tag" v-if="newsCont.pay_num_type==1">一次付清</span>
+                <span class="tag" v-if="newsCont.pay_num_type==2">多次付清</span>
+                <span class="tag" v-if="newsCont.win_type==1">单人中榜</span>
+                <span class="tag" v-if="newsCont.win_type==2">多人中榜</span>
+                <span class="tag" v-if="newsCont.is_trustee==1">托管</span>
+                <span class="tag" v-if="newsCont.is_trustee==2">不托管</span>
               </div>
               <div class="t-bot">
                 <a class="rank-detail-btn fl non" href="javascript:void(0);">我要应榜</a>
@@ -84,7 +86,8 @@
             <div class="bd-article">
               <div class="bd-article-li clearfix">
                 <div class="label">榜文类型：</div>
-                <div class="c">学棋</div>
+                <div class="c" v-if="newsCont.type==1">教课</div>
+                <div class="c" v-if="newsCont.type==2">学课</div>
               </div>
               <div class="bd-article-li clearfix">
                 <div class="label">服务分类：</div>
@@ -92,7 +95,7 @@
               </div>
               <div class="bd-article-li clearfix">
                 <div class="label">酬金金额：</div>
-                <div class="c">1000元</div>
+                <div class="c">{{newsCont.total_money}}元</div>
               </div>
               <div class="bd-article-li clearfix">
                 <div class="label">酬金托管：</div>
@@ -104,21 +107,19 @@
               </div>
               <div class="bd-article-li clearfix">
                 <div class="label">应榜截止日期：</div>
-                <div class="c">2021-04-25</div>
+                <div class="c">{{newsCont.signup_end_time}}</div>
               </div>
               <div class="bd-article-li clearfix">
                 <div class="label">任务起止日期：</div>
-                <div class="c">2021-04-25 至 2021-04-29</div>
+                <div class="c">{{newsCont.task_start_time}} 至 {{newsCont.task_end_time}}</div>
               </div>
               <div class="bd-article-li clearfix">
                 <div class="label">榜文详情：</div>
-                <div class="c">围棋的棋盘上有纵横十九条线，361个交差点，有黑白两个颜色的棋子，以围棋围住的地盘大小决定胜
-                  负。棋盘可分为九个部分，每个部分上都有一个星点，中间星为天元，执黑子的人先下，黑白棋子轮流
-                  下，落子后不能悔棋。</div>
+                <div class="c" v-html="newsCont.detail"></div>
               </div>
               <div class="bd-article-li clearfix">
-                <div class="label">附近下载：</div>
-                <div class="c">点击下载附近</div>
+                <div class="label">附件下载：</div>
+                <div class="c">点击下载附件</div>
               </div>
               <div class="bd-article-c">
                 <a href="">文件3.png</a>

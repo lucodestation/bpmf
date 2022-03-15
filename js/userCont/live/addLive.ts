@@ -7,35 +7,35 @@ new Vue({
   el: '#app',
   data() {
     return {
-      id: '',// id
-      newsCont: '',
+      // 表单数据
+      formData: {
+        type: '',// 1课程直播，2赛事直播
+        join_type: '',// 1申请进入（需要发布者审核），2全网公开，3会员公开，4设置密码
+        c_id: '',// 分类
+        title: '',// 标题
+        start_time: '',// 开始时间
+        end_time: '',// 结束时间
+        descri: '',// 描述
+        image: '',// 封面图
+        password: '',// 密码进入，此值必传
+      },
+      typeList: [{ id: 1, title: '课程直播' }, { id: 2, title: '赛事直播' }],
     }
   },
   async created() {
-    this.GetRequest()
-    const res = await request({
-      method: 'POST',
-      url: '/api/Bangwen/bangwenDetail',
-      data: { bangwen_id: this.id },
-    })
-    if (res) {
-      this.newsCont = res.data
-    }
+
   },
   methods: {
-    // 获取当前页面url
-    GetRequest() {
-      let url = location.search; //获取当前页面url
-      let theRequest = new Object();
-      if (url.indexOf("?") != -1) {
-        var str = url.substr(1);
-        let strs = str.split("&");
-        for (let i = 0; i < strs.length; i++) {
-          theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
-        }
+    aa() {
+      const res = await request({
+        method: 'POST',
+        url: '/api/Live/push',
+        data: { page: 1, pagenum: 7, type: 1 },
+      })
+      if (res) {
+        this.bangList = res.data.data
       }
-      this.id = theRequest.id
-    },
+    }
   }
 })
 

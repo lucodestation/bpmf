@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="/plugins/upload/upload.js"></script>
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/upload/imgFileupload.js"></script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css">
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jsencrypt.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <div class="public-user"></div>
+      <!--center-content start-->
+      <div class="center-content fr">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit">购买会员</div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <!--center-member start-->
+            <div class="center-member">
+              <!--member-head start-->
+              <div class="member-head clearfix">
+                <div class="img"><img src="/images/index12.png"></div>
+                <div class="txt">
+                  <div class="t">周杰儿<span class="txt-tip m-l-30">普通会员</span></div>
+                  <div class="c">开通会员享受更多特权</div>
+                </div>
+              </div>
+              <!--member-head end-->
+              <div class="member-col">
+                <div class="bond-pay">
+                  <div class="t">支付金额</div>
+                  <div class="c m-t-15 w160">
+                    3个月经典VIP
+                    <span class="color-orange fr">60元</span>
+                  </div>
+                </div>
+                <div class="bond-pay">
+                  <div class="t w160">
+                    实际支付
+                    <span class="color-orange fr">60元</span>
+                  </div>
+                </div>
+                <div class="bond-pay">
+                  <div class="t">选择支付方式</div>
+                  <div class="con clearfix">
+                    <div class="li">
+                      <input type="radio" class="bond-radio" checked name="money">
+                      <span class="radio-s"><img src="/images/pub14.png"></span>
+                    </div>
+                    <div class="li">
+                      <input type="radio" class="bond-radio" name="money">
+                      <span class="radio-s"><img src="/images/pub13.png"></span>
+                    </div>
+                    <div class="li">
+                      <input type="radio" class="bond-radio" name="money">
+                      <span class="radio-s"><img src="/images/pub19.png"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="bond-pay">
+                  <div class="t">选支付密码</div>
+                  <div class="input-w m-t-20">
+                    <input type="text" class="input" placeholder="请输入">
+                  </div>
+                </div>
+              </div>
+              <div class="member-bot m-t-30">
+                <button class="center-set-btn">确定</button>
+              </div>
+            </div>
+            <!--center-member end-->
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script>
+    function ok (id) {
+      syalert.syhide(id);
+    };
+  </script>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/member/pay.js"></script>
+</body>
+
+</html>

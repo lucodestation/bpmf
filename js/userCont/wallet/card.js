@@ -53,11 +53,38 @@ new Vue({
                 code: '', // 验证码
             },
             codeTxt: '获取验证码',
-            second: 60
+            second: 60,
+            cardList: [],
+            title: '添加银行卡'
         };
     },
-    created: function () { },
+    created: function () {
+        this.onCardlist();
+    },
     methods: {
+        // 获取列表
+        onCardlist: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var res;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Bankcard/list',
+                            })];
+                        case 1:
+                            res = _a.sent();
+                            if (res.code == 200) {
+                                res.data.map(function (item) {
+                                    item.num = item.number.substr(0, 4) + ' **** **** ' + item.number.substring(item.number.length - 3);
+                                });
+                                this.cardList = res.data;
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        },
         // 获取验证码
         onCode: function () {
             return __awaiter(this, void 0, void 0, function () {
@@ -93,10 +120,20 @@ new Vue({
                 });
             });
         },
+        // 编辑
+        onEditClick: function (item) {
+            this.formData.name = item.name;
+            this.formData.number = item.number;
+            this.formData.bank_name = item.bank_name;
+            this.formData.mobile = item.mobile;
+            this.formData.card_id = item.id;
+            this.title = '编辑银行卡';
+            syalert.syopen('add_bank');
+        },
         // 提交
         onAddClick: function () {
             return __awaiter(this, void 0, void 0, function () {
-                var data, res;
+                var reg_tel, res, res;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -104,29 +141,57 @@ new Vue({
                                 return [2 /*return*/, layer.msg('请输入姓名')];
                             if (!this.formData.number)
                                 return [2 /*return*/, layer.msg('请输入银行卡号')];
+                            if (this.formData.number) {
+                                reg_tel = /^([1-9]{1})(\d{15}|\d{16}|\d{18})$/;
+                                if (!reg_tel.test(this.formData.number))
+                                    return [2 /*return*/, layer.msg('请输入正确的银行卡号')];
+                            }
                             if (!this.formData.bank_name)
-                                return [2 /*return*/, layer.msg('请输入开会银行')];
+                                return [2 /*return*/, layer.msg('请输入开户银行')];
                             if (!this.formData.code)
                                 return [2 /*return*/, layer.msg('请输入短信验证码')];
-                            data = {
-                                name: this.formData.name,
-                                number: this.formData.number,
-                                bank_name: this.formData.bank_name,
-                                mobile: this.formData.mobile,
-                                code: this.formData.code, // 验证码
-                            };
+                            if (!(this.title == '添加银行卡')) return [3 /*break*/, 2];
                             return [4 /*yield*/, request({
                                     method: 'POST',
                                     url: '/api/Bankcard/add',
-                                    data: data,
+                                    data: this.formData,
                                 })];
                         case 1:
                             res = _a.sent();
                             if (res.code == 200) {
+                                this.onCardlist();
+                                layer.msg('添加成功');
+                                syalert.syhide('add_bank');
                             }
                             else {
                                 layer.msg(res.msg);
                             }
+                            return [3 /*break*/, 4];
+                        case 2: return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Bankcard/edit',
+                                data: this.formData,
+                            })];
+                        case 3:
+                            res = _a.sent();
+                            if (res.code == 200) {
+                                this.onCardlist();
+                                this.title = '添加银行卡';
+                                layer.msg('编辑成功');
+                                syalert.syhide('add_bank');
+                            }
+                            else {
+                                layer.msg(res.msg);
+                            }
+                            _a.label = 4;
+                        case 4:
+                            this.formData = {
+                                name: '',
+                                number: '',
+                                bank_name: '',
+                                mobile: '',
+                                code: '', // 验证码
+                            };
                             return [2 /*return*/];
                     }
                 });
@@ -146,5 +211,42 @@ new Vue({
                 }
             }, 1000);
         },
+        // 删除银行卡
+        onDelClick: function (item) {
+            var that = this;
+            layui.use('layer', function () {
+                layer.confirm('您确定要删除该银行卡吗?', {
+                    btn: ['确定', '取消'] //按钮
+                }, function (index) {
+                    layer.close(index);
+                    that.onDelete(item);
+                });
+            });
+        },
+        // 删除数据
+        onDelete: function (item) {
+            return __awaiter(this, void 0, void 0, function () {
+                var ress;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Bankcard/delete',
+                                data: { card_id: item.id }
+                            })];
+                        case 1:
+                            ress = _a.sent();
+                            if (ress.code == 200) {
+                                layer.msg('删除成功');
+                                this.onCardlist();
+                            }
+                            else {
+                                layer.msg(ress.msg);
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        }
     }
 });
