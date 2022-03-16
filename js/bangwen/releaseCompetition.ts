@@ -5,6 +5,11 @@ $('.public-header').load('/components/PublicHeader.html')
 // 引入底部
 $('.public-footer').load('/components/PublicFooter.html')
 
+var encrypt = new JSEncrypt()
+//公钥.
+const publiukey =
+  '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----'
+
 new Vue({
   el: '#app',
   data() {
@@ -28,6 +33,8 @@ new Vue({
         c_b_t: '', // 比赛开始时间，时间戳（秒）
         c_e_t: '', // 比赛结束时间，时间戳（秒）
         description: '', // 赛事描述
+        sponsor: '', // 赞助方
+        service_tel: '', // 客服电话
         cover_picture: '', // 封面图 url
         affix: '', // 附件 url
 
@@ -44,6 +51,15 @@ new Vue({
       // 如果分钟是 0 或 30，则开始时间再加 10 分钟
       startDate: new Date().getMinutes() === 0 || new Date().getMinutes() === 30 ? new Date(new Date().valueOf() + 1000 * 60 * 10) : new Date().valueOf(),
 
+      // 报名开始时间
+      signUpStartDate: '',
+      // 报名结束时间
+      signUpEndDate: '',
+      // 比赛开始时间
+      competitionStartDate: '',
+      // 比赛结束时间
+      competitionEndDate: '',
+
       // 封面图
       coverImage: {},
       // 附件列表
@@ -57,6 +73,10 @@ new Vue({
       teamListShow: true,
       // 团队名称列表
       teamNameList: [{ id: 1, name: '' }],
+
+      // 保证金弹框
+      pay_type: '1', // 支付方式
+      pwd: '', // 支付密码
     }
   },
   mounted() {
@@ -151,7 +171,8 @@ new Vue({
           }
 
           console.log('报名开始时间', dateValue)
-          this.formData.a_b_t = dateValue
+          this.signUpStartDate = dateValue
+          this.formData.a_b_t = dateValue ? new Date(dateValue).valueOf() : ''
         },
       })
     },
@@ -176,7 +197,7 @@ new Vue({
           if (!dateValue) {
             // 点击了清空
             console.log('点击了清空', dateValue)
-          } else if (!this.formData.a_b_t) {
+          } else if (!this.signUpStartDate) {
             // 如果还没有选择报名开始时间
             layer.open({
               type: 0,
@@ -186,7 +207,7 @@ new Vue({
               btn: [],
             })
             dateValue = ''
-          } else if (new Date(dateValue) <= new Date(this.formData.a_b_t)) {
+          } else if (new Date(dateValue) <= new Date(this.signUpStartDate)) {
             // 如果报名结束时间小于报名开始时间
             layer.open({
               type: 0,
@@ -208,7 +229,8 @@ new Vue({
           }
 
           console.log('报名结束时间', dateValue)
-          this.formData.a_e_t = dateValue
+          this.signUpEndDate = dateValue
+          this.formData.a_e_t = dateValue ? new Date(dateValue).valueOf() : ''
         },
       })
     },
@@ -232,7 +254,7 @@ new Vue({
           if (!dateValue) {
             // 点击了清空
             console.log('点击了清空', dateValue)
-          } else if (!this.formData.a_e_t) {
+          } else if (!this.signUpEndDate) {
             // 如果还没有选择报名结束时间
             layer.open({
               type: 0,
@@ -242,7 +264,7 @@ new Vue({
               btn: [],
             })
             dateValue = ''
-          } else if (new Date(dateValue) <= new Date(this.formData.a_e_t)) {
+          } else if (new Date(dateValue) <= new Date(this.signUpEndDate)) {
             // 如果比赛开始时间小于报名结束时间
             layer.open({
               type: 0,
@@ -264,7 +286,8 @@ new Vue({
           }
 
           console.log('比赛开始时间', dateValue)
-          this.formData.c_b_t = dateValue
+          this.competitionStartDate = dateValue
+          this.formData.c_b_t = dateValue ? new Date(dateValue).valueOf() : ''
         },
       })
     },
@@ -288,7 +311,7 @@ new Vue({
           if (!dateValue) {
             // 点击了清空
             console.log('点击了清空', dateValue)
-          } else if (!this.formData.c_b_t) {
+          } else if (!this.competitionStartDate) {
             // 如果还没有选择比赛开始时间
             layer.open({
               type: 0,
@@ -298,7 +321,7 @@ new Vue({
               btn: [],
             })
             dateValue = ''
-          } else if (new Date(dateValue) <= new Date(this.formData.c_b_t)) {
+          } else if (new Date(dateValue) <= new Date(this.competitionStartDate)) {
             // 如果比赛开始时间小于报名结束时间
             layer.open({
               type: 0,
@@ -320,7 +343,8 @@ new Vue({
           }
 
           console.log('比赛结束时间', dateValue)
-          this.formData.c_e_t = dateValue
+          this.competitionEndDate = dateValue
+          this.formData.c_e_t = dateValue ? new Date(dateValue).valueOf() : ''
         },
       })
     },
@@ -518,6 +542,8 @@ new Vue({
         { label: '请选择比赛开始时间', validate: !this.formData.c_b_t },
         { label: '请选择比赛结束时间', validate: !this.formData.c_e_t },
         { label: '请输入赛事描述', validate: !this.formData.description.trim() },
+        { label: '请输入赞助方', validate: !this.coverImage.sponsor },
+        { label: '请输入赛事客服电话', validate: !this.coverImage.service_tel },
         { label: '请选择封面图', validate: !this.coverImage.url },
         { label: '请选择附件', validate: !this.affixList.length },
         { label: '请选择报名信息', validate: !this.formData.apply_info },
@@ -543,7 +569,7 @@ new Vue({
 
       const errorArr = arr.filter((item) => item.validate)
       if (errorArr.length) {
-        layer.msg(errorArr[0].label, { icon: 0, time: 3000 })
+        layer.msg(errorArr[0].label)
       } else {
         return true
       }
@@ -551,6 +577,58 @@ new Vue({
     // 下一步
     handleNextStep(event) {
       if (!this._validateFormData()) return
+      this.formData.cover_picture = 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg'
+      this.formData.affix = 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg,https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg'
+
+      if (this.teamListShow) {
+        this.formData.team_list = this.teamNameList
+          .filter((i) => i.name)
+          .map((i) => i.name)
+          .toString()
+      }
+      console.log('发布比赛', this.formData)
+      request({
+        url: '/api/competition/push_match',
+        method: 'post',
+        data: this.formData,
+      }).then((result) => {
+        console.log(result)
+        if (result.code === 200) {
+          // 发布成功
+          console.log('发布成功')
+          layer.msg(result.msg)
+        } else if (result.code === 201) {
+          // 发布次数不足，跳转购买会员页面
+          console.log('发布次数不足，跳转购买会员页面')
+          layer.msg(result.msg)
+        } else if (result.code === 202) {
+          // 错误信息
+          console.log('错误信息')
+          layer.msg(result.msg)
+        } else if (result.code === 203) {
+          // 未绑定手机号
+          console.log('未绑定手机号')
+          layer.msg(result.msg)
+        } else if (result.code === 205) {
+          // 余额不足
+          console.log('余额不足')
+          layer.msg(result.msg)
+        } else if (result.code === 206) {
+          // 未交保证金
+          console.log('未交保证金')
+          layer.msg(result.msg)
+          syalert.syopen('bondCont')
+        } else if (result.code === 207) {
+          // 未实名认证
+          console.log('未实名认证')
+          layer.msg(result.msg)
+        } else if (result.code === 208) {
+          // 未设置支付密码
+          console.log('未设置支付密码')
+          layer.msg(result.msg)
+        }
+      })
+
       // if (this.formData.team_where === 1) {
       //   this.formData.team_list = this.teamNameList
       //     .filter((i) => i.name)
@@ -576,6 +654,60 @@ new Vue({
       // })
 
       // // client.put('test.txt', formData).then((r) => console.log(r))
+    },
+
+    // 保证金
+    async onBzjClick() {
+      console.log('aa')
+      const res = await request({
+        method: 'POST',
+        url: '/api/Deposit/refer',
+        data: { pay_type: this.pay_type },
+      })
+      if (res.code == 200) {
+        // this.cateList = res.data
+        // this.formData.b_id = res.data[0].id;
+        if (this.pay_type == '1') {
+          encrypt.setPublicKey(publiukey)
+          // 加密
+          const pwd = encrypt.encrypt(this.pwd) //需要加密的内容
+          const ress = await request({
+            method: 'POST',
+            url: '/api/Deposit/balancePay',
+            data: { out_trade_no: res.data.out_trade_no, pay_pwd: pwd },
+          })
+          if (ress.code == 200) {
+            layer.msg('支付成功')
+            syalert.syhide('bondCont')
+          } else {
+            layer.msg(ress.msg)
+          }
+        }
+        if (this.pay_type == '2') {
+          const ress = await request({
+            method: 'POST',
+            url: '/api/Deposit/aliPay',
+            data: { out_trade_no: res.data.out_trade_no },
+          })
+          if (ress.code == 200) {
+            location.href = ress.data.code_url
+            syalert.syhide('bondCont')
+          }
+        }
+        if (this.pay_type == '3') {
+          const ress = await request({
+            method: 'POST',
+            url: '/api/Deposit/wxPay',
+            data: { out_trade_no: res.data.out_trade_no },
+          })
+          if (ress.code == 200) {
+            location.href = ress.data.code_url
+            syalert.syhide('bondCont')
+          }
+        }
+      } else {
+        layer.msg(res.msg)
+      }
     },
   },
 })

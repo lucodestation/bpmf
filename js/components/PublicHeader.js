@@ -69,8 +69,8 @@ new Vue({
             localStorage.clear();
             sessionStorage.clear();
             location.href = '/index.html';
-        }
-    }
+        },
+    },
 });
 // 登录
 new Vue({
@@ -82,8 +82,7 @@ new Vue({
         codeTxt: '获取验证码',
         second: 60,
     },
-    created: function () {
-    },
+    created: function () { },
     methods: {
         // 获取验证码
         onCode: function () {
