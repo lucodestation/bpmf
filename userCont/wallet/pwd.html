@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>支付密码</title>
+  <link rel="stylesheet" href="/plugins/date/jedate.css" />
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/upload/imgFileupload.js"></script>
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jsencrypt.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <div class="public-user"></div>
+      <!--center-content start-->
+      <div class="center-content fr" id="app">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit">设置支付密码</div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <!--center-set start-->
+            <div class="center-set">
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">手机号码：</div>
+                <div class="item-r">
+                  <div class="set-bor w548">
+                    <input class="input" type="text" placeholder="" v-model="formData.mobile">
+                  </div>
+                </div>
+              </div>
+              <!--set-item end-->
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">验证码：</div>
+                <div class="item-r">
+                  <div class="set-bor w548">
+                    <input class="input" type="text" v-model="formData.code" placeholder="请输入短信验证码">
+                    <button class="center-set-code" v-if="codeTxt=='获取验证码'" @click="onCode">获取验证码</button>
+                    <button class="center-set-code" v-else>{{codeTxt}}</button>
+                  </div>
+                </div>
+              </div>
+              <!--set-item end-->
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">设置密码：</div>
+                <div class="item-r">
+                  <div class="set-bor w548">
+                    <input class="input" type="text" v-model="formData.pwd" placeholder="请设置支付密码">
+                  </div>
+                </div>
+              </div>
+              <!--set-item end-->
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">确认密码：</div>
+                <div class="item-r">
+                  <div class="set-bor w548">
+                    <input class="input" type="text" v-model="formData.pwd2" placeholder="请再次输入支付密码">
+                  </div>
+                </div>
+              </div>
+              <!--set-item end-->
+              <div class="set-bot">
+                <button class="center-set-btn" @click="onAddClick">提交</button>
+              </div>
+            </div>
+            <!--center-set end-->
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/wallet/pwd.js"></script>
+</body>
+
+</html>

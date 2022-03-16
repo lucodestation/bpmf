@@ -363,7 +363,7 @@
     <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
       id="bondCont">
       <div class="bond-content">
-        <div class="bond-close" onClick="ok('alert2')"></div>
+        <div class="bond-close" onClick="syalert.syhide('bondCont')"></div>
         <div class="bond-tit">保证金</div>
         <div class="bond-tip">本平台发布任务，需要保证金，才能享有权益 支付后个人中心可查看，随时可退</div>
         <div class="bond-price">保证金：<span class="color-red">￥1000.00</span></div>
@@ -401,12 +401,6 @@
   <!--publish-container end-->
   <!-- 公共底部 -->
   <footer class="public-footer"></footer>
-
-  <script>
-    function ok (id) {
-      syalert.syhide(id)
-    }
-  </script>
   <script src="/js/common.js"></script>
   <script src="/js/bangwen/addList.js"></script>
 </body>
