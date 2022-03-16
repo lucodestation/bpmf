@@ -22,19 +22,18 @@ new Vue({
       typeList: [{ id: 1, title: '课程直播' }, { id: 2, title: '赛事直播' }],
     }
   },
-  created() {
-    this.onLiveCates()
+  async created() {
+    // 直播分类
+    const res = await request({
+      method: 'POST',
+      url: '/api/Live/liveCates',
+    })
+    if (res.code == 200) {
+      this.bangList = res.data
+    }
   },
   methods: {
-    async onLiveCates() {
-      const res = await request({
-        method: 'POST',
-        url: '/api/Live/liveCates',
-      })
-      if (res) {
-        this.bangList = res.data.data
-      }
-    }
+
   }
 })
 

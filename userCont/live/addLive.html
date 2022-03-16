@@ -32,7 +32,7 @@
     <div class="main-center w-1200 clearfix">
       <div class="public-user"></div>
       <!--center-content start-->
-      <div class="center-content fr">
+      <div class="center-content fr" id="app">
         <!--center-inner start-->
         <div class="center-inner">
           <div class="center-inner-tit">发起直播</div>
@@ -77,27 +77,11 @@
                     <span class="tag-s">设置密码</span>
                   </div>
                 </div>
-                <div class="center-live-input">
+                <div class="center-live-input" v-if="formData.join_type==4">
                   <input type="password" class="input w340" v-model="formData.password" placeholder="请设置6位数进房密码">
                 </div>
               </div>
             </div>
-            <!--设置密码显示不显示-->
-            <script>
-              $(function () {
-                // 默认选中“通过”，隐藏2
-                $(".center-live-input").hide();
-                // 根据"radio的1和2展示不同的内容
-                $(".radio-juris[name='juris']").change(function () {
-                  var num = $('input:radio[name="juris"]:checked').val();
-                  if (num == 4) {
-                    $(".center-live-input").show();
-                  } else {
-                    $(".center-live-input").hide();
-                  }
-                });
-              })
-            </script>
             <!--publish-item end-->
             <!--publish-item start-->
             <div class="publish-item clearfix">
@@ -116,7 +100,7 @@
               <div class="label"><span class="color-red">*</span>直播讲解主题：</div>
               <div class="con">
                 <div class="live-bor">
-                  <input type="text" class="input rate-100"  v-model="formData.title" placeholder="请用20个字描述直播讲解主题">
+                  <input type="text" class="input rate-100" v-model="formData.title" placeholder="请用20个字描述直播讲解主题">
                 </div>
               </div>
             </div>
@@ -154,7 +138,7 @@
               <div class="label"><span class="color-red">*</span>直播讲解描述：</div>
               <div class="con">
                 <div class="detail-text">
-                  <textarea class="text" rows="5" placeholder="请描述直播内容"></textarea>
+                  <textarea class="text" v-model="formData.descri" rows="5" placeholder="请描述直播内容"></textarea>
                 </div>
               </div>
             </div>

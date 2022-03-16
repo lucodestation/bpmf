@@ -78,7 +78,7 @@
             <div class="bd-title clearfix">
               <span class="t">榜文详情</span>
               <div class="fr">
-                <a class="rank-collect fl" href="">收藏</a>
+                <div class="rank-collect fl">收藏</div>
                 <a class="rank-share fl" href="">分享</a>
                 <a class="rank-ju fl" href="javascript:void(0);" onClick="syalert.syopen('alert2')">举报</a>
               </div>
@@ -99,11 +99,13 @@
               </div>
               <div class="bd-article-li clearfix">
                 <div class="label">酬金托管：</div>
-                <div class="c">一次支付</div>
+                <div class="c" v-if="newsCont.pay_num_type==1">一次支付</div>
+                <div class="c" v-if="newsCont.pay_num_type==2">多次支付</div>
               </div>
               <div class="bd-article-li clearfix">
                 <div class="label">中榜模式：</div>
-                <div class="c">多次中榜3人</div>
+                <div class="c" v-if="newsCont.win_type==1">单人中榜</div>
+                <div class="c" v-if="newsCont.win_type==2">多次中榜{{newsCont.win_num}}人</div>
               </div>
               <div class="bd-article-li clearfix">
                 <div class="label">应榜截止日期：</div>
@@ -135,10 +137,10 @@
         <div class="rank-detail-fr fr">
           <!--fr-hd start-->
           <div class="fr-hd clearfix">
-            <img class="h-img" src="/images/index51.png">
+            <img class="h-img" :src="newsCont.avatar">
             <div class="txt">
-              <div class="name">棋王24512</div>
-              <div class="ren"><img src="/images/rank15.png"></div>
+              <div class="name">{{newsCont.nickname}}</div>
+              <div class="ren" v-if="newsCont.real_info==1"><img src="/images/rank15.png"></div>
             </div>
           </div>
           <!--fr-hd end-->
@@ -148,15 +150,15 @@
             <div class="con clearfix">
               <div class="li">
                 <div class="t color-gray">浏览</div>
-                <div class="num">7</div>
+                <div class="num">{{newsCont.read_num}}</div>
               </div>
               <div class="li">
                 <div class="t color-gray">报名人数</div>
-                <div class="num">7</div>
+                <div class="num">{{newsCont.sign_num}}</div>
               </div>
               <div class="li">
                 <div class="t color-gray">收藏</div>
-                <div class="num">7</div>
+                <div class="num">{{newsCont.collect_num}}</div>
               </div>
             </div>
           </div>
@@ -165,14 +167,7 @@
           <div class="fr-bot">
             <div class="tit">应榜名单</div>
             <div class="c">
-              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
-              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
-              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
-              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
-              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
-              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
-              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
-              <div class="li"><span class="tip">棋王1452：</span>进行了应榜</div>
+              <div class="li" v-for="item,i in newsCont.sign"><span class="tip">{{item.nickname}}：</span>进行了应榜</div>
             </div>
           </div>
           <!--fr-bot end-->

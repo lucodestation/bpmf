@@ -11,10 +11,10 @@ new Vue({
       formData: {
         name: '',// 姓名
         idcard: '',// 身份证号
-        front_image: '',// 身份证正面
-        back_image: '',// 身份证反面
-        hand_image: '',// 手持身份证
-        check_id: '',// 修改是必选，审核数据的id复
+        front_image: 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg',// 身份证正面
+        back_image: 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg',// 身份证反面
+        hand_image: 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg',// 手持身份证
+        // check_id: '',// 修改是必选，审核数据的id复
       },
     }
   },
@@ -23,6 +23,19 @@ new Vue({
     this.initCoverImageFileChange()
   },
   methods: {
+    async onBtnClick() {
+      const ress = await request({
+        method: 'POST',
+        url: '/api/Mine/realname',
+        data: this.formData
+      })
+      if (ress.code == 200) {
+        // layer.msg('删除成功')
+        // this.onCardlist()
+      } else {
+        layer.msg(ress.msg)
+      }
+    },
     // 初始化选择封面图
     initCoverImageFileChange() {
       layui.upload.render({

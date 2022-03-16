@@ -60,27 +60,23 @@ new Vue({
         };
     },
     created: function () {
-        this.onLiveCates();
-    },
-    methods: {
-        onLiveCates: function () {
-            return __awaiter(this, void 0, void 0, function () {
-                var res;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, request({
-                                method: 'POST',
-                                url: '/api/Live/liveCates',
-                            })];
-                        case 1:
-                            res = _a.sent();
-                            if (res) {
-                                this.bangList = res.data.data;
-                            }
-                            return [2 /*return*/];
-                    }
-                });
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request({
+                            method: 'POST',
+                            url: '/api/Live/liveCates',
+                        })];
+                    case 1:
+                        res = _a.sent();
+                        if (res.code == 200) {
+                            this.bangList = res.data;
+                        }
+                        return [2 /*return*/];
+                }
             });
-        }
-    }
+        });
+    },
+    methods: {}
 });
