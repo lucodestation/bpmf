@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
     <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.7/theme-chalk/index.min.css" />
     <link rel="stylesheet" href="/css/style.css" />
 
     <script src="/plugins/babel-polyfill.min.js"></script>
@@ -17,6 +18,7 @@
     <script src="/plugins/syalert/syalert.min.js"></script>
     <script src="/plugins/vue.min.js"></script>
     <script src="/plugins/axios.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.7/index.min.js"></script>
 
     <script src="https://cdn.bootcdn.net/ajax/libs/ali-oss/6.17.1/aliyun-oss-sdk.min.js"></script>
 
@@ -26,7 +28,7 @@
       /* 临时 */
       .temp-pre {
         position: fixed;
-        top: 0;
+        top: 100px;
         right: 0;
         bottom: 0;
         background: rgba(255 255 255);
@@ -108,6 +110,10 @@
     <div id="app" class="publish-container">
       <!-- 临时 -->
       <pre class="temp-pre layui-code">
+        <div>{{signUpStartDate}}</div>
+        <div>{{signUpEndDate}}</div>
+        <div>{{competitionStartDate}}</div>
+        <div>{{competitionEndDate}}</div>
         <!-- 表单数据 -->
         <div>{{formData}}</div>
         <!-- 封面图 -->
@@ -266,18 +272,16 @@
             <div class="con">
               <div class="bor clearfix">
                 <div id="signUpStartDate" class="date-time-picker input w400 fl">
-                  <span class="date-time" v-if="formData.a_b_t">{{formData.a_b_t}}</span>
+                  <span class="date-time" v-if="signUpStartDate">{{signUpStartDate}}</span>
                   <span v-else>{{'开始时间'}}</span>
                 </div>
-                <!-- <input id="signUpStartDate" type="text" :value="formData.a_b_t" class="input w400 fl" placeholder="YYYY-MM-DD" /> -->
 
                 <span class="date-mid fl">至</span>
 
                 <div id="signUpEndDate" class="date-time-picker input w400 fl">
-                  <span class="date-time" v-if="formData.a_e_t">{{formData.a_e_t}}</span>
+                  <span class="date-time" v-if="signUpEndDate">{{signUpEndDate}}</span>
                   <span v-else>{{'结束时间'}}</span>
                 </div>
-                <!-- <input id="signUpEndDate" type="text" :value="formData.a_e_t" class="input w400 fr" placeholder="YYYY-MM-DD" :disabled="!formData.a_b_t" /> -->
               </div>
             </div>
           </div>
@@ -288,25 +292,16 @@
             <div class="con">
               <div class="bor clearfix">
                 <div id="competitionStartDate" class="date-time-picker input w400 fl">
-                  <span class="date-time" v-if="formData.c_b_t">{{formData.c_b_t}}</span>
+                  <span class="date-time" v-if="competitionStartDate">{{competitionStartDate}}</span>
                   <span v-else>{{'开始时间'}}</span>
                 </div>
-                <!-- <input
-                  id="competitionStartDate"
-                  type="text"
-                  :value="formData.c_b_t"
-                  class="input w400 fl"
-                  placeholder="YYYY-MM-DD"
-                  :disabled="!formData.a_e_t"
-                /> -->
 
                 <span class="date-mid fl">至</span>
 
                 <div id="competitionEndDate" class="date-time-picker input w400 fl">
-                  <span class="date-time" v-if="formData.c_e_t">{{formData.c_e_t}}</span>
+                  <span class="date-time" v-if="competitionEndDate">{{competitionEndDate}}</span>
                   <span v-else>{{'结束时间'}}</span>
                 </div>
-                <!-- <input id="competitionEndDate" type="text" :value="formData.c_e_t" class="input w400 fr" placeholder="YYYY-MM-DD" :disabled="!formData.c_b_t" /> -->
               </div>
             </div>
           </div>
@@ -318,6 +313,22 @@
               <div class="detail-text">
                 <textarea class="text" rows="5" placeholder="请描述活动内容" v-model="formData.description"></textarea>
               </div>
+            </div>
+          </div>
+
+          <!-- 赞助方 -->
+          <div class="publish-item clearfix">
+            <div class="label">赞助方：</div>
+            <div class="con">
+              <input type="text" class="input w400" placeholder="请输入赛事名称" v-model.trim="formData.sponsor" />
+            </div>
+          </div>
+
+          <!-- 赛事客服电话 -->
+          <div class="publish-item clearfix">
+            <div class="label">赛事客服电话：</div>
+            <div class="con">
+              <input type="tel" class="input w400" placeholder="请输入赛事名称" v-model.trim="formData.service_tel" />
             </div>
           </div>
 
@@ -552,6 +563,44 @@
         <!--publish-content end-->
       </div>
       <!--publish-main end-->
+
+      <!--保证金弹出-->
+      <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="bondCont">
+        <div class="bond-content">
+          <div class="bond-close" onClick="syalert.syhide('bondCont')"></div>
+          <div class="bond-tit">保证金</div>
+          <div class="bond-tip">本平台发布任务，需要保证金，才能享有权益 支付后个人中心可查看，随时可退</div>
+          <div class="bond-price">保证金：<span class="color-red">￥1000.00</span></div>
+          <div class="bond-pay">
+            <div class="t">选择支付方式</div>
+            <div class="con clearfix">
+              <div class="li" @click="pay_type=1">
+                <input type="radio" class="bond-radio" checked name="money" />
+                <span class="radio-s"><img src="/images/pub14.png" /></span>
+              </div>
+              <div class="li" @click="pay_type=2">
+                <input type="radio" class="bond-radio" name="money" />
+                <span class="radio-s"><img src="/images/pub19.png" /></span>
+              </div>
+              <div class="li" @click="pay_type=3">
+                <input type="radio" class="bond-radio" name="money" />
+                <span class="radio-s"><img src="/images/pub13.png" /></span>
+              </div>
+            </div>
+          </div>
+          <div class="bond-pay" v-if="pay_type==1">
+            <div class="t">支付密码</div>
+            <div class="con clearfix">
+              <div class="input-w m-t-20 m-l-10">
+                <input type="password" v-model="pwd" placeholder="请输入支付密码" />
+              </div>
+            </div>
+          </div>
+          <div class="last-bottom">
+            <button class="bond-btn" @click="onBzjClick">确认并支付</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 公共底部 -->

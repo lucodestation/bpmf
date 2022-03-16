@@ -1,17 +1,17 @@
-
 var encrypt = new JSEncrypt()
 //公钥.
-const publiukey = '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----'
+const publiukey =
+  '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----'
 new Vue({
   el: '#Header',
   data() {
     return {
-      userShow: false,// 登录之后是否显示
-      cooperationShow: false,// 合作吧是否选中
-      homeShow: false,// 首页是否选中
-      helpShow: false,// 帮助中心是否选中
-      hallShow: false,// 榜文大厅是否选中
-      userHeadShow: false,// 个人中心头部
+      userShow: false, // 登录之后是否显示
+      cooperationShow: false, // 合作吧是否选中
+      homeShow: false, // 首页是否选中
+      helpShow: false, // 帮助中心是否选中
+      hallShow: false, // 榜文大厅是否选中
+      userHeadShow: false, // 个人中心头部
     }
   },
   created() {
@@ -30,11 +30,11 @@ new Vue({
   methods: {
     // 退出
     onSignout() {
-      localStorage.clear();
-      sessionStorage.clear();
+      localStorage.clear()
+      sessionStorage.clear()
       location.href = '/index.html'
-    }
-  }
+    },
+  },
 })
 // 登录
 new Vue({
@@ -46,9 +46,7 @@ new Vue({
     codeTxt: '获取验证码',
     second: 60,
   },
-  created() {
-
-  },
+  created() {},
   methods: {
     // 获取验证码
     async onCode() {
@@ -143,8 +141,7 @@ new Vue({
 // 微信登录
 new Vue({
   el: '#alert2',
-  data: {
-  },
+  data: {},
   created() {
     // $.ajax({
     //   method: 'POST',
@@ -162,5 +159,3 @@ new Vue({
   },
   methods: {},
 })
-
-
