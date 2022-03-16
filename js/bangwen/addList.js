@@ -39,6 +39,9 @@ $(function () {
     $('.public-header').load('/components/PublicHeader.html');
     $('.public-footer').load('/components/PublicFooter.html');
 });
+var encrypt = new JSEncrypt();
+//公钥.
+var publiukey = '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----';
 new Vue({
     el: '#app',
     data: function () {
@@ -77,7 +80,9 @@ new Vue({
             competitionSignUpStartTimeMinValue: new Date().valueOf(),
             ordeList: [],
             totalMoney: '',
-            num: ''
+            num: '',
+            pay_type: '1',
+            pwd: '', // 支付密码
         };
     },
     watch: {
@@ -251,34 +256,96 @@ new Vue({
                 var res;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
-                            if (!this.formData.title)
-                                return [2 /*return*/, layer.msg('请输入标题')];
-                            if (!this.formData.total_money)
-                                return [2 /*return*/, layer.msg('请输入金额')];
-                            if (!this.formData.detail)
-                                return [2 /*return*/, layer.msg('请输入榜文详情')
-                                    // for (let i = 0; i <= this.ordeList.length; i++) {
-                                    //   if (this.ordeList[i].num == 0 || this.ordeList[i].num == '') {
-                                    //     return layer.msg('多次支付里面金额不能为空')
-                                    //   }
-                                    // }
-                                ];
-                            return [4 /*yield*/, request({
-                                    method: 'POST',
-                                    url: '/api/Bangwen/pushBangwen',
-                                    data: this.formData,
-                                })];
+                        case 0: return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Bangwen/pushBangwen',
+                                data: this.formData,
+                            })];
                         case 1:
                             res = _a.sent();
                             if (res.code == 200) {
                                 // this.cateList = res.data
                                 // this.formData.b_id = res.data[0].id;
                             }
+                            else if (res.code == 206) {
+                                syalert.syopen('bondCont');
+                            }
                             else {
                                 layer.msg(res.msg);
                             }
                             return [2 /*return*/];
+                    }
+                });
+            });
+        },
+        // 保证金
+        onBzjClick: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var res, pwd, ress, ress, ress;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            console.log('aa');
+                            return [4 /*yield*/, request({
+                                    method: 'POST',
+                                    url: '/api/Deposit/refer',
+                                    data: { pay_type: this.pay_type }
+                                })];
+                        case 1:
+                            res = _a.sent();
+                            if (!(res.code == 200)) return [3 /*break*/, 8];
+                            if (!(this.pay_type == '1')) return [3 /*break*/, 3];
+                            encrypt.setPublicKey(publiukey);
+                            pwd = encrypt.encrypt(this.pwd) //需要加密的内容
+                            ;
+                            return [4 /*yield*/, request({
+                                    method: 'POST',
+                                    url: '/api/Deposit/balancePay',
+                                    data: { out_trade_no: res.data.out_trade_no, pay_pwd: pwd }
+                                })];
+                        case 2:
+                            ress = _a.sent();
+                            if (ress.code == 200) {
+                                layer.msg('支付成功');
+                                syalert.syhide('bondCont');
+                            }
+                            else {
+                                layer.msg(ress.msg);
+                            }
+                            _a.label = 3;
+                        case 3:
+                            if (!(this.pay_type == '2')) return [3 /*break*/, 5];
+                            return [4 /*yield*/, request({
+                                    method: 'POST',
+                                    url: '/api/Deposit/aliPay',
+                                    data: { out_trade_no: res.data.out_trade_no }
+                                })];
+                        case 4:
+                            ress = _a.sent();
+                            if (ress.code == 200) {
+                                location.href = ress.data.code_url;
+                                syalert.syhide('bondCont');
+                            }
+                            _a.label = 5;
+                        case 5:
+                            if (!(this.pay_type == '3')) return [3 /*break*/, 7];
+                            return [4 /*yield*/, request({
+                                    method: 'POST',
+                                    url: '/api/Deposit/wxPay',
+                                    data: { out_trade_no: res.data.out_trade_no }
+                                })];
+                        case 6:
+                            ress = _a.sent();
+                            if (ress.code == 200) {
+                                location.href = ress.data.code_url;
+                                syalert.syhide('bondCont');
+                            }
+                            _a.label = 7;
+                        case 7: return [3 /*break*/, 9];
+                        case 8:
+                            layer.msg(res.msg);
+                            _a.label = 9;
+                        case 9: return [2 /*return*/];
                     }
                 });
             });

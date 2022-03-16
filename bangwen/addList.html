@@ -32,6 +32,17 @@
       right: 0;
       background: rgba(255 255 255 / 0.5);
     }
+
+    .input-w {
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      padding: 0px 10px;
+      width: 300px;
+    }
+
+    .input-w input {
+      height: 48px;
+    }
   </style>
 </head>
 
@@ -348,40 +359,49 @@
       <!--publish-content end-->
     </div>
     <!--publish-main end-->
+    <!--保证金弹出-->
+    <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+      id="bondCont">
+      <div class="bond-content">
+        <div class="bond-close" onClick="ok('alert2')"></div>
+        <div class="bond-tit">保证金</div>
+        <div class="bond-tip">本平台发布任务，需要保证金，才能享有权益 支付后个人中心可查看，随时可退</div>
+        <div class="bond-price">保证金：<span class="color-red">￥1000.00</span></div>
+        <div class="bond-pay">
+          <div class="t">选择支付方式</div>
+          <div class="con clearfix">
+            <div class="li" @click="pay_type=1">
+              <input type="radio" class="bond-radio" checked name="money" />
+              <span class="radio-s"><img src="/images/pub14.png" /></span>
+            </div>
+            <div class="li" @click="pay_type=2">
+              <input type="radio" class="bond-radio" name="money" />
+              <span class="radio-s"><img src="/images/pub19.png" /></span>
+            </div>
+            <div class="li" @click="pay_type=3">
+              <input type="radio" class="bond-radio" name="money" />
+              <span class="radio-s"><img src="/images/pub13.png" /></span>
+            </div>
+          </div>
+        </div>
+        <div class="bond-pay" v-if="pay_type==1">
+          <div class="t">支付密码</div>
+          <div class="con clearfix">
+            <div class="input-w m-t-20 m-l-10">
+              <input type="password" v-model="pwd" placeholder="请输入支付密码">
+            </div>
+          </div>
+        </div>
+        <div class="last-bottom">
+          <button class="bond-btn" @click="onBzjClick">确认并支付</button>
+        </div>
+      </div>
+    </div>
   </div>
   <!--publish-container end-->
   <!-- 公共底部 -->
   <footer class="public-footer"></footer>
-  <!--保证金弹出-->
-  <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
-    id="alert2">
-    <div class="bond-content">
-      <div class="bond-close" onClick="ok('alert2')"></div>
-      <div class="bond-tit">保证金</div>
-      <div class="bond-tip">本平台发布任务，需要保证金，才能享有权益 支付后个人中心可查看，随时可退</div>
-      <div class="bond-price">保证金：<span class="color-red">￥1000.00</span></div>
-      <div class="bond-pay">
-        <div class="t">选择支付方式</div>
-        <div class="con clearfix">
-          <div class="li">
-            <input type="radio" class="bond-radio" checked name="money" />
-            <span class="radio-s"><img src="/images/pub14.png" /></span>
-          </div>
-          <div class="li">
-            <input type="radio" class="bond-radio" name="money" />
-            <span class="radio-s"><img src="/images/pub13.png" /></span>
-          </div>
-          <div class="li">
-            <input type="radio" class="bond-radio" name="money" />
-            <span class="radio-s"><img src="/images/pub19.png" /></span>
-          </div>
-        </div>
-      </div>
-      <div class="last-bottom">
-        <button class="bond-btn">确认并支付</button>
-      </div>
-    </div>
-  </div>
+
   <script>
     function ok (id) {
       syalert.syhide(id)

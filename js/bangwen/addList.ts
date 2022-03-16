@@ -2,6 +2,10 @@ $(function () {
   $('.public-header').load('/components/PublicHeader.html')
   $('.public-footer').load('/components/PublicFooter.html')
 })
+var encrypt = new JSEncrypt()
+//公钥.
+const publiukey = '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----'
+
 new Vue({
   el: '#app',
   data() {
@@ -40,7 +44,9 @@ new Vue({
       competitionSignUpStartTimeMinValue: new Date().valueOf(),
       ordeList: [],// 多次付清数据
       totalMoney: '',
-      num: ''
+      num: '',
+      pay_type: '1',// 支付方式
+      pwd: '',// 支付密码
     }
   },
   watch: {
@@ -200,9 +206,9 @@ new Vue({
     },
     // 提交
     async onBtnClick() {
-      if (!this.formData.title) return layer.msg('请输入标题')
-      if (!this.formData.total_money) return layer.msg('请输入金额')
-      if (!this.formData.detail) return layer.msg('请输入榜文详情')
+      // if (!this.formData.title) return layer.msg('请输入标题')
+      // if (!this.formData.total_money) return layer.msg('请输入金额')
+      // if (!this.formData.detail) return layer.msg('请输入榜文详情')
       // for (let i = 0; i <= this.ordeList.length; i++) {
       //   if (this.ordeList[i].num == 0 || this.ordeList[i].num == '') {
       //     return layer.msg('多次支付里面金额不能为空')
@@ -216,6 +222,61 @@ new Vue({
       if (res.code == 200) {
         // this.cateList = res.data
         // this.formData.b_id = res.data[0].id;
+      } else if (res.code == 206) {
+        syalert.syopen('bondCont')
+      } else {
+        layer.msg(res.msg)
+      }
+    },
+    // 保证金
+    async onBzjClick() {
+      console.log('aa')
+      const res = await request({
+        method: 'POST',
+        url: '/api/Deposit/refer',
+        data: { pay_type: this.pay_type }
+      })
+      if (res.code == 200) {
+        // this.cateList = res.data
+        // this.formData.b_id = res.data[0].id;
+        if (this.pay_type == '1') {
+          encrypt.setPublicKey(publiukey)
+          // 加密
+          const pwd = encrypt.encrypt(this.pwd) //需要加密的内容
+          const ress = await request({
+            method: 'POST',
+            url: '/api/Deposit/balancePay',
+            data: { out_trade_no: res.data.out_trade_no, pay_pwd: pwd }
+          })
+          if (ress.code == 200) {
+            layer.msg('支付成功')
+            syalert.syhide('bondCont')
+          } else {
+            layer.msg(ress.msg)
+          }
+        }
+        if (this.pay_type == '2') {
+          const ress = await request({
+            method: 'POST',
+            url: '/api/Deposit/aliPay',
+            data: { out_trade_no: res.data.out_trade_no }
+          })
+          if (ress.code == 200) {
+            location.href = ress.data.code_url
+            syalert.syhide('bondCont')
+          }
+        }
+        if (this.pay_type == '3') {
+          const ress = await request({
+            method: 'POST',
+            url: '/api/Deposit/wxPay',
+            data: { out_trade_no: res.data.out_trade_no }
+          })
+          if (ress.code == 200) {
+            location.href = ress.data.code_url
+            syalert.syhide('bondCont')
+          }
+        }
       } else {
         layer.msg(res.msg)
       }
