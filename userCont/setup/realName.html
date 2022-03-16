@@ -40,7 +40,8 @@
       <!--center-content start-->
       <div class="center-content fr" id="app">
         <!--center-inner start-->
-        <div class="center-inner">
+        <!-- 未提交 -->
+        <div class="center-inner" v-if="userCont.check_status=='-2'">
           <div class="center-inner-tit">实名认证</div>
           <!--center-inner-content start-->
           <div class="center-inner-content">
@@ -119,6 +120,81 @@
               <!--set-item end-->
               <div class="set-bot">
                 <button class="center-set-btn" @click="onBtnClick">提交</button>
+              </div>
+            </div>
+            <!--center-set end-->
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!-- 实名成功 -->
+        <div class="center-inner" v-if="userCont.check_status==1">
+          <div class="center-inner-tit">实名认证</div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <!--center-set start-->
+            <div class="center-set">
+              <div class="center-set-success">已实名认证</div>
+              <div class="center-profile">
+                <div class="profile-li">姓名：{{userCont.name}}</div>
+                <div class="profile-li">身份照片：{{userCont.idcard}}</div>
+                <div class="profile-li">身份证照片：
+                  <div class="profile-li-img">
+                    <img class="profile-img" :src="userCont.front_image">
+                    <img class="profile-img" :src="userCont.back_image">
+                    <img class="profile-img" :src="userCont.hand_image">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--center-set end-->
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!-- 审核中 -->
+        <div class="center-inner" v-if="userCont.check_status==0">
+          <div class="center-inner-tit">实名认证</div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <!--center-set start-->
+            <div class="center-set">
+              <div class="center-set-exa">资料已提交，认证审核中</div>
+              <div class="center-profile">
+                <div class="profile-li">姓名：{{userCont.name}}</div>
+                <div class="profile-li">身份照片：{{userCont.idcard}}</div>
+                <div class="profile-li">身份证照片：
+                  <div class="profile-li-img">
+                    <img class="profile-img" :src="userCont.front_image">
+                    <img class="profile-img" :src="userCont.back_image">
+                    <img class="profile-img" :src="userCont.hand_image">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--center-set end-->
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!-- 审核失败 -->
+        <div class="center-inner" v-if="userCont.check_status=='-1'">
+          <div class="center-inner-tit">实名认证</div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <!--center-set start-->
+            <div class="center-set">
+              <div class="center-set-fail">
+                <span>审核失败，请重新认证</span>
+                <button class="set-fail-btn m-l-40" @click="userCont.check_status='-2'">重新上传</button>
+              </div>
+              <div class="center-profile">
+                <div class="profile-li">姓名：{{userCont.name}}</div>
+                <div class="profile-li">身份照片：{{userCont.idcard}}</div>
+                <div class="profile-li">身份证照片：
+                  <div class="profile-li-img">
+                    <img class="profile-img" :src="userCont.front_image">
+                    <img class="profile-img" :src="userCont.back_image">
+                    <img class="profile-img" :src="userCont.hand_image">
+                  </div>
+                </div>
               </div>
             </div>
             <!--center-set end-->

@@ -16,11 +16,23 @@ new Vue({
         hand_image: 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg',// 手持身份证
         // check_id: '',// 修改是必选，审核数据的id复
       },
+      userCont: '',// 认证信息
     }
   },
-  created() {
+  async created() {
     // 初始化选择封面图
     this.initCoverImageFileChange()
+    // 实名认证信息
+    const res = await request({
+      method: 'POST',
+      url: '/api/Mine/realInfo',
+    })
+    if (res.code == 200) {
+      this.userCont = res.data
+      this.userCont.check_status = 0
+    } else {
+      layer.msg(res.msg)
+    }
   },
   methods: {
     async onBtnClick() {

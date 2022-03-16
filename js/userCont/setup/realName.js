@@ -53,11 +53,34 @@ new Vue({
                 hand_image: 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg', // 手持身份证
                 // check_id: '',// 修改是必选，审核数据的id复
             },
+            userCont: '', // 认证信息
         };
     },
     created: function () {
-        // 初始化选择封面图
-        this.initCoverImageFileChange();
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        // 初始化选择封面图
+                        this.initCoverImageFileChange();
+                        return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Mine/realInfo',
+                            })];
+                    case 1:
+                        res = _a.sent();
+                        if (res.code == 200) {
+                            this.userCont = res.data;
+                            this.userCont.check_status = 0;
+                        }
+                        else {
+                            layer.msg(res.msg);
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     },
     methods: {
         onBtnClick: function () {
