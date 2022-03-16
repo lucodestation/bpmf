@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>我发布的榜文</title>
+  <link rel="stylesheet" href="/plugins/date/jedate.css" />
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/upload/imgFileupload.js"></script>
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jsencrypt.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+  <style>
+    .center-order-state .li,
+    .center-inner-tit .li-a {
+      cursor: pointer;
+    }
+
+    .center-order-state .li.active {
+      color: #ff7f17;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <div class="public-user"></div>
+      <!--center-content start-->
+      <div class="center-content fr" id="app">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit clearfix">
+            <div v-for="item,i in nameList" :key="item.id" class="li-a fl m-r-40" :class="item.id==type?'active':''"
+              @click="onNameClick(item.id)">
+              {{item.title}}</div>
+          </div>
+          <div class="center-inner-content">
+            <!--center-order-state start-->
+            <div class="center-order-state m-b-20 clearfix">
+              <div v-for="item,i in navList" class="li" :class="item.id==navId?'active':''"
+                @click="onNavClick(item.id)">{{item.title}}</div>
+            </div>
+            <!--center-order-state end-->
+            <!--center-inner-form start-->
+            <div class="center-inner-form wallet-search clearfix">
+              <div class="form-bor">
+                <select class="select w130">
+                  <option>111</option>
+                </select>
+              </div>
+              <div class="form-bor m-l-20">
+                <input type="text" class="input common-date-input w130" id="dateS" placeholder="开始时间">
+              </div>
+              <div class="form-bor m-l-20">
+                <input type="text" class="input common-date-input w130" id="dateE" placeholder="结束时间">
+              </div>
+              <button class="form-btn m-l-20">查询</button>
+            </div>
+            <!--center-inner-form end-->
+            <!--center-inner-table-wrap start-->
+            <div class="center-inner-table-wrap">
+              <table class="center-inner-table center-order-table">
+                <tr>
+                  <th>榜文标题</th>
+                  <th>榜文类型</th>
+                  <th>任务周期</th>
+                  <th>服务分类</th>
+                  <th>审核状态</th>
+                  <th>应榜人数</th>
+                  <th>操作</th>
+                </tr>
+                <tr v-for="item,i in noticeList" :key="i">
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" :src="item.image">
+                      <p class="center-order-txt m-l-10">{{item.title}}</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>{{item.name}}</p>
+                    <p class="color-red">金额{{item.total_money}}</p>
+                  </td>
+                  <td>
+                    <p>{{item.task_start_time}}</p>
+                    至
+                    <p>{{item.task_end_time}}</p>
+                  </td>
+                  <td>
+                    <p v-if="item.pay_num_type==1">一次付清</p>
+                    <p v-if="item.pay_num_type==2">多次付清</p>
+                    <p v-if="item.win_type==1">单人中榜</p>
+                    <p v-if="item.win_type==2">多人中榜</p>
+                    <p v-if="item.is_trustee==1">托管</p>
+                    <p v-if="item.is_trustee==2">不托管</p>
+                  </td>
+                  <td v-if="item.status=='-2'">整体终止任务</td>
+                  <td v-if="item.status=='-1'">审核失败</td>
+                  <td v-if="item.status==0">待审核</td>
+                  <td v-if="item.status==1">审核成功</td>
+                  <td v-if="item.status==2">应榜中</td>
+                  <td v-if="item.status==3">应榜结束</td>
+                  <td v-if="item.status==4">工作中</td>
+                  <td v-if="item.status==5">任务结束</td>
+                  <td v-if="item.status==0||item.status=='-1'||item.status==5">--</td>
+                  <td v-if="item.status==2||item.status==3">
+                    <p class="color-blue">{{item.join_num}}人</p>
+                  </td>
+                  <td v-if="item.status==4||item.status==5">{{item.select_num}}人中榜{{item.join_num}}人</td>
+                  <td v-if="item.status==0">
+                    <div class="handle text-c">
+                      <a class="handle-btn m-r-10 m-t-5" href="CenterRank.html">修改榜文</a>
+                      <a class="handle-btn blue m-t-5" :href="'./noticeView.html?id='+item.id">查看详情</a>
+                    </div>
+                  </td>
+                  <td v-if="item.status==2">
+                    <div class="handle text-c">
+                      <a class="handle-btn m-t-5 m-r-10" href="CenterRank5.html">选择中榜人</a>
+                      <a class="handle-btn m-t-5 blue" href="CenterRank5.html">查看详情</a>
+                    </div>
+                  </td>
+                  <td v-if="item.status==3">
+                    <div class="handle text-c">
+                      <a class="handle-btn m-t-5 m-r-10" href="CenterRank5.html">选择中榜人</a>
+                      <a class="handle-btn m-t-5" href="CenterRank6.html">开始学习</a>
+                    </div>
+                  </td>
+                  <td v-if="item.status==3">
+                    <div class="handle text-c">
+                      <a class="handle-btn m-t-5 m-r-10" href="CenterRank8.html">我要评价</a>
+                      <a class="handle-btn blue m-t-5" href="CenterRank8.html">查看详情</a>
+                    </div>
+                  </td>
+                  <td v-if="item.status==4">
+                    <div class="handle text-c">
+                      <a class="handle-btn m-t-5 m-r-10" href="CenterRank6.html">完成学习</a>
+                      <a class="handle-btn blue m-t-5" href="CenterRank6.html">查看详情</a>
+                    </div>
+                  </td>
+                  <td v-if="item.status==5">
+                    <div class="handle text-c">
+                      <a class="handle-btn blue m-t-5" href="CenterRank8.html">查看详情</a>
+                    </div>
+                  </td>
+                  <td v-if="item.status=='-1'">
+                    <div class="handle text-c">
+                      <a class="handle-btn m-t-5 m-r-10" href="CenterRank.html">修改榜文</a>
+                      <a class="handle-btn blue m-t-5" href="javascript:void(0)"
+                        onClick="syalert.syopen('alert3')">删除榜文</a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!--center-inner-table-wrap end-->
+          </div>
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <!--删除榜文弹出-->
+  <div class="sy-alert bond-pop animated" style="width:500px;" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm"
+    sy-mask="true" id="alert3">
+    <div class="bond-content">
+      <div class="bond-close" onClick="ok('alert3')"></div>
+      <div class="bond-tit">删除榜文</div>
+      <div class="text-c m-t-40">
+        <div class="f-16">榜文删除后，将不能不发布</div>
+        <div class="f-20 m-t-25">您确定删除？</div>
+      </div>
+      <div class="last-bottom text-c">
+        <button class="bond-btn mar-auto" onClick="ok('alert3')">确定</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    function ok (id) {
+      syalert.syhide(id);
+    };
+  </script>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/bangwen/noticeList.js"></script>
+</body>
+
+</html>

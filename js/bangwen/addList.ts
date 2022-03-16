@@ -27,8 +27,8 @@ new Vue({
         signup_start_time: '',// 报名开始时间
         signup_end_time: '',// 报名结束时间
         detail: '',// 榜文详情
-        image: 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg',// 封面（路径如：/uploads/20211216/6d39ccf1e51e8e21a0ba946de64cb8f0.jpg）
-        files: 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg',// 文件（路径如：/uploads/20211216/6d39ccf1e51e8e21a0ba946de64cb8f0.jpg）
+        image: 'https://lmg.jj20.com/up/allimg/4k/s/02/21092423260Q119-0-lp.jpg',// 封面（路径如：/uploads/20211216/6d39ccf1e51e8e21a0ba946de64cb8f0.jpg）
+        files: 'https://lmg.jj20.com/up/allimg/4k/s/02/21092423260Q119-0-lp.jpg',// 文件（路径如：/uploads/20211216/6d39ccf1e51e8e21a0ba946de64cb8f0.jpg）
         mobile: '',// 手机号
         qq: '',// qq号
         email: '',// 邮箱号
@@ -206,9 +206,21 @@ new Vue({
     },
     // 提交
     async onBtnClick() {
-      // if (!this.formData.title) return layer.msg('请输入标题')
-      // if (!this.formData.total_money) return layer.msg('请输入金额')
-      // if (!this.formData.detail) return layer.msg('请输入榜文详情')
+      if (!this.formData.title) return layer.msg('请输入标题')
+      if (!this.formData.total_money) return layer.msg('请输入金额')
+      if (!this.formData.detail) return layer.msg('请输入榜文详情')
+      if (this.formData.mobile) {
+        var reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/ //11位手机号码正则
+        if (!reg_tel.test(this.formData.mobile)) return layer.msg('请输入正确的手机号')
+      }
+      if (this.formData.qq) {
+        var qq = "[1-9][0-9]{4,14}"
+        if (!qq.test(this.formData.qq)) return layer.msg('请输入正确QQ号')
+      }
+      if (this.formData.email) {
+        var email = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/
+        if (!email.test(this.formData.email)) return layer.msg('请输入正确邮箱')
+      }
       // for (let i = 0; i <= this.ordeList.length; i++) {
       //   if (this.ordeList[i].num == 0 || this.ordeList[i].num == '') {
       //     return layer.msg('多次支付里面金额不能为空')
@@ -230,15 +242,12 @@ new Vue({
     },
     // 保证金
     async onBzjClick() {
-      console.log('aa')
       const res = await request({
         method: 'POST',
         url: '/api/Deposit/refer',
         data: { pay_type: this.pay_type }
       })
       if (res.code == 200) {
-        // this.cateList = res.data
-        // this.formData.b_id = res.data[0].id;
         if (this.pay_type == '1') {
           encrypt.setPublicKey(publiukey)
           // 加密
