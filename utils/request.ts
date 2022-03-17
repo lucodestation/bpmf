@@ -41,7 +41,10 @@ request.interceptors.response.use(
   (response) => {
     // console.log('响应拦截器', response)
     const data = response.data
-
+    // 判断没有登录
+    if (data.code == 502) {
+      syalert.syopen('alert1')
+    }
     return data
   },
   (error) => {

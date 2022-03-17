@@ -23,8 +23,10 @@
   <script src="/plugins/syalert/syalert.min.js"></script>
   <script src="/plugins/vue.min.js"></script>
 
+  <script src="https://cdn.bootcdn.net/ajax/libs/ali-oss/6.17.1/aliyun-oss-sdk.min.js"></script>
   <script src="/plugins/axios.min.js"></script>
   <script src="/utils/request.js"></script>
+  <script src="/utils/util.js"></script>
   <style>
     .temp-pre {
       position: fixed;
@@ -269,11 +271,13 @@
             <!--封面start-->
             <div class="publish-up-head">
               <div id="drop_area">
-                <div class="preview">
-                  <img src="/images/pub21.png" class="img-responsive" alt="" title="" />
+                <div class="preview" id="uploadCover">
+                  <!-- <img src="/images/pub21.png" class="img-responsive" alt="" title="" /> -->
+                  <img src="/images/pub21.png" v-if="!this.coverImage.url" />
+                  <img class="cover-image" :src="this.coverImage.url" v-else />
                 </div>
               </div>
-              <script src="/plugins/singleUp.js"></script>
+              <!-- <script src="/plugins/singleUp.js"></script>
               <script type="text/javascript">
                 var dragImgUpload = new DragImgUpload('#drop_area', {
                   callback: function (files) {
@@ -282,7 +286,7 @@
                     console.log(file.name)
                   },
                 })
-              </script>
+              </script> -->
             </div>
             <!--封面end-->
           </div>

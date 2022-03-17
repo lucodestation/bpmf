@@ -64,17 +64,19 @@
             <!--center-inner-form start-->
             <div class="center-inner-form wallet-search clearfix">
               <div class="form-bor">
-                <select class="select w130">
-                  <option>111</option>
+                <select class="select w130" v-model="b_id">
+                  <option :value="item.id" v-for="item in cateList">{{item.name}}</option>
                 </select>
               </div>
               <div class="form-bor m-l-20">
-                <input type="text" class="input common-date-input w130" id="dateS" placeholder="开始时间">
+                <input id="signUpStartDate" type="text" :value="start_time" class="input common-date-input w130"
+                  placeholder="开始时间" />
               </div>
               <div class="form-bor m-l-20">
-                <input type="text" class="input common-date-input w130" id="dateE" placeholder="结束时间">
+                <input type="text" class="input common-date-input w130" :value="end_time" id="signUpEndDate"
+                  placeholder="结束时间" />
               </div>
-              <button class="form-btn m-l-20">查询</button>
+              <button class="form-btn m-l-20" @click="onqueryClick">查询</button>
             </div>
             <!--center-inner-form end-->
             <!--center-inner-table-wrap start-->

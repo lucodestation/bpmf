@@ -63,8 +63,8 @@ new Vue({
                 signup_start_time: '',
                 signup_end_time: '',
                 detail: '',
-                image: 'https://lmg.jj20.com/up/allimg/4k/s/02/21092423260Q119-0-lp.jpg',
-                files: 'https://lmg.jj20.com/up/allimg/4k/s/02/21092423260Q119-0-lp.jpg',
+                image: '',
+                files: '',
                 mobile: '',
                 qq: '',
                 email: '',
@@ -82,7 +82,8 @@ new Vue({
             totalMoney: '',
             num: '',
             pay_type: '1',
-            pwd: '', // 支付密码
+            pwd: '',
+            coverImage: {}, // 封面图
         };
     },
     watch: {
@@ -210,12 +211,42 @@ new Vue({
                                 },
                             });
                         };
+                        // 初始化选择封面图
+                        this.initCoverImageFileChange();
                         return [2 /*return*/];
                 }
             });
         });
     },
     methods: {
+        // 初始化选择封面图
+        initCoverImageFileChange: function () {
+            var _this = this;
+            layui.upload.render({
+                elem: '#uploadCover',
+                auto: false,
+                // accept: 'image', // 指定允许上传时校验的文件类型
+                // acceptMime: '.jpg,.png,.bmp,.jpeg,.webp', // 规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
+                // exts: 'jpg|png|bmp|jpeg|webp', // 允许上传的文件后缀。一般结合 accept 参数类设定。
+                size: 0,
+                multiple: false,
+                // 选择文件回调
+                choose: function (result) {
+                    console.log(result);
+                    //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                    result.preview(function (index, file, result) {
+                        // console.log(index) //得到文件索引
+                        // console.log(file) //得到文件对象
+                        // console.log(result) //得到文件base64编码，比如图片
+                        _this.coverImage = {
+                            file: file,
+                            url: result,
+                        };
+                        console.log(_this.coverImage);
+                    });
+                },
+            });
+        },
         // 点击支付方式判断
         getpaynumSelected: function () {
             if (this.totalMoney == '') {
@@ -253,37 +284,19 @@ new Vue({
         // 提交
         onBtnClick: function () {
             return __awaiter(this, void 0, void 0, function () {
-                var reg_tel, qq, email, res;
+                var aa, reg_tel, qq, email, res;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            if (!this.formData.title)
-                                return [2 /*return*/, layer.msg('请输入标题')];
-                            if (!this.formData.total_money)
-                                return [2 /*return*/, layer.msg('请输入金额')];
-                            if (!this.formData.detail)
-                                return [2 /*return*/, layer.msg('请输入榜文详情')];
-                            if (this.formData.mobile) {
-                                reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/ //11位手机号码正则
-                                ;
-                                if (!reg_tel.test(this.formData.mobile))
-                                    return [2 /*return*/, layer.msg('请输入正确的手机号')];
-                            }
-                            if (this.formData.qq) {
-                                qq = "[1-9][0-9]{4,14}";
-                                if (!qq.test(this.formData.qq))
-                                    return [2 /*return*/, layer.msg('请输入正确QQ号')];
-                            }
-                            if (this.formData.email) {
-                                email = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
-                                if (!email.test(this.formData.email))
-                                    return [2 /*return*/, layer.msg('请输入正确邮箱')];
-                            }
-                            return [4 /*yield*/, request({
-                                    method: 'POST',
-                                    url: '/api/Bangwen/pushBangwen',
-                                    data: this.formData,
-                                })];
+                            aa = util.uploadFile({
+                                file: this.coverImage.file,
+                                fileName: 'cover',
+                            });
+                            console.log(aa);
+                            console.log(this.coverImage);
+                            console.log(this.coverImage.file);
+                            this.formData.image = this.coverImage.file;
+                            return [2 /*return*/];
                         case 1:
                             res = _a.sent();
                             if (res.code == 200) {

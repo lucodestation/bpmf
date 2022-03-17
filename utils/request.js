@@ -40,6 +40,10 @@ request.interceptors.request.use(function (config) {
 request.interceptors.response.use(function (response) {
     // console.log('响应拦截器', response)
     var data = response.data;
+    // 判断没有登录
+    if (data.code == 502) {
+        syalert.syopen('alert1');
+    }
     return data;
 }, function (error) {
     // console.log('响应拦截器 error', response)

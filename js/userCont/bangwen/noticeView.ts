@@ -7,53 +7,43 @@ new Vue({
   el: '#app',
   data() {
     return {
-      nameList: [{ id: '1', title: '教棋榜文' }, { id: '2', title: '学棋榜文' }],
-      type: 1,
-      navList: [{ id: '', title: '全部榜文' }, { id: '1', title: '待审核' }, { id: '2', title: '应榜中' }, { id: '3', title: '应榜结束' }, { id: '4', title: '工作中' }, { id: '5', title: '任务结束' }, { id: '6', title: '未通过' }],// 分类
-      navId: '',
-      cateList: [],// 分类列表
-      noticeList: [],// 列表
+      id: '',
+      cateList: [],// 棋分类
+      noticeCont: '',// 详情内容
+      name: '',// 棋名
     }
   },
-  async created() {
-    const ress = await request({
-      method: 'POST',
-      url: '/api/Bangwen/cate'
+  created() {
+    this.GetRequest()
+    request({ method: 'POST', url: '/api/Bangwen/cate' }).then((res) => {
+      if (res.code == 200) {
+        this.cateList = res.data
+      }
     })
-    if (ress.code == 200) {
-      this.cateList = ress.data
-    }
-    setTimeout(() => {
-      this.onpushList()
-    }, 500);
+    request({ url: '/api/Bangwen/bangwenDetail', method: 'post', data: { bangwen_id: this.id }, }).then((res) => {
+      if (res.code == 200) {
+        this.noticeCont = res.data
+        for (let i in this.cateList) {
+          if (this.cateList[i].id == res.data.b_id) {
+            this.name = this.cateList[i].name
+          }
+        }
+      }
+    })
   },
   methods: {
-    // 列表数据
-    async onpushList() {
-      const res = await request({
-        method: 'POST',
-        url: '/api/Bangwenpush/pushList',
-        data: { type: this.type, status: this.navId, start_time: '', end_time: '', page: 1, pagenum: 10 }
-      })
-      if (res.code == 200) {
-        res.data.data.map(item => {
-          for (let i in this.cateList) {
-            if (item.b_id == this.cateList[i].id) {
-              item.name = this.cateList[i].name
-            }
-          }
-        })
-        this.noticeList = res.data.data
+    // 获取当前页面url
+    GetRequest() {
+      let url = location.search; //获取当前页面url
+      let theRequest = new Object();
+      if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        let strs = str.split("&");
+        for (let i = 0; i < strs.length; i++) {
+          theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+        }
       }
+      this.id = theRequest.id
     },
-    // 点击状态切换
-    onNavClick(e) {
-      this.navId = e
-      this.onpushList()
-    },
-    onNameClick(e) {
-      this.type = e
-      this.onpushList()
-    }
   }
 })
