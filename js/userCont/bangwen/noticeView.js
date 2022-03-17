@@ -9,16 +9,28 @@ new Vue({
     data: function () {
         return {
             id: '',
+            cateList: [],
+            noticeCont: '',
+            name: '', // 棋名
         };
     },
     created: function () {
+        var _this = this;
         this.GetRequest();
-        request({
-            url: '/api/Bangwen/bangwenDetail',
-            method: 'post',
-            data: { bangwen_id: this.id },
-        }).then(function (res) {
-            console.log(res);
+        request({ method: 'POST', url: '/api/Bangwen/cate' }).then(function (res) {
+            if (res.code == 200) {
+                _this.cateList = res.data;
+            }
+        });
+        request({ url: '/api/Bangwen/bangwenDetail', method: 'post', data: { bangwen_id: this.id }, }).then(function (res) {
+            if (res.code == 200) {
+                _this.noticeCont = res.data;
+                for (var i in _this.cateList) {
+                    if (_this.cateList[i].id == res.data.b_id) {
+                        _this.name = _this.cateList[i].name;
+                    }
+                }
+            }
         });
     },
     methods: {

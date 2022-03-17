@@ -36,36 +36,48 @@
     <div class="main-center w-1200 clearfix">
       <div class="public-user"></div>
       <!--center-content start-->
-      <div class="center-content fr">
+      <div class="center-content fr" id="app">
         <!--center-inner start-->
         <div class="center-inner">
           <!--inner-position start-->
           <div class="inner-position">
             <a href="">榜文管理</a>
-            <span>
-              < </span>
-                <a class="current" href="">榜文详情</a>
+            <span>&lt; </span>
+            <a class="current" href="">榜文详情</a>
           </div>
           <!--inner-position end-->
           <div class="center-inner-content">
             <!--center-rank-head start-->
             <div class="center-rank-head clearfix">
               <div class="img fl">
-                <img src="/images/rank16.png">
+                <img :src="noticeCont.image">
               </div>
               <div class="txt">
                 <div class="t m-b-10">
-                  围棋入门级教程解法
-                  <div class="state fr color-6">当前状态：<span class="color-orange">审核中</span> </div>
+                  {{noticeCont.title}}
+                  <div class="state fr color-6">当前状态：
+                    <span class="color-orange" v-if="noticeCont.status=='-2'">整体终止任务</span>
+                    <span class="color-orange" v-if="noticeCont.status=='-1'">审核失败</span>
+                    <span class="color-orange" v-if="noticeCont.status=='0'">待审核</span>
+                    <span class="color-orange" v-if="noticeCont.status=='1'">审核成功</span>
+                    <span class="color-orange" v-if="noticeCont.status=='2'">应榜中</span>
+                    <span class="color-orange" v-if="noticeCont.status=='3'">应榜结束</span>
+                    <span class="color-orange" v-if="noticeCont.status=='4'">工作中</span>
+                    <span class="color-orange" v-if="noticeCont.status=='5'">任务结束</span>
+                  </div>
                 </div>
                 <div class="tags clearfix">
-                  <span class="tag fl">围棋</span>
-                  <span class="tag fl">一次付清</span>
-                  <span class="tag fl">单人中榜</span>
-                  <span class="tag fl">不托管</span>
+                  <span class="tag fl">{{name}}</span>
+                  <span class="tag fl" v-if="noticeCont.pay_num_type==1">一次付清</span>
+                  <span class="tag fl" v-if="noticeCont.pay_num_type==2">多次付清</span>
+                  <span class="tag fl" v-if="noticeCont.win_type==1">单人中榜</span>
+                  <span class="tag fl" v-if="noticeCont.win_type==2">多人中榜</span>
+                  <span class="tag fl" v-if="noticeCont.is_trustee==1">托管</span>
+                  <span class="tag fl" v-if="noticeCont.is_trustee==2">不托管</span>
                 </div>
-                <div class="price f-16 m-t-10 m-b-10">酬金：<span class="f-20 color-red">￥15263</span></div>
-                <div class="date color-6">2021-10-18 12:00 至 2021-10-24 12:00</div>
+                <div class="price f-16 m-t-10 m-b-10">酬金：<span class="f-20 color-red">￥{{noticeCont.total_money}}</span>
+                </div>
+                <div class="date color-6">{{noticeCont.task_start_time}} 至 {{noticeCont.task_end_time}}</div>
               </div>
             </div>
             <!--center-rank-head end-->

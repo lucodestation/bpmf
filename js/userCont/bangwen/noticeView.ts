@@ -8,17 +8,27 @@ new Vue({
   data() {
     return {
       id: '',
+      cateList: [],// 棋分类
+      noticeCont: '',// 详情内容
+      name: '',// 棋名
     }
   },
   created() {
     this.GetRequest()
-    request({
-      url: '/api/Bangwen/bangwenDetail',
-      method: 'post',
-      data: { bangwen_id: this.id },
-    }).then((res) => {
-      console.log(res)
-
+    request({ method: 'POST', url: '/api/Bangwen/cate' }).then((res) => {
+      if (res.code == 200) {
+        this.cateList = res.data
+      }
+    })
+    request({ url: '/api/Bangwen/bangwenDetail', method: 'post', data: { bangwen_id: this.id }, }).then((res) => {
+      if (res.code == 200) {
+        this.noticeCont = res.data
+        for (let i in this.cateList) {
+          if (this.cateList[i].id == res.data.b_id) {
+            this.name = this.cateList[i].name
+          }
+        }
+      }
     })
   },
   methods: {
