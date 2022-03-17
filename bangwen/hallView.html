@@ -25,6 +25,28 @@
 
   <script src="/plugins/axios.min.js"></script>
   <script src="/utils/request.js"></script>
+  <style>
+    .more-pay .editipnut {
+      width: 200px;
+      margin-top: 10px;
+      float: left;
+    }
+
+    .more-pay .editipnut .pay-name {
+      margin-right: 10px;
+    }
+
+    .more-pay .editipnut input {
+      width: 100px !important;
+    }
+
+    .rank-collect1 {
+      background: url('../images/rank14.png') no-repeat 0px center;
+      padding-left: 30px;
+      margin-left: 40px;
+      display: block;
+    }
+  </style>
 </head>
 
 <body>
@@ -66,9 +88,13 @@
                 <span class="tag" v-if="newsCont.is_trustee==1">托管</span>
                 <span class="tag" v-if="newsCont.is_trustee==2">不托管</span>
               </div>
-              <div class="t-bot">
-                <a class="rank-detail-btn fl non" href="javascript:void(0);">我要应榜</a>
-                <span class="t-bot-c fl">已应榜：6人</span>
+              <div class="t-bot" v-if="newsCont.is_attend==1">
+                <a class="rank-detail-btn fl non" href="javascript:void(0);">已应榜</a>
+                <span class="t-bot-c fl">已应榜：{{newsCont.sign_num}}人</span>
+              </div>
+              <div class="t-bot" v-else>
+                <a class="rank-detail-btn fl" href="javascript:void(0);" onClick="syalert.syopen('bangCont')">我要应榜</a>
+                <span class="t-bot-c fl">已应榜：{{newsCont.sign_num}}人</span>
               </div>
             </div>
           </div>
@@ -78,9 +104,10 @@
             <div class="bd-title clearfix">
               <span class="t">榜文详情</span>
               <div class="fr">
-                <div class="rank-collect fl">收藏</div>
+                <div class="rank-collect1 fl" v-if="newsCont.is_collect==1" @click="onCollClick">已收藏</div>
+                <div class="rank-collect fl" v-else @click="onCollClick">收藏</div>
                 <a class="rank-share fl" href="">分享</a>
-                <a class="rank-ju fl" href="javascript:void(0);" onClick="syalert.syopen('alert2')">举报</a>
+                <a class="rank-ju fl" href="javascript:void(0);" onClick="syalert.syopen('reportCont')">举报</a>
               </div>
             </div>
             <div class="bd-article">
@@ -295,110 +322,122 @@
       </div>
     </div>
     <!--rank-recommend end-->
+    <!-- 我要应榜弹窗 -->
+    <div class="sy-alert rank-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+      id="bangCont">
+      <div class="rank-pop-content">
+        <div class="bond-close" onClick="syalert.syhide('bangCont')"></div>
+        <div class="tit">我要应榜</div>
+        <!--rank-pop-item start-->
+        <div class="publish-item clearfix">
+          <div class="label">我要报价：</div>
+          <div class="con">
+            <div class="input-w">
+              <input type="text" v-model="totalMoney" class="input" placeholder="请输入报价">
+            </div>
+          </div>
+        </div>
+        <!--rank-pop-item end-->
+        <!--rank-pop-item start-->
+        <div class="publish-item clearfix">
+          <div class="label">支付方式：</div>
+          <div class="con">
+            <div class="input-w fl" style="width:120px;">
+              <select class="select rate-100" v-model="formData.pay_num_type" @change="getpaynumSelected">
+                <option :value="item.id" v-for="item in payList">{{item.name}}</option>
+              </select>
+            </div>
+            <div class="more-pay" v-if="formData.pay_num_type==2">
+              <div class="input-w fl" style="margin-left: 10px;width:120px;">
+                <select class="select" v-model="formData.pay_num" @change="getCouponSelected">
+                  <option :value="item" v-for="item in num">{{item}}次</option>
+                </select>
+              </div>
+              <div class="input-w fl" style="margin-left: 10px;width:120px;">
+                <select class="select" v-model="formData.more_type">
+                  <option :value="item.id" v-for="item in moreList">{{item.name}}</option>
+                </select>
+              </div>
+              <div class="editipnut" v-for="item,i in ordeList" :key="item">
+                <span class="pay-name">第{{item.id}}次</span>
+                <input type="text" v-if="formData.more_type==1" readonly v-model="item.num" placeholder="请输入金额"
+                  class="input">
+                <input type="text" v-if="formData.more_type==2" v-model="item.num" placeholder="请输入金额" class="input">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--rank-pop-item end-->
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label">任务周期：</div>
+          <div class="item-fr">
+            <div class="date fl">{{newsCont.signup_start_time}}</div>
+            <div class="date-line fl"></div>
+            <div class="date fl">{{newsCont.signup_end_time}}</div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label">应榜描述：</div>
+          <div class="con">
+            <div class="detail-text">
+              <textarea class="text" rows="3" v-model="formData.descri" placeholder="请介绍自己，方便发榜者了解，提高应榜效率"></textarea>
+            </div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label">应榜附件：</div>
+          <div class="con">
+            <div class="pop-up">
+              <input type="file" class="up-file">
+              <span class="up-s">选择文件</span>
+            </div>
+            <div class="pop-up-tip">※上传文件，支持PDF、Word的格式，大小不超过2M</div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <div class="publish-check">
+          <div class="check fl">
+            <input class="check-input" type="checkbox">
+            <span class="check-s"></span>
+          </div>
+          <span>我已阅读并同意</span>
+          <a class="color-orange" href="">《玻坡摸佛榜文（需求）规则》</a>
+        </div>
+        <div class="publish-bottom">
+          <button class="publish-btn" @click="onBtnClick">提交</button>
+        </div>
+      </div>
+    </div>
+    <!-- 举报内容弹窗 -->
+    <div class="sy-alert rank-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+      id="reportCont">
+      <div class="rank-pop-content">
+        <div class="bond-close" onClick="syalert.syhide('reportCont')"></div>
+        <div class="tit">举报内容</div>
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label">填写内容：</div>
+          <div class="con">
+            <div class="detail-text">
+              <textarea class="text" rows="5" v-model="content" placeholder=" 请输入"></textarea>
+            </div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <div class="publish-bottom">
+          <button class="publish-btn" @click="onReportClick">立即发布</button>
+        </div>
+      </div>
+    </div>
   </div>
   <!--rank-container end-->
   <!-- 公共底部 -->
   <footer class="public-footer"></footer>
-  <!-- 我要应榜弹窗 -->
-  <div class="sy-alert rank-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
-    id="alert1">
-    <div class="rank-pop-content">
-      <div class="bond-close" onClick="ok('alert1')"></div>
-      <div class="tit">我要应榜</div>
-      <!--rank-pop-item start-->
-      <div class="publish-item clearfix">
-        <div class="label">我要报价：</div>
-        <div class="con">
-          <div class="input-w">
-            <input type="text" class="input" placeholder="">
-          </div>
-        </div>
-      </div>
-      <!--rank-pop-item end-->
-      <!--rank-pop-item start-->
-      <div class="publish-item clearfix">
-        <div class="label">支付方式：</div>
-        <div class="con">
-          <div class="input-w">
-            <select class="select">
-              <option>一次付清</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <!--rank-pop-item end-->
-      <!--publish-item start-->
-      <div class="publish-item clearfix">
-        <div class="label">任务周期：</div>
-        <div class="item-fr">
-          <div class="date fl">2021-09-25</div>
-          <div class="date-line fl"></div>
-          <div class="date fl">2021-10-25</div>
-        </div>
-      </div>
-      <!--publish-item end-->
-      <!--publish-item start-->
-      <div class="publish-item clearfix">
-        <div class="label">应榜描述：</div>
-        <div class="con">
-          <div class="detail-text">
-            <textarea class="text" rows="3" placeholder="请介绍自己，方便发榜者了解，提高应榜效率"></textarea>
-          </div>
-        </div>
-      </div>
-      <!--publish-item end-->
-      <!--publish-item start-->
-      <div class="publish-item clearfix">
-        <div class="label">应榜附件：</div>
-        <div class="con">
-          <div class="pop-up">
-            <input type="file" class="up-file">
-            <span class="up-s">选择文件</span>
-          </div>
-          <div class="pop-up-tip">※上传文件，支持PDF、Word的格式，大小不超过2M</div>
-        </div>
-      </div>
-      <!--publish-item end-->
-      <div class="publish-check">
-        <div class="check fl">
-          <input class="check-input" type="checkbox">
-          <span class="check-s"></span>
-        </div>
-        <span>我已阅读并同意</span>
-        <a class="color-orange" href="">《玻坡摸佛榜文（需求）规则》</a>
-      </div>
-      <div class="publish-bottom">
-        <button class="publish-btn">提交</button>
-      </div>
-    </div>
-  </div>
-  <!-- 举报内容弹窗 -->
-  <div class="sy-alert rank-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
-    id="alert2">
-    <div class="rank-pop-content">
-      <div class="bond-close" onClick="ok('alert2')"></div>
-      <div class="tit">举报内容</div>
-
-      <!--publish-item start-->
-      <div class="publish-item clearfix">
-        <div class="label">填写内容：</div>
-        <div class="con">
-          <div class="detail-text">
-            <textarea class="text" rows="5" placeholder=" 请输入"></textarea>
-          </div>
-        </div>
-      </div>
-      <!--publish-item end-->
-      <div class="publish-bottom">
-        <button class="publish-btn">立即发布</button>
-      </div>
-    </div>
-  </div>
-  <script>
-    function ok (id) {
-      syalert.syhide(id);
-    };
-  </script>
   <script src="/js/common.js"></script>
   <script src="/js/bangwen/hallView.js"></script>
 </body>

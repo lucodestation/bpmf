@@ -27,8 +27,8 @@ new Vue({
         signup_start_time: '',// 报名开始时间
         signup_end_time: '',// 报名结束时间
         detail: '',// 榜文详情
-        image: 'https://lmg.jj20.com/up/allimg/4k/s/02/21092423260Q119-0-lp.jpg',// 封面（路径如：/uploads/20211216/6d39ccf1e51e8e21a0ba946de64cb8f0.jpg）
-        files: 'https://lmg.jj20.com/up/allimg/4k/s/02/21092423260Q119-0-lp.jpg',// 文件（路径如：/uploads/20211216/6d39ccf1e51e8e21a0ba946de64cb8f0.jpg）
+        image: '',// 封面（路径如：/uploads/20211216/6d39ccf1e51e8e21a0ba946de64cb8f0.jpg）
+        files: '',// 文件（路径如：/uploads/20211216/6d39ccf1e51e8e21a0ba946de64cb8f0.jpg）
         mobile: '',// 手机号
         qq: '',// qq号
         email: '',// 邮箱号
@@ -47,6 +47,7 @@ new Vue({
       num: '',
       pay_type: '1',// 支付方式
       pwd: '',// 支付密码
+      coverImage: {},// 封面图
     }
   },
   watch: {
@@ -167,9 +168,38 @@ new Vue({
         },
       })
     }
-
+    // 初始化选择封面图
+    this.initCoverImageFileChange()
   },
   methods: {
+    // 初始化选择封面图
+    initCoverImageFileChange() {
+      layui.upload.render({
+        elem: '#uploadCover', //绑定元素
+        auto: false, // 是否选完文件后自动上传，默认 true
+        // accept: 'image', // 指定允许上传时校验的文件类型
+        // acceptMime: '.jpg,.png,.bmp,.jpeg,.webp', // 规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
+        // exts: 'jpg|png|bmp|jpeg|webp', // 允许上传的文件后缀。一般结合 accept 参数类设定。
+        size: 0, // 设置文件最大可允许上传的大小，单位 KB，0 表示不限制
+        multiple: false, // 是否允许多文件上传, 默认 false
+        // 选择文件回调
+        choose: (result) => {
+          console.log(result)
+          //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+          result.preview((index, file, result) => {
+            // console.log(index) //得到文件索引
+            // console.log(file) //得到文件对象
+            // console.log(result) //得到文件base64编码，比如图片
+
+            this.coverImage = {
+              file,
+              url: result,
+            }
+            console.log(this.coverImage)
+          })
+        },
+      })
+    },
     // 点击支付方式判断
     getpaynumSelected() {
       if (this.totalMoney == '') {
@@ -206,6 +236,15 @@ new Vue({
     },
     // 提交
     async onBtnClick() {
+      let aa = util.uploadFile({
+        file: this.coverImage.file,
+        fileName: 'cover',
+      })
+      console.log(aa)
+      console.log(this.coverImage)
+      console.log(this.coverImage.file)
+      this.formData.image = this.coverImage.file
+      return
       if (!this.formData.title) return layer.msg('请输入标题')
       if (!this.formData.total_money) return layer.msg('请输入金额')
       if (!this.formData.detail) return layer.msg('请输入榜文详情')
