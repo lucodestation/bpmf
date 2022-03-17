@@ -151,6 +151,10 @@ new Vue({
         this.initCoverImageFileChange();
     },
     methods: {
+        // 测试
+        handleTest: function () {
+            console.log('测试');
+        },
         // 选择赛事分类-赛事种类（单选框）
         handleSelectCompetitionType: function (event) {
             var target = event.target || event.srcElement;
@@ -205,7 +209,7 @@ new Vue({
                         // 点击了清空
                         console.log('点击了清空', dateValue);
                     }
-                    else if (new Date(dateValue) <= new Date()) {
+                    else if (new Date(dateValue.replace(/-/g, '/')) <= new Date()) {
                         // 选择的时间小于当前时间（可能没有选择“时间”直接点击的确定）
                         console.log('选择的时间小于当前时间');
                         layer.msg('选择的时间不能小于当前时间', { icon: 0, time: 3000 });
@@ -216,9 +220,30 @@ new Vue({
                         layer.msg('请选择具体时间', { icon: 0, time: 3000 });
                         dateValue = '';
                     }
-                    console.log('报名开始时间', dateValue);
+                    console.log('报名开始时间', typeof dateValue, dateValue);
+                    // 设置报名开始时间（页面显示用）
                     _this.signUpStartDate = dateValue;
-                    _this.formData.a_b_t = dateValue ? new Date(dateValue).valueOf() : '';
+                    // 设置报名开始时间（提交数据用）
+                    _this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
+                    // 如果报名结束时间存在且比报名开始时间小（或相等）
+                    if (_this.signUpEndDate && _this.signUpEndDate <= _this.signUpStartDate) {
+                        // 如果比赛开始时间存在且比 报名结束时间或报名开始时间小（或相等）
+                        if (_this.competitionStartDate && (_this.competitionStartDate <= _this.signUpEndDate || _this.competitionStartDate <= _this.signUpStartDate)) {
+                            // 如果比赛结束时间存在且比 比赛开始时间或报名结束时间或报名开始时间小（或相等）
+                            if (_this.competitionEndDate &&
+                                (_this.competitionEndDate <= _this.competitionStartDate || _this.competitionEndDate <= _this.signUpEndDate || _this.competitionEndDate <= _this.signUpStartDate)) {
+                                // 清空比赛结束时间
+                                _this.competitionEndDate = '';
+                                _this.formData.c_e_t = '';
+                            }
+                            // 清空比赛开始时间
+                            _this.competitionStartDate = '';
+                            _this.formData.c_b_t = '';
+                        }
+                        // 清空报名结束时间
+                        _this.signUpEndDate = '';
+                        _this.formData.a_e_t = '';
+                    }
                 },
             });
         },
@@ -255,7 +280,7 @@ new Vue({
                         });
                         dateValue = '';
                     }
-                    else if (new Date(dateValue) <= new Date(_this.signUpStartDate)) {
+                    else if (new Date(dateValue.replace(/-/g, '/')) <= new Date(_this.signUpStartDate.replace(/-/g, '/'))) {
                         // 如果报名结束时间小于报名开始时间
                         layer.open({
                             type: 0,
@@ -266,7 +291,7 @@ new Vue({
                         });
                         dateValue = '';
                     }
-                    else if (new Date(dateValue) <= new Date()) {
+                    else if (new Date(dateValue.replace(/-/g, '/')) <= new Date()) {
                         // 选择的时间小于当前时间（可能没有选择“时间”直接点击的确定）
                         console.log('选择的时间小于当前时间');
                         layer.msg('选择的时间不能小于当前时间', { icon: 0, time: 3000 });
@@ -279,7 +304,15 @@ new Vue({
                     }
                     console.log('报名结束时间', dateValue);
                     _this.signUpEndDate = dateValue;
-                    _this.formData.a_e_t = dateValue ? new Date(dateValue).valueOf() : '';
+                    _this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
+                    if (_this.competitionStartDate && _this.competitionStartDate <= _this.signUpEndDate) {
+                        if (_this.competitionEndDate && (_this.competitionEndDate <= _this.competitionStartDate || _this.competitionEndDate <= _this.signUpEndDate)) {
+                            _this.competitionEndDate = '';
+                            _this.formData.c_e_t = '';
+                        }
+                        _this.competitionStartDate = '';
+                        _this.formData.c_b_t = '';
+                    }
                 },
             });
         },
@@ -315,7 +348,7 @@ new Vue({
                         });
                         dateValue = '';
                     }
-                    else if (new Date(dateValue) <= new Date(_this.signUpEndDate)) {
+                    else if (new Date(dateValue.replace(/-/g, '/')) <= new Date(_this.signUpEndDate.replace(/-/g, '/'))) {
                         // 如果比赛开始时间小于报名结束时间
                         layer.open({
                             type: 0,
@@ -326,7 +359,7 @@ new Vue({
                         });
                         dateValue = '';
                     }
-                    else if (new Date(dateValue) <= new Date()) {
+                    else if (new Date(dateValue.replace(/-/g, '/')) <= new Date()) {
                         // 选择的时间小于当前时间（可能没有选择“时间”直接点击的确定）
                         console.log('选择的时间小于当前时间');
                         layer.msg('选择的时间不能小于当前时间', { icon: 0, time: 3000 });
@@ -339,7 +372,11 @@ new Vue({
                     }
                     console.log('比赛开始时间', dateValue);
                     _this.competitionStartDate = dateValue;
-                    _this.formData.c_b_t = dateValue ? new Date(dateValue).valueOf() : '';
+                    _this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
+                    if (_this.competitionEndDate && _this.competitionEndDate <= _this.competitionStartDate) {
+                        _this.competitionEndDate = '';
+                        _this.formData.c_e_t = '';
+                    }
                 },
             });
         },
@@ -375,7 +412,7 @@ new Vue({
                         });
                         dateValue = '';
                     }
-                    else if (new Date(dateValue) <= new Date(_this.competitionStartDate)) {
+                    else if (new Date(dateValue.replace(/-/g, '/')) <= new Date(_this.competitionStartDate.replace(/-/g, '/'))) {
                         // 如果比赛开始时间小于报名结束时间
                         layer.open({
                             type: 0,
@@ -386,7 +423,7 @@ new Vue({
                         });
                         dateValue = '';
                     }
-                    else if (new Date(dateValue) <= new Date()) {
+                    else if (new Date(dateValue.replace(/-/g, '/')) <= new Date()) {
                         // 选择的时间小于当前时间（可能没有选择“时间”直接点击的确定）
                         console.log('选择的时间小于当前时间');
                         layer.msg('选择的时间不能小于当前时间', { icon: 0, time: 3000 });
@@ -399,7 +436,7 @@ new Vue({
                     }
                     console.log('比赛结束时间', dateValue);
                     _this.competitionEndDate = dateValue;
-                    _this.formData.c_e_t = dateValue ? new Date(dateValue).valueOf() : '';
+                    _this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
                 },
             });
         },
@@ -409,9 +446,9 @@ new Vue({
             layui.upload.render({
                 elem: '#uploadCover',
                 auto: false,
-                // accept: 'image', // 指定允许上传时校验的文件类型
-                // acceptMime: '.jpg,.png,.bmp,.jpeg,.webp', // 规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
-                // exts: 'jpg|png|bmp|jpeg|webp', // 允许上传的文件后缀。一般结合 accept 参数类设定。
+                accept: 'images',
+                acceptMime: '.jpg,.png,.bmp,.jpeg',
+                exts: 'jpg|png|bmp|jpeg',
                 size: 0,
                 multiple: false,
                 // 选择文件回调
@@ -423,7 +460,9 @@ new Vue({
                         // console.log(file) //得到文件对象
                         // console.log(result) //得到文件base64编码，比如图片
                         _this.coverImage = {
+                            // 用于提交数据
                             file: file,
+                            // 用于页面展示
                             url: result,
                         };
                         console.log(_this.coverImage);
@@ -433,30 +472,42 @@ new Vue({
         },
         // 选择附件
         handleAffixFileChange: function (event) {
-            var _a;
             var element = event.target || event.srcElement;
+            // 获取文件对象数组
             var files = element.files;
-            window.URL = window.URL || window.webkitURL;
-            var tempArr = [];
-            var errorArr = new Set();
+            // 存储符合规定的文件
+            var tempArr = __spreadArray([], this.affixList, true);
+            // 存储所选文件中不支持的扩展名
+            var errorArr = [];
+            // 存储所选文件中超过指定大小的文件名
+            var errorArr2 = [];
             for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
                 var item = files_1[_i];
-                var filesNameList = this.affixList.length ? this.affixList.map(function (i) { return i.name; }) : [];
-                // （如果不存在文件名）禁止添加同名文件
-                if (!filesNameList.includes(item.name)) {
-                    if (!['png', 'jpg', 'jpeg', 'webp', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
-                        errorArr.add(util.getExtensionName(item.name));
-                    }
-                    else if (tempArr.length < 5) {
-                        tempArr.push({
-                            file: item,
-                            name: item.name,
-                            url: window.URL.createObjectURL(item),
-                        });
+                // 做多上传 5 个文件
+                if (tempArr.length < 5) {
+                    var filesNameList = this.affixList.length ? this.affixList.map(function (i) { return i.name; }) : [];
+                    // （如果不存在文件名）禁止添加同名文件
+                    if (!filesNameList.includes(item.name)) {
+                        console.log(item);
+                        if (!['png', 'jpg', 'jpeg', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
+                            if (!errorArr.includes(util.getExtensionName(item.name))) {
+                                errorArr.push(util.getExtensionName(item.name));
+                            }
+                        }
+                        else if (item.size > 2048 * 1024) {
+                            if (!errorArr2.includes(item.name)) {
+                                errorArr2.push(item.name);
+                            }
+                        }
+                        else if (tempArr.length < 5) {
+                            tempArr.push(item);
+                        }
                     }
                 }
             }
-            if (errorArr.size) {
+            console.log('tempArr', tempArr.length, tempArr);
+            if (tempArr.length < 5 && errorArr.length) {
+                console.log('errorArr', errorArr);
                 layer.open({
                     type: 0,
                     icon: 0,
@@ -465,10 +516,17 @@ new Vue({
                     btn: ['重新选择'],
                 });
             }
-            if (this.affixList.length > 5) {
-                tempArr.length = 5 - this.affixList.length;
+            else if (errorArr2.length) {
+                console.log('errorArr2', errorArr2);
+                layer.open({
+                    type: 0,
+                    icon: 0,
+                    title: '文件过大',
+                    content: '请选择 2M 以内的文件',
+                    btn: ['重新选择'],
+                });
             }
-            (_a = this.affixList).push.apply(_a, tempArr);
+            this.affixList = tempArr;
             element.value = '';
             console.log(__assign({}, this.affixList));
         },
@@ -591,7 +649,7 @@ new Vue({
             if (this.formData.way === 1) {
                 arr.push({ label: '请输入比赛方式补充说明', validate: !this.formData.way_memo });
             }
-            arr.push({ label: '请选择报名开始时间', validate: !this.formData.a_b_t }, { label: '请选择报名结束时间', validate: !this.formData.a_e_t }, { label: '请选择比赛开始时间', validate: !this.formData.c_b_t }, { label: '请选择比赛结束时间', validate: !this.formData.c_e_t }, { label: '请输入赛事描述', validate: !this.formData.description.trim() }, { label: '请输入赞助方', validate: !this.coverImage.sponsor }, { label: '请输入赛事客服电话', validate: !this.coverImage.service_tel }, { label: '请选择封面图', validate: !this.coverImage.url }, { label: '请选择附件', validate: !this.affixList.length }, { label: '请选择报名信息', validate: !this.formData.apply_info }, { label: '请选择联系方式', validate: !this.formData.contact_info }, { label: '请选择角色', validate: !this.formData.roles });
+            arr.push({ label: '请选择报名开始时间', validate: !this.formData.a_b_t }, { label: '请选择报名结束时间', validate: !this.formData.a_e_t }, { label: '请选择比赛开始时间', validate: !this.formData.c_b_t }, { label: '请选择比赛结束时间', validate: !this.formData.c_e_t }, { label: '请输入赛事描述', validate: !this.formData.description.trim() }, { label: '请输入赞助方', validate: !this.formData.sponsor }, { label: '请输入赛事客服电话', validate: !this.formData.service_tel }, { label: '请选择封面图', validate: !this.coverImage.url }, { label: '请选择附件', validate: !this.affixList.length }, { label: '请选择报名信息', validate: !this.formData.apply_info }, { label: '请选择联系方式', validate: !this.formData.contact_info }, { label: '请选择角色', validate: !this.formData.roles });
             if (this.feeInputShow) {
                 arr.push({ label: '请输入报名费用', validate: !this.formData.fee }, { label: '报名费用必须大于 0', validate: this.formData.fee <= 0 });
             }
@@ -612,103 +670,157 @@ new Vue({
         },
         // 下一步
         handleNextStep: function (event) {
-            // util.uploadFile({
-            //   file: this.coverImage.file,
-            //   fileName: 'cover',
-            // })
-            // if (!this._validateFormData()) return
-            // this.formData.cover_picture = 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg'
-            // this.formData.affix = 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg,https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg'
-            // if (this.teamListShow) {
-            //   this.formData.team_list = this.teamNameList
-            //     .filter((i) => i.name)
-            //     .map((i) => i.name)
-            //     .toString()
-            // }
-            // console.log('发布比赛', this.formData)
-            // request({
-            //   url: '/api/competition/push_match',
-            //   method: 'post',
-            //   data: this.formData,
-            // }).then((result) => {
-            //   console.log(result)
-            //   if (result.code === 200) {
-            //     // 发布成功
-            //     console.log('发布成功')
-            //     layer.msg(result.msg)
-            //   } else if (result.code === 201) {
-            //     // 发布次数不足，跳转购买会员页面
-            //     console.log('发布次数不足，跳转购买会员页面')
-            //     layer.msg(result.msg)
-            //   } else if (result.code === 202) {
-            //     // 错误信息
-            //     console.log('错误信息')
-            //     layer.msg(result.msg)
-            //   } else if (result.code === 203) {
-            //     // 未绑定手机号
-            //     console.log('未绑定手机号')
-            //     layer.msg(result.msg)
-            //   } else if (result.code === 205) {
-            //     // 余额不足
-            //     console.log('余额不足')
-            //     layer.msg(result.msg)
-            //   } else if (result.code === 206) {
-            //     // 未交保证金
-            //     console.log('未交保证金')
-            //     layer.msg(result.msg)
-            //     syalert.syopen('bondCont')
-            //   } else if (result.code === 207) {
-            //     // 未实名认证
-            //     console.log('未实名认证')
-            //     layer.msg(result.msg)
-            //   } else if (result.code === 208) {
-            //     // 未设置支付密码
-            //     console.log('未设置支付密码')
-            //     layer.msg(result.msg)
-            //   }
-            // })
-            //
-            //
-            //
-            // if (this.formData.team_where === 1) {
-            //   this.formData.team_list = this.teamNameList
-            //     .filter((i) => i.name)
-            //     .map((i) => i.name)
-            //     .toString()
-            // }
-            // var formData = new FormData()
-            // formData.append('file', this.coverImage.file)
-            // console.log(formData.get('file'))
-            // console.log('OSS', OSS)
-            // const client = new OSS({
-            //   // yourRegion填写Bucket所在地域。以华东1（杭州）为例，yourRegion填写为oss-cn-hangzhou。
-            //   region: 'oss-cn-beijing',
-            //   // 从STS服务获取的临时访问密钥（AccessKey ID和AccessKey Secret）。
-            //   accessKeyId: 'LTAI4GDaFivfzrgrQxzncZHT',
-            //   accessKeySecret: 'OY9GL3QKj6D78EwkdojkZY132vbLEA',
-            //   // 从STS服务获取的安全令牌（SecurityToken）。
-            //   stsToken: 'yourSecurityToken',
-            //   // 填写Bucket名称。
-            //   bucket: 'bpmf',
-            // })
-            // // client.put('test.txt', formData).then((r) => console.log(r))
+            return __awaiter(this, void 0, void 0, function () {
+                var loadingIndex, _a, affixUrlArr;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            console.log('发布比赛 未校验', this.formData);
+                            // 校验数据
+                            if (!this._validateFormData())
+                                return [2 /*return*/];
+                            loadingIndex = layer.load(1, {
+                                shade: [0.5, '#000'],
+                                time: 10 * 1000, // 如果十秒还没关闭则自动关闭
+                            });
+                            // 上传封面图
+                            _a = this.formData;
+                            return [4 /*yield*/, util
+                                    .uploadFile({
+                                    file: this.coverImage.file,
+                                    fileName: this.coverImage.file.name,
+                                })
+                                    .catch(function (error) {
+                                    console.log('上传封面图失败', error);
+                                    layer.close(loadingIndex);
+                                    layer.msg('上传封面图失败');
+                                })];
+                        case 1:
+                            // 上传封面图
+                            _a.cover_picture = _b.sent();
+                            if (!this.formData.cover_picture)
+                                return [2 /*return*/];
+                            return [4 /*yield*/, util
+                                    .uploadMultipleFile(this.affixList.map(function (item) {
+                                    console.log('affixList item', item);
+                                    return {
+                                        file: item,
+                                        fileName: item.name,
+                                    };
+                                }))
+                                    .catch(function (error) {
+                                    console.log('上传附件失败', error);
+                                    layer.close(loadingIndex);
+                                    layer.msg('上传附件失败');
+                                })];
+                        case 2:
+                            affixUrlArr = _b.sent();
+                            if (!affixUrlArr)
+                                return [2 /*return*/];
+                            this.formData.affix = affixUrlArr.toString();
+                            if (this.teamListShow) {
+                                this.formData.team_list = this.teamNameList
+                                    .filter(function (i) { return i.name; })
+                                    .map(function (i) { return i.name; })
+                                    .toString();
+                            }
+                            console.log('发布比赛 已校验', this.formData);
+                            // 发布赛事
+                            request({
+                                url: '/api/competition/push_match',
+                                method: 'post',
+                                data: this.formData,
+                            })
+                                .then(function (result) {
+                                layer.close(loadingIndex);
+                                console.log(result);
+                                if (result.code === 200) {
+                                    // 发布成功
+                                    console.log('发布成功');
+                                    var successIndex_1 = layer.open({
+                                        type: 0,
+                                        icon: 1,
+                                        closeBtn: 0,
+                                        title: false,
+                                        content: result.msg,
+                                        btn: ['确定'],
+                                        yes: function () {
+                                            console.log('点击了确定');
+                                            layer.close(successIndex_1);
+                                            // 跳转到个人中心发布赛事页面
+                                            window.location.href = "/userCont/competition/releaseCompetition.html?competition_id=".concat(result.data.competition_id);
+                                        },
+                                    });
+                                }
+                                else if (result.code === 201) {
+                                    // 发布次数不足，跳转购买会员页面
+                                    console.log('发布次数不足，跳转购买会员页面');
+                                    layer.msg(result.msg);
+                                }
+                                else if (result.code === 202) {
+                                    // 错误信息
+                                    console.log('错误信息');
+                                    layer.msg(result.msg);
+                                }
+                                else if (result.code === 203) {
+                                    // 未绑定手机号
+                                    console.log('未绑定手机号');
+                                    layer.msg(result.msg);
+                                }
+                                else if (result.code === 205) {
+                                    // 余额不足
+                                    console.log('余额不足');
+                                    layer.msg(result.msg);
+                                }
+                                else if (result.code === 206) {
+                                    // 未交保证金
+                                    console.log('未交保证金');
+                                    layer.msg(result.msg);
+                                    syalert.syopen('bondCont');
+                                }
+                                else if (result.code === 207) {
+                                    // 未实名认证
+                                    console.log('未实名认证');
+                                    layer.msg(result.msg);
+                                }
+                                else if (result.code === 208) {
+                                    // 未设置支付密码
+                                    console.log('未设置支付密码');
+                                    layer.msg(result.msg);
+                                }
+                            })
+                                .catch(function (error) {
+                                console.log(error);
+                                layer.close(loadingIndex);
+                            });
+                            return [2 /*return*/];
+                    }
+                });
+            });
         },
         // 保证金
         onBzjClick: function () {
             return __awaiter(this, void 0, void 0, function () {
-                var res, pwd, ress, ress, ress;
+                var loadingIndex, res, pwd, ress, ress, ress;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             console.log('aa');
+                            loadingIndex = layer.load(1, {
+                                shade: [0.5, '#000'],
+                                time: 10 * 1000, // 如果十秒还没关闭则自动关闭
+                            });
                             return [4 /*yield*/, request({
                                     method: 'POST',
                                     url: '/api/Deposit/refer',
                                     data: { pay_type: this.pay_type },
+                                }).catch(function (error) {
+                                    console.log('error', error);
                                 })];
                         case 1:
                             res = _a.sent();
-                            if (!(res.code == 200)) return [3 /*break*/, 8];
+                            if (!(res && res.code == 200)) return [3 /*break*/, 8];
+                            layer.close(loadingIndex);
                             if (!(this.pay_type == '1')) return [3 /*break*/, 3];
                             encrypt.setPublicKey(publiukey);
                             pwd = encrypt.encrypt(this.pwd) //需要加密的内容
@@ -758,7 +870,10 @@ new Vue({
                             _a.label = 7;
                         case 7: return [3 /*break*/, 9];
                         case 8:
-                            layer.msg(res.msg);
+                            if (res) {
+                                layer.close(loadingIndex);
+                                layer.msg(res.msg);
+                            }
                             _a.label = 9;
                         case 9: return [2 /*return*/];
                     }

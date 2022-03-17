@@ -71,7 +71,10 @@
         display: none;
       }
 
-      /*  */
+      /* 上传封面图 */
+      .publish-up-head {
+        display: flex;
+      }
       .publish-up-head .cover-image {
         width: 160px;
         height: 160px;
@@ -139,7 +142,7 @@
         <div class="content clearfix">
           <div class="head-li li1 on">
             <div class="t">1.设置赛事公告信息</div>
-            <div class="icon"></div>
+            <div class="icon" @click="handleTest"></div>
           </div>
           <div class="head-line"></div>
           <div class="head-li li2">
@@ -322,7 +325,7 @@
           <div class="publish-item clearfix">
             <div class="label">赞助方：</div>
             <div class="con">
-              <input type="text" class="input w400" placeholder="请输入赛事名称" v-model.trim="formData.sponsor" />
+              <input type="text" class="input w400" placeholder="请输入赞助方" v-model.trim="formData.sponsor" />
             </div>
           </div>
 
@@ -330,7 +333,7 @@
           <div class="publish-item clearfix">
             <div class="label">赛事客服电话：</div>
             <div class="con">
-              <input type="tel" class="input w400" placeholder="请输入赛事名称" v-model.trim="formData.service_tel" />
+              <input type="tel" class="input w400" placeholder="请输入赛事客服电话" v-model.trim="formData.service_tel" />
             </div>
           </div>
 
@@ -344,18 +347,6 @@
                   <img src="/images/pub21.png" v-if="!this.coverImage.url" />
                   <img class="cover-image" :src="this.coverImage.url" v-else />
                 </div>
-                <!-- <div>
-                  <input id="cover" type="file" accept=".png,.jpg,.jpeg,.webp" hidden />
-                  <label id="uploadCover" for="cover">
-                    <img src="/images/pub21.png" v-if="!this.coverImage.url" />
-                    <img :src="this.coverImage.url" v-else />
-                  </label>
-                </div> -->
-                <!-- <div>
-                  <div class="preview">
-                    <img src="/images/pub21.png" class="img-responsive" alt="" title="" />
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>

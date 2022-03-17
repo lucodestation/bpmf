@@ -8,7 +8,7 @@ util.getExtensionName = (fileName) => {
     // console.log('文件名有误')
     return
   } else {
-    // console.log('返回扩展名', arr[arr.length - 1])
+    console.log('返回扩展名', arr[arr.length - 1])
     return arr[arr.length - 1]
   }
 }
@@ -44,7 +44,7 @@ util.uploadFile = (option) => {
       secure: true,
     })
 
-    const fileName = new Date().valueOf() + '-' + option.fileName + '.' + util.getExtensionName(option.file.name)
+    const fileName = new Date().valueOf() + '-' + option.fileName
     console.log(fileName)
 
     client
@@ -92,10 +92,10 @@ util.uploadMultipleFile = async (option) => {
 
   const arr = option.map((item) => {
     return new Promise(async (resolve, reject) => {
-      const fileName = new Date().valueOf() + '-' + item.fileName + '.' + util.getExtensionName(item.file.name)
+      const fileName = new Date().valueOf() + '-' + item.fileName
 
       client
-        .put('images/' + fileName, option.file)
+        .put('images/' + fileName, item.file)
         .then(() => {
           let url = `https://bpmf.oss-cn-beijing.aliyuncs.com/images/${fileName}`
           resolve(url)
@@ -107,7 +107,7 @@ util.uploadMultipleFile = async (option) => {
     })
   })
 
-  const result = await Premise.all(arr)
+  const result = await Promise.all(arr)
   console.log(result)
   return result
 }

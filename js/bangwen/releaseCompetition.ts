@@ -105,6 +105,11 @@ new Vue({
     this.initCoverImageFileChange()
   },
   methods: {
+    // 测试
+    handleTest() {
+      console.log('测试')
+    },
+
     // 选择赛事分类-赛事种类（单选框）
     handleSelectCompetitionType(event) {
       const target = event.target || event.srcElement
@@ -159,7 +164,7 @@ new Vue({
           if (!dateValue) {
             // 点击了清空
             console.log('点击了清空', dateValue)
-          } else if (new Date(dateValue) <= new Date()) {
+          } else if (new Date(dateValue.replace(/-/g, '/')) <= new Date()) {
             // 选择的时间小于当前时间（可能没有选择“时间”直接点击的确定）
             console.log('选择的时间小于当前时间')
             layer.msg('选择的时间不能小于当前时间', { icon: 0, time: 3000 })
@@ -170,9 +175,33 @@ new Vue({
             dateValue = ''
           }
 
-          console.log('报名开始时间', dateValue)
+          console.log('报名开始时间', typeof dateValue, dateValue)
+          // 设置报名开始时间（页面显示用）
           this.signUpStartDate = dateValue
-          this.formData.a_b_t = dateValue ? new Date(dateValue).valueOf() : ''
+          // 设置报名开始时间（提交数据用）
+          this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+
+          // 如果报名结束时间存在且比报名开始时间小（或相等）
+          if (this.signUpEndDate && this.signUpEndDate <= this.signUpStartDate) {
+            // 如果比赛开始时间存在且比 报名结束时间或报名开始时间小（或相等）
+            if (this.competitionStartDate && (this.competitionStartDate <= this.signUpEndDate || this.competitionStartDate <= this.signUpStartDate)) {
+              // 如果比赛结束时间存在且比 比赛开始时间或报名结束时间或报名开始时间小（或相等）
+              if (
+                this.competitionEndDate &&
+                (this.competitionEndDate <= this.competitionStartDate || this.competitionEndDate <= this.signUpEndDate || this.competitionEndDate <= this.signUpStartDate)
+              ) {
+                // 清空比赛结束时间
+                this.competitionEndDate = ''
+                this.formData.c_e_t = ''
+              }
+              // 清空比赛开始时间
+              this.competitionStartDate = ''
+              this.formData.c_b_t = ''
+            }
+            // 清空报名结束时间
+            this.signUpEndDate = ''
+            this.formData.a_e_t = ''
+          }
         },
       })
     },
@@ -207,7 +236,7 @@ new Vue({
               btn: [],
             })
             dateValue = ''
-          } else if (new Date(dateValue) <= new Date(this.signUpStartDate)) {
+          } else if (new Date(dateValue.replace(/-/g, '/')) <= new Date(this.signUpStartDate.replace(/-/g, '/'))) {
             // 如果报名结束时间小于报名开始时间
             layer.open({
               type: 0,
@@ -217,7 +246,7 @@ new Vue({
               btn: ['重新选择'],
             })
             dateValue = ''
-          } else if (new Date(dateValue) <= new Date()) {
+          } else if (new Date(dateValue.replace(/-/g, '/')) <= new Date()) {
             // 选择的时间小于当前时间（可能没有选择“时间”直接点击的确定）
             console.log('选择的时间小于当前时间')
             layer.msg('选择的时间不能小于当前时间', { icon: 0, time: 3000 })
@@ -230,7 +259,16 @@ new Vue({
 
           console.log('报名结束时间', dateValue)
           this.signUpEndDate = dateValue
-          this.formData.a_e_t = dateValue ? new Date(dateValue).valueOf() : ''
+          this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+
+          if (this.competitionStartDate && this.competitionStartDate <= this.signUpEndDate) {
+            if (this.competitionEndDate && (this.competitionEndDate <= this.competitionStartDate || this.competitionEndDate <= this.signUpEndDate)) {
+              this.competitionEndDate = ''
+              this.formData.c_e_t = ''
+            }
+            this.competitionStartDate = ''
+            this.formData.c_b_t = ''
+          }
         },
       })
     },
@@ -264,7 +302,7 @@ new Vue({
               btn: [],
             })
             dateValue = ''
-          } else if (new Date(dateValue) <= new Date(this.signUpEndDate)) {
+          } else if (new Date(dateValue.replace(/-/g, '/')) <= new Date(this.signUpEndDate.replace(/-/g, '/'))) {
             // 如果比赛开始时间小于报名结束时间
             layer.open({
               type: 0,
@@ -274,7 +312,7 @@ new Vue({
               btn: ['重新选择'],
             })
             dateValue = ''
-          } else if (new Date(dateValue) <= new Date()) {
+          } else if (new Date(dateValue.replace(/-/g, '/')) <= new Date()) {
             // 选择的时间小于当前时间（可能没有选择“时间”直接点击的确定）
             console.log('选择的时间小于当前时间')
             layer.msg('选择的时间不能小于当前时间', { icon: 0, time: 3000 })
@@ -287,7 +325,12 @@ new Vue({
 
           console.log('比赛开始时间', dateValue)
           this.competitionStartDate = dateValue
-          this.formData.c_b_t = dateValue ? new Date(dateValue).valueOf() : ''
+          this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+
+          if (this.competitionEndDate && this.competitionEndDate <= this.competitionStartDate) {
+            this.competitionEndDate = ''
+            this.formData.c_e_t = ''
+          }
         },
       })
     },
@@ -321,7 +364,7 @@ new Vue({
               btn: [],
             })
             dateValue = ''
-          } else if (new Date(dateValue) <= new Date(this.competitionStartDate)) {
+          } else if (new Date(dateValue.replace(/-/g, '/')) <= new Date(this.competitionStartDate.replace(/-/g, '/'))) {
             // 如果比赛开始时间小于报名结束时间
             layer.open({
               type: 0,
@@ -331,7 +374,7 @@ new Vue({
               btn: ['重新选择'],
             })
             dateValue = ''
-          } else if (new Date(dateValue) <= new Date()) {
+          } else if (new Date(dateValue.replace(/-/g, '/')) <= new Date()) {
             // 选择的时间小于当前时间（可能没有选择“时间”直接点击的确定）
             console.log('选择的时间小于当前时间')
             layer.msg('选择的时间不能小于当前时间', { icon: 0, time: 3000 })
@@ -344,7 +387,7 @@ new Vue({
 
           console.log('比赛结束时间', dateValue)
           this.competitionEndDate = dateValue
-          this.formData.c_e_t = dateValue ? new Date(dateValue).valueOf() : ''
+          this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
         },
       })
     },
@@ -354,9 +397,9 @@ new Vue({
       layui.upload.render({
         elem: '#uploadCover', //绑定元素
         auto: false, // 是否选完文件后自动上传，默认 true
-        // accept: 'image', // 指定允许上传时校验的文件类型
-        // acceptMime: '.jpg,.png,.bmp,.jpeg,.webp', // 规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
-        // exts: 'jpg|png|bmp|jpeg|webp', // 允许上传的文件后缀。一般结合 accept 参数类设定。
+        accept: 'images', // 指定允许上传时校验的文件类型
+        acceptMime: '.jpg,.png,.bmp,.jpeg', // 规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
+        exts: 'jpg|png|bmp|jpeg', // 允许上传的文件后缀。一般结合 accept 参数类设定。
         size: 0, // 设置文件最大可允许上传的大小，单位 KB，0 表示不限制
         multiple: false, // 是否允许多文件上传, 默认 false
         // 选择文件回调
@@ -369,7 +412,9 @@ new Vue({
             // console.log(result) //得到文件base64编码，比如图片
 
             this.coverImage = {
+              // 用于提交数据
               file,
+              // 用于页面展示
               url: result,
             }
             console.log(this.coverImage)
@@ -380,27 +425,41 @@ new Vue({
     // 选择附件
     handleAffixFileChange(event) {
       const element = event.target || event.srcElement
+      // 获取文件对象数组
       const files = element.files
 
-      window.URL = window.URL || window.webkitURL
-      const tempArr = []
-      const errorArr = new Set()
+      // 存储符合规定的文件
+      const tempArr = [...this.affixList]
+      // 存储所选文件中不支持的扩展名
+      const errorArr = []
+      // 存储所选文件中超过指定大小的文件名
+      const errorArr2 = []
       for (const item of files) {
-        const filesNameList = this.affixList.length ? this.affixList.map((i) => i.name) : []
-        // （如果不存在文件名）禁止添加同名文件
-        if (!filesNameList.includes(item.name)) {
-          if (!['png', 'jpg', 'jpeg', 'webp', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
-            errorArr.add(util.getExtensionName(item.name))
-          } else if (tempArr.length < 5) {
-            tempArr.push({
-              file: item,
-              name: item.name,
-              url: window.URL.createObjectURL(item),
-            })
+        // 做多上传 5 个文件
+        if (tempArr.length < 5) {
+          const filesNameList = this.affixList.length ? this.affixList.map((i) => i.name) : []
+          // （如果不存在文件名）禁止添加同名文件
+          if (!filesNameList.includes(item.name)) {
+            console.log(item)
+            if (!['png', 'jpg', 'jpeg', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
+              if (!errorArr.includes(util.getExtensionName(item.name))) {
+                errorArr.push(util.getExtensionName(item.name))
+              }
+            } else if (item.size > 2048 * 1024) {
+              if (!errorArr2.includes(item.name)) {
+                errorArr2.push(item.name)
+              }
+            } else if (tempArr.length < 5) {
+              tempArr.push(item)
+            }
           }
         }
       }
-      if (errorArr.size) {
+
+      console.log('tempArr', tempArr.length, tempArr)
+
+      if (tempArr.length < 5 && errorArr.length) {
+        console.log('errorArr', errorArr)
         layer.open({
           type: 0,
           icon: 0, // 0 警告，1 成功，2 错误，3 问号，4 锁，5 🙁，6 笑脸
@@ -408,12 +467,18 @@ new Vue({
           content: '您选择的 ' + [...errorArr] + ' 类型的文件不受支持',
           btn: ['重新选择'],
         })
+      } else if (errorArr2.length) {
+        console.log('errorArr2', errorArr2)
+        layer.open({
+          type: 0,
+          icon: 0, // 0 警告，1 成功，2 错误，3 问号，4 锁，5 🙁，6 笑脸
+          title: '文件过大',
+          content: '请选择 2M 以内的文件',
+          btn: ['重新选择'],
+        })
       }
 
-      if (this.affixList.length > 5) {
-        tempArr.length = 5 - this.affixList.length
-      }
-      this.affixList.push(...tempArr)
+      this.affixList = tempArr
       element.value = ''
       console.log({ ...this.affixList })
     },
@@ -542,8 +607,8 @@ new Vue({
         { label: '请选择比赛开始时间', validate: !this.formData.c_b_t },
         { label: '请选择比赛结束时间', validate: !this.formData.c_e_t },
         { label: '请输入赛事描述', validate: !this.formData.description.trim() },
-        { label: '请输入赞助方', validate: !this.coverImage.sponsor },
-        { label: '请输入赛事客服电话', validate: !this.coverImage.service_tel },
+        { label: '请输入赞助方', validate: !this.formData.sponsor },
+        { label: '请输入赛事客服电话', validate: !this.formData.service_tel },
         { label: '请选择封面图', validate: !this.coverImage.url },
         { label: '请选择附件', validate: !this.affixList.length },
         { label: '请选择报名信息', validate: !this.formData.apply_info },
@@ -575,98 +640,140 @@ new Vue({
       }
     },
     // 下一步
-    handleNextStep(event) {
-      // util.uploadFile({
-      //   file: this.coverImage.file,
-      //   fileName: 'cover',
-      // })
-      // if (!this._validateFormData()) return
-      // this.formData.cover_picture = 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg'
-      // this.formData.affix = 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg,https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg'
-      // if (this.teamListShow) {
-      //   this.formData.team_list = this.teamNameList
-      //     .filter((i) => i.name)
-      //     .map((i) => i.name)
-      //     .toString()
-      // }
-      // console.log('发布比赛', this.formData)
-      // request({
-      //   url: '/api/competition/push_match',
-      //   method: 'post',
-      //   data: this.formData,
-      // }).then((result) => {
-      //   console.log(result)
-      //   if (result.code === 200) {
-      //     // 发布成功
-      //     console.log('发布成功')
-      //     layer.msg(result.msg)
-      //   } else if (result.code === 201) {
-      //     // 发布次数不足，跳转购买会员页面
-      //     console.log('发布次数不足，跳转购买会员页面')
-      //     layer.msg(result.msg)
-      //   } else if (result.code === 202) {
-      //     // 错误信息
-      //     console.log('错误信息')
-      //     layer.msg(result.msg)
-      //   } else if (result.code === 203) {
-      //     // 未绑定手机号
-      //     console.log('未绑定手机号')
-      //     layer.msg(result.msg)
-      //   } else if (result.code === 205) {
-      //     // 余额不足
-      //     console.log('余额不足')
-      //     layer.msg(result.msg)
-      //   } else if (result.code === 206) {
-      //     // 未交保证金
-      //     console.log('未交保证金')
-      //     layer.msg(result.msg)
-      //     syalert.syopen('bondCont')
-      //   } else if (result.code === 207) {
-      //     // 未实名认证
-      //     console.log('未实名认证')
-      //     layer.msg(result.msg)
-      //   } else if (result.code === 208) {
-      //     // 未设置支付密码
-      //     console.log('未设置支付密码')
-      //     layer.msg(result.msg)
-      //   }
-      // })
-      //
-      //
-      //
-      // if (this.formData.team_where === 1) {
-      //   this.formData.team_list = this.teamNameList
-      //     .filter((i) => i.name)
-      //     .map((i) => i.name)
-      //     .toString()
-      // }
-      // var formData = new FormData()
-      // formData.append('file', this.coverImage.file)
-      // console.log(formData.get('file'))
-      // console.log('OSS', OSS)
-      // const client = new OSS({
-      //   // yourRegion填写Bucket所在地域。以华东1（杭州）为例，yourRegion填写为oss-cn-hangzhou。
-      //   region: 'oss-cn-beijing',
-      //   // 从STS服务获取的临时访问密钥（AccessKey ID和AccessKey Secret）。
-      //   accessKeyId: 'LTAI4GDaFivfzrgrQxzncZHT',
-      //   accessKeySecret: 'OY9GL3QKj6D78EwkdojkZY132vbLEA',
-      //   // 从STS服务获取的安全令牌（SecurityToken）。
-      //   stsToken: 'yourSecurityToken',
-      //   // 填写Bucket名称。
-      //   bucket: 'bpmf',
-      // })
-      // // client.put('test.txt', formData).then((r) => console.log(r))
+    async handleNextStep(event) {
+      console.log('发布比赛 未校验', this.formData)
+
+      // 校验数据
+      if (!this._validateFormData()) return
+
+      // 加载中
+      const loadingIndex = layer.load(1, {
+        shade: [0.5, '#000'], // 0.1透明度的白色背景
+        time: 10 * 1000, // 如果十秒还没关闭则自动关闭
+      })
+
+      // 上传封面图
+      this.formData.cover_picture = await util
+        .uploadFile({
+          file: this.coverImage.file,
+          fileName: this.coverImage.file.name,
+        })
+        .catch((error) => {
+          console.log('上传封面图失败', error)
+          layer.close(loadingIndex)
+          layer.msg('上传封面图失败')
+        })
+      if (!this.formData.cover_picture) return
+
+      // 上传附件
+      const affixUrlArr = await util
+        .uploadMultipleFile(
+          this.affixList.map((item) => {
+            console.log('affixList item', item)
+            return {
+              file: item,
+              fileName: item.name,
+            }
+          })
+        )
+        .catch((error) => {
+          console.log('上传附件失败', error)
+          layer.close(loadingIndex)
+          layer.msg('上传附件失败')
+        })
+      if (!affixUrlArr) return
+      this.formData.affix = affixUrlArr.toString()
+
+      if (this.teamListShow) {
+        this.formData.team_list = this.teamNameList
+          .filter((i) => i.name)
+          .map((i) => i.name)
+          .toString()
+      }
+      console.log('发布比赛 已校验', this.formData)
+
+      // 发布赛事
+      request({
+        url: '/api/competition/push_match',
+        method: 'post',
+        data: this.formData,
+      })
+        .then((result) => {
+          layer.close(loadingIndex)
+          console.log(result)
+          if (result.code === 200) {
+            // 发布成功
+            console.log('发布成功')
+
+            const successIndex = layer.open({
+              type: 0,
+              icon: 1, // 0 警告，1 成功，2 错误，3 问号，4 锁，5 🙁，6 笑脸
+              closeBtn: 0, // 不显示关闭按钮
+              title: false,
+              content: result.msg,
+              btn: ['确定'],
+              yes() {
+                console.log('点击了确定')
+                layer.close(successIndex)
+                // 跳转到个人中心发布赛事页面
+                window.location.href = `/userCont/competition/releaseCompetition.html?competition_id=${result.data.competition_id}`
+              },
+            })
+          } else if (result.code === 201) {
+            // 发布次数不足，跳转购买会员页面
+            console.log('发布次数不足，跳转购买会员页面')
+            layer.msg(result.msg)
+          } else if (result.code === 202) {
+            // 错误信息
+            console.log('错误信息')
+            layer.msg(result.msg)
+          } else if (result.code === 203) {
+            // 未绑定手机号
+            console.log('未绑定手机号')
+            layer.msg(result.msg)
+          } else if (result.code === 205) {
+            // 余额不足
+            console.log('余额不足')
+            layer.msg(result.msg)
+          } else if (result.code === 206) {
+            // 未交保证金
+            console.log('未交保证金')
+            layer.msg(result.msg)
+            syalert.syopen('bondCont')
+          } else if (result.code === 207) {
+            // 未实名认证
+            console.log('未实名认证')
+            layer.msg(result.msg)
+          } else if (result.code === 208) {
+            // 未设置支付密码
+            console.log('未设置支付密码')
+            layer.msg(result.msg)
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          layer.close(loadingIndex)
+        })
     },
 
     // 保证金
     async onBzjClick() {
       console.log('aa')
+
+      // 加载中
+      const loadingIndex = layer.load(1, {
+        shade: [0.5, '#000'], // 0.1透明度的白色背景
+        time: 10 * 1000, // 如果十秒还没关闭则自动关闭
+      })
       const res = await request({
         method: 'POST',
         url: '/api/Deposit/refer',
         data: { pay_type: this.pay_type },
+      }).catch((error) => {
+        console.log('error', error)
       })
-      if (res.code == 200) {
+      if (res && res.code == 200) {
+        layer.close(loadingIndex)
         // this.cateList = res.data
         // this.formData.b_id = res.data[0].id;
         if (this.pay_type == '1') {
@@ -707,7 +814,8 @@ new Vue({
             syalert.syhide('bondCont')
           }
         }
-      } else {
+      } else if (res) {
+        layer.close(loadingIndex)
         layer.msg(res.msg)
       }
     },

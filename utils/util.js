@@ -45,7 +45,7 @@ util.getExtensionName = function (fileName) {
         return;
     }
     else {
-        // console.log('返回扩展名', arr[arr.length - 1])
+        console.log('返回扩展名', arr[arr.length - 1]);
         return arr[arr.length - 1];
     }
 };
@@ -83,7 +83,7 @@ util.uploadFile = function (option) {
                         bucket: 'bpmf',
                         secure: true,
                     });
-                    fileName = new Date().valueOf() + '-' + option.fileName + '.' + util.getExtensionName(option.file.name);
+                    fileName = new Date().valueOf() + '-' + option.fileName;
                     console.log(fileName);
                     client
                         .put('images/' + fileName, option.file)
@@ -137,9 +137,9 @@ util.uploadMultipleFile = function (option) { return __awaiter(void 0, void 0, v
                     return new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
                         var fileName;
                         return __generator(this, function (_a) {
-                            fileName = new Date().valueOf() + '-' + item.fileName + '.' + util.getExtensionName(item.file.name);
+                            fileName = new Date().valueOf() + '-' + item.fileName;
                             client
-                                .put('images/' + fileName, option.file)
+                                .put('images/' + fileName, item.file)
                                 .then(function () {
                                 var url = "https://bpmf.oss-cn-beijing.aliyuncs.com/images/".concat(fileName);
                                 resolve(url);
@@ -152,7 +152,7 @@ util.uploadMultipleFile = function (option) { return __awaiter(void 0, void 0, v
                         });
                     }); });
                 });
-                return [4 /*yield*/, Premise.all(arr)];
+                return [4 /*yield*/, Promise.all(arr)];
             case 2:
                 result = _a.sent();
                 console.log(result);
