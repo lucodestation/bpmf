@@ -40,12 +40,6 @@ $(function () {
     $('.public-footer').load('/components/PublicFooter.html');
     $('.public-user').load('/components/CenterAside.html');
 });
-jeDate("#dateS", {
-    format: "MM-DD-YYYY"
-});
-jeDate("#dateE", {
-    format: "MM-DD-YYYY"
-});
 new Vue({
     el: '#app',
     data: function () {
@@ -54,6 +48,9 @@ new Vue({
             type: 1,
             navList: [{ id: '', title: '全部榜文' }, { id: '1', title: '待审核' }, { id: '2', title: '应榜中' }, { id: '3', title: '应榜结束' }, { id: '4', title: '工作中' }, { id: '5', title: '任务结束' }, { id: '6', title: '未通过' }],
             navId: '',
+            b_id: '',
+            start_time: '',
+            end_time: '',
             cateList: [],
             noticeList: [], // 列表
         };
@@ -72,16 +69,39 @@ new Vue({
                         ress = _a.sent();
                         if (ress.code == 200) {
                             this.cateList = ress.data;
+                            this.cateList.unshift({ id: '', name: '分类' });
                         }
                         setTimeout(function () {
                             _this.onpushList();
                         }, 500);
+                        // 起始时间
+                        layui.laydate.render({
+                            elem: '#signUpStartDate',
+                            theme: '#FF7F17',
+                            btns: ['clear', 'confirm'],
+                            done: function (value, date) {
+                                _this.start_time = value;
+                            },
+                        });
+                        // 结束时间
+                        layui.laydate.render({
+                            elem: '#signUpEndDate',
+                            theme: '#FF7F17',
+                            btns: ['clear', 'confirm'],
+                            done: function (value, date) {
+                                _this.end_time = value;
+                            },
+                        });
                         return [2 /*return*/];
                 }
             });
         });
     },
     methods: {
+        // 查询
+        onqueryClick: function () {
+            this.onpushList();
+        },
         // 列表数据
         onpushList: function () {
             return __awaiter(this, void 0, void 0, function () {
@@ -92,7 +112,7 @@ new Vue({
                         case 0: return [4 /*yield*/, request({
                                 method: 'POST',
                                 url: '/api/Bangwenpush/pushList',
-                                data: { type: this.type, status: this.navId, start_time: '', end_time: '', page: 1, pagenum: 10 }
+                                data: { type: this.type, status: this.navId, b_id: this.b_id, start_time: this.start_time, end_time: this.end_time, page: 1, pagenum: 10 }
                             })];
                         case 1:
                             res = _a.sent();
