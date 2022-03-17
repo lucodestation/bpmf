@@ -583,7 +583,7 @@ const competitionAnnouncement = {
       //   file: this.coverImage.file,
       //   fileName: 'cover',
       // })
-      if (!this._validateFormData()) return
+      // if (!this._validateFormData()) return
       // this.formData.cover_picture = 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg'
       // this.formData.affix = 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg,https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg'
       // if (this.teamListShow) {

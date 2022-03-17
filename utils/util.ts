@@ -25,7 +25,10 @@ util.uploadFile = (option) => {
     // 获取阿里云sts_token
     const OSSInfo = await request({
       url: '/api/common/sts_token',
+    }).catch((error) => {
+      reject(error)
     })
+    if (!OSSInfo) return
     console.log('OSSInfo', OSSInfo)
 
     const client = new OSS({
@@ -38,16 +41,22 @@ util.uploadFile = (option) => {
       stsToken: OSSInfo.data.SecurityToken,
       // 填写Bucket名称。
       bucket: 'bpmf',
+      secure: true,
     })
 
     const fileName = new Date().valueOf() + '-' + option.fileName + '.' + util.getExtensionName(option.file.name)
+    console.log(fileName)
 
-    const result = await client.put(fileName, option.file).catch((error) => {
-      console.log('上传失败', error)
-      reject(error)
-    })
-    console.log(result)
-    resolve(result)
+    client
+      .put('images/' + fileName, option.file)
+      .then(() => {
+        let url = `https://bpmf.oss-cn-beijing.aliyuncs.com/images/${fileName}`
+        resolve(url)
+      })
+      .catch((error) => {
+        console.log('上传失败', error)
+        reject(error)
+      })
   })
 }
 
@@ -63,7 +72,10 @@ util.uploadMultipleFile = async (option) => {
   // 获取阿里云sts_token
   const OSSInfo = await request({
     url: '/api/common/sts_token',
+  }).catch((error) => {
+    reject(error)
   })
+  if (!OSSInfo) return
   console.log('OSSInfo', OSSInfo)
 
   const client = new OSS({
@@ -82,12 +94,16 @@ util.uploadMultipleFile = async (option) => {
     return new Promise(async (resolve, reject) => {
       const fileName = new Date().valueOf() + '-' + item.fileName + '.' + util.getExtensionName(item.file.name)
 
-      const result = await client.put(fileName, item.file).catch((error) => {
-        console.log('上传失败', error)
-        reject(error)
-      })
-      console.log(result)
-      resolve(result)
+      client
+        .put('images/' + fileName, option.file)
+        .then(() => {
+          let url = `https://bpmf.oss-cn-beijing.aliyuncs.com/images/${fileName}`
+          resolve(url)
+        })
+        .catch((error) => {
+          console.log('上传失败', error)
+          reject(error)
+        })
     })
   })
 
