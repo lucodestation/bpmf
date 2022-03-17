@@ -409,9 +409,9 @@ new Vue({
             layui.upload.render({
                 elem: '#uploadCover',
                 auto: false,
-                accept: 'image',
-                acceptMime: '.jpg,.png,.bmp,.jpeg,.webp',
-                exts: 'jpg|png|bmp|jpeg|webp',
+                // accept: 'image', // 指定允许上传时校验的文件类型
+                // acceptMime: '.jpg,.png,.bmp,.jpeg,.webp', // 规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
+                // exts: 'jpg|png|bmp|jpeg|webp', // 允许上传的文件后缀。一般结合 accept 参数类设定。
                 size: 0,
                 multiple: false,
                 // 选择文件回调
@@ -616,8 +616,7 @@ new Vue({
             //   file: this.coverImage.file,
             //   fileName: 'cover',
             // })
-            if (!this._validateFormData())
-                return;
+            // if (!this._validateFormData()) return
             // this.formData.cover_picture = 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg'
             // this.formData.affix = 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg,https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg'
             // if (this.teamListShow) {

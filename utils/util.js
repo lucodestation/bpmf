@@ -58,14 +58,18 @@ util.getExtensionName = function (fileName) {
  */
 util.uploadFile = function (option) {
     return new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
-        var OSSInfo, client, fileName, result;
+        var OSSInfo, client, fileName;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, request({
                         url: '/api/common/sts_token',
+                    }).catch(function (error) {
+                        reject(error);
                     })];
                 case 1:
                     OSSInfo = _a.sent();
+                    if (!OSSInfo)
+                        return [2 /*return*/];
                     console.log('OSSInfo', OSSInfo);
                     client = new OSS({
                         // yourRegion填写Bucket所在地域。以华东1（杭州）为例，yourRegion填写为oss-cn-hangzhou。
@@ -77,16 +81,20 @@ util.uploadFile = function (option) {
                         stsToken: OSSInfo.data.SecurityToken,
                         // 填写Bucket名称。
                         bucket: 'bpmf',
+                        secure: true,
                     });
                     fileName = new Date().valueOf() + '-' + option.fileName + '.' + util.getExtensionName(option.file.name);
-                    return [4 /*yield*/, client.put(fileName, option.file).catch(function (error) {
-                            console.log('上传失败', error);
-                            reject(error);
-                        })];
-                case 2:
-                    result = _a.sent();
-                    console.log(result);
-                    resolve(result);
+                    console.log(fileName);
+                    client
+                        .put('images/' + fileName, option.file)
+                        .then(function () {
+                        var url = "https://bpmf.oss-cn-beijing.aliyuncs.com/images/".concat(fileName);
+                        resolve(url);
+                    })
+                        .catch(function (error) {
+                        console.log('上传失败', error);
+                        reject(error);
+                    });
                     return [2 /*return*/];
             }
         });
@@ -106,9 +114,13 @@ util.uploadMultipleFile = function (option) { return __awaiter(void 0, void 0, v
         switch (_a.label) {
             case 0: return [4 /*yield*/, request({
                     url: '/api/common/sts_token',
+                }).catch(function (error) {
+                    reject(error);
                 })];
             case 1:
                 OSSInfo = _a.sent();
+                if (!OSSInfo)
+                    return [2 /*return*/];
                 console.log('OSSInfo', OSSInfo);
                 client = new OSS({
                     // yourRegion填写Bucket所在地域。以华东1（杭州）为例，yourRegion填写为oss-cn-hangzhou。
@@ -123,21 +135,20 @@ util.uploadMultipleFile = function (option) { return __awaiter(void 0, void 0, v
                 });
                 arr = option.map(function (item) {
                     return new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
-                        var fileName, result;
+                        var fileName;
                         return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    fileName = new Date().valueOf() + '-' + item.fileName + '.' + util.getExtensionName(item.file.name);
-                                    return [4 /*yield*/, client.put(fileName, item.file).catch(function (error) {
-                                            console.log('上传失败', error);
-                                            reject(error);
-                                        })];
-                                case 1:
-                                    result = _a.sent();
-                                    console.log(result);
-                                    resolve(result);
-                                    return [2 /*return*/];
-                            }
+                            fileName = new Date().valueOf() + '-' + item.fileName + '.' + util.getExtensionName(item.file.name);
+                            client
+                                .put('images/' + fileName, option.file)
+                                .then(function () {
+                                var url = "https://bpmf.oss-cn-beijing.aliyuncs.com/images/".concat(fileName);
+                                resolve(url);
+                            })
+                                .catch(function (error) {
+                                console.log('上传失败', error);
+                                reject(error);
+                            });
+                            return [2 /*return*/];
                         });
                     }); });
                 });
