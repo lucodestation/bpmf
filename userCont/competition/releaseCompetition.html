@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<!-- 发布比赛 -->
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>发布比赛 - 玻坡摸佛</title>
+    <title>发布赛事 - 玻坡摸佛</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
     <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
@@ -26,6 +25,7 @@
 
     <script src="/utils/request.js"></script>
     <script src="/utils/util.js"></script>
+
     <style>
       /* 临时 */
       .temp-pre {
@@ -103,59 +103,74 @@
       }
     </style>
   </head>
-
   <body>
     <!-- 公共头部 -->
     <header class="public-header"></header>
 
-    <!-- 公共容器/页面主要内容 -->
-    <div id="app" class="publish-container">
-      <!-- 临时 -->
-      <pre class="temp-pre layui-code">
-        <div>{{signUpStartDate}}</div>
-        <div>{{signUpEndDate}}</div>
-        <div>{{competitionStartDate}}</div>
-        <div>{{competitionEndDate}}</div>
-        <!-- 表单数据 -->
-        <div>{{formData}}</div>
-        <!-- 封面图 -->
-        <div>{{coverImage}}</div>
-        <!-- 附件列表 -->
-        <div>{{affixList}}</div>
-        <!-- 团队名称列表 -->
-        <div>{{teamNameList}}</div>
-      </pre>
-      <!-- <pre class="temp-pre">{{competitionCateList}}</pre> -->
-      <!-- 面包屑导航 -->
-      <div class="inner-position w-1200">
-        <a href="/">首页</a>
-        <!-- <span> < </span> -->
-        <span> &lt; </span>
-        <span class="current">发布比赛</span>
-      </div>
+    <!--center-container start-->
+    <div class="center-container">
+      <!--main-center start-->
+      <div class="main-center w-1200 clearfix">
+        <aside class="public-user"></aside>
 
-      <!-- 发布赛事步骤 -->
-      <div class="publish-head w-1200">
-        <div class="content clearfix">
-          <div class="head-li li1 on">
-            <div class="t">1.设置赛事公告信息</div>
-            <div class="icon"></div>
-          </div>
-          <div class="head-line"></div>
-          <div class="head-li li2">
-            <div class="t">2.设置赛事比赛方法</div>
-            <div class="icon"></div>
-          </div>
-          <div class="head-line"></div>
-          <div class="head-li li3">
-            <div class="t">3.设置赛事奖励</div>
-            <div class="icon"></div>
+        <!--center-content start-->
+        <div class="center-content fr" id="app">
+          <!--center-inner start-->
+
+          <!-- 赛事公告 -->
+          <competition-announcement></competition-announcement>
+
+          <!--center-inner end-->
+        </div>
+        <!--center-content end-->
+      </div>
+      <!--main-center end-->
+    </div>
+    <!--center-container end-->
+
+    <!-- 公共底部 -->
+    <footer class="public-footer"></footer>
+
+    <!-- 设置赛事公告信息 -->
+    <script type="text/x-template" id="competitionAnnouncement">
+      <div class="center-inner">
+        <!-- 临时 -->
+        <pre class="temp-pre layui-code">
+          <div>{{signUpStartDate}}</div>
+          <div>{{signUpEndDate}}</div>
+          <div>{{competitionStartDate}}</div>
+          <div>{{competitionEndDate}}</div>
+          <!-- 表单数据 -->
+          <div>{{formData}}</div>
+          <!-- 封面图 -->
+          <div>{{coverImage}}</div>
+          <!-- 附件列表 -->
+          <div>{{affixList}}</div>
+          <!-- 团队名称列表 -->
+          <div>{{teamNameList}}</div>
+        </pre>
+
+        <div class="center-inner-tit">发布赛事</div>
+        <!--publish-head start-->
+        <div class="publish-head">
+          <div class="content clearfix flex flex-center">
+            <div class="head-li li1 w150 on">
+              <div class="t">1.设置赛事公告信息</div>
+              <div class="icon"></div>
+            </div>
+            <div class="head-line"></div>
+            <div class="head-li w150 li2">
+              <div class="t">2.设置赛事比赛方法</div>
+              <div class="icon"></div>
+            </div>
+            <div class="head-line"></div>
+            <div class="head-li w150 li3">
+              <div class="t">3.设置赛事奖励</div>
+              <div class="icon"></div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="publish-main w-1200">
-        <h1 class="publish-tit">发布比赛</h1>
+        <!--publish-head end-->
         <!-- 主要内容 -->
         <div class="publish-content">
           <div class="item-tit">赛事分类</div>
@@ -273,14 +288,14 @@
             <div class="label">报名起止时间：</div>
             <div class="con">
               <div class="bor clearfix">
-                <div id="signUpStartDate" class="date-time-picker input w400 fl">
+                <div id="signUpStartDate" class="date-time-picker input w280 fl">
                   <span class="date-time" v-if="signUpStartDate">{{signUpStartDate}}</span>
                   <span v-else>{{'开始时间'}}</span>
                 </div>
 
                 <span class="date-mid fl">至</span>
 
-                <div id="signUpEndDate" class="date-time-picker input w400 fl">
+                <div id="signUpEndDate" class="date-time-picker input w280 fl">
                   <span class="date-time" v-if="signUpEndDate">{{signUpEndDate}}</span>
                   <span v-else>{{'结束时间'}}</span>
                 </div>
@@ -293,14 +308,14 @@
             <div class="label">比赛起止时间：</div>
             <div class="con">
               <div class="bor clearfix">
-                <div id="competitionStartDate" class="date-time-picker input w400 fl">
+                <div id="competitionStartDate" class="date-time-picker input w280 fl">
                   <span class="date-time" v-if="competitionStartDate">{{competitionStartDate}}</span>
                   <span v-else>{{'开始时间'}}</span>
                 </div>
 
                 <span class="date-mid fl">至</span>
 
-                <div id="competitionEndDate" class="date-time-picker input w400 fl">
+                <div id="competitionEndDate" class="date-time-picker input w280 fl">
                   <span class="date-time" v-if="competitionEndDate">{{competitionEndDate}}</span>
                   <span v-else>{{'结束时间'}}</span>
                 </div>
@@ -345,17 +360,17 @@
                   <img class="cover-image" :src="this.coverImage.url" v-else />
                 </div>
                 <!-- <div>
-                  <input id="cover" type="file" accept=".png,.jpg,.jpeg,.webp" hidden />
-                  <label id="uploadCover" for="cover">
-                    <img src="/images/pub21.png" v-if="!this.coverImage.url" />
-                    <img :src="this.coverImage.url" v-else />
-                  </label>
-                </div> -->
+              <input id="cover" type="file" accept=".png,.jpg,.jpeg,.webp" hidden />
+              <label id="uploadCover" for="cover">
+                <img src="/images/pub21.png" v-if="!this.coverImage.url" />
+                <img :src="this.coverImage.url" v-else />
+              </label>
+            </div> -->
                 <!-- <div>
-                  <div class="preview">
-                    <img src="/images/pub21.png" class="img-responsive" alt="" title="" />
-                  </div>
-                </div> -->
+              <div class="preview">
+                <img src="/images/pub21.png" class="img-responsive" alt="" title="" />
+              </div>
+            </div> -->
               </div>
             </div>
           </div>
@@ -379,12 +394,12 @@
                   </div>
                 </div>
                 <!-- <input type="file" name="" id="" class="imgFiles" style="display: none" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" multiple />
-                <div class="imgAll publish-load-img fl">
-                  <ul></ul>
-                </div>
-                <div class="imgClick publish-load fl">
-                  <img src="/images/pub22.png" />
-                </div> -->
+            <div class="imgAll publish-load-img fl">
+              <ul></ul>
+            </div>
+            <div class="imgClick publish-load fl">
+              <img src="/images/pub22.png" />
+            </div> -->
               </div>
             </div>
           </div>
@@ -564,50 +579,8 @@
         </div>
         <!--publish-content end-->
       </div>
-      <!--publish-main end-->
+    </script>
 
-      <!--保证金弹出-->
-      <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="bondCont">
-        <div class="bond-content">
-          <div class="bond-close" onClick="syalert.syhide('bondCont')"></div>
-          <div class="bond-tit">保证金</div>
-          <div class="bond-tip">本平台发布任务，需要保证金，才能享有权益 支付后个人中心可查看，随时可退</div>
-          <div class="bond-price">保证金：<span class="color-red">￥1000.00</span></div>
-          <div class="bond-pay">
-            <div class="t">选择支付方式</div>
-            <div class="con clearfix">
-              <div class="li" @click="pay_type=1">
-                <input type="radio" class="bond-radio" checked name="money" />
-                <span class="radio-s"><img src="/images/pub14.png" /></span>
-              </div>
-              <div class="li" @click="pay_type=2">
-                <input type="radio" class="bond-radio" name="money" />
-                <span class="radio-s"><img src="/images/pub19.png" /></span>
-              </div>
-              <div class="li" @click="pay_type=3">
-                <input type="radio" class="bond-radio" name="money" />
-                <span class="radio-s"><img src="/images/pub13.png" /></span>
-              </div>
-            </div>
-          </div>
-          <div class="bond-pay" v-if="pay_type==1">
-            <div class="t">支付密码</div>
-            <div class="con clearfix">
-              <div class="input-w m-t-20 m-l-10">
-                <input type="password" v-model="pwd" placeholder="请输入支付密码" />
-              </div>
-            </div>
-          </div>
-          <div class="last-bottom">
-            <button class="bond-btn" @click="onBzjClick">确认并支付</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 公共底部 -->
-    <footer class="public-footer"></footer>
-
-    <script src="/js/bangwen/releaseCompetition.js"></script>
+    <script src="/js/userCont/competition/releaseCompetition.js"></script>
   </body>
 </html>

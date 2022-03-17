@@ -60,11 +60,14 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 $('.public-header').load('/components/PublicHeader.html');
 // 引入底部
 $('.public-footer').load('/components/PublicFooter.html');
+// 引入侧边栏
+$('.public-user').load('/components/CenterAside.html');
 var encrypt = new JSEncrypt();
 //公钥.
 var publiukey = '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----';
-new Vue({
-    el: '#app',
+// 赛事公告
+var competitionAnnouncement = {
+    template: '#competitionAnnouncement',
     data: function () {
         return {
             // 赛事类型列表（从服务器获取）
@@ -766,5 +769,12 @@ new Vue({
                 });
             });
         },
+    },
+};
+new Vue({
+    el: '#app',
+    components: {
+        // 赛事公告
+        'competition-announcement': competitionAnnouncement,
     },
 });
