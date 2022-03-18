@@ -43,7 +43,7 @@ request.interceptors.response.use(
     const data = response.data
     // 判断没有登录
     if (data.code == 502) {
-      syalert.syopen('alert1')
+      syalert.syopen('loginConter')
     }
     return data
   },

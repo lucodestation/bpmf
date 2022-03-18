@@ -48,12 +48,14 @@ new Vue({
             formData: {
                 name: '',
                 idcard: '',
-                front_image: 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg',
-                back_image: 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg',
-                hand_image: 'https://pics4.baidu.com/feed/71cf3bc79f3df8dc1fe19ff60a487a8146102858.jpeg', // 手持身份证
+                front_image: '',
+                back_image: '',
+                hand_image: '', // 手持身份证
                 // check_id: '',// 修改是必选，审核数据的id复
             },
-            userCont: '', // 认证信息
+            userCont: '',
+            coverImage: {},
+            sfzImage: {}, // 身份证反面
         };
     },
     created: function () {
@@ -61,54 +63,31 @@ new Vue({
             var res;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        // 初始化选择封面图
-                        this.initCoverImageFileChange();
-                        return [4 /*yield*/, request({
-                                method: 'POST',
-                                url: '/api/Mine/realInfo',
-                            })];
+                    case 0: return [4 /*yield*/, request({
+                            method: 'POST',
+                            url: '/api/Mine/realInfo',
+                        })];
                     case 1:
                         res = _a.sent();
                         if (res.code == 200) {
                             this.userCont = res.data;
-                            this.userCont.check_status = 0;
                         }
                         else {
                             layer.msg(res.msg);
                         }
+                        // 身份证正面
+                        this.initCoverImageFileChange();
+                        // 身份证反面
+                        this.ImageFileChange();
                         return [2 /*return*/];
                 }
             });
         });
     },
     methods: {
-        onBtnClick: function () {
-            return __awaiter(this, void 0, void 0, function () {
-                var ress;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, request({
-                                method: 'POST',
-                                url: '/api/Mine/realname',
-                                data: this.formData
-                            })];
-                        case 1:
-                            ress = _a.sent();
-                            if (ress.code == 200) {
-                                // layer.msg('删除成功')
-                                // this.onCardlist()
-                            }
-                            else {
-                                layer.msg(ress.msg);
-                            }
-                            return [2 /*return*/];
-                    }
-                });
-            });
-        },
-        // 初始化选择封面图
+        // 身份证正面
         initCoverImageFileChange: function () {
+            var _this = this;
             layui.upload.render({
                 elem: '#uploadCover',
                 auto: false,
@@ -125,31 +104,69 @@ new Vue({
                         // console.log(index) //得到文件索引
                         // console.log(file) //得到文件对象
                         // console.log(result) //得到文件base64编码，比如图片
-                        // const formData = new FormData()
-                        // formData.append('file', file)
-                        // console.log(formData)
-                        // this.coverImage = {
-                        //   file,
-                        //   url: result,
-                        // }
+                        _this.coverImage = {
+                            file: file,
+                            url: result,
+                        };
+                        console.log(_this.coverImage);
                     });
                 },
             });
-            // const element = event.target || event.srcElement
-            // const files = element.files[0]
-            // console.log(files)
-            // if (!files.type.startsWith('image/')) {
-            //   console.log('请选择图片文件')
-            //   layer.msg('请选择图片文件', { icon: 2, time: 3000 })
-            //   element.value = ''
-            //   this.coverImage = ''
-            //   return
-            // }
-            // window.URL = window.URL || window.webkitURL
-            // const url = window.URL.createObjectURL(files)
-            // console.log(url)
-            // console.log(files)
-            // this.coverImage = files
+        },
+        // 身份证反面
+        ImageFileChange: function () {
+            var _this = this;
+            layui.upload.render({
+                elem: '#uploadSfz',
+                auto: false,
+                // accept: 'image', // 指定允许上传时校验的文件类型
+                // acceptMime: '.jpg,.png,.bmp,.jpeg,.webp', // 规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
+                // exts: 'jpg|png|bmp|jpeg|webp', // 允许上传的文件后缀。一般结合 accept 参数类设定。
+                size: 0,
+                multiple: false,
+                // 选择文件回调
+                choose: function (result) {
+                    console.log(result);
+                    //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                    result.preview(function (index, file, result) {
+                        // console.log(index) //得到文件索引
+                        // console.log(file) //得到文件对象
+                        // console.log(result) //得到文件base64编码，比如图片
+                        _this.sfzImage = {
+                            file: file,
+                            url: result,
+                        };
+                        console.log(_this.sfzImage);
+                    });
+                },
+            });
+        },
+        onBtnClick: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var aa, ress;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            aa = util.uploadFile({
+                                file: this.sfzImage.file,
+                                fileName: 'cover',
+                            });
+                            console.log(aa);
+                            console.log(this.sfzImage);
+                            console.log(this.sfzImage.file);
+                            // this.formData.image = this.coverImage.file
+                            return [2 /*return*/];
+                        case 1:
+                            ress = _a.sent();
+                            if (ress.code == 200) {
+                            }
+                            else {
+                                layer.msg(ress.msg);
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
         },
     }
 });

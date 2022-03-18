@@ -95,7 +95,7 @@
                   <td>
                     <div class="center-order-flex">
                       <img class="center-order-img" :src="item.image">
-                      <p class="center-order-txt m-l-10">{{item.title}}</p>
+                      <p class="center-order-txt m-l-10" style="width:117px">{{item.title}}</p>
                     </div>
                   </td>
                   <td>
@@ -123,14 +123,23 @@
                   <td v-if="item.status==3">应榜结束</td>
                   <td v-if="item.status==4">工作中</td>
                   <td v-if="item.status==5">任务结束</td>
-                  <td v-if="item.status==0||item.status=='-1'||item.status==5">--</td>
+                  <td v-if="item.status==0||item.status==1||item.status=='-1'||item.status==5">--</td>
                   <td v-if="item.status==2||item.status==3">
                     <p class="color-blue">{{item.join_num}}人</p>
                   </td>
                   <td v-if="item.status==4||item.status==5">{{item.select_num}}人中榜{{item.join_num}}人</td>
                   <td v-if="item.status==0">
                     <div class="handle text-c">
-                      <a class="handle-btn m-r-10 m-t-5" href="CenterRank.html">修改榜文</a>
+                      <a class="handle-btn m-r-10 m-t-5" :href="'./addCont.html?id='+item.id"
+                        style="margin-right: 5px;">修改榜文</a>
+                      <a class="handle-btn blue m-t-5" :href="'./noticeView.html?id='+item.id"
+                        style="margin-right: 5px;">查看详情</a><a class="handle-btn blue m-t-5" href="javascript:void(0)"
+                        @click='onDelClick(item.id)'>删除榜文</a>
+                    </div>
+                  </td>
+                  <td v-if="item.status==1">
+                    <div class="handle text-c">
+                      <!-- <a class="handle-btn m-r-10 m-t-5" href="CenterRank.html">修改榜文</a> -->
                       <a class="handle-btn blue m-t-5" :href="'./noticeView.html?id='+item.id">查看详情</a>
                     </div>
                   </td>
@@ -166,8 +175,7 @@
                   <td v-if="item.status=='-1'">
                     <div class="handle text-c">
                       <a class="handle-btn m-t-5 m-r-10" href="CenterRank.html">修改榜文</a>
-                      <a class="handle-btn blue m-t-5" href="javascript:void(0)"
-                        onClick="syalert.syopen('alert3')">删除榜文</a>
+
                     </div>
                   </td>
                 </tr>
@@ -177,6 +185,21 @@
           </div>
         </div>
         <!--center-inner end-->
+        <!--删除榜文弹出-->
+        <div class="sy-alert bond-pop animated" style="width:500px;" sy-enter="zoomIn" sy-leave="zoomOut"
+          sy-type="confirm" sy-mask="true" id="noticeDelCont">
+          <div class="bond-content">
+            <div class="bond-close" onClick="syalert.syhide('noticeDelCont')"></div>
+            <div class="bond-tit">删除榜文</div>
+            <div class="text-c m-t-40">
+              <div class="f-16">榜文删除后，将不能不发布</div>
+              <div class="f-20 m-t-25">您确定删除？</div>
+            </div>
+            <div class="last-bottom text-c">
+              <button class="bond-btn mar-auto" @click="onDelqueryClick">确定</button>
+            </div>
+          </div>
+        </div>
       </div>
       <!--center-content end-->
     </div>
@@ -185,26 +208,6 @@
   <!--center-container end-->
   <!-- 公共底部 -->
   <footer class="public-footer"></footer>
-  <!--删除榜文弹出-->
-  <div class="sy-alert bond-pop animated" style="width:500px;" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm"
-    sy-mask="true" id="alert3">
-    <div class="bond-content">
-      <div class="bond-close" onClick="ok('alert3')"></div>
-      <div class="bond-tit">删除榜文</div>
-      <div class="text-c m-t-40">
-        <div class="f-16">榜文删除后，将不能不发布</div>
-        <div class="f-20 m-t-25">您确定删除？</div>
-      </div>
-      <div class="last-bottom text-c">
-        <button class="bond-btn mar-auto" onClick="ok('alert3')">确定</button>
-      </div>
-    </div>
-  </div>
-  <script>
-    function ok (id) {
-      syalert.syhide(id);
-    };
-  </script>
   <script src="/js/common.js"></script>
   <script src="/js/userCont/bangwen/noticeList.js"></script>
 </body>

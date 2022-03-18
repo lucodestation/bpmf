@@ -125,7 +125,7 @@
                   <td v-if="item.status==4">已评价</td>
                   <td v-if="item.status==0||item.status==1||item.status==4">
                     <div class=" handle text-c">
-                      <a class="handle-btn blue m-t-5" href="CenterRank7.html">查看详情</a>
+                      <a class="handle-btn blue m-t-5" :href="'./myCont.html?id='+item.id">查看详情</a>
                     </div>
                   </td>
                   <td v-if="item.status==2">

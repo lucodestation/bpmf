@@ -38,7 +38,7 @@ new Vue({
 })
 // 登录
 new Vue({
-  el: '#alert1',
+  el: '#loginConter',
   data: {
     mobile: '', // 手机号
     pwd: '', // 密码
@@ -46,7 +46,7 @@ new Vue({
     codeTxt: '获取验证码',
     second: 60,
   },
-  created() {},
+  created() { },
   methods: {
     // 获取验证码
     async onCode() {
@@ -136,26 +136,43 @@ new Vue({
         }
       }, 1000)
     },
+    // 跳转微信授权
+    onwxClick() {
+      syalert.syhide('loginConter')
+      setTimeout(() => {
+        syalert.syopen('wxConter')
+      }, 500);
+    }
   },
 })
 // 微信登录
 new Vue({
-  el: '#alert2',
-  data: {},
-  created() {
-    // $.ajax({
-    //   method: 'POST',
-    //   url: this.baseUrl + '/api/Loginwx/getCode',
-    //   success: function (res) {
-    //     if (res.code == 200) {
-    //       // layer.msg('登录成功')
-    //       // localStorage.setItem('token', res.data.token)
-    //       // location.reload()
-    //     } else {
-    //       layer.msg(res.msg)
-    //     }
-    //   },
-    // })
+  el: '#wxConter',
+  data: {
+    wxImg: ''
   },
-  methods: {},
+  created() {
+    // 获取微信二维码
+    request({ url: '/api/Loginwx/getCode', method: 'POST' }).then((res) => {
+      if (res.code == 200) {
+        this.wxImg = res.data
+      }
+    })
+  },
+  methods: {
+    // 密码登录
+    onPwdClick() {
+      syalert.syhide('wxConter')
+      setTimeout(() => {
+        syalert.syopen('loginConter')
+      }, 500);
+    },
+    // 短信登录
+    ondxClick() {
+      syalert.syhide('wxConter')
+      setTimeout(() => {
+        syalert.syopen('loginConter')
+      }, 500);
+    }
+  },
 })

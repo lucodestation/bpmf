@@ -74,7 +74,7 @@ new Vue({
 });
 // 登录
 new Vue({
-    el: '#alert1',
+    el: '#loginConter',
     data: {
         mobile: '',
         pwd: '',
@@ -222,26 +222,44 @@ new Vue({
                 }
             }, 1000);
         },
+        // 跳转微信授权
+        onwxClick: function () {
+            syalert.syhide('loginConter');
+            setTimeout(function () {
+                syalert.syopen('wxConter');
+            }, 500);
+        }
     },
 });
 // 微信登录
 new Vue({
-    el: '#alert2',
-    data: {},
-    created: function () {
-        // $.ajax({
-        //   method: 'POST',
-        //   url: this.baseUrl + '/api/Loginwx/getCode',
-        //   success: function (res) {
-        //     if (res.code == 200) {
-        //       // layer.msg('登录成功')
-        //       // localStorage.setItem('token', res.data.token)
-        //       // location.reload()
-        //     } else {
-        //       layer.msg(res.msg)
-        //     }
-        //   },
-        // })
+    el: '#wxConter',
+    data: {
+        wxImg: ''
     },
-    methods: {},
+    created: function () {
+        var _this = this;
+        // 获取微信二维码
+        request({ url: '/api/Loginwx/getCode', method: 'POST' }).then(function (res) {
+            if (res.code == 200) {
+                _this.wxImg = res.data;
+            }
+        });
+    },
+    methods: {
+        // 密码登录
+        onPwdClick: function () {
+            syalert.syhide('wxConter');
+            setTimeout(function () {
+                syalert.syopen('loginConter');
+            }, 500);
+        },
+        // 短信登录
+        ondxClick: function () {
+            syalert.syhide('wxConter');
+            setTimeout(function () {
+                syalert.syopen('loginConter');
+            }, 500);
+        }
+    },
 });
