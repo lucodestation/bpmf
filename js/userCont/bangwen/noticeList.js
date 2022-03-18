@@ -52,7 +52,8 @@ new Vue({
             start_time: '',
             end_time: '',
             cateList: [],
-            noticeList: [], // 列表
+            noticeList: [],
+            id: '', // 删除id
         };
     },
     created: function () {
@@ -139,6 +140,24 @@ new Vue({
         onNameClick: function (e) {
             this.type = e;
             this.onpushList();
+        },
+        // 点击删除按钮
+        onDelClick: function (e) {
+            this.id = e;
+            syalert.syopen('noticeDelCont');
+        },
+        onDelqueryClick: function () {
+            var _this = this;
+            request({ url: '/api/Bangwenpush/delete', method: 'post', data: { bangwen_id: this.id } }).then(function (res) {
+                if (res.code == 200) {
+                    layer.msg('删除成功');
+                    syalert.syhide('noticeDelCont');
+                    _this.onpushList();
+                }
+                else {
+                    layer.msg(res.msg);
+                }
+            });
         }
     }
 });

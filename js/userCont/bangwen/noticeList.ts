@@ -16,6 +16,7 @@ new Vue({
       end_time: '',
       cateList: [],// 分类列表
       noticeList: [],// 列表
+      id: '',// 删除id
     }
   },
   async created() {
@@ -80,6 +81,22 @@ new Vue({
     onNameClick(e) {
       this.type = e
       this.onpushList()
+    },
+    // 点击删除按钮
+    onDelClick(e) {
+      this.id = e
+      syalert.syopen('noticeDelCont')
+    },
+    onDelqueryClick() {
+      request({ url: '/api/Bangwenpush/delete', method: 'post', data: { bangwen_id: this.id } }).then((res) => {
+        if (res.code == 200) {
+          layer.msg('删除成功')
+          syalert.syhide('noticeDelCont')
+          this.onpushList()
+        } else {
+          layer.msg(res.msg)
+        }
+      })
     }
   }
 })

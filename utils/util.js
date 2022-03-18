@@ -58,7 +58,7 @@ util.getExtensionName = function (fileName) {
  */
 util.uploadFile = function (option) {
     return new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
-        var OSSInfo, client, fileName;
+        var OSSInfo, client, headers, fileName;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, request({
@@ -74,6 +74,7 @@ util.uploadFile = function (option) {
                     client = new OSS({
                         // yourRegion填写Bucket所在地域。以华东1（杭州）为例，yourRegion填写为oss-cn-hangzhou。
                         region: 'oss-cn-beijing',
+                        'Content-Disposition': 'inline',
                         // 从STS服务获取的临时访问密钥（AccessKey ID和AccessKey Secret）。
                         accessKeyId: OSSInfo.data.AccessKeyId,
                         accessKeySecret: OSSInfo.data.AccessKeySecret,
@@ -83,10 +84,28 @@ util.uploadFile = function (option) {
                         bucket: 'bpmf',
                         secure: true,
                     });
+                    headers = {
+                        // 指定该Object被下载时网页的缓存行为。
+                        // 'Cache-Control': 'no-cache',
+                        // 指定该Object被下载时的名称。
+                        'Content-Disposition': 'inline',
+                        // 指定该Object被下载时的内容编码格式。
+                        // 'Content-Encoding': 'UTF-8',
+                        // 指定过期时间。
+                        // 'Expires': 'Wed, 08 Jul 2022 16:57:01 GMT',
+                        // 指定Object的存储类型。
+                        // 'x-oss-storage-class': 'Standard',
+                        // 指定Object的访问权限。
+                        // 'x-oss-object-acl': 'private',
+                        // 设置Object的标签，可同时设置多个标签。
+                        // 'x-oss-tagging': 'Tag1=1&Tag2=2',
+                        // 指定CopyObject操作时是否覆盖同名目标Object。此处设置为true，表示禁止覆盖同名Object。
+                        // 'x-oss-forbid-overwrite': 'true',
+                    };
                     fileName = new Date().valueOf() + '-' + option.fileName;
                     console.log(fileName);
                     client
-                        .put('images/' + fileName, option.file)
+                        .put('images/' + fileName, option.file, headers)
                         .then(function () {
                         var url = "https://bpmf.oss-cn-beijing.aliyuncs.com/images/".concat(fileName);
                         resolve(url);

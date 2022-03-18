@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>我的应榜-榜文详情</title>
+  <link rel="stylesheet" href="/plugins/date/jedate.css" />
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/upload/imgFileupload.js"></script>
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jsencrypt.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <div class="public-user"></div>
+      <!--center-content start-->
+      <div class="center-content fr" id="app">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <!--inner-position start-->
+          <div class="inner-position">
+            <a href="">榜文管理</a>
+            <span>&lt;</span>
+            <a class="current" href="">榜文详情</a>
+          </div>
+          <!--inner-position end-->
+          <div class="center-inner-content">
+            <!--center-rank-head start-->
+            <div class="center-rank-head clearfix">
+              <div class="img fl">
+                <img :src="noticeCont.image">
+              </div>
+              <div class="txt">
+                <div class="t m-b-10">
+                  {{noticeCont.title}}
+                  <div class="state fr color-6">当前状态：<span class="color-orange">已中榜</span>
+                    <!-- <span class="color-orange" v-if="noticeCont.status=='-2'">整体终止任务</span>
+                    <span class="color-orange" v-if="noticeCont.status=='-1'">审核失败</span>
+                    <span class="color-orange" v-if="noticeCont.status=='0'">待审核</span>
+                    <span class="color-orange" v-if="noticeCont.status=='1'">审核成功</span>
+                    <span class="color-orange" v-if="noticeCont.status=='2'">应榜中</span>
+                    <span class="color-orange" v-if="noticeCont.status=='3'">应榜结束</span>
+                    <span class="color-orange" v-if="noticeCont.status=='4'">工作中</span>
+                    <span class="color-orange" v-if="noticeCont.status=='5'">任务结束</span> -->
+                  </div>
+                </div>
+                <div class="tags clearfix">
+                  <span class="tag fl">{{name}}</span>
+                  <span class="tag fl" v-if="noticeCont.pay_num_type==1">一次付清</span>
+                  <span class="tag fl" v-if="noticeCont.pay_num_type==2">多次付清</span>
+                  <span class="tag fl" v-if="noticeCont.win_type==1">单人中榜</span>
+                  <span class="tag fl" v-if="noticeCont.win_type==2">多人中榜</span>
+                  <span class="tag fl" v-if="noticeCont.is_trustee==1">托管</span>
+                  <span class="tag fl" v-if="noticeCont.is_trustee==2">不托管</span>
+                </div>
+                <div class="price f-16 m-t-10 m-b-10">酬金：<span class="f-20 color-red">￥{{noticeCont.total_money}}</span>
+                </div>
+                <div class="date color-6">{{noticeCont.task_start_time}} 至 {{noticeCont.task_end_time}}</div>
+              </div>
+            </div>
+            <!--center-rank-head end-->
+            <!--center-rank-head-hd start-->
+            <div class="center-rank-head-hd m-t-35">
+              <div class="date"><span class="color-gray"> 中榜时间：</span>2021-10-21 12：00</div>
+              <div class="hd-t m-t-10 clearfix">
+                <div class="num f-weight f-16 fl">01</div>
+                <div class="name f-weight f-16 fl m-l-20">周杰</div>
+                <div class="price fl m-l-40">报价：100元</div>
+                <div class="c fl m-l-40">支付方式：多次支付</div>
+                <div class="c fl m-l-15">2次</div>
+              </div>
+            </div>
+            <!--center-rank-head-hd end-->
+            <!--center-inner-table-wrap start-->
+            <div class="center-inner-table-wrap">
+              <table class="center-inner-table center-order-table">
+                <tr>
+                  <th>第1次支付50元</th>
+                  <th>第2次支付30元</th>
+                  <th>第3次支付20元</th>
+                </tr>
+                <tr>
+                  <td>
+                    <p class="color-orange">未开始</p>
+                  </td>
+                  <td>
+                    <p class="color-orange">未开始</p>
+                  </td>
+                  <td>
+                    <p class="color-orange">未开始</p>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!--center-inner-table-wrap end-->
+            <!--                    &lt;!&ndash;center-rank-reason start&ndash;&gt;-->
+            <!--                    <div class="center-rank-reason m-t-15">-->
+            <!--                        <div class="t f-16 m-b-5">终止原因</div>-->
+            <!--                        <div class="c"><span class="color-gray">对方反馈：</span> 身体原因，无法继续</div>-->
+            <!--                    </div>-->
+            <!--                    &lt;!&ndash;center-rank-reason end&ndash;&gt;-->
+          </div>
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/bangwen/myCont.js"></script>
+</body>
+
+</html>
