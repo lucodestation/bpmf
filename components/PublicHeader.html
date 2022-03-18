@@ -81,7 +81,7 @@
           <a href="">消息中心</a>
         </div>
         <div class="top-login fl">
-          <a class="log-a" href="javascript:void(0);" onClick="syalert.syopen('alert1')">登录</a>
+          <a class="log-a" href="javascript:void(0);" onClick="syalert.syopen('loginConter')">登录</a>
           <span class="log-s">|</span>
           <a class="log-a" href="/register.html">注册</a>
         </div>
@@ -168,7 +168,8 @@
 </div>
 <!--main-header end-->
 <!-- 登录弹窗 -->
-<div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert1">
+<div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+  id="loginConter">
   <div class="index-login-hd clearfix">
     <div class="login-li on">密码登录</div>
     <div class="login-li">短信登录</div>
@@ -212,27 +213,24 @@
   <div class="index-login-other">
     <div class="tit">第三方登录</div>
     <div class="wx">
-      <a href="javascript:void(0)" onClick="syalert.syopen('alert2')||ok('alert1')"><img src="/images/icon-wx.png" /></a>
+      <div @click="onwxClick"><img src="/images/icon-wx.png" />
+      </div>
     </div>
   </div>
 </div>
 <!-- 微信登录弹窗 -->
-<div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert2">
+<div class="sy-alert index-login animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+  id="wxConter">
   <div class="login-wx">
-    <div class="wx-close" onClick="ok('alert2')"></div>
+    <div class="wx-close" onClick="syalert.syhide('wxConter')"></div>
     <div class="wx-tit">微信扫码登录</div>
-    <div class="wx-img"><img src="/images/wx.png" /></div>
+    <div class="wx-img"><img :src="wxImg" /></div>
     <div class="wx-tip">用手机APP扫下方二维码登录，扫码后在手机 上点击“确认授权”即可</div>
     <div class="wx-bot clearfix">
-      <a class="wx-btn fl" href="javascript:void(0);" onClick="syalert.syopen('alert1')||ok('alert2')">密码登录</a>
-      <a class="wx-btn fr" href="javascript:void(0);" onClick="syalert.syopen('alert1')||ok('alert2')">短信登录</a>
+      <div class="wx-btn fl" @click="onPwdClick">密码登录</div>
+      <div class="wx-btn fr" @click="ondxClick">短信登录</div>
     </div>
   </div>
 </div>
 <script src="/js/common.js"></script>
 <script src="/js/components/PublicHeader.js"></script>
-<script>
-  function ok(id) {
-    syalert.syhide(id)
-  }
-</script>
