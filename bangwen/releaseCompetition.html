@@ -22,7 +22,7 @@
     <script src="/plugins/axios.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.7/index.min.js"></script>
 
-    <script src="https://cdn.bootcdn.net/ajax/libs/ali-oss/6.17.1/aliyun-oss-sdk.min.js"></script>
+    <script src="/plugins/aliyun-oss-sdk.min.js"></script>
 
     <script src="/utils/request.js"></script>
     <script src="/utils/util.js"></script>
@@ -212,6 +212,9 @@
             <div class="label">比赛阶段总数：</div>
             <div class="con">
               <input class="input w400" type="number" min="1" max="5" step="1" minlength="1" maxlength="1" placeholder="请输入比赛阶段总数(1~5的整数)" v-model.trim.number="formData.stage" />
+              <!-- <select class="select rate-100" v-model="formData.type">
+                <option :value="item.id" v-for="item in typeList">{{item.name}}</option>
+              </select> -->
             </div>
           </div>
 
