@@ -91,9 +91,9 @@ new Vue({
                 affix: '',
                 apply_info: '',
                 contact_info: '',
-                roles: '',
+                roles: '1,2,3',
                 fee: '',
-                upper_limit: 0,
+                upper_limit: '',
                 team_where: 1,
                 team_list: '', // team_where=1时必传此参数，团队列表，多个用英文逗号隔开
             },
@@ -115,7 +115,7 @@ new Vue({
             // 报名费用输入框是否显示
             feeInputShow: true,
             // 报名人数上限输入框是否显示
-            upperLimitInputShow: false,
+            upperLimitInputShow: true,
             // 添加团队名称列表是否显示
             teamListShow: true,
             // 团队名称列表
@@ -649,7 +649,12 @@ new Vue({
             if (this.formData.way === 1) {
                 arr.push({ label: '请输入比赛方式补充说明', validate: !this.formData.way_memo });
             }
-            arr.push({ label: '请选择报名开始时间', validate: !this.formData.a_b_t }, { label: '请选择报名结束时间', validate: !this.formData.a_e_t }, { label: '请选择比赛开始时间', validate: !this.formData.c_b_t }, { label: '请选择比赛结束时间', validate: !this.formData.c_e_t }, { label: '请输入赛事描述', validate: !this.formData.description.trim() }, { label: '请输入赞助方', validate: !this.formData.sponsor }, { label: '请输入赛事客服电话', validate: !this.formData.service_tel }, { label: '请选择封面图', validate: !this.coverImage.url }, { label: '请选择附件', validate: !this.affixList.length }, { label: '请选择报名信息', validate: !this.formData.apply_info }, { label: '请选择联系方式', validate: !this.formData.contact_info }, { label: '请选择角色', validate: !this.formData.roles });
+            arr.push({ label: '请选择报名开始时间', validate: !this.formData.a_b_t }, { label: '请选择报名结束时间', validate: !this.formData.a_e_t }, { label: '请选择比赛开始时间', validate: !this.formData.c_b_t }, { label: '请选择比赛结束时间', validate: !this.formData.c_e_t }, { label: '请输入赛事描述', validate: !this.formData.description.trim() }, { label: '请输入赞助方', validate: !this.formData.sponsor }, { label: '请输入赛事客服电话', validate: !this.formData.service_tel }, { label: '请选择封面图', validate: !this.coverImage.url }
+            // { label: '请选择附件', validate: !this.affixList.length },
+            // { label: '请选择报名信息', validate: !this.formData.apply_info },
+            // { label: '请选择联系方式', validate: !this.formData.contact_info },
+            // { label: '请选择角色', validate: !this.formData.roles }
+            );
             if (this.feeInputShow) {
                 arr.push({ label: '请输入报名费用', validate: !this.formData.fee }, { label: '报名费用必须大于 0', validate: this.formData.fee <= 0 });
             }

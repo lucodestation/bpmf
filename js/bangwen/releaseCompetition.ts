@@ -40,9 +40,9 @@ new Vue({
 
         apply_info: '', // 报名信息：1=年龄，2=居住地址，3=自我介绍 ps:多个用英文逗号隔开
         contact_info: '', // 联系方式：1=qq,2=MSN,3=SKYPE,4=微信号 ps:多个用英文逗号隔开
-        roles: '', // 报名角色，1=选手，2=裁判，3=主裁判 ps:多个用英文逗号隔开，必须全选，传递1,2,3
+        roles: '1,2,3', // 报名角色，1=选手，2=裁判，3=主裁判 ps:多个用英文逗号隔开，必须全选，传递1,2,3
         fee: '', // 报名费用，0=没有报名费，具体金额为每人报名费
-        upper_limit: 0, // 报名人数上限，0=没有上限，其他值为人数上限，最多不超过10000人
+        upper_limit: '', // 报名人数上限，0=没有上限，其他值为人数上限，最多不超过10000人
         team_where: 1, // 团队添加，1=组织者添加，2=队员自己填写采用队员总分制团队必须组织者添加
         team_list: '', // team_where=1时必传此参数，团队列表，多个用英文逗号隔开
       },
@@ -68,7 +68,7 @@ new Vue({
       // 报名费用输入框是否显示
       feeInputShow: true,
       // 报名人数上限输入框是否显示
-      upperLimitInputShow: false,
+      upperLimitInputShow: true,
       // 添加团队名称列表是否显示
       teamListShow: true,
       // 团队名称列表
@@ -609,11 +609,11 @@ new Vue({
         { label: '请输入赛事描述', validate: !this.formData.description.trim() },
         { label: '请输入赞助方', validate: !this.formData.sponsor },
         { label: '请输入赛事客服电话', validate: !this.formData.service_tel },
-        { label: '请选择封面图', validate: !this.coverImage.url },
-        { label: '请选择附件', validate: !this.affixList.length },
-        { label: '请选择报名信息', validate: !this.formData.apply_info },
-        { label: '请选择联系方式', validate: !this.formData.contact_info },
-        { label: '请选择角色', validate: !this.formData.roles }
+        { label: '请选择封面图', validate: !this.coverImage.url }
+        // { label: '请选择附件', validate: !this.affixList.length },
+        // { label: '请选择报名信息', validate: !this.formData.apply_info },
+        // { label: '请选择联系方式', validate: !this.formData.contact_info },
+        // { label: '请选择角色', validate: !this.formData.roles }
       )
 
       if (this.feeInputShow) {

@@ -211,10 +211,15 @@
           <div class="publish-item clearfix">
             <div class="label">比赛阶段总数：</div>
             <div class="con">
-              <input class="input w400" type="number" min="1" max="5" step="1" minlength="1" maxlength="1" placeholder="请输入比赛阶段总数(1~5的整数)" v-model.trim.number="formData.stage" />
-              <!-- <select class="select rate-100" v-model="formData.type">
-                <option :value="item.id" v-for="item in typeList">{{item.name}}</option>
-              </select> -->
+              <div class="live-bor w420">
+                <select class="select w420" :disabled="formData.is_total_points === 1" v-model="formData.stage">
+                  <option value="1">1个阶段</option>
+                  <option value="2">2个阶段</option>
+                  <option value="3">3个阶段</option>
+                  <option value="4">4个阶段</option>
+                  <option value="5">5个阶段</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -470,15 +475,15 @@
             <div class="con">
               <div class="clearfix">
                 <label class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" name="roles" value="1" @change="handleSelectRoles" />
+                  <input class="check-in" type="checkbox" name="roles" value="1" @change="handleSelectRoles" checked disabled />
                   <span class="check-s">比赛选手</span>
                 </label>
                 <label class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" name="roles" value="2" @change="handleSelectRoles" />
+                  <input class="check-in" type="checkbox" name="roles" value="2" @change="handleSelectRoles" checked disabled />
                   <span class="check-s">裁判</span>
                 </label>
                 <label class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" name="roles" value="3" @change="handleSelectRoles" />
+                  <input class="check-in" type="checkbox" name="roles" value="3" @change="handleSelectRoles" checked disabled />
                   <span class="check-s">主裁判</span>
                 </label>
               </div>
