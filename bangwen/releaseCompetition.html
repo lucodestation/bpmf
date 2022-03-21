@@ -19,6 +19,7 @@
     <script src="/plugins/jquery.min.js"></script>
     <script src="/plugins/syalert/syalert.min.js"></script>
     <script src="/plugins/vue.min.js"></script>
+    <script src="/plugins/httpVueLoader.js"></script>
     <script src="/plugins/axios.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.7/index.min.js"></script>
 
@@ -40,7 +41,7 @@
         z-index: 10000;
       }
 
-      /* 隐藏时间选择控件不需要的分、秒 */
+      /* 隐藏 layui 时间选择控件不需要的分、秒 */
       /* 隐藏分 */
       .laydate-time-list > li:nth-child(2) ol li {
         display: none;
@@ -104,6 +105,21 @@
         background: url('/images/bank4.png') no-repeat center;
         background-size: 100% 100%;
       }
+
+      .publish-item.required .label {
+        display: block;
+        padding-top: 10px;
+      }
+
+      .publish-item.fee-return .label {
+        display: block;
+      }
+      .publish-item.fee-return .label span {
+        white-space: nowrap;
+      }
+      .publish-item.fee-return .con {
+        margin-left: 140px;
+      }
     </style>
   </head>
 
@@ -114,20 +130,7 @@
     <!-- 公共容器/页面主要内容 -->
     <div id="app" class="publish-container">
       <!-- 临时 -->
-      <pre class="temp-pre layui-code">
-        <div>{{signUpStartDate}}</div>
-        <div>{{signUpEndDate}}</div>
-        <div>{{competitionStartDate}}</div>
-        <div>{{competitionEndDate}}</div>
-        <!-- 表单数据 -->
-        <div>{{formData}}</div>
-        <!-- 封面图 -->
-        <div>{{coverImage}}</div>
-        <!-- 附件列表 -->
-        <div>{{affixList}}</div>
-        <!-- 团队名称列表 -->
-        <div>{{teamNameList}}</div>
-      </pre>
+
       <!-- <pre class="temp-pre">{{competitionCateList}}</pre> -->
       <!-- 面包屑导航 -->
       <div class="inner-position w-1200">
@@ -160,7 +163,7 @@
       <div class="publish-main w-1200">
         <h1 class="publish-tit">发布比赛</h1>
         <!-- 主要内容 -->
-        <div class="publish-content">
+        <div disabled class="publish-content">
           <div class="item-tit">赛事分类</div>
 
           <!-- 赛事种类 -->
@@ -169,397 +172,22 @@
             <div class="con">
               <div class="item-radio clearfix">
                 <label class="radio-li fl">
-                  <input class="radio" type="radio" name="competitionType" value="0" :checked="formData.competition_type === 0" @change="handleSelectCompetitionType" />
-                  <span class="span">个人赛</span>
+                  <input class="radio" type="radio" name="competitionType" value="0" :checked="competitionType === 0" @change="handleSelectCompetitionType" />
+                  <span class="span" @click="handleTest">个人赛</span>
                 </label>
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="competitionType" value="1" :checked="formData.competition_type === 1" @change="handleSelectCompetitionType" />
+                <label class="radio-li fl" for="competitionType">
+                  <input id="competitionType" class="radio" type="radio" name="competitionType" value="1" :checked="competitionType === 1" @change="handleSelectCompetitionType" />
                   <span class="span">团队赛</span>
                 </label>
               </div>
             </div>
           </div>
 
-          <!-- 赛事类型 -->
-          <div class="publish-item clearfix">
-            <div class="label">赛事类型：</div>
-            <div class="con">
-              <div class="item-radio clearfix">
-                <label class="radio-li fl" v-for="(item, index) in competitionCateList" :key="index">
-                  <input class="radio" type="radio" name="competitionCate" :value="item.id" :checked="item.id === formData.category_id" @change="handleSelectCompetitionCate" />
-                  <span class="span">{{item.category_name}}</span>
-                </label>
+          <!-- 个人赛事公告 -->
+          <release-personal-competition></release-personal-competition>
 
-                <div class="radio-input fl" v-if="formData.category_id === 5">
-                  <input type="text" class="input" placeholder="说明" v-model.trim="formData.category_memo" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="item-tit">赛事描述</div>
-
-          <!-- 赛事名称 -->
-          <div class="publish-item clearfix">
-            <div class="label">赛事名称：</div>
-            <div class="con">
-              <input type="text" class="input w400" placeholder="请输入赛事名称" v-model.trim="formData.competition_name" />
-            </div>
-          </div>
-
-          <!-- 比赛阶段总数 -->
-          <div class="publish-item clearfix">
-            <div class="label">比赛阶段总数：</div>
-            <div class="con">
-              <div class="live-bor w420">
-                <select class="select w420" :disabled="formData.is_total_points === 1" v-model="formData.stage">
-                  <option value="1">1个阶段</option>
-                  <option value="2">2个阶段</option>
-                  <option value="3">3个阶段</option>
-                  <option value="4">4个阶段</option>
-                  <option value="5">5个阶段</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- 是否采用队员总分制 -->
-          <div class="publish-item clearfix">
-            <div class="label">是否采用队员总分制：</div>
-            <div class="con">
-              <div class="item-radio clearfix">
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="competitionTotalPoints" value="0" :checked="formData.is_total_points === 0" @change="handleSelectCompetitionTotalPointes" />
-                  <span class="span">否</span>
-                </label>
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="competitionTotalPoints" value="1" :checked="formData.is_total_points === 1" @change="handleSelectCompetitionTotalPointes" />
-                  <span class="span">是</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- 比赛方式 -->
-          <div class="publish-item clearfix">
-            <div class="label">比赛方式：</div>
-            <div class="con">
-              <div class="item-radio clearfix">
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="competitionWay" value="0" :checked="formData.way === 0" @change="handleSelectCompetitionWay" />
-                  <span class="span">线下场地</span>
-                </label>
-              </div>
-              <div class="item-radio clearfix">
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="competitionWay" value="1" :checked="formData.way === 1" @change="handleSelectCompetitionWay" />
-                  <span class="span">线上游戏平台</span>
-                </label>
-                <div class="radio-input fl" v-if="formData.way === 1">
-                  <input type="text" class="input" placeholder="补充说明（备注线上游戏平台）" v-model.trim="formData.way_memo" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 赛事种类 -->
-          <div class="publish-item clearfix">
-            <div class="label">赛事种类：</div>
-            <div class="con">
-              <div class="item-radio clearfix">
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="joinType" value="1" :checked="formData.join_type === 1" @change="handleSelectJoinType" />
-                  <span class="span">自由参与</span>
-                </label>
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="joinType" value="2" :checked="formData.join_type === 2" @change="handleSelectJoinType" />
-                  <span class="span">批准参与</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- 报名起止时间 -->
-          <div class="publish-item clearfix">
-            <div class="label">报名起止时间：</div>
-            <div class="con">
-              <div class="bor clearfix">
-                <div id="signUpStartDate" class="date-time-picker input w400 fl">
-                  <span class="date-time" v-if="signUpStartDate">{{signUpStartDate}}</span>
-                  <span v-else>{{'开始时间'}}</span>
-                </div>
-
-                <span class="date-mid fl">至</span>
-
-                <div id="signUpEndDate" class="date-time-picker input w400 fl">
-                  <span class="date-time" v-if="signUpEndDate">{{signUpEndDate}}</span>
-                  <span v-else>{{'结束时间'}}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 比赛起止时间 -->
-          <div class="publish-item clearfix">
-            <div class="label">比赛起止时间：</div>
-            <div class="con">
-              <div class="bor clearfix">
-                <div id="competitionStartDate" class="date-time-picker input w400 fl">
-                  <span class="date-time" v-if="competitionStartDate">{{competitionStartDate}}</span>
-                  <span v-else>{{'开始时间'}}</span>
-                </div>
-
-                <span class="date-mid fl">至</span>
-
-                <div id="competitionEndDate" class="date-time-picker input w400 fl">
-                  <span class="date-time" v-if="competitionEndDate">{{competitionEndDate}}</span>
-                  <span v-else>{{'结束时间'}}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 赛事描述 -->
-          <div class="publish-item clearfix">
-            <div class="label">赛事描述：</div>
-            <div class="con">
-              <div class="detail-text">
-                <textarea class="text" rows="5" placeholder="请描述活动内容" v-model="formData.description"></textarea>
-              </div>
-            </div>
-          </div>
-
-          <!-- 赞助方 -->
-          <div class="publish-item clearfix">
-            <div class="label">赞助方：</div>
-            <div class="con">
-              <input type="text" class="input w400" placeholder="请输入赞助方" v-model.trim="formData.sponsor" />
-            </div>
-          </div>
-
-          <!-- 赛事客服电话 -->
-          <div class="publish-item clearfix">
-            <div class="label">赛事客服电话：</div>
-            <div class="con">
-              <input type="tel" class="input w400" placeholder="请输入赛事客服电话" v-model.trim="formData.service_tel" />
-            </div>
-          </div>
-
-          <!-- 上传封面图 -->
-          <div class="publish-item clearfix">
-            <div class="label"><i class="color-red">*</i>上传封面图：</div>
-            <div class="con">
-              <div class="item-tip">封面尺寸320*180px</div>
-              <div class="publish-up-head">
-                <div id="uploadCover">
-                  <img src="/images/pub21.png" v-if="!this.coverImage.url" />
-                  <img class="cover-image" :src="this.coverImage.url" v-else />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 上传附件 -->
-          <div class="publish-item clearfix">
-            <div class="label">上传附件</div>
-            <div class="con">
-              <div class="item-tip">注意：最多上传五个附件。每个附件不超过2M，仅支持png、jpg、pdf、word、excel格式</div>
-              <div class="cert-up clearfix">
-                <input id="affix" type="file" accept=".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple hidden handle @change="handleAffixFileChange" />
-                <div class="imgClick publish-load fl">
-                  <label for="affix">
-                    <img src="/images/pub22.png" />
-                  </label>
-                </div>
-                <div class="affix-list">
-                  <div class="affix-item" v-for="(item, index) in affixList">
-                    <span class="close-icon" @click="handleDeleteAffix(index)"></span>
-                    <span class="name">{{item.name}}</span>
-                  </div>
-                </div>
-                <!-- <input type="file" name="" id="" class="imgFiles" style="display: none" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" multiple />
-                <div class="imgAll publish-load-img fl">
-                  <ul></ul>
-                </div>
-                <div class="imgClick publish-load fl">
-                  <img src="/images/pub22.png" />
-                </div> -->
-              </div>
-            </div>
-          </div>
-
-          <div class="item-tit">选择报名信息：<span class="tip">（参赛者报名填写的信息）</span></div>
-
-          <!-- 报名信息 -->
-          <div class="publish-item clearfix">
-            <div class="clearfix">
-              <label class="checkbox-li fl">
-                <input class="check-in" type="checkbox" checked disabled />
-                <span class="check-s"><i class="color-red">*</i>姓名</span>
-              </label>
-              <label class="checkbox-li fl">
-                <input class="check-in" type="checkbox" checked disabled />
-                <span class="check-s"><i class="color-red">*</i>比赛账号</span>
-              </label>
-              <label class="checkbox-li fl">
-                <input class="check-in" type="checkbox" checked disabled />
-                <span class="check-s"><i class="color-red">*</i>技术类别</span>
-              </label>
-              <label class="checkbox-li fl">
-                <input class="check-in" type="checkbox" checked disabled />
-                <span class="check-s"><i class="color-red">*</i>技术等级</span>
-              </label>
-              <label class="checkbox-li fl">
-                <input class="check-in" type="checkbox" checked disabled />
-                <span class="check-s"><i class="color-red">*</i>身份证明</span>
-              </label>
-              <label class="checkbox-li fl">
-                <input class="check-in" type="checkbox" checked disabled />
-                <span class="check-s"><i class="color-red">*</i>联系方式</span>
-              </label>
-              <label class="checkbox-li fl">
-                <input class="check-in" type="checkbox" checked disabled />
-                <span class="check-s"><i class="color-red">*</i>代表队</span>
-              </label>
-              <label class="checkbox-li fl">
-                <input class="check-in" type="checkbox" checked disabled />
-                <span class="check-s"><i class="color-red">*</i>所在区域</span>
-              </label>
-              <label class="checkbox-li fl">
-                <input class="check-in" type="checkbox" name="applyInfo" value="1" @change="handleSelectApplyInfo" />
-                <span class="check-s">年龄</span>
-              </label>
-              <label class="checkbox-li fl">
-                <input class="check-in" type="checkbox" name="applyInfo" value="2" @change="handleSelectApplyInfo" />
-                <span class="check-s">居住地址</span>
-              </label>
-              <label class="checkbox-li fl">
-                <input class="check-in" type="checkbox" name="applyInfo" value="3" @change="handleSelectApplyInfo" />
-                <span class="check-s">自我介绍</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- 联系方式 -->
-          <div class="publish-item clearfix">
-            <div class="label"><span class="color-red">*</span> 联系方式：</div>
-            <div class="con">
-              <div class="clearfix">
-                <label class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" checked disabled />
-                  <span class="check-s">手机号</span>
-                </label>
-                <label class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" name="contactInfo" value="1" @change="handleSelectContactInfo" />
-                  <span class="check-s">QQ</span>
-                </label>
-                <label class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" name="contactInfo" value="2" @change="handleSelectContactInfo" />
-                  <span class="check-s">MSN</span>
-                </label>
-                <label class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" name="contactInfo" value="3" @change="handleSelectContactInfo" />
-                  <span class="check-s">SKYPE</span>
-                </label>
-                <label class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" name="contactInfo" value="4" @change="handleSelectContactInfo" />
-                  <span class="check-s">微信号</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- 角色选择 -->
-          <div class="publish-item clearfix">
-            <div class="label"><span class="color-red">*</span> 角色选择：</div>
-            <div class="con">
-              <div class="clearfix">
-                <label class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" name="roles" value="1" @change="handleSelectRoles" checked disabled />
-                  <span class="check-s">比赛选手</span>
-                </label>
-                <label class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" name="roles" value="2" @change="handleSelectRoles" checked disabled />
-                  <span class="check-s">裁判</span>
-                </label>
-                <label class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" name="roles" value="3" @change="handleSelectRoles" checked disabled />
-                  <span class="check-s">主裁判</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- 报名费用 -->
-          <div class="publish-item clearfix">
-            <div class="label">报名费用：</div>
-            <div class="con">
-              <div class="item-radio clearfix">
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="fee" value="0" :checked="!feeInputShow" @change="handleSelectFee" />
-                  <span class="span">无</span>
-                </label>
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="fee" value="1" :checked="feeInputShow" @change="handleSelectFee" />
-                  <span class="span">有</span>
-                </label>
-              </div>
-              <div class="item-b" v-if="feeInputShow">每人(每队)<input class="input" type="number" min="0.01" v-model.trim.number="formData.fee" placeholder="请输入报名费用" /></div>
-            </div>
-          </div>
-
-          <!-- 报名人数上限 -->
-          <div class="publish-item clearfix">
-            <div class="label"><span class="color-red">*</span> 报名人数上限：</div>
-            <div class="con">
-              <div class="item-radio clearfix">
-                <label class="radio-li">
-                  <input class="radio" type="radio" name="upperLimit" value="0" :checked="!upperLimitInputShow" @click="handleSelectUpperLimit" />
-                  <span class="span">不限</span>
-                </label>
-              </div>
-              <div class="item-radio clearfix">
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="upperLimit" value="1" :checked="upperLimitInputShow" @click="handleSelectUpperLimit" />
-                  <span class="span">人数上限（个人赛）</span>
-                </label>
-                <div class="item-b fl" v-if="upperLimitInputShow"><input class="input" type="number" min="1" v-model.trim.number="formData.upper_limit" placeholder="请输入人数上限" />人</div>
-              </div>
-              <div class="tip color-gray">系统默认总人数最多不超过1万</div>
-            </div>
-          </div>
-
-          <!-- 团队添加 -->
-          <div class="publish-item clearfix">
-            <div class="label"><span class="color-red">*</span>团队添加：</div>
-            <div class="con">
-              <div class="item-radio clearfix">
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="teamWhere" value="1" @click="handleSelectTeamWhere" checked />
-                  <span class="span">组织者添加</span>
-                </label>
-                <label class="radio-li fl">
-                  <input class="radio" type="radio" name="teamWhere" value="2" @click="handleSelectTeamWhere" />
-                  <span class="span">各队员自己填写</span>
-                </label>
-              </div>
-              <div class="tip color-gray">（参赛队员报名时选择的团队）</div>
-
-              <!-- 输入团队名称 -->
-              <template v-if="teamListShow">
-                <div class="item-b item-people" v-for="(item, index) in teamNameList" :key="item.id">
-                  {{index + 1}}.<input type="text" class="input" placeholder="请输入团队名称" v-model.trim="teamNameList[index].name" />
-                  <button class="people-delete" @click="handleDeleteTeamName(index)"></button>
-                </div>
-
-                <button class="add-people" @click="handleAddTeamName">添加团队</button>
-              </template>
-            </div>
-          </div>
-          <!--publish-item end-->
-          <div class="publish-bottom">
-            <button class="publish-btn" @click="handleNextStep">下一步</button>
-          </div>
+          <!-- 团队赛事公告 -->
+          <div class="team-competition">团队</div>
         </div>
         <!--publish-content end-->
       </div>
@@ -598,7 +226,7 @@
             </div>
           </div>
           <div class="last-bottom">
-            <button class="bond-btn" @click="onBzjClick">确认并支付</button>
+            <button class="bond-btn" type="button" @click="onBzjClick">确认并支付</button>
           </div>
         </div>
       </div>

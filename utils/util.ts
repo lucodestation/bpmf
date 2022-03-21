@@ -44,11 +44,15 @@ util.uploadFile = (option) => {
       bucket: 'bpmf',
       secure: true,
     })
+
+    const fileName = new Date().valueOf() + '-' + option.fileName
+    console.log(fileName)
+
     const headers = {
       // 指定该Object被下载时网页的缓存行为。
       // 'Cache-Control': 'no-cache',
       // 指定该Object被下载时的名称。
-      'Content-Disposition': 'inline',
+      // 'Content-Disposition': 'inline',
       // 指定该Object被下载时的内容编码格式。
       // 'Content-Encoding': 'UTF-8',
       // 指定过期时间。
@@ -61,12 +65,10 @@ util.uploadFile = (option) => {
       // 'x-oss-tagging': 'Tag1=1&Tag2=2',
       // 指定CopyObject操作时是否覆盖同名目标Object。此处设置为true，表示禁止覆盖同名Object。
       // 'x-oss-forbid-overwrite': 'true',
-    };
-    const fileName = new Date().valueOf() + '-' + option.fileName
-    console.log(fileName)
+    }
 
     client
-      .put('images/' + fileName, option.file, headers)
+      .put('images/' + fileName, option.file, { headers })
       .then(() => {
         let url = `https://bpmf.oss-cn-beijing.aliyuncs.com/images/${fileName}`
         resolve(url)
@@ -112,8 +114,27 @@ util.uploadMultipleFile = async (option) => {
     return new Promise(async (resolve, reject) => {
       const fileName = new Date().valueOf() + '-' + item.fileName
 
+      const headers = {
+        // 指定该Object被下载时网页的缓存行为。
+        // 'Cache-Control': 'no-cache',
+        // 指定该Object被下载时的名称。
+        // 'Content-Disposition': 'inline',
+        // 指定该Object被下载时的内容编码格式。
+        // 'Content-Encoding': 'UTF-8',
+        // 指定过期时间。
+        // 'Expires': 'Wed, 08 Jul 2022 16:57:01 GMT',
+        // 指定Object的存储类型。
+        // 'x-oss-storage-class': 'Standard',
+        // 指定Object的访问权限。
+        // 'x-oss-object-acl': 'private',
+        // 设置Object的标签，可同时设置多个标签。
+        // 'x-oss-tagging': 'Tag1=1&Tag2=2',
+        // 指定CopyObject操作时是否覆盖同名目标Object。此处设置为true，表示禁止覆盖同名Object。
+        // 'x-oss-forbid-overwrite': 'true',
+      }
+
       client
-        .put('images/' + fileName, item.file)
+        .put('images/' + fileName, item.file, { headers })
         .then(() => {
           let url = `https://bpmf.oss-cn-beijing.aliyuncs.com/images/${fileName}`
           resolve(url)
