@@ -180,6 +180,7 @@ new Vue({
         },
         // 提交数据
         onBtnClick: function () {
+            var _this = this;
             var arr1 = [];
             var num = 0;
             for (var i in this.ordeList) {
@@ -200,6 +201,14 @@ new Vue({
             }).then(function (res) {
                 if (res.code == 200) {
                     syalert.syhide('bangCont');
+                    request({ url: '/api/Bangwen/bangwenDetail', method: 'post', data: { bangwen_id: _this.id } }).then(function (ress) {
+                        if (ress.code == 200) {
+                            _this.newsCont = ress.data;
+                        }
+                        else {
+                            layer.msg(res.msg);
+                        }
+                    });
                 }
                 else {
                     layer.msg(res.msg);

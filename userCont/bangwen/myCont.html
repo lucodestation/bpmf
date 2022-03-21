@@ -55,15 +55,16 @@
               <div class="txt">
                 <div class="t m-b-10">
                   {{noticeCont.title}}
-                  <div class="state fr color-6">当前状态：<span class="color-orange">已中榜</span>
-                    <!-- <span class="color-orange" v-if="noticeCont.status=='-2'">整体终止任务</span>
-                    <span class="color-orange" v-if="noticeCont.status=='-1'">审核失败</span>
+                  <div class="state fr color-6">当前状态：
+                    <!-- 0待中榜，1已中榜待学习（待教课），2已教课待开始学习，3已开始学习（已教课）即工作中,4已完成（正常完成或者终止任务） -->
+                    <!-- <span class="color-orange" v-if="noticeCont.status=='-2'">整体终止任务</span> -->
+                    <!-- <span class="color-orange" v-if="noticeCont.status=='-1'">审核失败</span> -->
                     <span class="color-orange" v-if="noticeCont.status=='0'">待审核</span>
-                    <span class="color-orange" v-if="noticeCont.status=='1'">审核成功</span>
-                    <span class="color-orange" v-if="noticeCont.status=='2'">应榜中</span>
-                    <span class="color-orange" v-if="noticeCont.status=='3'">应榜结束</span>
-                    <span class="color-orange" v-if="noticeCont.status=='4'">工作中</span>
-                    <span class="color-orange" v-if="noticeCont.status=='5'">任务结束</span> -->
+                    <span class="color-orange" v-if="noticeCont.status=='1'">已中榜</span>
+                    <span class="color-orange" v-if="noticeCont.status=='2'">已教课</span>
+                    <span class="color-orange" v-if="noticeCont.status=='3'">工作中</span>
+                    <span class="color-orange" v-if="noticeCont.status=='4'">任务结束</span>
+                    <!-- <span class="color-orange" v-if="noticeCont.status=='5'">任务结束</span> -->
                   </div>
                 </div>
                 <div class="tags clearfix">
@@ -82,8 +83,8 @@
             </div>
             <!--center-rank-head end-->
             <!--center-rank-head-hd start-->
-            <div class="center-rank-head-hd m-t-35">
-              <div class="date"><span class="color-gray"> 中榜时间：</span>2021-10-21 12：00</div>
+            <div class="center-rank-head-hd m-t-35"v-if="noticeCont.status=='1'">
+              <div class="date"><span class="color-gray"> 中榜时间：</span>{{noticeCont.select_time}}</div>
               <div class="hd-t m-t-10 clearfix">
                 <div class="num f-weight f-16 fl">01</div>
                 <div class="name f-weight f-16 fl m-l-20">周杰</div>
@@ -94,7 +95,7 @@
             </div>
             <!--center-rank-head-hd end-->
             <!--center-inner-table-wrap start-->
-            <div class="center-inner-table-wrap">
+            <div class="center-inner-table-wrap"v-if="noticeCont.status=='1'">
               <table class="center-inner-table center-order-table">
                 <tr>
                   <th>第1次支付50元</th>

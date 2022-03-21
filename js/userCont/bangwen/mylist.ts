@@ -7,40 +7,27 @@ new Vue({
   el: '#app',
   data() {
     return {
+      navList: [{ id: 1, name: '教课应榜' }, { id: 2, name: '学课应榜' }],
+      navId: 1,
       myList: [],// 列表
     }
   },
   created() {
-    // this.GetRequest()
-    // request({ method: 'POST', url: '/api/Bangwen/cate' }).then((res) => {
-    //   if (res.code == 200) {
-    //     this.cateList = res.data
-    //   }
-    // })
-    request({ url: '/api/Bangwenattend/list', method: 'post', data: { type: 1 }, }).then((res) => {
-      if (res.code == 200) {
-        this.myList = res.data
-        // for (let i in this.cateList) {
-        //   if (this.cateList[i].id == res.data.b_id) {
-        //     this.name = this.cateList[i].name
-        //   }
-        // }
-      }
-    })
+    this.onlist()
   },
   methods: {
-    // 获取当前页面url
-    // GetRequest() {
-    //   let url = location.search; //获取当前页面url
-    //   let theRequest = new Object();
-    //   if (url.indexOf("?") != -1) {
-    //     var str = url.substr(1);
-    //     let strs = str.split("&");
-    //     for (let i = 0; i < strs.length; i++) {
-    //       theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
-    //     }
-    //   }
-    //   this.id = theRequest.id
-    // },
+    // 获取数据列表
+    onlist() {
+      request({ url: '/api/Bangwenattend/list', method: 'post', data: { type: this.navId } }).then((res) => {
+        if (res.code == 200) {
+          this.myList = res.data
+        }
+      })
+    },
+    // 点击切换类型
+    onNavClick(id) {
+      this.navId = id
+      this.onlist()
+    }
   }
 })

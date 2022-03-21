@@ -68,10 +68,12 @@ new Vue({
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, request({
-                            method: 'POST',
-                            url: '/api/Bangwen/cate',
-                        })];
+                    case 0:
+                        this.GetRequest();
+                        return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Bangwen/cate',
+                            })];
                     case 1:
                         res = _a.sent();
                         if (res.code == 200) {
@@ -144,6 +146,19 @@ new Vue({
                     }
                 });
             });
-        }
+        },
+        // 获取当前页面url
+        GetRequest: function () {
+            var url = location.search; //获取当前页面url
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                var strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+                }
+            }
+            this.type = theRequest.type;
+        },
     }
 });

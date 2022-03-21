@@ -55,7 +55,8 @@ new Vue({
             },
             userCont: '',
             coverImage: {},
-            sfzImage: {}, // 身份证反面
+            sfzImage: {},
+            scImage: {}, // 手持身份证
         };
     },
     created: function () {
@@ -75,25 +76,27 @@ new Vue({
                         else {
                             layer.msg(res.msg);
                         }
-                        // 身份证正面
+                        // 初始化身份证正面
                         this.initCoverImageFileChange();
-                        // 身份证反面
-                        this.ImageFileChange();
+                        // 初始化身份证反面
+                        this.sfzImageFileChange();
+                        // 初始化身份证反面
+                        this.scImageFileChange();
                         return [2 /*return*/];
                 }
             });
         });
     },
     methods: {
-        // 身份证正面
+        // 初始化身份证正面
         initCoverImageFileChange: function () {
             var _this = this;
             layui.upload.render({
                 elem: '#uploadCover',
                 auto: false,
-                accept: 'image',
-                acceptMime: '.jpg,.png,.bmp,.jpeg,.webp',
-                exts: 'jpg|png|bmp|jpeg|webp',
+                accept: 'images',
+                acceptMime: '.jpg,.png,.bmp,.jpeg',
+                exts: 'jpg|png|bmp|jpeg',
                 size: 0,
                 multiple: false,
                 // 选择文件回调
@@ -105,7 +108,9 @@ new Vue({
                         // console.log(file) //得到文件对象
                         // console.log(result) //得到文件base64编码，比如图片
                         _this.coverImage = {
+                            // 用于提交数据
                             file: file,
+                            // 用于页面展示
                             url: result,
                         };
                         console.log(_this.coverImage);
@@ -113,15 +118,15 @@ new Vue({
                 },
             });
         },
-        // 身份证反面
-        ImageFileChange: function () {
+        // 初始化身份证反面
+        sfzImageFileChange: function () {
             var _this = this;
             layui.upload.render({
-                elem: '#uploadSfz',
+                elem: '#sfzuploadCover',
                 auto: false,
-                // accept: 'image', // 指定允许上传时校验的文件类型
-                // acceptMime: '.jpg,.png,.bmp,.jpeg,.webp', // 规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
-                // exts: 'jpg|png|bmp|jpeg|webp', // 允许上传的文件后缀。一般结合 accept 参数类设定。
+                accept: 'images',
+                acceptMime: '.jpg,.png,.bmp,.jpeg',
+                exts: 'jpg|png|bmp|jpeg',
                 size: 0,
                 multiple: false,
                 // 选择文件回调
@@ -133,7 +138,9 @@ new Vue({
                         // console.log(file) //得到文件对象
                         // console.log(result) //得到文件base64编码，比如图片
                         _this.sfzImage = {
+                            // 用于提交数据
                             file: file,
+                            // 用于页面展示
                             url: result,
                         };
                         console.log(_this.sfzImage);
@@ -141,28 +148,115 @@ new Vue({
                 },
             });
         },
+        // 初始化身份证反面
+        scImageFileChange: function () {
+            var _this = this;
+            layui.upload.render({
+                elem: '#scuploadCover',
+                auto: false,
+                accept: 'images',
+                acceptMime: '.jpg,.png,.bmp,.jpeg',
+                exts: 'jpg|png|bmp|jpeg',
+                size: 0,
+                multiple: false,
+                // 选择文件回调
+                choose: function (result) {
+                    console.log(result);
+                    //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                    result.preview(function (index, file, result) {
+                        // console.log(index) //得到文件索引
+                        // console.log(file) //得到文件对象
+                        // console.log(result) //得到文件base64编码，比如图片
+                        _this.scImage = {
+                            // 用于提交数据
+                            file: file,
+                            // 用于页面展示
+                            url: result,
+                        };
+                        console.log(_this.scImage);
+                    });
+                },
+            });
+        },
+        onrealInfo: function () {
+            var _this = this;
+            request({ url: '/api/Mine/realInfo', method: 'post' }).then(function (res) {
+                if (res.code == 200) {
+                    _this.userCont = res.data;
+                }
+                else {
+                    layer.msg(res.msg);
+                }
+            });
+        },
+        // 提交数据
         onBtnClick: function () {
             return __awaiter(this, void 0, void 0, function () {
-                var aa, ress;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
+                var reg_tel, _a, _b, _c;
+                var _this = this;
+                return __generator(this, function (_d) {
+                    switch (_d.label) {
                         case 0:
-                            aa = util.uploadFile({
-                                file: this.sfzImage.file,
-                                fileName: 'cover',
-                            });
-                            console.log(aa);
-                            console.log(this.sfzImage);
-                            console.log(this.sfzImage.file);
-                            // this.formData.image = this.coverImage.file
-                            return [2 /*return*/];
+                            if (!this.formData.name)
+                                return [2 /*return*/, layer.msg('请输入姓名')];
+                            if (!this.formData.idcard)
+                                return [2 /*return*/, layer.msg('请输入身份证号')];
+                            if (this.formData.idcard) {
+                                reg_tel = /^([1-6][1-9]|50)\d{4}(18|19|20)\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+                                if (!reg_tel.test(this.formData.idcard))
+                                    return [2 /*return*/, layer.msg('请输入正确的身份证号')];
+                            }
+                            _a = this.formData;
+                            return [4 /*yield*/, util
+                                    .uploadFile({
+                                    file: this.coverImage.file,
+                                    fileName: this.coverImage.file.name,
+                                })
+                                    .catch(function (error) {
+                                    console.log('上传身份证正面失败', error);
+                                    layer.msg('上传身份证正面失败');
+                                })];
                         case 1:
-                            ress = _a.sent();
-                            if (ress.code == 200) {
-                            }
-                            else {
-                                layer.msg(ress.msg);
-                            }
+                            _a.front_image = _d.sent();
+                            if (!this.formData.front_image)
+                                return [2 /*return*/];
+                            _b = this.formData;
+                            return [4 /*yield*/, util
+                                    .uploadFile({
+                                    file: this.sfzImage.file,
+                                    fileName: this.sfzImage.file.name,
+                                })
+                                    .catch(function (error) {
+                                    console.log('上传身份证反面失败', error);
+                                    layer.msg('上传身份证反面失败');
+                                })];
+                        case 2:
+                            _b.back_image = _d.sent();
+                            if (!this.formData.back_image)
+                                return [2 /*return*/];
+                            _c = this.formData;
+                            return [4 /*yield*/, util
+                                    .uploadFile({
+                                    file: this.scImage.file,
+                                    fileName: this.scImage.file.name,
+                                })
+                                    .catch(function (error) {
+                                    console.log('上传手持身份证失败', error);
+                                    layer.msg('上传手持身份证失败');
+                                })];
+                        case 3:
+                            _c.hand_image = _d.sent();
+                            if (!this.formData.hand_image)
+                                return [2 /*return*/];
+                            request({ url: '/api/Mine/realname', method: 'post', data: this.formData }).then(function (res) {
+                                if (res.code == 200) {
+                                    layer.msg('提交成功');
+                                    _this.onrealInfo();
+                                }
+                                else {
+                                    layer.msg(res.msg);
+                                }
+                            });
                             return [2 /*return*/];
                     }
                 });
