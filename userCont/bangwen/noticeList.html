@@ -99,6 +99,8 @@
                     </div>
                   </td>
                   <td>
+                    <p v-if="item.type==1">教棋</p>
+                    <p v-if="item.type==2">学棋</p>
                     <p>{{item.name}}</p>
                     <p class="color-red">金额{{item.total_money}}</p>
                   </td>
@@ -133,23 +135,23 @@
                       <a class="handle-btn m-r-10 m-t-5" :href="'./addCont.html?id='+item.id"
                         style="margin-right: 5px;">修改榜文</a>
                       <a class="handle-btn blue m-t-5" :href="'./noticeView.html?id='+item.id"
-                        style="margin-right: 5px;">查看详情</a><a class="handle-btn blue m-t-5" href="javascript:void(0)"
-                        @click='onDelClick(item.id)'>删除榜文</a>
+                        style="margin-right: 5px;">查看详情</a>
+                      <!-- <a class="handle-btn blue m-t-5" href="javascript:void(0)" @click='onDelClick(item.id)'>删除榜文</a> -->
                     </div>
                   </td>
+                  <!-- <td v-if="item.status==1">
+                    <div class="handle text-c">
+                      <a class="handle-btn m-r-10 m-t-5" href="CenterRank.html">修改榜文</a>
+                      <a class="handle-btn blue m-t-5" :href="'./noticeView.html?id='+item.id">查看详情</a>
+                    </div>
+                  </td> -->
                   <td v-if="item.status==1">
                     <div class="handle text-c">
-                      <!-- <a class="handle-btn m-r-10 m-t-5" href="CenterRank.html">修改榜文</a> -->
-                      <a class="handle-btn blue m-t-5" :href="'./noticeView.html?id='+item.id">查看详情</a>
+                      <a class="handle-btn m-t-5 m-r-10" :href="'./noticeView.html?id='+item.id">选择中榜人</a>
+                      <a class="handle-btn m-t-5 blue" :href="'./noticeView.html?id='+item.id">查看详情</a>
                     </div>
                   </td>
                   <td v-if="item.status==2">
-                    <div class="handle text-c">
-                      <a class="handle-btn m-t-5 m-r-10" href="CenterRank5.html">选择中榜人</a>
-                      <a class="handle-btn m-t-5 blue" href="CenterRank5.html">查看详情</a>
-                    </div>
-                  </td>
-                  <td v-if="item.status==3">
                     <div class="handle text-c">
                       <a class="handle-btn m-t-5 m-r-10" href="CenterRank5.html">选择中榜人</a>
                       <a class="handle-btn m-t-5" href="CenterRank6.html">开始学习</a>

@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,6 +45,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
+};
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 $(function () {
     $('.public-header').load('/components/PublicHeader.html');
@@ -83,7 +103,8 @@ new Vue({
             num: '',
             pay_type: '1',
             pwd: '',
-            coverImage: {}, // 封面图
+            coverImage: {},
+            affixList: [], // 附件列表
         };
     },
     watch: {
@@ -107,10 +128,12 @@ new Vue({
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, request({
-                            method: 'POST',
-                            url: '/api/Bangwen/cate'
-                        })];
+                    case 0:
+                        this.GetRequest();
+                        return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Bangwen/cate'
+                            })];
                     case 1:
                         res = _a.sent();
                         if (res.code == 200) {
@@ -247,6 +270,70 @@ new Vue({
                 },
             });
         },
+        // 选择附件
+        handleAffixFileChange: function (event) {
+            var element = event.target || event.srcElement;
+            // 获取文件对象数组
+            var files = element.files;
+            // 存储符合规定的文件
+            var tempArr = __spreadArray([], this.affixList, true);
+            // 存储所选文件中不支持的扩展名
+            var errorArr = [];
+            // 存储所选文件中超过指定大小的文件名
+            var errorArr2 = [];
+            for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
+                var item = files_1[_i];
+                // 做多上传 5 个文件
+                if (tempArr.length < 5) {
+                    var filesNameList = this.affixList.length ? this.affixList.map(function (i) { return i.name; }) : [];
+                    // （如果不存在文件名）禁止添加同名文件
+                    if (!filesNameList.includes(item.name)) {
+                        console.log(item);
+                        if (!['png', 'jpg', 'jpeg', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
+                            if (!errorArr.includes(util.getExtensionName(item.name))) {
+                                errorArr.push(util.getExtensionName(item.name));
+                            }
+                        }
+                        else if (item.size > 2048 * 1024) {
+                            if (!errorArr2.includes(item.name)) {
+                                errorArr2.push(item.name);
+                            }
+                        }
+                        else if (tempArr.length < 5) {
+                            tempArr.push(item);
+                        }
+                    }
+                }
+            }
+            console.log('tempArr', tempArr.length, tempArr);
+            if (tempArr.length < 5 && errorArr.length) {
+                console.log('errorArr', errorArr);
+                layer.open({
+                    type: 0,
+                    icon: 0,
+                    title: '不受支持的文件类型',
+                    content: '您选择的 ' + __spreadArray([], errorArr, true) + ' 类型的文件不受支持',
+                    btn: ['重新选择'],
+                });
+            }
+            else if (errorArr2.length) {
+                console.log('errorArr2', errorArr2);
+                layer.open({
+                    type: 0,
+                    icon: 0,
+                    title: '文件过大',
+                    content: '请选择 2M 以内的文件',
+                    btn: ['重新选择'],
+                });
+            }
+            this.affixList = tempArr;
+            element.value = '';
+            console.log(__assign({}, this.affixList));
+        },
+        // 删除附件
+        handleDeleteAffix: function (index) {
+            this.affixList = this.affixList.filter(function (item, ind) { return index !== ind; });
+        },
         // 点击支付方式判断
         getpaynumSelected: function () {
             if (this.totalMoney == '') {
@@ -284,21 +371,70 @@ new Vue({
         // 提交
         onBtnClick: function () {
             return __awaiter(this, void 0, void 0, function () {
-                var aa, reg_tel, qq, email, res;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
+                var _a, affixUrlArr, reg_tel, qq, email, res;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
                         case 0:
-                            aa = util.uploadFile({
-                                file: this.coverImage.file,
-                                fileName: 'cover',
-                            });
-                            console.log(aa);
-                            console.log(this.coverImage);
-                            console.log(this.coverImage.file);
-                            this.formData.image = this.coverImage.file;
-                            return [2 /*return*/];
+                            if (!this.formData.title)
+                                return [2 /*return*/, layer.msg('请输入标题')];
+                            if (!this.formData.total_money)
+                                return [2 /*return*/, layer.msg('请输入金额')];
+                            if (!this.formData.detail)
+                                return [2 /*return*/, layer.msg('请输入榜文详情')];
+                            _a = this.formData;
+                            return [4 /*yield*/, util
+                                    .uploadFile({
+                                    file: this.coverImage.file,
+                                    fileName: this.coverImage.file.name,
+                                })
+                                    .catch(function (error) {
+                                    console.log('上传封面图失败', error);
+                                    layer.msg('上传封面图失败');
+                                })];
                         case 1:
-                            res = _a.sent();
+                            _a.image = _b.sent();
+                            if (!this.formData.image)
+                                return [2 /*return*/];
+                            return [4 /*yield*/, util
+                                    .uploadMultipleFile(this.affixList.map(function (item) {
+                                    console.log('affixList item', item);
+                                    return {
+                                        file: item,
+                                        fileName: item.name,
+                                    };
+                                }))
+                                    .catch(function (error) {
+                                    console.log('上传附件失败', error);
+                                    layer.msg('上传附件失败');
+                                })];
+                        case 2:
+                            affixUrlArr = _b.sent();
+                            if (!affixUrlArr)
+                                return [2 /*return*/];
+                            this.formData.files = affixUrlArr.toString();
+                            if (this.formData.mobile) {
+                                reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/ //11位手机号码正则
+                                ;
+                                if (!reg_tel.test(this.formData.mobile))
+                                    return [2 /*return*/, layer.msg('请输入正确的手机号')];
+                            }
+                            if (this.formData.qq) {
+                                qq = "[1-9][0-9]{4,14}";
+                                if (!qq.test(this.formData.qq))
+                                    return [2 /*return*/, layer.msg('请输入正确QQ号')];
+                            }
+                            if (this.formData.email) {
+                                email = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+                                if (!email.test(this.formData.email))
+                                    return [2 /*return*/, layer.msg('请输入正确邮箱')];
+                            }
+                            return [4 /*yield*/, request({
+                                    method: 'POST',
+                                    url: '/api/Bangwen/pushBangwen',
+                                    data: this.formData,
+                                })];
+                        case 3:
+                            res = _b.sent();
                             if (res.code == 200) {
                                 // this.cateList = res.data
                                 // this.formData.b_id = res.data[0].id;
@@ -383,6 +519,19 @@ new Vue({
                     }
                 });
             });
-        }
+        },
+        // 获取当前页面url
+        GetRequest: function () {
+            var url = location.search; //获取当前页面url
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                var strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+                }
+            }
+            this.formData.type = theRequest.type;
+        },
     }
 });

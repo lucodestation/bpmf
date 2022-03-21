@@ -48,6 +48,7 @@ new Vue({
       pay_type: '1',// 支付方式
       pwd: '',// 支付密码
       coverImage: {},// 封面图
+      affixList: [],// 附件列表
     }
   },
   watch: {
@@ -66,6 +67,7 @@ new Vue({
     },
   },
   async created() {
+    this.GetRequest()
     const res = await request({
       method: 'POST',
       url: '/api/Bangwen/cate'
@@ -200,6 +202,70 @@ new Vue({
         },
       })
     },
+    // 选择附件
+    handleAffixFileChange(event) {
+      const element = event.target || event.srcElement
+      // 获取文件对象数组
+      const files = element.files
+
+      // 存储符合规定的文件
+      const tempArr = [...this.affixList]
+      // 存储所选文件中不支持的扩展名
+      const errorArr = []
+      // 存储所选文件中超过指定大小的文件名
+      const errorArr2 = []
+      for (const item of files) {
+        // 做多上传 5 个文件
+        if (tempArr.length < 5) {
+          const filesNameList = this.affixList.length ? this.affixList.map((i) => i.name) : []
+          // （如果不存在文件名）禁止添加同名文件
+          if (!filesNameList.includes(item.name)) {
+            console.log(item)
+            if (!['png', 'jpg', 'jpeg', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
+              if (!errorArr.includes(util.getExtensionName(item.name))) {
+                errorArr.push(util.getExtensionName(item.name))
+              }
+            } else if (item.size > 2048 * 1024) {
+              if (!errorArr2.includes(item.name)) {
+                errorArr2.push(item.name)
+              }
+            } else if (tempArr.length < 5) {
+              tempArr.push(item)
+            }
+          }
+        }
+      }
+
+      console.log('tempArr', tempArr.length, tempArr)
+
+      if (tempArr.length < 5 && errorArr.length) {
+        console.log('errorArr', errorArr)
+        layer.open({
+          type: 0,
+          icon: 0, // 0 警告，1 成功，2 错误，3 问号，4 锁，5 🙁，6 笑脸
+          title: '不受支持的文件类型',
+          content: '您选择的 ' + [...errorArr] + ' 类型的文件不受支持',
+          btn: ['重新选择'],
+        })
+      } else if (errorArr2.length) {
+        console.log('errorArr2', errorArr2)
+        layer.open({
+          type: 0,
+          icon: 0, // 0 警告，1 成功，2 错误，3 问号，4 锁，5 🙁，6 笑脸
+          title: '文件过大',
+          content: '请选择 2M 以内的文件',
+          btn: ['重新选择'],
+        })
+      }
+
+      this.affixList = tempArr
+      element.value = ''
+      console.log({ ...this.affixList })
+    },
+    // 删除附件
+    handleDeleteAffix(index) {
+      this.affixList = this.affixList.filter((item, ind) => index !== ind)
+    },
     // 点击支付方式判断
     getpaynumSelected() {
       if (this.totalMoney == '') {
@@ -236,18 +302,38 @@ new Vue({
     },
     // 提交
     async onBtnClick() {
-      let aa = util.uploadFile({
-        file: this.coverImage.file,
-        fileName: 'cover',
-      })
-      console.log(aa)
-      console.log(this.coverImage)
-      console.log(this.coverImage.file)
-      this.formData.image = this.coverImage.file
-      return
+
       if (!this.formData.title) return layer.msg('请输入标题')
       if (!this.formData.total_money) return layer.msg('请输入金额')
       if (!this.formData.detail) return layer.msg('请输入榜文详情')
+      this.formData.image = await util
+        .uploadFile({
+          file: this.coverImage.file,
+          fileName: this.coverImage.file.name,
+        })
+        .catch((error) => {
+          console.log('上传封面图失败', error)
+          layer.msg('上传封面图失败')
+        })
+      if (!this.formData.image) return
+
+      // 上传附件
+      const affixUrlArr = await util
+        .uploadMultipleFile(
+          this.affixList.map((item) => {
+            console.log('affixList item', item)
+            return {
+              file: item,
+              fileName: item.name,
+            }
+          })
+        )
+        .catch((error) => {
+          console.log('上传附件失败', error)
+          layer.msg('上传附件失败')
+        })
+      if (!affixUrlArr) return
+      this.formData.files = affixUrlArr.toString()
       if (this.formData.mobile) {
         var reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/ //11位手机号码正则
         if (!reg_tel.test(this.formData.mobile)) return layer.msg('请输入正确的手机号')
@@ -328,6 +414,19 @@ new Vue({
       } else {
         layer.msg(res.msg)
       }
-    }
+    },
+    // 获取当前页面url
+    GetRequest() {
+      let url = location.search; //获取当前页面url
+      let theRequest = new Object();
+      if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        let strs = str.split("&");
+        for (let i = 0; i < strs.length; i++) {
+          theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+        }
+      }
+      this.formData.type = theRequest.type
+    },
   }
 })

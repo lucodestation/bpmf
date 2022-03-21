@@ -62,87 +62,34 @@
           <div class="con">
             <h2 class="t">学课榜文大厅</h2>
             <div class="en">fuwubangwen</div>
-            <a class="rank-asd-a" href="发布榜文.html">我要发布学课</a>
+            <a class="rank-asd-a" href="./addList.html?type=2">我要发布学课</a>
           </div>
         </div>
         <!--index-sec2-asd end-->
         <!--index-sec2-item start-->
-        <div class="index-sec2-item">
+        <div class="index-sec2-item" v-for="item in xueList" :key="item.id">
           <div class="bor">
-            <a href="榜文大厅详情.html">
-              <div class="img-w"><img src="/images/index41.png" /></div>
+            <a :href="'./hallView.html?id='+item.id">
+              <div class="img-w"><img :src="item.image"></div>
               <div class="li-h clearfix">
-                <span class="hs">五子棋</span>
-                <div class="ht">五子棋潜龙棋局怎么破解</div>
+                <span class="hs">{{item.name}}</span>
+                <div class="ht">{{item.title}}</div>
               </div>
               <div class="li-tags">
-                <span class="gs">一次付清</span>
-                <span class="gs">单人中榜</span>
-                <span class="gs">不托管</span>
+                <span class="gs" v-if="item.pay_num_type==1">一次付清</span>
+                <span class="gs" v-else>多次付清</span>
+                <span class="gs" v-if="item.win_type==1">单人中榜</span>
+                <span class="gs" v-else>多人中榜</span>
+                <span class="gs" v-if="item.is_trustee==1">托管</span>
+                <span class="gs" v-else>不托管</span>
               </div>
-              <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
-              <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
-              <div class="li-price">酬金：<span class="price">￥15263</span></div>
+              <div class="li-date">任务周期：<span>{{item.task_start_time}}至{{item.task_end_time}}</span></div>
+              <div class="li-date">报名截止日期：<span>{{item.signup_end_time}}</span></div>
+              <div class="li-price">酬金：<span class="price">￥{{item.total_money}}</span></div>
               <div class="li-c clearfix">
                 <div class="li-private fl">
-                  <img src="/images/index22.png" />
-                  <div class="name">赛亚</div>
-                </div>
-                <div class="last fr">学棋</div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <!--index-sec2-item end-->
-        <!--index-sec2-item start-->
-        <div class="index-sec2-item">
-          <div class="bor">
-            <a href="榜文大厅详情.html">
-              <div class="img-w"><img src="/images/index41.png" /></div>
-              <div class="li-h clearfix">
-                <span class="hs">五子棋</span>
-                <div class="ht">五子棋潜龙棋局怎么破解</div>
-              </div>
-              <div class="li-tags">
-                <span class="gs">一次付清</span>
-                <span class="gs">单人中榜</span>
-                <span class="gs">不托管</span>
-              </div>
-              <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
-              <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
-              <div class="li-price">酬金：<span class="price">￥15263</span></div>
-              <div class="li-c clearfix">
-                <div class="li-private fl">
-                  <img src="/images/index22.png" />
-                  <div class="name">赛亚</div>
-                </div>
-                <div class="last fr">学棋</div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <!--index-sec2-item end-->
-        <!--index-sec2-item start-->
-        <div class="index-sec2-item">
-          <div class="bor">
-            <a href="榜文大厅详情.html">
-              <div class="img-w"><img src="/images/index41.png" /></div>
-              <div class="li-h clearfix">
-                <span class="hs">五子棋</span>
-                <div class="ht">五子棋潜龙棋局怎么破解</div>
-              </div>
-              <div class="li-tags">
-                <span class="gs">一次付清</span>
-                <span class="gs">单人中榜</span>
-                <span class="gs">不托管</span>
-              </div>
-              <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
-              <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
-              <div class="li-price">酬金：<span class="price">￥15263</span></div>
-              <div class="li-c clearfix">
-                <div class="li-private fl">
-                  <img src="/images/index22.png" />
-                  <div class="name">赛亚</div>
+                  <img :src="item.avatar">
+                  <div class="name">{{item.nickname}}</div>
                 </div>
                 <div class="last fr">学棋</div>
               </div>
@@ -151,7 +98,7 @@
         </div>
         <!--index-sec2-item end-->
       </div>
-      <a class="rank-more" href="榜文大厅-学棋更多.html">查看更多 ></a>
+      <a class="rank-more" href="./hallMore.html?type=2">查看更多 ></a>
     </div>
     <!--index-sec2 end-->
     <!--index-sec2 start-->
@@ -162,14 +109,14 @@
           <div class="con">
             <h2 class="t">教课榜文大厅</h2>
             <div class="en">jiaoxuebangwen</div>
-            <a class="rank-asd-a" href="">我要发布教课</a>
+            <a class="rank-asd-a" href="./addList.html">我要发布教课</a>
           </div>
         </div>
         <!--index-sec2-asd end-->
         <!--index-sec2-item start-->
         <div class="index-sec2-item" v-for="item in bangList" :key="item.id">
           <div class="bor">
-            <a href="榜文大厅教棋更多详情.html">
+            <a :href="'./hallView.html?id='+item.id">
               <div class="img-w"><img :src="item.image"></div>
               <div class="li-h clearfix">
                 <span class="hs">{{item.name}}</span>
@@ -198,7 +145,7 @@
         </div>
         <!--index-sec2-item end-->
       </div>
-      <a class="rank-more" href="./hallMore.html">查看更多 ></a>
+      <a class="rank-more" href="./hallMore.html?type=1">查看更多 ></a>
     </div>
     <!--index-sec2 end-->
   </div>

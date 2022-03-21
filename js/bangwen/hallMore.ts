@@ -26,6 +26,7 @@ new Vue({
     }
   },
   async created() {
+    this.GetRequest()
     // if (this.$route.query.type) {
     //   this.type = this.$route.query.type
     // }
@@ -90,6 +91,19 @@ new Vue({
       if (res.code == 200) {
         this.bangList = res.data.data
       }
-    }
+    },
+    // 获取当前页面url
+    GetRequest() {
+      let url = location.search; //获取当前页面url
+      let theRequest = new Object();
+      if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        let strs = str.split("&");
+        for (let i = 0; i < strs.length; i++) {
+          theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+        }
+      }
+      this.type = theRequest.type
+    },
   }
 })

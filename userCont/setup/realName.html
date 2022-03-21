@@ -1,30 +1,25 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <title>实名认证</title>
-  <link rel="stylesheet" href="/plugins/date/jedate.css">
-  <script src="/plugins/date/jedate.js"></script>
-  <script src="/plugins/upload/imgFileupload.js"></script>
-
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <link rel="stylesheet" href="/plugins/animate.min.css" />
-  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
-  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/plugins/layui/css/layui.css">
-
-  <script src="/plugins/babel-polyfill.min.js"></script>
-  <script src="/plugins/layui/layui.js"></script>
-  <script src="/plugins/jsencrypt.js"></script>
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <!-- <link rel="stylesheet" href="/plugins/swiper.min.css"> -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- <link rel="stylesheet" href="/plugins/date/jedate.css"> -->
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
   <script src="/plugins/jquery.min.js"></script>
-  <script src="/plugins/swiper/swiper.min.js"></script>
+  <!-- <script src="/plugins/swiper.min.js"></script> -->
+  <script src="/plugins/layui/layui.js"></script>
   <script src="/plugins/syalert/syalert.min.js"></script>
+  <!-- <script src="/plugins/date/jedate.js"></script> -->
+  <script src="/plugins/upload/imgFileupload.js"></script>
+  <script src="/plugins/upload/upload.js"></script>
   <script src="/plugins/vue.min.js"></script>
-
-  <script src="https://cdn.bootcdn.net/ajax/libs/ali-oss/6.17.1/aliyun-oss-sdk.min.js"></script>
   <script src="/plugins/axios.min.js"></script>
+  <script src="/plugins/aliyun-oss-sdk.min.js"></script>
   <script src="/utils/request.js"></script>
   <script src="/utils/util.js"></script>
 </head>
@@ -41,7 +36,7 @@
       <div class="center-content fr" id="app">
         <!--center-inner start-->
         <!-- 未提交 -->
-        <div class="center-inner" v-if="userCont.check_status=='-2'">
+        <div class="center-inner" v-show="userCont.check_status=='-2'">
           <div class="center-inner-tit">实名认证</div>
           <!--center-inner-content start-->
           <div class="center-inner-content">
@@ -77,19 +72,22 @@
                     <div class="set-id">
                       <div class="preview" id="uploadCover">
                         <img src="/images/set1.png" class="img-responsive" v-if="!this.coverImage.url" />
-                        <img :src="this.coverImage.url" class="img-responsive" v-else />
+                        <img class="cover-image" class="img-responsive" :src="this.coverImage.url" v-else />
                       </div>
                       <p class="tip">上传身份证正面</p>
                     </div>
-                    <div class="set-id" id="uploadSfz">
-                      <div class="preview">
+                    <div class="set-id">
+                      <div class="preview" id="sfzuploadCover">
                         <img src="/images/set2.png" class="img-responsive" v-if="!this.sfzImage.url" />
-                        <img class="img-responsive" :src="this.sfzImage.url" v-else />
+                        <img class="cover-image" class="img-responsive" :src="this.sfzImage.url" v-else />
                       </div>
                       <p class="tip">上传身份证反面</p>
                     </div>
                     <div class="set-id">
-                      <div class="preview"><img src="/images/set3.png" class="img-responsive" alt="" title=""> </div>
+                      <div class="preview" id="scuploadCover">
+                        <img src="/images/set3.png" class="img-responsive" v-if="!this.scImage.url" />
+                        <img class="cover-image" class="img-responsive" :src="this.scImage.url" v-else />
+                      </div>
                       <p class="tip">上传手持身份证</p>
                     </div>
                   </div>
@@ -106,7 +104,7 @@
           <!--center-inner-content end-->
         </div>
         <!-- 实名成功 -->
-        <div class="center-inner" v-if="userCont.check_status==1">
+        <div class="center-inner" v-show="userCont.check_status==1">
           <div class="center-inner-tit">实名认证</div>
           <!--center-inner-content start-->
           <div class="center-inner-content">
@@ -130,7 +128,7 @@
           <!--center-inner-content end-->
         </div>
         <!-- 审核中 -->
-        <div class="center-inner" v-if="userCont.check_status==0">
+        <div class="center-inner" v-show="userCont.check_status==0">
           <div class="center-inner-tit">实名认证</div>
           <!--center-inner-content start-->
           <div class="center-inner-content">
@@ -154,7 +152,7 @@
           <!--center-inner-content end-->
         </div>
         <!-- 审核失败 -->
-        <div class="center-inner" v-if="userCont.check_status=='-1'">
+        <div class="center-inner" v-show="userCont.check_status=='-1'">
           <div class="center-inner-tit">实名认证</div>
           <!--center-inner-content start-->
           <div class="center-inner-content">

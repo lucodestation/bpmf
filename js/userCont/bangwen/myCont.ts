@@ -20,14 +20,14 @@ new Vue({
         this.cateList = res.data
       }
     })
-    request({ url: '/api/Bangwen/bangwenDetail', method: 'POST', data: { bangwen_id: this.id }, }).then((res) => {
+    request({ url: '/api/Bangwenattend/attendDetail', method: 'POST', data: { attend_id: this.id }, }).then((res) => {
       if (res.code == 200) {
         this.noticeCont = res.data
-        for (let i in this.cateList) {
-          if (this.cateList[i].id == res.data.b_id) {
-            this.name = this.cateList[i].name
-          }
-        }
+        // for (let i in this.cateList) {
+        //   if (this.cateList[i].id == res.data.b_id) {
+        //     this.name = this.cateList[i].name
+        //   }
+        // }
       }
     })
   },
@@ -44,6 +44,7 @@ new Vue({
         }
       }
       this.id = theRequest.id
+      this.name = theRequest.name
     },
   }
 })

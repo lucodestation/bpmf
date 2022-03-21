@@ -145,6 +145,13 @@ new Vue({
       }).then((res) => {
         if (res.code == 200) {
           syalert.syhide('bangCont')
+          request({ url: '/api/Bangwen/bangwenDetail', method: 'post', data: { bangwen_id: this.id } }).then((ress) => {
+            if (ress.code == 200) {
+              this.newsCont = ress.data
+            } else {
+              layer.msg(res.msg)
+            }
+          })
         } else {
           layer.msg(res.msg)
         }

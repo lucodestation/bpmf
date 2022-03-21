@@ -49,6 +49,44 @@
     .publish-content .pay-l {
       display: block;
     }
+
+    /* 上传封面图 */
+    .publish-up-head {
+      display: flex;
+    }
+
+    .publish-up-head .cover-image {
+      width: 160px;
+      height: 160px;
+    }
+
+    /* 附件列表 */
+    .affix-list {
+      /* background: pink; */
+      color: #666;
+    }
+
+    .affix-list .affix-item {
+      /* background: #eee; */
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .affix-list .affix-item .close-icon {
+      width: 16px;
+      height: 16px;
+      margin: 0 10px;
+      transform: rotate(45deg);
+      background: url('/images/pub31.png') no-repeat center;
+      background-size: 100% 100%;
+      cursor: pointer;
+    }
+
+    .affix-list .affix-item .close-icon:hover {
+      background: url('/images/bank4.png') no-repeat center;
+      background-size: 100% 100%;
+    }
   </style>
 </head>
 
@@ -272,21 +310,10 @@
             <div class="publish-up-head">
               <div id="drop_area">
                 <div class="preview" id="uploadCover">
-                  <!-- <img src="/images/pub21.png" class="img-responsive" alt="" title="" /> -->
                   <img src="/images/pub21.png" v-if="!this.coverImage.url" />
                   <img class="cover-image" :src="this.coverImage.url" v-else />
                 </div>
               </div>
-              <!-- <script src="/plugins/singleUp.js"></script>
-              <script type="text/javascript">
-                var dragImgUpload = new DragImgUpload('#drop_area', {
-                  callback: function (files) {
-                    //回调函数，可以传递给后台等等
-                    var file = files[0]
-                    console.log(file.name)
-                  },
-                })
-              </script> -->
             </div>
             <!--封面end-->
           </div>
@@ -298,16 +325,28 @@
           <div class="con">
             <div class="item-tip">注意：最多上传五个附件。每个附件不超过2M，仅支持png、jpg、pdf、word、excel格式</div>
             <div class="cert-up clearfix">
-              <input type="file" name="" id="" class="imgFiles" style="display: none"
-                accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" multiple />
+              <input id="affix" type="file" accept=".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                multiple hidden handle @change="handleAffixFileChange" />
+              <div class="imgClick publish-load fl">
+                <label for="affix">
+                  <img src="/images/pub22.png" />
+                </label>
+              </div>
+              <div class="affix-list">
+                <div class="affix-item" v-for="(item, index) in affixList">
+                  <span class="close-icon" @click="handleDeleteAffix(index)"></span>
+                  <span class="name">{{item.name}}</span>
+                </div>
+              </div>
+              <!-- <input type="file" name="" id="" class="imgFiles" style="display: none" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" multiple />
               <div class="imgAll publish-load-img fl">
                 <ul></ul>
               </div>
               <div class="imgClick publish-load fl">
                 <img src="/images/pub22.png" />
-              </div>
+              </div> -->
             </div>
-            <script>
+            <!-- <script>
               var imgFile = new ImgUploadeFiles('.cert-up', function (e) {
                 this.init({
                   MH: 5800, //像素限制高度
@@ -317,7 +356,7 @@
                   },
                 })
               })
-            </script>
+            </script> -->
           </div>
         </div>
         <!--publish-item end-->

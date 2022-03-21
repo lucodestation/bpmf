@@ -43,20 +43,31 @@ new Vue({
     el: '#app',
     data: function () {
         return {
+            xueList: [],
             bangList: [], // 教课榜文列表
         };
     },
     created: function () {
         return __awaiter(this, void 0, void 0, function () {
-            var res;
+            var res, res;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, request({
                             method: 'POST',
                             url: '/api/Bangwen/list',
-                            data: { page: 1, pagenum: 7, type: 1 },
+                            data: { page: 1, pagenum: 7, type: 2 },
                         })];
                     case 1:
+                        res = _a.sent();
+                        if (res) {
+                            this.xueList = res.data.data;
+                        }
+                        return [4 /*yield*/, request({
+                                method: 'POST',
+                                url: '/api/Bangwen/list',
+                                data: { page: 1, pagenum: 7, type: 1 },
+                            })];
+                    case 2:
                         res = _a.sent();
                         if (res) {
                             this.bangList = res.data.data;
