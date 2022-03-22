@@ -82,38 +82,45 @@
               </div>
             </div>
             <!--center-rank-head end-->
-            <!--center-rank-head-hd start-->
-            <div class="center-rank-head-hd m-t-35"v-if="noticeCont.status=='1'">
-              <div class="date"><span class="color-gray"> 中榜时间：</span>{{noticeCont.select_time}}</div>
-              <div class="hd-t m-t-10 clearfix">
-                <div class="num f-weight f-16 fl">01</div>
-                <div class="name f-weight f-16 fl m-l-20">周杰</div>
-                <div class="price fl m-l-40">报价：100元</div>
-                <div class="c fl m-l-40">支付方式：多次支付</div>
-                <div class="c fl m-l-15">2次</div>
+            <div v-if="noticeCont.status=='1'">
+              <div v-for="item,k in selectList" :key='k'>
+                <!--center-rank-head-hd start-->
+                <div class="center-rank-head-hd m-t-35">
+                  <div class="date"><span class="color-gray"> 中榜时间：</span>{{noticeCont.select_time}}</div>
+                  <div class="hd-t m-t-10 clearfix">
+                    <div class="num f-weight f-16 fl">{{k+1}}</div>
+                    <div class="name f-weight f-16 fl m-l-20">{{item.nickname}}</div>
+                    <div class="price fl m-l-40">报价：{{item.total_money}}元</div>
+                    <div class="c fl m-l-40" v-if="item.pay_num_type==1">支付方式：单次支付</div>
+                    <div class="c fl m-l-40" v-if="item.pay_num_type==2">支付方式：多次支付</div>
+                    <div class="c fl m-l-15" v-if="item.pay_num_type==2">{{item.pay_num}}次</div>
+                  </div>
+                </div>
+                <!--center-rank-head-hd end-->
+                <!--center-inner-table-wrap start-->
+                <div class="center-inner-table-wrap">
+                  <table class="center-inner-table center-order-table" v-for="items,i in item.blList" :key='i'>
+                    <!-- {{items}} -->
+                    <tr>
+                      <th v-for="e,k in items" :key="k">第{{e.num}}次支付{{e.money}}元</th>
+                      <!-- <th>第2次支付30元</th>
+                      <th>第3次支付20元</th> -->
+                    </tr>
+                    <tr>
+                      <td v-for="e,k in items" :key="k">
+                        <!-- 0待总的开始学习，1待开始教课，2已开始教课待阶段完成学习，3完成学习 -->
+                        <p v-if="e.de_status==0" class="color-orange">未开始</p>
+                      </td>
+                      <!-- <td>
+                        <p class="color-orange">未开始</p>
+                      </td>
+                      <td>
+                        <p class="color-orange">未开始</p>
+                      </td> -->
+                    </tr>
+                  </table>
+                </div>
               </div>
-            </div>
-            <!--center-rank-head-hd end-->
-            <!--center-inner-table-wrap start-->
-            <div class="center-inner-table-wrap"v-if="noticeCont.status=='1'">
-              <table class="center-inner-table center-order-table">
-                <tr>
-                  <th>第1次支付50元</th>
-                  <th>第2次支付30元</th>
-                  <th>第3次支付20元</th>
-                </tr>
-                <tr>
-                  <td>
-                    <p class="color-orange">未开始</p>
-                  </td>
-                  <td>
-                    <p class="color-orange">未开始</p>
-                  </td>
-                  <td>
-                    <p class="color-orange">未开始</p>
-                  </td>
-                </tr>
-              </table>
             </div>
             <!--center-inner-table-wrap end-->
             <!--                    &lt;!&ndash;center-rank-reason start&ndash;&gt;-->

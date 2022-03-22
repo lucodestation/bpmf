@@ -21,16 +21,19 @@
         </div>
         <div class="top-person fr">
           <div class="top-person-img clearfix">
-            <img src="/images/index13.png" />
-            <span class="name">棋王1245</span>
+            <img :src="userCont.avatar" />
+            <span class="name" v-if="userCont.nickname">{{userCont.nickname}}</span>
+            <span class="name" v-else>昵称</span>
           </div>
           <div class="top-person-down">
             <div class="down-hd clearfix">
               <a href="/userCont/bangwen/addCont.html">
-                <img class="img" src="/images/index5.png" />
+                <img class="img" :src="userCont.avatar" />
                 <div class="txt">
-                  <div class="t">棋王1245</div>
-                  <div class="c"><img src="/images/VIP.png" /></div>
+                  <div class="t">{{userCont.nickname}}</div>
+                  <div class="c" v-if="userCont.vip==1"><img src="/images/VIP.png" /></div>
+                  <div class="c" v-if="userCont.vip==2"><img src="/images/VIP2.png" /></div>
+                  <div class="c" v-if="userCont.vip==3"><img src="/images/VIP3.png" /></div>
                 </div>
               </a>
               <button class="top-quit fr" @click="onSignout">退出</button>
