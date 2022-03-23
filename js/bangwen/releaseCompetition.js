@@ -187,7 +187,7 @@ var releaseCompetitionPersonal = {
                     // 设置报名开始时间（页面显示用）
                     _this.signUpStartDate = dateValue;
                     // 设置报名开始时间（提交数据用）
-                    _this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
+                    _this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : '';
                     // 如果报名结束时间存在且比报名开始时间小（或相等）
                     if (_this.signUpEndDate && _this.signUpEndDate <= _this.signUpStartDate) {
                         // 如果比赛开始时间存在且比 报名结束时间或报名开始时间小（或相等）
@@ -254,7 +254,7 @@ var releaseCompetitionPersonal = {
                     }
                     console.log('报名结束时间', dateValue);
                     _this.signUpEndDate = dateValue;
-                    _this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
+                    _this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : '';
                     if (_this.competitionStartDate && _this.competitionStartDate <= _this.signUpEndDate) {
                         if (_this.competitionEndDate && (_this.competitionEndDate <= _this.competitionStartDate || _this.competitionEndDate <= _this.signUpEndDate)) {
                             _this.competitionEndDate = '';
@@ -310,7 +310,7 @@ var releaseCompetitionPersonal = {
                     }
                     console.log('比赛开始时间', dateValue);
                     _this.competitionStartDate = dateValue;
-                    _this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
+                    _this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : '';
                     if (_this.competitionEndDate && _this.competitionEndDate <= _this.competitionStartDate) {
                         _this.competitionEndDate = '';
                         _this.formData.c_e_t = '';
@@ -362,7 +362,7 @@ var releaseCompetitionPersonal = {
                     }
                     console.log('比赛结束时间', dateValue);
                     _this.competitionEndDate = dateValue;
-                    _this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
+                    _this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : '';
                 },
             });
         },
@@ -824,7 +824,7 @@ var releaseCompetitionTeam = {
                     // 设置报名开始时间（页面显示用）
                     _this.signUpStartDate = dateValue;
                     // 设置报名开始时间（提交数据用）
-                    _this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
+                    _this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : '';
                     // 如果报名结束时间存在且比报名开始时间小（或相等）
                     if (_this.signUpEndDate && _this.signUpEndDate <= _this.signUpStartDate) {
                         // 如果比赛开始时间存在且比 报名结束时间或报名开始时间小（或相等）
@@ -892,7 +892,7 @@ var releaseCompetitionTeam = {
                     }
                     console.log('报名结束时间', dateValue);
                     _this.signUpEndDate = dateValue;
-                    _this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
+                    _this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : '';
                     if (_this.competitionStartDate && _this.competitionStartDate <= _this.signUpEndDate) {
                         if (_this.competitionEndDate && (_this.competitionEndDate <= _this.competitionStartDate || _this.competitionEndDate <= _this.signUpEndDate)) {
                             _this.competitionEndDate = '';
@@ -948,7 +948,7 @@ var releaseCompetitionTeam = {
                     }
                     console.log('比赛开始时间', dateValue);
                     _this.competitionStartDate = dateValue;
-                    _this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
+                    _this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : '';
                     if (_this.competitionEndDate && _this.competitionEndDate <= _this.competitionStartDate) {
                         _this.competitionEndDate = '';
                         _this.formData.c_e_t = '';
@@ -1000,7 +1000,7 @@ var releaseCompetitionTeam = {
                     }
                     console.log('比赛结束时间', dateValue);
                     _this.competitionEndDate = dateValue;
-                    _this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : '';
+                    _this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : '';
                 },
             });
         },

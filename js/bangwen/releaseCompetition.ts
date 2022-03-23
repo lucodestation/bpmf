@@ -140,7 +140,7 @@ const releaseCompetitionPersonal = {
           // 设置报名开始时间（页面显示用）
           this.signUpStartDate = dateValue
           // 设置报名开始时间（提交数据用）
-          this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           // 如果报名结束时间存在且比报名开始时间小（或相等）
           if (this.signUpEndDate && this.signUpEndDate <= this.signUpStartDate) {
@@ -207,7 +207,7 @@ const releaseCompetitionPersonal = {
 
           console.log('报名结束时间', dateValue)
           this.signUpEndDate = dateValue
-          this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           if (this.competitionStartDate && this.competitionStartDate <= this.signUpEndDate) {
             if (this.competitionEndDate && (this.competitionEndDate <= this.competitionStartDate || this.competitionEndDate <= this.signUpEndDate)) {
@@ -261,7 +261,7 @@ const releaseCompetitionPersonal = {
 
           console.log('比赛开始时间', dateValue)
           this.competitionStartDate = dateValue
-          this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           if (this.competitionEndDate && this.competitionEndDate <= this.competitionStartDate) {
             this.competitionEndDate = ''
@@ -311,7 +311,7 @@ const releaseCompetitionPersonal = {
 
           console.log('比赛结束时间', dateValue)
           this.competitionEndDate = dateValue
-          this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
         },
       })
     },
@@ -782,7 +782,7 @@ const releaseCompetitionTeam = {
           // 设置报名开始时间（页面显示用）
           this.signUpStartDate = dateValue
           // 设置报名开始时间（提交数据用）
-          this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           // 如果报名结束时间存在且比报名开始时间小（或相等）
           if (this.signUpEndDate && this.signUpEndDate <= this.signUpStartDate) {
@@ -850,7 +850,7 @@ const releaseCompetitionTeam = {
 
           console.log('报名结束时间', dateValue)
           this.signUpEndDate = dateValue
-          this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           if (this.competitionStartDate && this.competitionStartDate <= this.signUpEndDate) {
             if (this.competitionEndDate && (this.competitionEndDate <= this.competitionStartDate || this.competitionEndDate <= this.signUpEndDate)) {
@@ -904,7 +904,7 @@ const releaseCompetitionTeam = {
 
           console.log('比赛开始时间', dateValue)
           this.competitionStartDate = dateValue
-          this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           if (this.competitionEndDate && this.competitionEndDate <= this.competitionStartDate) {
             this.competitionEndDate = ''
@@ -954,7 +954,7 @@ const releaseCompetitionTeam = {
 
           console.log('比赛结束时间', dateValue)
           this.competitionEndDate = dateValue
-          this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
         },
       })
     },
