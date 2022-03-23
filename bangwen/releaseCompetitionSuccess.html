@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<!-- 发布比赛个人赛发布成功 -->
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>发布比赛 - 玻坡摸佛</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+    <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/plugins/vue.min.js"></script>
+    <script src="/plugins/qs.min.js"></script>
+    <script src="/plugins/axios.min.js"></script>
+    <script src="/plugins/jsencrypt.js"></script>
+    <script src="/plugins/aliyun-oss-sdk.min.js"></script>
+    <script src="/plugins/jquery.min.js"></script>
+    <script src="/plugins/syalert/syalert.min.js"></script>
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/element-ui/element-ui.min.js"></script>
+
+    <script src="/utils/request.js"></script>
+    <script src="/utils/util.js"></script>
+    <style>
+      /* 临时 */
+      .temp-pre {
+        position: fixed;
+        top: 100px;
+        right: 0;
+        bottom: 50px;
+        background: rgba(255, 192, 203, 0.5);
+        overflow: scroll;
+        max-width: 500px;
+        /* opacity: 0.7; */
+        z-index: 10000;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 公共头部 -->
+    <header class="public-header"></header>
+
+    <!--publish-container start-->
+    <div class="publish-container">
+      <!--inner-position start-->
+      <div class="inner-position w-1200">
+        <a href="/">首页</a>
+        <span> &lt; </span>
+        <span class="current">发布比赛</span>
+      </div>
+      <!--inner-position end-->
+      <!--publish-head start-->
+      <div class="publish-head w-1200">
+        <div class="content clearfix">
+          <div class="head-li li1 on">
+            <div class="t">1.设置赛事公告信息</div>
+            <div class="icon"></div>
+          </div>
+          <div class="head-line"></div>
+          <div class="head-li li2 on">
+            <div class="t">2.设置赛事比赛方法</div>
+            <div class="icon"></div>
+          </div>
+          <div class="head-line"></div>
+          <div class="head-li li3 on">
+            <div class="t">3.设置赛事奖励</div>
+            <div class="icon"></div>
+          </div>
+        </div>
+      </div>
+      <!--publish-head end-->
+      <!--publish-main start-->
+      <div class="publish-main w-1200">
+        <h1 class="publish-tit">提交成功</h1>
+        <!--publish-content start-->
+        <div class="publish-content">
+          <div class="publish-submit">
+            <div class="submit-success">
+              <img src="/images/icon-sucess.png" />
+              <div class="t">提交成功，等待审核中</div>
+              <a class="success-a" href="/userCont/competition/myReleaseCompetition.html">查看我的赛事</a>
+            </div>
+          </div>
+          <!--publish-asd start-->
+          <div class="publish-asd">
+            <div class="asd-t">广告位购买介绍</div>
+            <div class="asd-tip">
+              在个人发布的赛事详情页面，将会有2-3个广告位，可以添加链接，宣传等. 组织者可以优先预定购买自己赛事的广告位， 比赛审核发布后可以去<a
+                class="color-orange"
+                href="/userCont/bangwen/CenterAsd.html"
+                >个人中心-广告购买</a
+              >，进行购买，是否立即预定？
+            </div>
+            <div class="asd-t">位置展示<span>（点击放大）</span></div>
+            <div class="asd-c">
+              <img src="/images/jpg1.jpg" />
+            </div>
+            <div class="asd-bot">
+              <a class="asd-btn" href="">立即预定</a>
+            </div>
+          </div>
+          <!--publish-asd end-->
+        </div>
+        <!--publish-content end-->
+      </div>
+      <!--publish-main end-->
+    </div>
+    <!--publish-container end-->
+
+    <!-- 公共底部 -->
+    <footer class="public-footer"></footer>
+
+    <script src="/js/bangwen/releaseCompetitionSuccess.js"></script>
+  </body>
+</html>

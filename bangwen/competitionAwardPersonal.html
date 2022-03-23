@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<!-- 发布比赛个人赛赛事奖励 -->
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>发布比赛 - 玻坡摸佛</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+    <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/plugins/vue.min.js"></script>
+    <script src="/plugins/qs.min.js"></script>
+    <script src="/plugins/axios.min.js"></script>
+    <script src="/plugins/jsencrypt.js"></script>
+    <script src="/plugins/aliyun-oss-sdk.min.js"></script>
+    <script src="/plugins/jquery.min.js"></script>
+    <script src="/plugins/syalert/syalert.min.js"></script>
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/element-ui/element-ui.min.js"></script>
+
+    <script src="/utils/request.js"></script>
+    <script src="/utils/util.js"></script>
+    <style>
+      /* 临时 */
+      .temp-pre {
+        position: fixed;
+        top: 100px;
+        right: 0;
+        bottom: 50px;
+        background: rgba(255, 192, 203, 0.5);
+        overflow: scroll;
+        max-width: 500px;
+        /* opacity: 0.7; */
+        z-index: 10000;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 公共头部 -->
+    <header class="public-header"></header>
+
+    <!--publish-container start-->
+    <div id="app" class="publish-container">
+      <!-- 临时 -->
+      <pre class="temp-pre">
+        <div>{{formData}}</div>
+      </pre>
+
+      <!--inner-position start-->
+      <div class="inner-position w-1200">
+        <a href="/">首页</a>
+        <span> &lt; </span>
+        <span class="current">发布比赛</span>
+      </div>
+      <!--inner-position end-->
+      <!--publish-head start-->
+      <div class="publish-head w-1200">
+        <div class="content clearfix">
+          <div class="head-li li1 on">
+            <div class="t">1.设置赛事公告信息</div>
+            <div class="icon"></div>
+          </div>
+          <div class="head-line"></div>
+          <div class="head-li li2 on">
+            <div class="t">2.设置赛事比赛方法</div>
+            <div class="icon"></div>
+          </div>
+          <div class="head-line"></div>
+          <div class="head-li li3 on">
+            <div class="t">3.设置赛事奖励</div>
+            <div class="icon"></div>
+          </div>
+        </div>
+      </div>
+      <!--publish-head end-->
+      <!--publish-main start-->
+      <div class="publish-main w-1200">
+        <h1 class="publish-tit">发布比赛</h1>
+        <!--publish-content start-->
+        <div class="publish-content">
+          <div class="item-t">奖励设置</div>
+
+          <!-- 奖励类型 -->
+          <div class="publish-item clearfix">
+            <div class="label"><span class="color-red">*</span>奖励类型：</div>
+            <div class="con">
+              <div class="item-radio clearfix">
+                <div class="radio-li fl">
+                  <input class="radio" type="radio" disabled checked />
+                  <span class="span">冠亚季</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 奖项设置 -->
+          <div class="publish-item clearfix">
+            <div class="label"><span class="color-red">*</span>奖项设置：</div>
+            <div class="con">
+              <!--item-li start-->
+              <div class="item-li clearfix">
+                <div class="li-l">冠军</div>
+                <div class="li-r">
+                  <div class="in-w">
+                    <input type="number" class="in" placeholder="请输入数量" v-model.number="formData.champion_num" />
+                    <span class="ma">名</span>
+                  </div>
+                  <div class="in-w">
+                    <input type="number" class="in" placeholder="请输入奖励金额" v-model.number="formData.champion_money" />
+                    <span class="ma">元/名</span>
+                  </div>
+                </div>
+              </div>
+              <!--item-li end-->
+              <!--item-li start-->
+              <div class="item-li clearfix">
+                <div class="li-l">亚军</div>
+                <div class="li-r">
+                  <div class="in-w">
+                    <input type="number" class="in" placeholder="请输入数量" v-model.number="formData.runner_up_num" />
+                    <span class="ma">名</span>
+                  </div>
+                  <div class="in-w">
+                    <input type="number" class="in" placeholder="请输入奖励金额" v-model.number="formData.runner_up_money" />
+                    <span class="ma">元/名</span>
+                  </div>
+                </div>
+              </div>
+              <!--item-li end-->
+              <!--item-li start-->
+              <div class="item-li clearfix">
+                <div class="li-l">季军</div>
+                <div class="li-r">
+                  <div class="in-w">
+                    <input type="number" class="in" placeholder="请输入数量" v-model.number="formData.third_winner_num" />
+                    <span class="ma">名</span>
+                  </div>
+                  <div class="in-w">
+                    <input type="number" class="in" placeholder="请输入奖励金额" v-model.number="formData.third_winner_money" />
+                    <span class="ma">元/名</span>
+                  </div>
+                </div>
+              </div>
+              <!--item-li end-->
+            </div>
+          </div>
+
+          <!-- 奖项备注 -->
+          <div class="publish-item clearfix">
+            <div class="label">奖项备注：</div>
+            <div class="con">
+              <input type="text" class="input w400" placeholder="请输入备注信息" v-model.trim="formData.memo" />
+            </div>
+          </div>
+
+          <!-- 奖金总金额 -->
+          <div class="publish-item clearfix">
+            <div class="label"><span class="item-tit">奖金总金额：</span></div>
+            <div class="con">
+              <!-- <span class="input w400">{{formData.total_money}}元</span> -->
+              <input type="text" disabled class="input w400" placeholder="" :value="formData.total_money * 1 + '元'" />
+            </div>
+          </div>
+
+          <!-- 奖金托管 -->
+          <div class="publish-item clearfix">
+            <div class="label">奖金托管：</div>
+            <div class="con">
+              <div class="item-radio clearfix">
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="trusteeship" value="1" v-model.number="formData.trusteeship" />
+                  <span class="span">托管（在线支付）</span>
+                </label>
+                <div class="radio-tip">大额奖金可以不托管在本网站</div>
+              </div>
+              <div class="item-radio clearfix">
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="trusteeship" value="2" v-model.number="formData.trusteeship" />
+                  <span class="span">不托管（线下支付或者其他方式支付）</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 选择支付方式 -->
+          <div class="publish-item clearfix">
+            <div class="bond-pay" v-if="formData.trusteeship === 1">
+              <div class="t">选择支付方式</div>
+              <div class="con clearfix">
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payWay" value="1" v-model.number="formData.pay_way" />
+                  <span class="radio-s"><img src="/images/pub14.png" /></span>
+                </label>
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payWay" value="2" v-model.number="formData.pay_way" />
+                  <span class="radio-s"><img src="/images/pub13.png" /></span>
+                </label>
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payWay" value="3" v-model.number="formData.pay_way" />
+                  <span class="radio-s"><img src="/images/pub19.png" /></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 确认支付 -->
+            <div class="last-bottom">
+              <button class="bond-btn" @click="handleNextStep">确认并支付</button>
+            </div>
+          </div>
+          <!--publish-item end-->
+        </div>
+        <!--publish-content end-->
+      </div>
+      <!--publish-main end-->
+    </div>
+    <!--publish-container end-->
+
+    <!-- 公共底部 -->
+    <footer class="public-footer"></footer>
+
+    <!--钱包支付弹窗-->
+    <div class="sy-alert wallet-pop w850 animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert1">
+      <div class="wallet-con">
+        <div class="wallet-close" onClick="ok('alert1')"></div>
+        <div class="t">钱包支付</div>
+        <div class="wallet-mid">
+          <div class="wallet-label">输入支付密码<a class="wallet-a fr color-gray" href="">忘记密码？</a></div>
+          <div class="wallet-input">
+            <input class="input" type="text" />
+          </div>
+        </div>
+        <div class="wallet-bottom">
+          <button class="wallet-btn">确定</button>
+        </div>
+      </div>
+    </div>
+    <!--微信支付弹窗-->
+    <div class="sy-alert wallet-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert2">
+      <div class="wallet-con">
+        <div class="wallet-close" onClick="ok('alert2')"></div>
+        <div class="t">微信支付</div>
+        <div class="money">支付金额：<span class="price color-red">￥100.00</span></div>
+        <div class="con clearfix">
+          <div class="wx-g">
+            <img src="images/pub3.jpg" />
+            <div class="tip">请使用微信“扫一扫”,扫描二维码支付</div>
+          </div>
+          <div class="wx-i">
+            <img src="images/pub1.jpg" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--支付宝支付弹窗-->
+    <div class="sy-alert wallet-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert3">
+      <div class="wallet-con">
+        <div class="wallet-close" onClick="ok('alert3')"></div>
+        <div class="t">支付宝支付</div>
+        <div class="money">支付金额：<span class="price color-red">￥100.00</span></div>
+        <div class="con clearfix">
+          <div class="wx-g">
+            <img src="images/pub3.jpg" />
+            <div class="tip">请使用支付宝“扫一扫”,扫描二维码支付</div>
+          </div>
+          <div class="wx-i">
+            <img src="images/pub1.jpg" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/bangwen/competitionAwardPersonal.js"></script>
+  </body>
+</html>
