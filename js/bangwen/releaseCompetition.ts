@@ -1,4 +1,4 @@
-// 发布比赛
+// 发布比赛第一步
 
 // 引入头部
 $('.public-header').load('/components/PublicHeader.html')
@@ -18,6 +18,8 @@ const releaseCompetitionPersonal = {
   props: ['competitionCateList'],
   data() {
     return {
+      // 临时
+      tempPreShow: true,
       // 表单数据
       formData: {
         competition_type: 0, // 赛事种类：0=个人赛，1=团队赛
@@ -138,7 +140,7 @@ const releaseCompetitionPersonal = {
           // 设置报名开始时间（页面显示用）
           this.signUpStartDate = dateValue
           // 设置报名开始时间（提交数据用）
-          this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           // 如果报名结束时间存在且比报名开始时间小（或相等）
           if (this.signUpEndDate && this.signUpEndDate <= this.signUpStartDate) {
@@ -205,7 +207,7 @@ const releaseCompetitionPersonal = {
 
           console.log('报名结束时间', dateValue)
           this.signUpEndDate = dateValue
-          this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           if (this.competitionStartDate && this.competitionStartDate <= this.signUpEndDate) {
             if (this.competitionEndDate && (this.competitionEndDate <= this.competitionStartDate || this.competitionEndDate <= this.signUpEndDate)) {
@@ -259,7 +261,7 @@ const releaseCompetitionPersonal = {
 
           console.log('比赛开始时间', dateValue)
           this.competitionStartDate = dateValue
-          this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           if (this.competitionEndDate && this.competitionEndDate <= this.competitionStartDate) {
             this.competitionEndDate = ''
@@ -309,7 +311,7 @@ const releaseCompetitionPersonal = {
 
           console.log('比赛结束时间', dateValue)
           this.competitionEndDate = dateValue
-          this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
         },
       })
     },
@@ -334,6 +336,10 @@ const releaseCompetitionPersonal = {
         // 用于页面展示
         url: window.URL.createObjectURL(file),
       }
+      if (this.formData.cover_picture) {
+        // 如果有 url，说明上传过了，改变图片的时候把 url 删除
+        this.formData.cover_picture = ''
+      }
     },
     // 选择附件
     handleAffixFileChange(event) {
@@ -348,22 +354,29 @@ const releaseCompetitionPersonal = {
       // 存储所选文件中超过指定大小的文件名
       const errorArr2 = []
       for (const item of files) {
-        // 做多上传 5 个文件
+        // 限制个数 5 个
         if (tempArr.length < 5) {
           const filesNameList = this.affixList.length ? this.affixList.map((i) => i.name) : []
           // （如果不存在文件名）禁止添加同名文件
           if (!filesNameList.includes(item.name)) {
             console.log(item)
             if (!['png', 'jpg', 'jpeg', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
+              // 限制扩展名
               if (!errorArr.includes(util.getExtensionName(item.name))) {
                 errorArr.push(util.getExtensionName(item.name))
               }
             } else if (item.size > 1024 * 1024 * 10) {
+              // 限制大小 10M
               if (!errorArr2.includes(item.name)) {
                 errorArr2.push(item.name)
               }
             } else if (tempArr.length < 5) {
+              console.log('添加文件')
               tempArr.push(item)
+              if (this.formData.affix) {
+                // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+                this.formData.affix = ''
+              }
             }
           }
         }
@@ -380,12 +393,16 @@ const releaseCompetitionPersonal = {
       }
 
       this.affixList = tempArr
-      element.value = ''
+      // element.value = ''
       console.log({ ...this.affixList })
     },
     // 删除附件
     handleDeleteAffix(index) {
       this.affixList.splice(index, 1)
+      if (this.formData.affix) {
+        // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+        this.formData.affix = ''
+      }
     },
 
     // 选择报名信息（复选框）（年龄、居住地址、自我介绍）
@@ -536,40 +553,46 @@ const releaseCompetitionPersonal = {
       // 加载中
       const loadingIndex = layer.load(1, {
         shade: [0.5, '#000'], // 0.1透明度的白色背景
-        time: 10 * 1000, // 如果十秒还没关闭则自动关闭
+        // time: 30 * 1000, // 如果30秒还没关闭则自动关闭
       })
 
-      // 上传封面图
-      this.formData.cover_picture = await util
-        .uploadFile({
-          file: this.coverImage.file,
-          fileName: this.coverImage.file.name,
-        })
-        .catch((error) => {
-          console.log('上传封面图失败', error)
-          layer.close(loadingIndex)
-          layer.msg('上传封面图失败')
-        })
-      if (!this.formData.cover_picture) return
-
-      // 上传附件
-      const affixUrlArr = await util
-        .uploadMultipleFile(
-          this.affixList.map((item) => {
-            console.log('affixList item', item)
-            return {
-              file: item,
-              fileName: item.name,
-            }
+      // 如果有 url 说明已经上传过了，没有时才去上传
+      if (!this.formData.cover_picture) {
+        // 上传封面图
+        this.formData.cover_picture = await util
+          .uploadFile({
+            file: this.coverImage.file,
+            fileName: this.coverImage.file.name,
           })
-        )
-        .catch((error) => {
-          console.log('上传附件失败', error)
-          layer.close(loadingIndex)
-          layer.msg('上传附件失败')
-        })
-      if (!affixUrlArr) return
-      this.formData.affix = affixUrlArr.toString()
+          .catch((error) => {
+            console.log('上传封面图失败', error)
+            layer.close(loadingIndex)
+            layer.msg('上传封面图失败')
+          })
+        if (!this.formData.cover_picture) return
+      }
+
+      // 如果有 url 说明已经上传过了，没有时才去上传
+      if (!this.formData.affix) {
+        // 上传附件
+        const affixUrlArr = await util
+          .uploadMultipleFile(
+            this.affixList.map((item) => {
+              console.log('affixList item', item)
+              return {
+                file: item,
+                fileName: item.name,
+              }
+            })
+          )
+          .catch((error) => {
+            console.log('上传附件失败', error)
+            layer.close(loadingIndex)
+            layer.msg('上传附件失败')
+          })
+        if (!affixUrlArr) return
+        this.formData.affix = affixUrlArr.toString()
+      }
 
       if (this.teamListShow) {
         this.formData.team_list = this.teamNameList
@@ -591,15 +614,17 @@ const releaseCompetitionPersonal = {
           if (result.code === 200) {
             // 发布成功
             console.log('发布成功')
+            // 跳转到个人赛设置阶段页面
+            window.location.href = `/bangwen/competitionStagePersonal.html?competition_id=${result.data.competition_id}`
 
-            this.$alert('发布成功', '', {
-              showClose: false,
-              confirmButtonText: '确定',
-              callback: (action) => {
-                // 跳转到个人赛设置阶段页面
-                window.location.href = `/bangwen/competitionStagePersonal.html?competition_id=${result.data.competition_id}`
-              },
-            })
+            // this.$alert('发布成功', '', {
+            //   showClose: false,
+            //   confirmButtonText: '确定',
+            //   callback: (action) => {
+            //     // 跳转到个人赛设置阶段页面
+            //     window.location.href = `/bangwen/competitionStagePersonal.html?competition_id=${result.data.competition_id}`
+            //   },
+            // })
           } else if (result.code === 201) {
             // 发布次数不足，跳转购买会员页面
             console.log('发布次数不足，跳转购买会员页面')
@@ -648,6 +673,8 @@ const releaseCompetitionTeam = {
   ],
   data: function () {
     return {
+      // 临时
+      tempPreShow: true,
       // 表单数据
       formData: {
         competition_type: 1, // 赛事种类：0=个人赛，1=团队赛
@@ -755,7 +782,7 @@ const releaseCompetitionTeam = {
           // 设置报名开始时间（页面显示用）
           this.signUpStartDate = dateValue
           // 设置报名开始时间（提交数据用）
-          this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.a_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           // 如果报名结束时间存在且比报名开始时间小（或相等）
           if (this.signUpEndDate && this.signUpEndDate <= this.signUpStartDate) {
@@ -823,7 +850,7 @@ const releaseCompetitionTeam = {
 
           console.log('报名结束时间', dateValue)
           this.signUpEndDate = dateValue
-          this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.a_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           if (this.competitionStartDate && this.competitionStartDate <= this.signUpEndDate) {
             if (this.competitionEndDate && (this.competitionEndDate <= this.competitionStartDate || this.competitionEndDate <= this.signUpEndDate)) {
@@ -877,7 +904,7 @@ const releaseCompetitionTeam = {
 
           console.log('比赛开始时间', dateValue)
           this.competitionStartDate = dateValue
-          this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.c_b_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
 
           if (this.competitionEndDate && this.competitionEndDate <= this.competitionStartDate) {
             this.competitionEndDate = ''
@@ -927,7 +954,7 @@ const releaseCompetitionTeam = {
 
           console.log('比赛结束时间', dateValue)
           this.competitionEndDate = dateValue
-          this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() : ''
+          this.formData.c_e_t = dateValue ? new Date(dateValue.replace(/-/g, '/')).valueOf() / 1000 : ''
         },
       })
     },
@@ -952,6 +979,10 @@ const releaseCompetitionTeam = {
         // 用于页面展示
         url: window.URL.createObjectURL(file),
       }
+      if (this.formData.cover_picture) {
+        // 如果有 url，说明上传过了，改变图片的时候把 url 删除
+        this.formData.cover_picture = ''
+      }
     },
     // 选择附件
     handleAffixFileChange(event) {
@@ -966,22 +997,29 @@ const releaseCompetitionTeam = {
       // 存储所选文件中超过指定大小的文件名
       const errorArr2 = []
       for (const item of files) {
-        // 做多上传 5 个文件
+        // 限制个数 5 个
         if (tempArr.length < 5) {
           const filesNameList = this.affixList.length ? this.affixList.map((i) => i.name) : []
           // （如果不存在文件名）禁止添加同名文件
           if (!filesNameList.includes(item.name)) {
             console.log(item)
             if (!['png', 'jpg', 'jpeg', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
+              // 限制扩展名
               if (!errorArr.includes(util.getExtensionName(item.name))) {
                 errorArr.push(util.getExtensionName(item.name))
               }
             } else if (item.size > 1024 * 1024 * 10) {
+              // 限制大小 10M
               if (!errorArr2.includes(item.name)) {
                 errorArr2.push(item.name)
               }
             } else if (tempArr.length < 5) {
+              console.log('添加文件')
               tempArr.push(item)
+              if (this.formData.affix) {
+                // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+                this.formData.affix = ''
+              }
             }
           }
         }
@@ -998,12 +1036,16 @@ const releaseCompetitionTeam = {
       }
 
       this.affixList = tempArr
-      element.value = ''
+      // element.value = ''
       console.log({ ...this.affixList })
     },
     // 删除附件
     handleDeleteAffix(index) {
       this.affixList.splice(index, 1)
+      if (this.formData.affix) {
+        // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+        this.formData.affix = ''
+      }
     },
 
     // 选择报名信息（复选框）（年龄、居住地址、自我介绍）
@@ -1145,40 +1187,46 @@ const releaseCompetitionTeam = {
       // 加载中
       const loadingIndex = layer.load(1, {
         shade: [0.5, '#000'], // 0.1透明度的白色背景
-        time: 10 * 1000, // 如果十秒还没关闭则自动关闭
+        // time: 30 * 1000, // 如果30秒还没关闭则自动关闭
       })
 
-      // 上传封面图
-      this.formData.cover_picture = await util
-        .uploadFile({
-          file: this.coverImage.file,
-          fileName: this.coverImage.file.name,
-        })
-        .catch((error) => {
-          console.log('上传封面图失败', error)
-          layer.close(loadingIndex)
-          layer.msg('上传封面图失败')
-        })
-      if (!this.formData.cover_picture) return
-
-      // 上传附件
-      const affixUrlArr = await util
-        .uploadMultipleFile(
-          this.affixList.map((item) => {
-            console.log('affixList item', item)
-            return {
-              file: item,
-              fileName: item.name,
-            }
+      // 如果有 url 说明已经上传过了，没有时才去上传
+      if (!this.formData.cover_picture) {
+        // 上传封面图
+        this.formData.cover_picture = await util
+          .uploadFile({
+            file: this.coverImage.file,
+            fileName: this.coverImage.file.name,
           })
-        )
-        .catch((error) => {
-          console.log('上传附件失败', error)
-          layer.close(loadingIndex)
-          layer.msg('上传附件失败')
-        })
-      if (!affixUrlArr) return
-      this.formData.affix = affixUrlArr.toString()
+          .catch((error) => {
+            console.log('上传封面图失败', error)
+            layer.close(loadingIndex)
+            layer.msg('上传封面图失败')
+          })
+        if (!this.formData.cover_picture) return
+      }
+
+      // 如果有 url 说明已经上传过了，没有时才去上传
+      if (!this.formData.affix) {
+        // 上传附件
+        const affixUrlArr = await util
+          .uploadMultipleFile(
+            this.affixList.map((item) => {
+              console.log('affixList item', item)
+              return {
+                file: item,
+                fileName: item.name,
+              }
+            })
+          )
+          .catch((error) => {
+            console.log('上传附件失败', error)
+            layer.close(loadingIndex)
+            layer.msg('上传附件失败')
+          })
+        if (!affixUrlArr) return
+        this.formData.affix = affixUrlArr.toString()
+      }
 
       if (this.teamListShow) {
         this.formData.team_list = this.teamNameList
@@ -1201,14 +1249,17 @@ const releaseCompetitionTeam = {
             // 发布成功
             console.log('发布成功')
 
-            this.$alert('发布成功', '', {
-              showClose: false,
-              confirmButtonText: '确定',
-              callback: (action) => {
-                // 跳转到团队赛设置阶段页面
-                window.location.href = `/bangwen/competitionStageTeam.html?competition_id=${result.data.competition_id}`
-              },
-            })
+            // 跳转到团队赛设置阶段页面
+            window.location.href = `/bangwen/competitionStageTeam.html?competition_id=${result.data.competition_id}`
+
+            // this.$alert('发布成功', '', {
+            //   showClose: false,
+            //   confirmButtonText: '确定',
+            //   callback: (action) => {
+            //     // 跳转到团队赛设置阶段页面
+            //     window.location.href = `/bangwen/competitionStageTeam.html?competition_id=${result.data.competition_id}`
+            //   },
+            // })
           } else if (result.code === 201) {
             // 发布次数不足，跳转购买会员页面
             console.log('发布次数不足，跳转购买会员页面')

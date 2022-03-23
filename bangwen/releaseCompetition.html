@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- 发布比赛 -->
+<!-- 发布比赛第一步 -->
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
@@ -14,22 +14,20 @@
     <link rel="stylesheet" href="/css/style.css" />
 
     <script src="/plugins/babel-polyfill.min.js"></script>
-    <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/vue.min.js"></script>
+    <script src="/plugins/axios.min.js"></script>
     <script src="/plugins/jsencrypt.js"></script>
+    <script src="/plugins/aliyun-oss-sdk.min.js"></script>
     <script src="/plugins/jquery.min.js"></script>
     <script src="/plugins/syalert/syalert.min.js"></script>
-    <script src="/plugins/vue.min.js"></script>
-    <script src="/plugins/httpVueLoader.js"></script>
-    <script src="/plugins/axios.min.js"></script>
+    <script src="/plugins/layui/layui.js"></script>
     <script src="/plugins/element-ui/element-ui.min.js"></script>
-
-    <script src="/plugins/aliyun-oss-sdk.min.js"></script>
 
     <script src="/utils/request.js"></script>
     <script src="/utils/util.js"></script>
     <style>
       /* 临时 */
-      .temp-pre {
+      .temp-pre.show {
         position: fixed;
         top: 100px;
         right: 0;
@@ -198,7 +196,12 @@
       <!-- 单个跟元素 -->
       <div>
         <!-- 临时 -->
-        <pre class="temp-pre">
+        <pre
+          class="temp-pre"
+          :class="{
+            show: tempPreShow
+          }"
+        >
           <div>{{formData}}</div>
         </pre>
 
@@ -390,7 +393,7 @@
           <div class="label">上传附件</div>
           <div class="con">
             <label class="publish-up">
-              <input type="file" accept=".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple hidden handle @change="handleAffixFileChange" />
+              <input type="file" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple hidden handle @change="handleAffixFileChange" />
               <div class="up-img">
                 <img src="/images/pub.png" />
                 <div class="txt">
@@ -608,7 +611,12 @@
       <!-- 单个根元素 -->
       <div>
         <!-- 临时 -->
-        <pre class="temp-pre">
+        <pre
+          class="temp-pre"
+          :class="{
+            show: tempPreShow
+          }"
+        >
           <div>{{ formData }}</div>
           <div>{{ competitionCateList }}</div>
         </pre>
@@ -784,7 +792,7 @@
           <div class="label">上传附件</div>
           <div class="con">
             <label class="publish-up">
-              <input type="file" accept=".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple hidden handle @change="handleAffixFileChange" />
+              <input type="file" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple hidden handle @change="handleAffixFileChange" />
               <div class="up-img">
                 <img src="/images/pub.png" />
                 <div class="txt">

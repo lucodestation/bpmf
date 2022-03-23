@@ -1,103 +1,113 @@
 <!DOCTYPE html>
+<!-- 发布比赛个人赛设置阶段 -->
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <title>Title</title>
-    <link rel="stylesheet" href="css/animate.min.css" />
-    <link rel="stylesheet" href="js/syalert/syalert.min.css" />
-    <link rel="stylesheet" href="css/swiper.min.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="js/date/jedate.css" />
-    <script src="js/jquery-1.10.2.min.js"></script>
-    <script src="js/swiper.min.js"></script>
-    <script src="js/syalert/syalert.min.js"></script>
-    <script src="js/date/jedate.js"></script>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>发布比赛 - 玻坡摸佛</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+    <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/plugins/vue.min.js"></script>
+    <script src="/plugins/qs.min.js"></script>
+    <script src="/plugins/axios.min.js"></script>
+    <script src="/plugins/jsencrypt.js"></script>
+    <script src="/plugins/aliyun-oss-sdk.min.js"></script>
+    <script src="/plugins/jquery.min.js"></script>
+    <script src="/plugins/syalert/syalert.min.js"></script>
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/element-ui/element-ui.min.js"></script>
+
+    <script src="/utils/request.js"></script>
+    <script src="/utils/util.js"></script>
+    <style>
+      /* 临时 */
+      .temp-pre {
+        position: fixed;
+        top: 100px;
+        right: 0;
+        bottom: 50px;
+        background: rgba(255, 192, 203, 0.5);
+        overflow: scroll;
+        max-width: 500px;
+        /* opacity: 0.7; */
+        z-index: 10000;
+        padding: 10px;
+      }
+
+      /* 隐藏时间选择控件不需要的分、秒 */
+      /* 隐藏分 */
+      .laydate-time-list > li:nth-child(2) ol li {
+        display: none;
+      }
+      /* 显示 00 分和 30 分*/
+      .laydate-time-list > li:nth-child(2) ol li:nth-child(1),
+      .laydate-time-list > li:nth-child(2) ol li:nth-child(31) {
+        display: list-item;
+      }
+      /* 隐藏秒 */
+      .laydate-time-list > li:nth-child(3) ol li {
+        display: none;
+      }
+
+      /* 日期时间选择器（触发打开日期时间选择器的元素） */
+      .date-time-picker {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #999;
+      }
+      .date-time-picker .date-time {
+        color: #333;
+      }
+
+      .select.grey {
+        color: #999;
+      }
+      .select.grey option:not([disabled]) {
+        color: #333;
+      }
+      .item-select.ranking-system select {
+        margin-bottom: 10px;
+      }
+    </style>
   </head>
   <body>
-    <!--main-header start-->
-    <div class="main-header">
-      <h1>赛事阶段 - 个人</h1>
-      <!--header-top start-->
-      <div class="header-top">
-        <div class="w-1200 clearfix">
-          <div class="top-fl fl">
-            <div class="top-welcome fl">欢迎您来到玻坡摸佛</div>
-            <div class="top-nav fl">
-              <a href="">发布榜文</a>
-              <a href="">发起直播</a>
-              <a href="">发布比赛</a>
-            </div>
-          </div>
-          <div class="top-fr fr">
-            <div class="top-nav fl">
-              <a href="">消息中心</a>
-            </div>
-            <div class="top-login fl">
-              <a class="log-a" href="javascript:void(0);" onClick="syalert.syopen('alert1')">登录</a>
-              <span class="log-s">|</span>
-              <a class="log-a" href="">注册</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--header-top end-->
-      <!--header start-->
-      <div class="header w-1200 clearfix">
-        <div class="header-logo fl">
-          <a href="index.html"><img src="images/logo.png" /></a>
-        </div>
-        <div class="header-nav fl">
-          <ul class="nav">
-            <li class="current"><a href="">首页</a></li>
-            <li><a href="">榜文大厅</a></li>
-            <li><a href="">赛事频道</a></li>
-            <li><a href="">直播频道</a></li>
-            <li><a href="">合作吧</a></li>
-            <li><a href="">帮助中心</a></li>
-          </ul>
-        </div>
-        <!--header-search start-->
-        <div class="header-search fl">
-          <div class="search-select fl">
-            <select class="select">
-              <option>榜文</option>
-            </select>
-          </div>
-          <div class="search-input fl">
-            <input type="text" class="input" placeholder="请输入关键词" />
-          </div>
-          <button class="search-btn fr">搜索</button>
-        </div>
-        <!--header-search end-->
-        <!--header-sub start-->
-        <div class="header-sub fr">
-          <span class="span-name">我要发布</span>
-          <div class="sub-down">
-            <a class="sub-down-a" href="">发布榜文</a>
-            <a class="sub-down-a" href="">发布赛事</a>
-            <a class="sub-down-a" href="">发布直播</a>
-          </div>
-        </div>
-        <!--header-sub end-->
-      </div>
-      <!--header end-->
-    </div>
-    <!--main-header end-->
+    <!-- 公共头部 -->
+    <header class="public-header"></header>
+
     <!--publish-container start-->
-    <div class="publish-container">
-      <!--inner-position start-->
+    <div id="app" class="publish-container">
+      <!-- 临时 -->
+      <pre class="temp-pre">
+        <!-- <div>competitionId:{{competitionId}}</div>
+        <div>{{competitionStage}}</div>
+        <div>{{competitionDetail}}</div>
+        <div>{{formData}}</div>
+        <div>system1Rule:{{system1Rule}}</div>
+        <div>system2Rule:{{system2Rule}}</div> -->
+        <div>rankingSystemSelected:{{rankingSystemSelected}}</div>
+      </pre>
+
+      <!-- 面包屑导航 -->
       <div class="inner-position w-1200">
-        <a href="">首页</a>
-        <span> < </span>
-        <a class="current" href=""> 发布榜文</a>
+        <a href="/">首页</a>
+        <span> &lt; </span>
+        <span class="current">发布比赛</span>
       </div>
-      <!--inner-position end-->
+
       <!--publish-head start-->
       <div class="publish-head w-1200">
         <div class="content clearfix">
           <div class="head-li li1 on">
             <div class="t">1.设置赛事公告信息</div>
-            <div class="icon"></div>
+            <div class="icon" @click="handleTest"></div>
           </div>
           <div class="head-line"></div>
           <div class="head-li li2 on">
@@ -112,348 +122,287 @@
         </div>
       </div>
       <!--publish-head end-->
-      <!--publish-main start-->
+
       <div class="publish-main w-1200">
         <h1 class="publish-tit">发布比赛</h1>
-        <!--publish-content start-->
+        <!-- 主要内容 -->
         <div class="publish-content">
-          <!--publish-stage start-->
+          <!-- 阶段名称列表 -->
           <div class="publish-stage clearfix">
-            <div class="stage-li on fl">第一阶段</div>
-            <div class="stage-li fl">第二阶段</div>
-            <div class="stage-li fl">第三阶段</div>
-          </div>
-          <!--publish-stage end-->
-          <!--publish-item start-->
-          <div class="publish-item clearfix">
-            <div class="label"><span class="color-red">*</span> 阶段名称：</div>
-            <div class="con">
-              <div class="stage-t">第1阶段</div>
+            <div
+              class="stage-li fl"
+              :class="{
+              on: item === competitionStage.stage_name
+            }"
+              v-for="(item, index) in competitionStageNameList"
+              :key="index"
+            >
+              {{item}}
             </div>
           </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
+
+          <!-- 阶段名称 -->
+          <div class="publish-item clearfix">
+            <div class="label"><span class="color-red">*</span>阶段名称：</div>
+            <div class="con">
+              <div class="stage-t">{{competitionStage.stage_name}}</div>
+            </div>
+          </div>
+
+          <!-- 阶段时间 -->
           <div class="publish-item clearfix">
             <div class="label"><span class="color-red">*</span>阶段时间：</div>
             <div class="con">
               <div class="bor clearfix">
-                <input type="text" class="input w400 moredate fl" placeholder="YYYY-MM-DD" />
+                <div ref="stageStartDate" class="date-time-picker input w400 fl">
+                  <span class="date-time" v-if="stageStartDate">{{stageStartDate}}</span>
+                  <span v-else>{{'开始时间'}}</span>
+                </div>
+
                 <span class="date-mid fl">至</span>
-                <input type="text" class="input w400 moredate fr" placeholder="YYYY-MM-DD" />
+
+                <div ref="stageEndDate" class="date-time-picker input w400 fl">
+                  <span class="date-time" v-if="stageEndDate">{{stageEndDate}}</span>
+                  <span v-else>{{'结束时间'}}</span>
+                </div>
               </div>
             </div>
           </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
+
+          <!-- 比赛制度 -->
           <div class="publish-item clearfix">
             <div class="label"><span class="color-red">*</span> 比赛制度：</div>
             <div class="con">
               <div class="item-radio clearfix">
-                <div class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" />
+                <label class="checkbox-li fl">
+                  <input class="check-in" type="radio" name="system" value="1" :checked="formData.system === 1" @change="handleSelectSystem(1)" />
                   <span class="check-s">淘汰赛：</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="1" checked />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" :disabled="formData.system !== 1" type="radio" name="system1Rule" value="1" v-model.number="system1Rule" />
                   <span class="span">单败淘汰</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="1" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" :disabled="formData.system !== 1" type="radio" name="system1Rule" value="2" v-model.number="system1Rule" />
                   <span class="span">双败淘汰</span>
-                </div>
+                </label>
               </div>
+
               <div class="item-radio clearfix">
-                <div class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" />
+                <label class="checkbox-li fl">
+                  <input class="check-in" type="radio" name="system" value="2" :checked="formData.system === 2" @change="handleSelectSystem(2)" />
                   <span class="check-s">循环赛：</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="2" checked />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" :disabled="formData.system !== 2" name="system2Rule" value="1" v-model.number="system2Rule" />
                   <span class="span">单循环赛</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="3" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" :disabled="formData.system !== 2" name="system2Rule" value="2" v-model.number="system2Rule" />
                   <span class="span">双循环赛</span>
-                </div>
+                </label>
               </div>
-              <!--publish-gray start-->
+
               <div class="publish-gray item-radio clearfix">
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="3" />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" :disabled="formData.system !== 2" name="arithmetic" value="1" v-model.number="formData.arithmetic" />
                   <span class="span">贝格尔法</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="3" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" :disabled="formData.system !== 2" name="arithmetic" value="3" v-model.number="formData.arithmetic" />
                   <span class="span">顺时针转法</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="3" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" :disabled="formData.system !== 2" name="arithmetic" value="2" v-model.number="formData.arithmetic" />
                   <span class="span">蛇形编排</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="3" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" :disabled="formData.system !== 2" name="arithmetic" value="4" v-model.number="formData.arithmetic" />
                   <span class="span">逆时针转法</span>
-                </div>
+                </label>
               </div>
-              <!--publish-gray end-->
+
               <div class="item-radio clearfix">
-                <div class="checkbox-li fl">
-                  <input class="check-in" type="checkbox" />
+                <label class="checkbox-li fl">
+                  <input class="check-in" type="radio" name="system" value="3" :checked="formData.system === 3" @change="handleSelectSystem(3)" />
                   <span class="check-s">其他赛制：</span>
-                </div>
+                </label>
                 <div class="item-b fl">
-                  <input type="text" class="input" placeholder="请输入备注内容" />
+                  <input type="text" :disabled="formData.system !== 3" class="input" placeholder="请输入备注内容" v-model.trim="formData.system_memo" />
                 </div>
               </div>
             </div>
           </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
+
+          <!-- 分组数 -->
           <div class="publish-item clearfix">
-            <div class="label"><span class="color-red">*</span> 分组数：</div>
+            <div class="label"><span class="color-red">*</span>分组数：</div>
             <div class="con">
-              <input type="text" class="input w400" placeholder="请输入分组数" />
+              <input type="number" class="input w400" placeholder="请输入分组数" v-model.number="formData.group_num" />
               <span class="stage-c">组</span>
             </div>
           </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
+
+          <!-- 每组晋级/ 淘汰人数 -->
           <div class="publish-item clearfix">
-            <div class="label"><span class="color-red">*</span> 每组晋级/ 淘汰人数：</div>
+            <div class="label"><span class="color-red">*</span>每组晋级/ 淘汰人数：</div>
             <div class="con">
-              <select class="select w190">
-                <option>请选择</option>
+              <select
+                class="select w190"
+                :class="{
+                grey: !formData.rank_or_week
+              }"
+                v-model.number="formData.rank_or_week"
+              >
+                <option value="" disabled selected>请选择</option>
+                <option value="1">晋级</option>
+                <option value="2">淘汰</option>
               </select>
-              <input type="text" class="input w400" placeholder="请设置人数" />
+              <input type="number" class="input w400" placeholder="请设置人数" v-model.number="formData.people_num" />
               <span class="stage-c">人</span>
             </div>
           </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
+
+          <!-- 比赛形式 -->
           <div class="publish-item clearfix">
-            <div class="label"><span class="color-red">*</span> 台数：</div>
-            <div class="con">
-              <input type="text" class="input w400" placeholder="请输入台数" />
-              <span class="stage-c">台</span>
-            </div>
-          </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
-          <div class="publish-item clearfix">
-            <div class="label"><span class="color-red">*</span> 比赛形式：</div>
+            <div class="label"><span class="color-red">*</span>比赛形式：</div>
             <div class="con">
               <div class="stage-t">选手规则</div>
               <div class="item-radio clearfix">
                 <div class="stage-c fl">参赛选手分组：</div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="3" checked />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="groupWay" value="1" v-model.number="formData.group_way" />
                   <span class="span">按种子分组</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="3" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="groupWay" value="2" v-model.number="formData.group_way" />
                   <span class="span">随机分组</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="3" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="groupWay" value="3" v-model.number="formData.group_way" />
                   <span class="span">同队或同单位限制</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="3" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="groupWay" value="4" v-model.number="formData.group_way" />
                   <span class="span">地区分组</span>
-                </div>
+                </label>
               </div>
+
               <div class="item-radio clearfix">
                 <div class="stage-c fl">参赛选手参赛号：</div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="4" checked />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="competitionNum" value="1" v-model.number="formData.competition_num" />
                   <span class="span">按等级分</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="4" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="competitionNum" value="2" v-model.number="formData.competition_num" />
                   <span class="span">按技术水平</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="4" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="competitionNum" value="3" v-model.number="formData.competition_num" />
                   <span class="span">随机分号</span>
-                </div>
+                </label>
               </div>
-              <div class="item-b">
+
+              <div class="item-b" style="margin-left: 140px">
                 说明
-                <input type="text" class="input" placeholder="补充说明（备注线上游戏平台）" />
+                <input type="text" class="input" placeholder="补充说明（备注线上游戏平台）" v-model.trim="formData.group_memo" />
               </div>
-              <div class="item-radio clearfix">
-                <div class="stage-c fl">种子选手数量：</div>
-                <div class="item-b fl">
-                  <input type="text" class="input w160" placeholder="请输入种子数量" />
-                  <span class="stage-c">人</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="5" checked />
-                  <span class="span">按等级分</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="5" />
-                  <span class="span">按技术水平</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="5" />
-                  <span class="span">指定<i class="color-gray"> （指定原则见《赛事规则》）</i></span>
-                </div>
-              </div>
+
               <div class="stage-t">先后手</div>
               <div class="item-radio clearfix">
                 <div class="stage-c fl">首轮：</div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="6" checked />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="beforeAfter" value="1" v-model.number="formData.before_after" />
                   <span class="span">猜先</span>
-                </div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="6" />
+                </label>
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="beforeAfter" value="2" v-model.number="formData.before_after" />
                   <span class="span">按约定</span>
-                </div>
+                </label>
+              </div>
+              <div class="item-radio clearfix">
                 <div class="stage-c fl">其余轮次：</div>
-                <div class="radio-li fl">
-                  <input class="radio" type="radio" name="7" />
+                <label class="radio-li fl">
+                  <input class="radio" type="radio" name="surplus" value="1" v-model="formData.surplus" />
                   <span class="span">按约定</span>
-                </div>
+                </label>
               </div>
             </div>
           </div>
-          <!--publish-item end-->
-          <!--publish-item start-->
-          <div class="publish-item clearfix">
-            <div class="label"><span class="color-red">*</span> 设置计分规则：</div>
+
+          <!-- 设置计分规则 -->
+          <div class="publish-item clearfix" v-if="formData.system === 1 || formData.system === 2">
+            <div class="label"><span class="color-red">*</span>设置计分规则：</div>
             <div class="con">
               <div class="stage-t">个人赛：</div>
+
               <div class="item-b mar-r15">
                 每台赛局数
-                <input type="text" class="input w160" placeholder="请输入" />
+                <input type="number" class="input w160" placeholder="请输入" v-model.number="formData.sai_num" />
                 局
               </div>
-              <div class="clearfix">
+
+              <div class="clearfix" v-if="formData.system === 2">
                 <div class="item-b fl mar-r15">
                   胜
-                  <input type="text" class="input w160" placeholder="请输入" />
+                  <input type="number" class="input w160" placeholder="请输入" v-model.number="formData.win_score" />
                   分
                 </div>
                 <div class="item-b fl mar-r15">
                   平
-                  <input type="text" class="input w160" placeholder="请输入" />
+                  <input type="number" class="input w160" placeholder="请输入" v-model.number="formData.dogfall_score" />
                   分
                 </div>
                 <div class="item-b fl mar-r15">
                   负
-                  <input type="text" class="input w160" placeholder="请输入" />
+                  <input type="number" class="input w160" placeholder="请输入" v-model.number="formData.defeated_score" />
                   分
                 </div>
               </div>
-              <div class="clearfix">
+
+              <div class="clearfix" v-if="formData.system === 2">
                 <div class="item-b fl mar-r15">
                   弃权
-                  <input type="text" class="input w160" placeholder="请输入" />
+                  <input type="number" class="input w160" placeholder="请输入" v-model.number="formData.waiver_score" />
                   分
                 </div>
                 <div class="item-b fl mar-r15">
                   犯规
-                  <input type="text" class="input w160" placeholder="请输入" />
+                  <input type="number" class="input w160" placeholder="请输入" v-model.number="formData.illegality_score" />
                   分
                 </div>
               </div>
-              <div class="stage-c">平分名次排列：优先级从左到右排列</div>
-              <div class="item-select">
-                <select class="select">
-                  <option>积分</option>
-                </select>
-                <select class="select">
-                  <option>违规</option>
-                </select>
-                <select class="select">
-                  <option>并列</option>
-                </select>
-                <select class="select">
-                  <option>选择</option>
-                </select>
-                <select class="select">
-                  <option>选择</option>
+
+              <div class="stage-c" v-if="formData.system === 2">平分名次排列：优先级从左到右排列</div>
+
+              <div class="item-select ranking-system" v-if="formData.system === 2">
+                <select
+                  class="select"
+                  :value="rankingSystemSelected[selectIndex] || ''"
+                  @change="handleSelectRankingSystem(event, selectIndex)"
+                  v-show="rankingSystemList2[selectIndex]"
+                  v-for="(selectItem, selectIndex) in rankingSystemList"
+                  :key="selectIndex"
+                >
+                  <option value="" disabled selected>选择</option>
+                  <option :value="item.value" v-for="(item, index) in rankingSystemList2[selectIndex]" :key="index">{{item.label}}</option>
                 </select>
               </div>
             </div>
           </div>
-          <!--publish-item end-->
 
           <div class="publish-bottom">
-            <button class="publish-btn">下一步</button>
+            <button class="publish-btn" @click="handleNextStep">下一步</button>
           </div>
         </div>
-        <!--publish-content end-->
       </div>
-      <!--publish-main end-->
     </div>
     <!--publish-container end-->
-    <!--main-footer start-->
-    <div class="main-footer">
-      <div class="footer">
-        <div class="w-1200 clearfix">
-          <div class="foot-logo fl">
-            <img src="images/logo.png" />
-          </div>
-          <div class="foot-nav fl">
-            <div class="li fl">
-              <div class="a"><a href="">赛事频道</a></div>
-              <div class="a"><a href="">发布赛事</a></div>
-              <div class="a"><a href="">热门选手</a></div>
-              <div class="a"><a href="">激战中赛事</a></div>
-              <div class="a"><a href="">报名中赛事</a></div>
-            </div>
-            <div class="li fl">
-              <div class="a"><a href="">榜文大厅</a></div>
-              <div class="a"><a href="">发布榜文</a></div>
-              <div class="a"><a href="">学习榜文</a></div>
-              <div class="a"><a href="">教课榜文</a></div>
-            </div>
-            <div class="li fl">
-              <div class="a"><a href="">直播频道</a></div>
-              <div class="a"><a href="">发起直播</a></div>
-              <div class="a"><a href="">热播赛事</a></div>
-              <div class="a"><a href="">热播课程</a></div>
-              <div class="a"><a href="">直播预告</a></div>
-            </div>
-            <div class="li fl">
-              <div class="a"><a href="">个人中心</a></div>
-              <div class="a"><a href="">我的赛事</a></div>
-              <div class="a"><a href="">我的直播</a></div>
-              <div class="a"><a href="">我的应榜</a></div>
-              <div class="a"><a href="">账户余额</a></div>
-              <div class="a"><a href="">开通会员</a></div>
-            </div>
-            <div class="li fl">
-              <p>北京玻坡摸佛网络有限公司</p>
-              <p>北京市丰台区</p>
-              <p>13612455829</p>
-              <p>ibopomofo@126.com</p>
-            </div>
-          </div>
-          <div class="foot-wx fr">
-            <div class="wx"><img src="images/wx.png" /></div>
-            <p>扫描关注公众号</p>
-          </div>
-        </div>
-      </div>
-      <div class="foot-bottom">
-        <div class="foot-quick"><a href="">关于我们</a> | <a href="">支付方式</a> | <a href="">联系方式</a> | <a href="">客服中心</a> | <a href="">网站地图</a></div>
-        <div class="foot-copy">Copyight 北京玻坡摸佛网络有限公司 版权所有 京公网安备11010602007481号</div>
-      </div>
-    </div>
-    <!--main-footer end-->
-    <script src="js/common.js"></script>
-    <script>
-      var jel = document.querySelectorAll('.moredate')
-      for (var j = 0; j < jel.length; j++) {
-        var mat = jel[j].getAttribute('placeholder')
-        jeDate(jel[j], {
-          format: mat,
-        })
-      }
-    </script>
+
+    <!-- 公共底部 -->
+    <footer class="public-footer"></footer>
+
+    <script src="/js/bangwen/competitionStagePersonal.js"></script>
   </body>
 </html>
