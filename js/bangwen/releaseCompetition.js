@@ -1,5 +1,5 @@
 "use strict";
-// 发布比赛
+// 发布比赛第一步
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -70,6 +70,8 @@ var releaseCompetitionPersonal = {
     props: ['competitionCateList'],
     data: function () {
         return {
+            // 临时
+            tempPreShow: true,
             // 表单数据
             formData: {
                 competition_type: 0,
@@ -382,6 +384,10 @@ var releaseCompetitionPersonal = {
                 // 用于页面展示
                 url: window.URL.createObjectURL(file),
             };
+            if (this.formData.cover_picture) {
+                // 如果有 url，说明上传过了，改变图片的时候把 url 删除
+                this.formData.cover_picture = '';
+            }
         },
         // 选择附件
         handleAffixFileChange: function (event) {
@@ -396,24 +402,31 @@ var releaseCompetitionPersonal = {
             var errorArr2 = [];
             for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
                 var item = files_1[_i];
-                // 做多上传 5 个文件
+                // 限制个数 5 个
                 if (tempArr.length < 5) {
                     var filesNameList = this.affixList.length ? this.affixList.map(function (i) { return i.name; }) : [];
                     // （如果不存在文件名）禁止添加同名文件
                     if (!filesNameList.includes(item.name)) {
                         console.log(item);
                         if (!['png', 'jpg', 'jpeg', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
+                            // 限制扩展名
                             if (!errorArr.includes(util.getExtensionName(item.name))) {
                                 errorArr.push(util.getExtensionName(item.name));
                             }
                         }
                         else if (item.size > 1024 * 1024 * 10) {
+                            // 限制大小 10M
                             if (!errorArr2.includes(item.name)) {
                                 errorArr2.push(item.name);
                             }
                         }
                         else if (tempArr.length < 5) {
+                            console.log('添加文件');
                             tempArr.push(item);
+                            if (this.formData.affix) {
+                                // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+                                this.formData.affix = '';
+                            }
                         }
                     }
                 }
@@ -428,12 +441,16 @@ var releaseCompetitionPersonal = {
                 layer.msg("\u8BF7\u9009\u62E9 10M \u4EE5\u5185\u7684\u6587\u4EF6");
             }
             this.affixList = tempArr;
-            element.value = '';
+            // element.value = ''
             console.log(__assign({}, this.affixList));
         },
         // 删除附件
         handleDeleteAffix: function (index) {
             this.affixList.splice(index, 1);
+            if (this.formData.affix) {
+                // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+                this.formData.affix = '';
+            }
         },
         // 选择报名信息（复选框）（年龄、居住地址、自我介绍）
         handleSelectApplyInfo: function (event) {
@@ -563,7 +580,6 @@ var releaseCompetitionPersonal = {
         handleNextStep: function (event) {
             return __awaiter(this, void 0, void 0, function () {
                 var loadingIndex, _a, affixUrlArr;
-                var _this = this;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -572,9 +588,10 @@ var releaseCompetitionPersonal = {
                             if (!this._validateFormData())
                                 return [2 /*return*/];
                             loadingIndex = layer.load(1, {
-                                shade: [0.5, '#000'],
-                                time: 10 * 1000, // 如果十秒还没关闭则自动关闭
+                                shade: [0.5, '#000'], // 0.1透明度的白色背景
+                                // time: 30 * 1000, // 如果30秒还没关闭则自动关闭
                             });
+                            if (!!this.formData.cover_picture) return [3 /*break*/, 2];
                             // 上传封面图
                             _a = this.formData;
                             return [4 /*yield*/, util
@@ -592,6 +609,9 @@ var releaseCompetitionPersonal = {
                             _a.cover_picture = _b.sent();
                             if (!this.formData.cover_picture)
                                 return [2 /*return*/];
+                            _b.label = 2;
+                        case 2:
+                            if (!!this.formData.affix) return [3 /*break*/, 4];
                             return [4 /*yield*/, util
                                     .uploadMultipleFile(this.affixList.map(function (item) {
                                     console.log('affixList item', item);
@@ -605,11 +625,13 @@ var releaseCompetitionPersonal = {
                                     layer.close(loadingIndex);
                                     layer.msg('上传附件失败');
                                 })];
-                        case 2:
+                        case 3:
                             affixUrlArr = _b.sent();
                             if (!affixUrlArr)
                                 return [2 /*return*/];
                             this.formData.affix = affixUrlArr.toString();
+                            _b.label = 4;
+                        case 4:
                             if (this.teamListShow) {
                                 this.formData.team_list = this.teamNameList
                                     .filter(function (i) { return i.name; })
@@ -629,14 +651,16 @@ var releaseCompetitionPersonal = {
                                 if (result.code === 200) {
                                     // 发布成功
                                     console.log('发布成功');
-                                    _this.$alert('发布成功', '', {
-                                        showClose: false,
-                                        confirmButtonText: '确定',
-                                        callback: function (action) {
-                                            // 跳转到个人赛设置阶段页面
-                                            window.location.href = "/bangwen/competitionStagePersonal.html?competition_id=".concat(result.data.competition_id);
-                                        },
-                                    });
+                                    // 跳转到个人赛设置阶段页面
+                                    window.location.href = "/bangwen/competitionStagePersonal.html?competition_id=".concat(result.data.competition_id);
+                                    // this.$alert('发布成功', '', {
+                                    //   showClose: false,
+                                    //   confirmButtonText: '确定',
+                                    //   callback: (action) => {
+                                    //     // 跳转到个人赛设置阶段页面
+                                    //     window.location.href = `/bangwen/competitionStagePersonal.html?competition_id=${result.data.competition_id}`
+                                    //   },
+                                    // })
                                 }
                                 else if (result.code === 201) {
                                     // 发布次数不足，跳转购买会员页面
@@ -695,6 +719,8 @@ var releaseCompetitionTeam = {
     ],
     data: function () {
         return {
+            // 临时
+            tempPreShow: true,
             // 表单数据
             formData: {
                 competition_type: 1,
@@ -996,6 +1022,10 @@ var releaseCompetitionTeam = {
                 // 用于页面展示
                 url: window.URL.createObjectURL(file),
             };
+            if (this.formData.cover_picture) {
+                // 如果有 url，说明上传过了，改变图片的时候把 url 删除
+                this.formData.cover_picture = '';
+            }
         },
         // 选择附件
         handleAffixFileChange: function (event) {
@@ -1010,24 +1040,31 @@ var releaseCompetitionTeam = {
             var errorArr2 = [];
             for (var _i = 0, files_2 = files; _i < files_2.length; _i++) {
                 var item = files_2[_i];
-                // 做多上传 5 个文件
+                // 限制个数 5 个
                 if (tempArr.length < 5) {
                     var filesNameList = this.affixList.length ? this.affixList.map(function (i) { return i.name; }) : [];
                     // （如果不存在文件名）禁止添加同名文件
                     if (!filesNameList.includes(item.name)) {
                         console.log(item);
                         if (!['png', 'jpg', 'jpeg', 'bmp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(util.getExtensionName(item.name))) {
+                            // 限制扩展名
                             if (!errorArr.includes(util.getExtensionName(item.name))) {
                                 errorArr.push(util.getExtensionName(item.name));
                             }
                         }
                         else if (item.size > 1024 * 1024 * 10) {
+                            // 限制大小 10M
                             if (!errorArr2.includes(item.name)) {
                                 errorArr2.push(item.name);
                             }
                         }
                         else if (tempArr.length < 5) {
+                            console.log('添加文件');
                             tempArr.push(item);
+                            if (this.formData.affix) {
+                                // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+                                this.formData.affix = '';
+                            }
                         }
                     }
                 }
@@ -1042,12 +1079,16 @@ var releaseCompetitionTeam = {
                 layer.msg("\u8BF7\u9009\u62E9 10M \u4EE5\u5185\u7684\u6587\u4EF6");
             }
             this.affixList = tempArr;
-            element.value = '';
+            // element.value = ''
             console.log(__assign({}, this.affixList));
         },
         // 删除附件
         handleDeleteAffix: function (index) {
             this.affixList.splice(index, 1);
+            if (this.formData.affix) {
+                // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+                this.formData.affix = '';
+            }
         },
         // 选择报名信息（复选框）（年龄、居住地址、自我介绍）
         handleSelectApplyInfo: function (event) {
@@ -1160,7 +1201,6 @@ var releaseCompetitionTeam = {
         handleNextStep: function (event) {
             return __awaiter(this, void 0, void 0, function () {
                 var loadingIndex, _a, affixUrlArr;
-                var _this = this;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -1169,9 +1209,10 @@ var releaseCompetitionTeam = {
                             if (!this._validateFormData())
                                 return [2 /*return*/];
                             loadingIndex = layer.load(1, {
-                                shade: [0.5, '#000'],
-                                time: 10 * 1000, // 如果十秒还没关闭则自动关闭
+                                shade: [0.5, '#000'], // 0.1透明度的白色背景
+                                // time: 30 * 1000, // 如果30秒还没关闭则自动关闭
                             });
+                            if (!!this.formData.cover_picture) return [3 /*break*/, 2];
                             // 上传封面图
                             _a = this.formData;
                             return [4 /*yield*/, util
@@ -1189,6 +1230,9 @@ var releaseCompetitionTeam = {
                             _a.cover_picture = _b.sent();
                             if (!this.formData.cover_picture)
                                 return [2 /*return*/];
+                            _b.label = 2;
+                        case 2:
+                            if (!!this.formData.affix) return [3 /*break*/, 4];
                             return [4 /*yield*/, util
                                     .uploadMultipleFile(this.affixList.map(function (item) {
                                     console.log('affixList item', item);
@@ -1202,11 +1246,13 @@ var releaseCompetitionTeam = {
                                     layer.close(loadingIndex);
                                     layer.msg('上传附件失败');
                                 })];
-                        case 2:
+                        case 3:
                             affixUrlArr = _b.sent();
                             if (!affixUrlArr)
                                 return [2 /*return*/];
                             this.formData.affix = affixUrlArr.toString();
+                            _b.label = 4;
+                        case 4:
                             if (this.teamListShow) {
                                 this.formData.team_list = this.teamNameList
                                     .filter(function (i) { return i.name; })
@@ -1226,14 +1272,16 @@ var releaseCompetitionTeam = {
                                 if (result.code === 200) {
                                     // 发布成功
                                     console.log('发布成功');
-                                    _this.$alert('发布成功', '', {
-                                        showClose: false,
-                                        confirmButtonText: '确定',
-                                        callback: function (action) {
-                                            // 跳转到团队赛设置阶段页面
-                                            window.location.href = "/bangwen/competitionStageTeam.html?competition_id=".concat(result.data.competition_id);
-                                        },
-                                    });
+                                    // 跳转到团队赛设置阶段页面
+                                    window.location.href = "/bangwen/competitionStageTeam.html?competition_id=".concat(result.data.competition_id);
+                                    // this.$alert('发布成功', '', {
+                                    //   showClose: false,
+                                    //   confirmButtonText: '确定',
+                                    //   callback: (action) => {
+                                    //     // 跳转到团队赛设置阶段页面
+                                    //     window.location.href = `/bangwen/competitionStageTeam.html?competition_id=${result.data.competition_id}`
+                                    //   },
+                                    // })
                                 }
                                 else if (result.code === 201) {
                                     // 发布次数不足，跳转购买会员页面
