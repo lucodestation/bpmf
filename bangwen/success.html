@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>发布榜文-提交成功</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jsencrypt.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--publish-container start-->
+  <div class="publish-container">
+    <!--inner-position start-->
+    <div class="inner-position w-1200">
+      <a href="/index.html">首页</a>
+      <span>&lt; </span>
+      <a class="current" href="./addList.html"> 发布榜文</a>
+    </div>
+    <!--inner-position end-->
+    <!--publish-head start-->
+    <div class="publish-head w-1200">
+      <div class="content clearfix">
+        <div class="head-li li1">
+          <div class="t">1.榜文发布中</div>
+          <div class="icon"></div>
+        </div>
+        <div class="head-line"></div>
+        <div class="head-li li2">
+          <div class="t">2.榜文审核中</div>
+          <div class="icon"></div>
+        </div>
+        <div class="head-line"></div>
+        <div class="head-li li3">
+          <div class="t">3.应榜中</div>
+          <div class="icon"></div>
+        </div>
+        <div class="head-line"></div>
+        <div class="head-li li4">
+          <div class="t">4.应榜结束</div>
+          <div class="icon"></div>
+        </div>
+        <div class="head-line"></div>
+        <div class="head-li li5">
+          <div class="t">5.工作中</div>
+          <div class="icon"></div>
+        </div>
+        <div class="head-line"></div>
+        <div class="head-li li6">
+          <div class="t">6.任务结束</div>
+          <div class="icon"></div>
+        </div>
+      </div>
+    </div>
+    <!--publish-head end-->
+    <!--publish-main start-->
+    <div class="publish-main w-1200">
+      <h1 class="publish-tit">提交成功</h1>
+      <!--publish-content start-->
+      <div class="publish-content">
+        <div class="publish-submit">
+          <div class="submit-success">
+            <img src="/images/icon-sucess.png">
+            <div class="t">提交成功，等待审核中</div>
+            <a class="success-a" href="/userCont/bangwen/noticeList.html">查看我的榜文</a>
+          </div>
+        </div>
+      </div>
+      <!--publish-content end-->
+    </div>
+    <!--publish-main end-->
+  </div>
+  <!--publish-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/bangwen/success.js"></script>
+</body>
+
+</html>

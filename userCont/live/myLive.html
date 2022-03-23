@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>我的直播</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+  <link rel="stylesheet" href="/plugins/date/jedate.css" />
+
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <!-- <script src="/plugins/jsencrypt.js"></script> -->
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/clipboard.min.js"></script>
+  <script src="/plugins/httpVueLoader.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/plugins/aliyun-oss-sdk.min.js"></script>
+  <script src="/utils/request.js"></script>
+  <script src="/utils/util.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <div class="public-user"></div>
+      <!--center-content start-->
+      <div class="center-content fr" id="app">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit">发起直播</div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <!--center-order-state start-->
+            <div class="center-order-state m-b-20 clearfix">
+              <div class="li active"><a href="">全部直播</a> </div>
+              <div class="li"><a href="">审核中</a> </div>
+              <div class="li"><a href="">待直播</a> </div>
+              <div class="li"><a href="">直播中</a> </div>
+              <div class="li"><a href="">已结束</a> </div>
+              <div class="li"><a href="">未通过</a> </div>
+            </div>
+            <!--center-order-state end-->
+            <!--center-inner-form start-->
+            <div class="center-inner-form wallet-search clearfix">
+              <div class="form-bor">
+                <select class="select w130">
+                  <option>111</option>
+                </select>
+              </div>
+              <div class="form-bor m-l-20">
+                <input type="text" class="input jeinput w130" id="dateS" placeholder="开始时间">
+              </div>
+              <div class="form-bor m-l-20">
+                <input type="text" class="input jeinput w130" id="dateE" placeholder="结束时间">
+              </div>
+              <button class="form-btn m-l-20">查询</button>
+            </div>
+            <!--center-inner-form end-->
+            <script>
+              jeDate("#dateS", {
+                format: "MM-DD-YYYY"
+              });
+              jeDate("#dateE", {
+                format: "MM-DD-YYYY"
+              });
+            </script>
+            <!--center-inner-table-wrap start-->
+            <div class="center-inner-table-wrap">
+              <table class="center-inner-table center-order-table">
+                <tr>
+                  <th>直播主题</th>
+                  <th>直播类型</th>
+                  <th>开播时间</th>
+                  <th>直播时长</th>
+                  <th>审核状态</th>
+                  <th>操作</th>
+                </tr>
+                <tr v-for="item in pushList" :key="item.id">
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" :src="item.image">
+                      <p class="center-order-txt m-l-10">{{item.title}}</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>象棋</p>
+                    <p>课程直播</p>
+                    <p>密码进入</p>
+                  </td>
+                  <td>
+                    <p>{{item.start_time}}</p>
+                    至
+                    <p>{{item.end_time}}</p>
+                  </td>
+                  <td>预计120分钟</td>
+                  <td>审核中</td>
+                  <td>
+                    <div class="handle text-c">
+                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>象棋</p>
+                    <p>课程直播</p>
+                    <p>密码进入</p>
+                  </td>
+                  <td>
+                    <p>2021-10-12 12:00</p>
+                    至
+                    <p>2021-10-12 14:00</p>
+                  </td>
+                  <td>预计120分钟</td>
+                  <td>待开播</td>
+                  <td>
+                    <div class="handle text-c">
+                      <a class="handle-btn m-r-10" href="javascript:void(0);"
+                        onClick="syalert.syopen('alert2')">开始直播</a>
+                      <a class="handle-btn red m-r-10" href="">取消直播</a>
+                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>象棋</p>
+                    <p>课程直播</p>
+                    <p>密码进入</p>
+                  </td>
+                  <td>
+                    <p>2021-10-12 12:00</p>
+                    至
+                    <p>2021-10-12 14:00</p>
+                  </td>
+                  <td>预计120分钟</td>
+                  <td>
+                    <p class="color-blue">直播中</p>
+                  </td>
+                  <td>
+                    <div class="handle text-c">
+                      <a class="handle-btn m-r-10" href="">结束直播</a>
+                      <a class="handle-btn blue m-r-10" href="CenterLive-审核.html">审核人员</a>
+                      <a class="handle-btn blue" href="4直播频道-4教课课程直播详情页.html">去直播间</a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>象棋</p>
+                    <p>课程直播</p>
+                    <p>密码进入</p>
+                  </td>
+                  <td>
+                    <p>2021-10-12 12:00</p>
+                    至
+                    <p>2021-10-12 14:00</p>
+                  </td>
+                  <td>预计120分钟</td>
+                  <td>
+                    已结束
+                  </td>
+                  <td>
+                    <div class="handle text-c">
+                      <a class="handle-btn blue" href="">查看详情</a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>象棋</p>
+                    <p>课程直播</p>
+                    <p>密码进入</p>
+                  </td>
+                  <td>
+                    <p>2021-10-12 12:00</p>
+                    至
+                    <p>2021-10-12 14:00</p>
+                  </td>
+                  <td>预计120分钟</td>
+                  <td>
+                    未通过
+                  </td>
+                  <td>
+                    <div class="handle text-c">
+                      <a class="handle-btn blue m-r-10" href="CenterLive.html">修改直播</a>
+                      <a class="handle-btn red m-r-10" href="">取消直播</a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>象棋</p>
+                    <p>课程直播</p>
+                    <p>密码进入</p>
+                  </td>
+                  <td>
+                    <p>2021-10-12 12:00</p>
+                    至
+                    <p>2021-10-12 14:00</p>
+                  </td>
+                  <td>预计120分钟</td>
+                  <td>
+                    已取消
+                  </td>
+                  <td>
+                    <div class="handle text-c">
+                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!--center-inner-table-wrap end-->
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <!--开启直播弹出-->
+  <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+    id="alert2">
+    <div class="bond-content">
+      <div class="bond-close" onClick="syalert.syhide('alert2')"></div>
+      <div class="bond-tit">开启直播</div>
+      <!--bond-item start-->
+      <div class="bond-item clearfix">
+        <div class="label">推流地址：</div>
+        <div class="item-r">
+          <div class="bor">
+            <div class="text">https://modao.cc/app/ebd1f2b12a1e8240c8fc24e414392c6a6
+              9923ee0#screen=skv0dyoplgu0278</div>
+            <div class="copy">复制地址</div>
+          </div>
+        </div>
+      </div>
+      <!--bond-item end-->
+      <div class="bond-mtip">请复制地址后到推流平台</div>
+      <div class="bond-mtip">关闭后可到-个人中心-我的的直播-重新开启直播</div>
+      <div class="bond-bottom">
+        <button class="bond-btn" onclick="location='CenterLive1.html'">确认</button>
+      </div>
+    </div>
+  </div>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/live/myLive.js"></script>
+</body>
+
+</html>

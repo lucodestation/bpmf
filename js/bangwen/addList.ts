@@ -357,6 +357,8 @@ new Vue({
         data: this.formData,
       })
       if (res.code == 200) {
+        window.location.href = `/bangwen/success.html`
+        layer.msg('发布成功')
         // this.cateList = res.data
         // this.formData.b_id = res.data[0].id;
       } else if (res.code == 206) {

@@ -91,7 +91,7 @@
               <span class="color-gray" style="margin-left: 40px;">中榜人数：</span>{{noticeCont.select_num}}人
             </div>
             <!--center-rank-head-hd start-->
-            <div class="center-rank-head-hd">
+            <div class="center-rank-head-hd" v-if="noticeCont.status=='4'">
               <!-- <div class="m-b-15 clearfix">
                 <div class="fl color-gray">应榜人数：<span class="color-red f-16">25人</span> </div>
                 <div class="fl color-gray m-l-40">中榜人数：<span class="color-red f-16">3人</span> </div>
@@ -111,7 +111,7 @@
             </div>
             <!--center-rank-head-hd end-->
             <!--center-inner-table-wrap start-->
-            <div class="center-inner-table-wrap">
+            <div class="center-inner-table-wrap" v-if="noticeCont.status=='4'">
               <table class="center-inner-table center-order-table">
                 <tr>
                   <th>第1次支付50元</th>

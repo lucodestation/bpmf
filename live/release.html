@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>发布直播</title>
+  <!-- <script src="/plugins/upload/imgFileupload.js"></script> -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+  <link rel="stylesheet" href="/plugins/date/jedate.css" />
+
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <!-- <script src="/plugins/jsencrypt.js"></script> -->
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/clipboard.min.js"></script>
+  <script src="/plugins/httpVueLoader.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/plugins/aliyun-oss-sdk.min.js"></script>
+  <script src="/utils/request.js"></script>
+  <script src="/utils/util.js"></script>
+  <style>
+    /* 隐藏秒 */
+    .laydate-time-list>li:nth-child(3) ol li {
+      display: none;
+    }
+
+    /* 日期时间选择器（触发打开日期时间选择器的元素） */
+    .date-time-picker {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #999;
+    }
+
+    .date-time-picker .date-time {
+      color: #333;
+    }
+
+    /* 上传封面图 */
+    .upload-cover-image .con {
+      display: flex;
+    }
+
+    .upload-cover-image .con .publish-up {
+      margin-top: 0;
+    }
+
+    .publish-up,
+    .publish-up .cover-image {
+      width: 160px;
+      height: 160px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--publish-container start-->
+  <div class="publish-container" id="app">
+    <!--inner-position start-->
+    <div class="inner-position w-1200">
+      <a href="../index.html">首页</a>
+      <span>&lt; </span>
+      <a class="current" href="./release.html"> 发布直播</a>
+    </div>
+    <!--inner-position end-->
+    <!--publish-head start-->
+    <div class="publish-head w-1200">
+      <div class="content clearfix">
+        <div class="head-li li1">
+          <div class="t">1.发起直播</div>
+          <div class="icon"></div>
+        </div>
+        <div class="head-line"></div>
+        <div class="head-li li2">
+          <div class="t">2.直播审核</div>
+          <div class="icon"></div>
+        </div>
+        <div class="head-line"></div>
+        <div class="head-li li3">
+          <div class="t">3复制推流地址</div>
+          <div class="icon"></div>
+        </div>
+        <div class="head-line"></div>
+        <div class="head-li li4">
+          <div class="t">4.粘贴地址开播</div>
+          <div class="icon"></div>
+        </div>
+      </div>
+    </div>
+    <!--publish-head end-->
+    <!--publish-main start-->
+    <div class="publish-main w-1200">
+      <h1 class="publish-tit">发布直播</h1>
+      <!--publish-content start-->
+      <div class="publish-content">
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label"><span class="color-red">*</span> 设置直播种类：</div>
+          <div class="con">
+            <div class="publish-tags clearfix">
+              <div class="tag" @click="formData.type=1">
+                <input type="radio" class="tag-radio" name="1" checked>
+                <span class="tag-s">课程直播</span>
+              </div>
+              <div class="tag" @click="formData.type=2">
+                <input type="radio" class="tag-radio" name="1">
+                <span class="tag-s">赛事直播</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label"><span class="color-red">*</span> 设置进入权限：</div>
+          <div class="con">
+            <div class="publish-tags clearfix">
+              <div class="tag" @click="formData.join_type=1,formData.password=''">
+                <input type="radio" class="tag-radio radio-juris" value="1" name="juris" checked>
+                <span class="tag-s">申请进入</span>
+              </div>
+              <div class="tag" @click="formData.join_type=2,formData.password=''">
+                <input type="radio" class="tag-radio radio-juris" value="2" name="juris">
+                <span class="tag-s">全网公开</span>
+              </div>
+              <div class="tag" @click="formData.join_type=3,formData.password=''">
+                <input type="radio" class="tag-radio radio-juris" value="3" name="juris">
+                <span class="tag-s">会员公开</span>
+              </div>
+              <div class="tag" @click="formData.join_type=4">
+                <input type="radio" class="tag-radio radio-juris" value="4" name="juris">
+                <span class="tag-s">设置密码</span>
+              </div>
+            </div>
+            <div class="center-live-input" v-if="formData.join_type==4">
+              <input type="password" v-model="formData.password" maxlength="6" class="input w340"
+                placeholder="请设置6位数进房密码">
+            </div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label"><span class="color-red">*</span>设置棋类型：</div>
+          <div class="con">
+            <div class="live-bor w420">
+              <select class="select rate-100" v-model="formData.c_id">
+                <option :value="item.id" v-for="item in cateList">{{item.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label"><span class="color-red">*</span>直播讲解主题：</div>
+          <div class="con">
+            <div class="live-bor">
+              <input type="text" class="input rate-100" v-model="formData.title" placeholder="请用20个字描述直播讲解主题">
+            </div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label"><span class="color-red">*</span>直播讲解时间：</div>
+          <div class="con">
+            <div class="bor clearfix">
+              <div ref="signUpStartDate" class="date-time-picker input w400 fl">
+                <span class="date-time" v-if="signUpStartDate">{{ signUpStartDate }}</span>
+                <span v-else>{{ '开始时间' }}</span>
+              </div>
+              <span class="date-mid fl">至</span>
+              <div ref="signUpEndDate" class="date-time-picker input w400 fl">
+                <span class="date-time" v-if="signUpEndDate">{{ signUpEndDate }}</span>
+                <span v-else>{{ '结束时间' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label">直播讲解时长：</div>
+          <div class="con">
+            <div class="c-tip">--</div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label"><span class="color-red">*</span>直播讲解描述：</div>
+          <div class="con">
+            <div class="detail-text">
+              <textarea class="text" rows="5" v-model="formData.descri" placeholder="请描述直播内容"></textarea>
+            </div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label"><span class="color-red">*</span>上传直播头像：</div>
+          <div class="con">
+            <!--头像start-->
+            <div class="publish-up-head">
+              <label class="publish-up">
+                <input type="file" accept=".png,.jpg,.jpeg,.bmp" multiple hidden @change="handleCoverFileChange" />
+                <div id="drop_area" v-if="!this.coverImage.url">
+                  <div class="preview">
+                    <img src="/images/trans.png" class="img-responsive" alt="" title="">
+                    <div class="txt text-c">
+                      <div class="t">上传直播头像</div>
+                      <div class="c">16:9 例如320x180，支持
+                        png、jpg格式，不超过2M</div>
+                    </div>
+                  </div>
+                </div>
+                <img class="cover-image" :src="this.coverImage.url" v-else />
+              </label>
+            </div>
+            <!--头像end-->
+          </div>
+        </div>
+        <!--publish-item end-->
+        <div class="publish-check">
+          <div class="check fl">
+            <input class="check-input" type="checkbox">
+            <span class="check-s"></span>
+          </div>
+          <span>本人已阅读并熟悉玻坡摸佛开房讲解协议，作为讲解者，本人承诺本房间符合玻坡摸佛开房讲解协议要求，遵守国家相关法律
+            法规，并对本承诺负全责。</span>
+        </div>
+        <div class="publish-bottom">
+          <button class="publish-btn" @click="onAddClick">提交申请</button>
+        </div>
+      </div>
+      <!--publish-content end-->
+    </div>
+    <!--publish-main end-->
+    <!--开启直播弹出-->
+    <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+      id="liveCont">
+      <div class="bond-content">
+        <div class="bond-close" onClick="syalert.syhide('liveCont')"></div>
+        <div class="bond-tit">开启直播</div>
+        <!--bond-item start-->
+        <div class="bond-item clearfix">
+          <div class="label">推流地址：</div>
+          <div class="item-r">
+            <div class="bor">
+              <div class="text" id="url" v-text="push_url" ref="copytext">{{push_url}}</div>
+              <div class="copy" @click="copyUrl">复制地址</div>
+            </div>
+          </div>
+        </div>
+        <!--bond-item end-->
+        <div class="bond-mtip">请复制地址后到推流平台</div>
+        <div class="bond-mtip">关闭后可到-个人中心-我的的直播-重新开启直播</div>
+        <div class="bond-bottom">
+          <button class="bond-btn" onClick="syalert.syhide('liveCont')">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--publish-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/live/release.js"></script>
+</body>
+
+</html>

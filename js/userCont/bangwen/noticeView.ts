@@ -116,10 +116,10 @@ new Vue({
     },
     // 此处是学棋榜文，不托管  开始学习
     onStudyClick(id) {
-      request({ url: '/api/Bangwenpush/beginLearnUnmanaged', method: 'post', data: { order_id: id } }).then((res) => {
+      request({ url: '/api/Bangwenattend/startTeach', method: 'post', data: { detail_id: id } }).then((res) => {
         if (res.code == 200) {
           // layer.msg('中榜成功')
-          this.onselectList()
+          // this.onselectList()
         } else {
           layer.msg(res.msg)
         }

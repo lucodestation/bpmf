@@ -436,6 +436,8 @@ new Vue({
                         case 3:
                             res = _b.sent();
                             if (res.code == 200) {
+                                window.location.href = "/bangwen/success.html";
+                                layer.msg('发布成功');
                                 // this.cateList = res.data
                                 // this.formData.b_id = res.data[0].id;
                             }
