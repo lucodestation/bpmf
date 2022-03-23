@@ -1,5 +1,5 @@
 "use strict";
-// 发布比赛个人赛设置阶段
+// 发布比赛个人赛赛事阶段
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -87,11 +87,11 @@ new Vue({
     created: function () {
         var _this = this;
         var searchParams = Qs.parse(location.search.substr(1));
-        this.competitionId = searchParams.competition_id;
+        this.competitionId = searchParams.competition_id * 1;
         // 获取总阶段数，当前进行到哪个阶段
         request({
             url: '/api/competition/get_stage_status',
-            params: { competition_id: searchParams.competition_id },
+            params: { competition_id: searchParams.competition_id * 1 },
         }).then(function (result) {
             console.log('获取总阶段数，当前进行到哪个阶段', result);
             if (+result.code === 200) {
@@ -105,7 +105,7 @@ new Vue({
         // 获取赛事信息
         request({
             url: '/api/competition/competition_detail',
-            params: { competition_id: searchParams.competition_id },
+            params: { competition_id: searchParams.competition_id * 1 },
         }).then(function (result) {
             console.log('获取赛事信息', result);
             if (+result.code === 200) {
