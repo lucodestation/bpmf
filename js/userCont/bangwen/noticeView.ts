@@ -91,6 +91,62 @@ new Vue({
           layer.msg(res.msg)
         }
       })
-    }
+    },
+    // 取消中榜
+    onQueryClick(id) {
+      let that = this
+      layui.use('layer', function () {
+        layer.confirm('确定要取消中榜吗?', {
+          btn: ['确定', '取消']//按钮
+        }, function (index) {
+          that.cancelSelect(id)
+        });
+      });
+    },
+    // 点击取消中榜请求数据
+    cancelSelect(item) {
+      request({ url: '/api/Bangwenpush/cancelSelect', method: 'post', data: { order_id: item, bangwen_id: this.id } }).then((res) => {
+        if (res.code == 200) {
+          layer.msg('中榜成功')
+          this.onNotice()
+        } else {
+          layer.msg(res.msg)
+        }
+      })
+    },
+    // 此处是学棋榜文，不托管  开始学习
+    onStudyClick(id) {
+      request({ url: '/api/Bangwenpush/beginLearnUnmanaged', method: 'post', data: { order_id: id } }).then((res) => {
+        if (res.code == 200) {
+          // layer.msg('中榜成功')
+          this.onselectList()
+        } else {
+          layer.msg(res.msg)
+        }
+      })
+    },
+    onselectList() {
+      request({ url: '/api/Bangwenpush/selectList', method: 'POST', data: { bangwen_id: this.id }, }).then((res) => {
+        if (res.code == 200) {
+          res.data.map(item => {
+            item.detail.map((items, k) => {
+              items.num = k + 1
+              item.blList = this.group(item.detail, 3)
+            })
+          })
+          this.selectList = res.data
+          console.log(this.selectList)
+        }
+      })
+    },
+    // 数组重构
+    group(array, subGroupLength) {
+      let index = 0;
+      let newArray = [];
+      while (index < array.length) {
+        newArray.push(array.slice(index, index += subGroupLength));
+      }
+      return newArray;
+    },
   }
 })

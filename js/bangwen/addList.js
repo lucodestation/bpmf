@@ -531,7 +531,9 @@ new Vue({
                     theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
                 }
             }
-            this.formData.type = theRequest.type;
+            if (theRequest.type) {
+                this.formData.type = theRequest.type;
+            }
         },
     }
 });

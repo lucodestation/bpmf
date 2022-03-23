@@ -47,12 +47,21 @@ new Vue({
             homeShow: false,
             helpShow: false,
             hallShow: false,
-            userHeadShow: false, // 个人中心头部
+            userHeadShow: false,
+            userCont: '', // 个人信息
         };
     },
     created: function () {
+        var _this = this;
+        // 判断是否有token
         if (localStorage.getItem('token')) {
             this.userShow = localStorage.getItem('token') ? true : false;
+            // 获取个人信息
+            request({ method: 'POST', url: '/api/Mine/info' }).then(function (res) {
+                if (res.code == 200) {
+                    _this.userCont = res.data;
+                }
+            });
         }
         var url = window.location.pathname.substr(1); //获取当前页面url
         var url1 = url.substr(0, 8);

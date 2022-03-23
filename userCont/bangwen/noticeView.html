@@ -80,17 +80,75 @@
                 <div class="date color-6">{{noticeCont.task_start_time}} 至 {{noticeCont.task_end_time}}
                   <div v-if="noticeCont.type==1&&noticeCont.status=='0'" class="handle-btn red fr" @click="onDelClick">
                     删除榜文</div>
+                  <div v-if="noticeCont.type==1&&noticeCont.status==1" class="handle-btn red fr" @click="onDelClick">
+                    终止任务</div>
                 </div>
               </div>
             </div>
             <!--center-rank-head end-->
+            <div class="date color-red m-t-35">
+              <span class="color-gray"> 应榜人数：</span>{{noticeCont.attend_num}}人
+              <span class="color-gray" style="margin-left: 40px;">中榜人数：</span>{{noticeCont.select_num}}人
+            </div>
             <!--center-rank-head-hd start-->
-            <div class="center-rank-head-hd m-t-35">
-              <div class="date"><span class="color-gray"> 中榜时间：</span>2021-10-21 12：00</div>
+            <div class="center-rank-head-hd">
+              <!-- <div class="m-b-15 clearfix">
+                <div class="fl color-gray">应榜人数：<span class="color-red f-16">25人</span> </div>
+                <div class="fl color-gray m-l-40">中榜人数：<span class="color-red f-16">3人</span> </div>
+              </div> -->
+              <div class="m-t-15 m-b-15 clearfix">
+                <div class="f-weight f-16 fl">中榜人列表</div>
+                <div class="fl m-l-30"><span class="color-6"> 选择中榜时间：</span>2021-10-21 12:00</div>
+              </div>
+              <div class="hd-t m-t-10 clearfix">
+                <div class="num f-weight f-16 fl">01</div>
+                <div class="name f-weight f-16 fl m-l-20">周杰</div>
+                <div class="price fl m-l-40">报价：100元</div>
+                <div class="c fl m-l-40">支付方式：多次支付</div>
+                <div class="c fl m-l-15">2次</div>
+                <a class="handle-btn red fr" href="javascript:void(0);" onClick="syalert.syopen('alert3')">终止任务</a>
+              </div>
+            </div>
+            <!--center-rank-head-hd end-->
+            <!--center-inner-table-wrap start-->
+            <div class="center-inner-table-wrap">
+              <table class="center-inner-table center-order-table">
+                <tr>
+                  <th>第1次支付50元</th>
+                  <th>第2次支付30元</th>
+                  <th>第3次支付20元</th>
+                </tr>
+                <tr>
+                  <td>
+                    <p class="color-gray">已完成学课 2021-10-24</p>
+                  </td>
+                  <td>
+                    <p class="color-blue" onClick="syalert.syopen('alert2')">完成教课</p>
+                  </td>
+                  <td>
+                    <p class="color-blue" onClick="syalert.syopen('alert2')">完成教课</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p class="color-gray">已完成学课 2021-10-24</p>
+                  </td>
+                  <td>
+                    <p class="color-blue" onClick="syalert.syopen('alert2')">完成教课</p>
+                  </td>
+                  <td>
+                    <p class="color-blue" onClick="syalert.syopen('alert2')">完成教课</p>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!--center-inner-table-wrap end-->
+            <!--center-rank-head-hd start-->
+            <div class="center-rank-head-hd">
               <div class="hd-t m-t-10 clearfix">
                 <div class="f-weight f-16 fl">应榜人列表</div>
-                <div class="color-6 m-l-30 fl">应榜截止时间：2021-10-21 12:00</div>
-                <div class="fr color-orange">任务已终止</div>
+                <div class="color-6 m-l-30 fl">应榜截止时间：{{noticeCont.signup_end_time}}</div>
+                <!-- <div class="fr color-orange">任务已终止</div> -->
               </div>
             </div>
             <!--center-rank-head-hd end-->
@@ -130,7 +188,8 @@
                     <p class="color-orange" style="cursor: pointer;" @click="onZbClick(item)">中榜</p>
                   </td>
                   <td v-if="item.status==1">
-                    <p><a class="color-orange" href="CenterRank6.html">开始教课</a></p>
+                    <!-- 此处是学棋榜文，不托管 -->
+                    <p class="color-orange" @click="onStudyClick(item.id)">开始学习</p>
                     <p class="color-gray" @click="onQueryClick(item.id)">取消中榜</p>
                   </td>
                 </tr>
