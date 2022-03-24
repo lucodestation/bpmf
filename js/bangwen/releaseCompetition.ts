@@ -671,7 +671,7 @@ const releaseCompetitionTeam = {
     // 赛事类型列表
     'competitionCateList',
   ],
-  data: function () {
+  data() {
     return {
       // 临时
       tempPreShow: true,
@@ -735,7 +735,7 @@ const releaseCompetitionTeam = {
       teamNameList: [{ id: 1, name: '' }],
     }
   },
-  mounted: function () {
+  mounted() {
     // 初始化日期时间选择器
     // 初始化报名开始时间
     this.initSignUpStartDate(this.$refs.signUpStartDate)
@@ -1280,6 +1280,7 @@ const releaseCompetitionTeam = {
             // 未交保证金
             console.log('未交保证金')
             layer.msg(result.msg)
+
             syalert.syopen('bondCont')
           } else if (result.code === 207) {
             // 未实名认证
@@ -1314,6 +1315,16 @@ new Vue({
 
       // 赛事种类，0=个人赛，1=团队赛
       competitionType: 0,
+
+      // 保证金弹框是否显示
+      depositDialogVisible: true,
+      // 支付方式
+      payMethod: 1, // 1余额支付，2支付宝支付，3微信支付
+
+      // 钱包支付弹框是否显示
+      walletPayDialogVisible: false,
+      // 支付密码
+      payPassword: '',
     }
   },
   created() {
@@ -1326,11 +1337,94 @@ new Vue({
         this.competitionCateList = result.data
       }
     })
+
+    // // 判断是否实名认证
+    // request({
+    //   url: '/api/Mine/realInfo',
+    // }).then((result) => {
+    //   if (+result.code === 200) {
+    //     if (+result.data.check_status === -2) {
+    //       layer.confirm(
+    //         '无法发布赛事。您还未实名认证，请实名认证',
+    //         {
+    //           btn: ['立即认证'], //按钮
+    //           title: false,
+    //           closeBtn: 0,
+    //         },
+    //         function (index) {
+    //           location.href = '/userCont/setup/realName.html'
+    //         }
+    //       )
+    //     } else if (+result.data.check_status === -1) {
+    //       layer.confirm(
+    //         '无法发布赛事。实名认证信息审核失败，请重新上传',
+    //         {
+    //           btn: ['重新上传'], //按钮
+    //           title: false,
+    //           closeBtn: 0,
+    //         },
+    //         function (index) {
+    //           location.href = '/userCont/setup/realName.html'
+    //         }
+    //       )
+    //     } else if (+result.data.check_status === 0) {
+    //       layer.confirm(
+    //         '无法发布赛事。实名认证信息审核中...',
+    //         {
+    //           btn: ['返回'], //按钮
+    //           title: false,
+    //           closeBtn: 0,
+    //         },
+    //         function (index) {
+    //           // location.href = '/'
+    //           history.go(-1)
+    //         }
+    //       )
+    //     }
+    //   }
+    // })
+
+    // // 判断是否缴纳保证金
+    // request({
+    //   url: '/api/Mine/info'
+    // })
   },
   methods: {
     // 测试
     handleTest() {
       console.log('测试')
+      // window.open('/')
+    },
+    // 打开保证金弹框
+    handleOpenDepositDialog() {
+      this.depositDialogVisible = true
+    },
+    // 关闭保证金弹框
+    handleCloseDepositDialog() {
+      this.depositDialogVisible = false
+      window.history.go(-1)
+    },
+    // 确认支付保证金
+    async handleConfirmPayDeposit() {
+      if (this.payMethod === 1) {
+        // 判断是否设置了支付密码
+        const userInfoResult = await request({ url: '/api/Mine/info' })
+        if (+userInfoResult.code === 200 && +userInfoResult.data.is_set_paypwd === 0) {
+          // 未设置支付密码
+          this.$alert('<div style="text-align: center; font-size: 20px;">请先设置支付密码</div>', '', {
+            confirmButtonText: '确定',
+            showClose: false,
+            dangerouslyUseHTMLString: true,
+            confirmButtonClass: 'orange-button-bg',
+            callback() {
+              // 在新窗口中打开页面
+              // 打开设置支付密码页面
+              window.open('/userCont/wallet/pwd.html')
+            },
+          })
+          return
+        }
+      }
     },
   },
 })

@@ -86,6 +86,10 @@ body {
 .color-orange {
   color: #ff7f17 !important;
 }
+.orange-button-bg {
+  background: #ff7f17 !important;
+  border-color: #ff7f17 !important;
+}
 .color-red {
   color: #fd0404;
 }

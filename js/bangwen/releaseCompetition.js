@@ -1345,6 +1345,14 @@ new Vue({
             competitionCateList: [],
             // 赛事种类，0=个人赛，1=团队赛
             competitionType: 0,
+            // 保证金弹框是否显示
+            depositDialogVisible: true,
+            // 支付方式
+            payMethod: 1,
+            // 钱包支付弹框是否显示
+            walletPayDialogVisible: false,
+            // 支付密码
+            payPassword: '',
         };
     },
     created: function () {
@@ -1358,11 +1366,102 @@ new Vue({
                 _this.competitionCateList = result.data;
             }
         });
+        // // 判断是否实名认证
+        // request({
+        //   url: '/api/Mine/realInfo',
+        // }).then((result) => {
+        //   if (+result.code === 200) {
+        //     if (+result.data.check_status === -2) {
+        //       layer.confirm(
+        //         '无法发布赛事。您还未实名认证，请实名认证',
+        //         {
+        //           btn: ['立即认证'], //按钮
+        //           title: false,
+        //           closeBtn: 0,
+        //         },
+        //         function (index) {
+        //           location.href = '/userCont/setup/realName.html'
+        //         }
+        //       )
+        //     } else if (+result.data.check_status === -1) {
+        //       layer.confirm(
+        //         '无法发布赛事。实名认证信息审核失败，请重新上传',
+        //         {
+        //           btn: ['重新上传'], //按钮
+        //           title: false,
+        //           closeBtn: 0,
+        //         },
+        //         function (index) {
+        //           location.href = '/userCont/setup/realName.html'
+        //         }
+        //       )
+        //     } else if (+result.data.check_status === 0) {
+        //       layer.confirm(
+        //         '无法发布赛事。实名认证信息审核中...',
+        //         {
+        //           btn: ['返回'], //按钮
+        //           title: false,
+        //           closeBtn: 0,
+        //         },
+        //         function (index) {
+        //           // location.href = '/'
+        //           history.go(-1)
+        //         }
+        //       )
+        //     }
+        //   }
+        // })
+        // // 判断是否缴纳保证金
+        // request({
+        //   url: '/api/Mine/info'
+        // })
     },
     methods: {
         // 测试
         handleTest: function () {
             console.log('测试');
+            // window.open('/')
+        },
+        // 打开保证金弹框
+        handleOpenDepositDialog: function () {
+            this.depositDialogVisible = true;
+        },
+        // 关闭保证金弹框
+        handleCloseDepositDialog: function () {
+            this.depositDialogVisible = false;
+            window.history.go(-1);
+        },
+        // 确认支付保证金
+        handleConfirmPayDeposit: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var userInfoResult;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!(this.payMethod === 1)) return [3 /*break*/, 2];
+                            return [4 /*yield*/, request({ url: '/api/Mine/info' })];
+                        case 1:
+                            userInfoResult = _a.sent();
+                            if (+userInfoResult.code === 200 && +userInfoResult.data.is_set_paypwd === 0) {
+                                // 未设置支付密码
+                                this.$alert('<div style="text-align: center; font-size: 20px;">请先设置支付密码</div>', '', {
+                                    confirmButtonText: '确定',
+                                    showClose: false,
+                                    dangerouslyUseHTMLString: true,
+                                    confirmButtonClass: 'orange-button-bg',
+                                    callback: function () {
+                                        // 在新窗口中打开页面
+                                        // 打开设置支付密码页面
+                                        window.open('/userCont/wallet/pwd.html');
+                                    },
+                                });
+                                return [2 /*return*/];
+                            }
+                            _a.label = 2;
+                        case 2: return [2 /*return*/];
+                    }
+                });
+            });
         },
     },
 });
