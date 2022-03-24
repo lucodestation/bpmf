@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <script src="/plugins/qs.min.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--live-container start-->
+  <div class="live-container" id="app">
+    <!--inner-position start-->
+    <div class="inner-position w-1200">
+      <a href="">首页</a>
+      <span>&lt; </span>
+      <a href="">直播频道 </a>
+      <span>&lt; </span>
+      <a class="current" href="">直播详情</a>
+    </div>
+    <!--inner-position end-->
+    <!--live-detail start-->
+    <div class="live-detail w-1200">
+      <div class="detail-content clearfix">
+        <!--live-detail-fl start-->
+        <div class="live-detail-fl fl">
+          <!--live-detail-hd start-->
+          <div class="live-detail-hd clearfix">
+            <div class="img fl">
+              <img :src="noticeCont.image">
+            </div>
+            <div class="txt">
+              <div class="t">{{noticeCont.title}}<span class="tag">直播</span> </div>
+              <div class="c"><span class="gray">直播时间：</span> {{noticeCont.start_time}}至{{noticeCont.end_time}}</div>
+              <div class="c"><span class="gray">已预约：</span>50人 </div>
+              <div class="c"><span class="gray">直播状态：</span> <span class="color-orange">待开播</span> </div>
+              <div class="bot">
+                <a class="live-detail-btn" href="">预约直播</a>
+              </div>
+            </div>
+          </div>
+          <!--live-detail-hd end-->
+          <!--live-detail-bd start-->
+          <div class="live-detail-bd">
+            <div class="live-detail-tit index-sec2-title clearfix">
+              <div class="t fl">直播详情</div>
+              <div class="player-share fr">分享</div>
+              <div class="player-complain fr">投诉</div>
+            </div>
+            <div class="live-detail-article">
+              <p v-if="noticeCont.type==1">直播种类：课程直播</p>
+              <p v-if="noticeCont.type==2">直播种类：赛事直播直播</p>
+              <p v-if="noticeCont.join_type==1">进入权限：申请进入</p>
+              <p v-if="noticeCont.join_type==2">进入权限：全网公开</p>
+              <p v-if="noticeCont.join_type==3">进入权限：会员公开</p>
+              <p v-if="noticeCont.join_type==4">进入权限：设置密码</p>
+              <!-- <p>选择课程：{{noticeCont.cate_name}}教程</p> -->
+              <p>棋类型：{{noticeCont.cate_name}}</p>
+              <p>直播讲解时间：{{noticeCont.start_time}}至{{noticeCont.end_time}}</p>
+              <p>直播时长：{{dateTime}}分钟</p>
+              <p style="font-size:16px;">直播讲解描述</p>
+              <p>{{noticeCont.descri}}</p>
+              <!-- <p style="font-size:16px;">直播讲解描述</p>
+              <p>
+                围棋的棋盘上有纵横十九条线，361个交差点，有黑白两个颜色的棋子，以围棋围住的地盘大小决定胜负。棋盘可分为九个
+                部分，每个部分上都有一个星点，中间星为天元，执黑子的人先下，黑白棋子轮流下，落子后不能悔棋。
+              </p> -->
+            </div>
+          </div>
+          <!--live-detail-bd end-->
+        </div>
+        <!--live-detail-fl end-->
+        <!--live-detail-fr start-->
+        <div class="live-detail-fr fr">
+          <!--match-notice start-->
+          <div class="match-notice">
+            <div class="player-tit">直播描述</div>
+            <div class="con">
+              <p>{{noticeCont.descri}}</p>
+            </div>
+          </div>
+          <!--match-notice end-->
+          <!--match-asd start-->
+          <div class="match-asd">
+            <div class="li" v-for="item in adverList" :key="item.id">
+              <a :href="item.jump_url"><img :src="item.image"></a>
+            </div>
+          </div>
+          <!--match-asd end-->
+        </div>
+        <!--live-detail-fr end-->
+      </div>
+    </div>
+    <!--live-detail end-->
+  </div>
+  <!--live-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/live/notice.js"></script>
+</body>
+
+</html>

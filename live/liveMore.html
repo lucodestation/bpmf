@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>直播频道</title>
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--rank-container start-->
+  <div class="rank-container" id="app">
+    <!--inner-position start-->
+    <div class="inner-position w-1200">
+      <a href="">首页 </a>
+      <span>&lt;</span>
+      <a href=""> 榜文大厅 </a>
+      <span>&lt; </span>
+      <a class="current" href=""> 平台公告</a>
+    </div>
+    <!--inner-position end-->
+    <!--rank-choice start-->
+    <div class="rank-choice">
+      <div class="w-1200">
+        <!--rank-hd start-->
+        <div class="rank-hd clearfix">
+          <div class="label fl">直播种类：</div>
+          <div class="con">
+            <div v-for="item in navList" :key="item.id" class="rank-hd-a" :class="item.id==navId?'active':''"
+              @click="onNavClick(item.id)">{{item.name}}</div>
+          </div>
+        </div>
+        <!--rank-hd end-->
+        <!--rank-hd start-->
+        <div class="rank-hd clearfix">
+          <div class="label fl">筛选分类：</div>
+          <div class="con">
+            <div v-for="item in cateList" :key="item.id" class="rank-hd-a" :class="item.id==navId?'active':''"
+              @click="onNavClick(item.id)">{{item.name}}</div>
+          </div>
+        </div>
+        <!--rank-hd end-->
+        <!--rank-hd start-->
+        <div class="rank-hd clearfix">
+          <div class="label fl">直播状态：</div>
+          <div class="con">
+            <a class="rank-hd-a active" href="">全部</a>
+            <a class="rank-hd-a " href="">预告</a>
+            <a class="rank-hd-a" href="">直播中</a>
+          </div>
+        </div>
+        <!--rank-hd end-->
+      </div>
+    </div>
+    <!--rank-choice end-->
+    <div class="rank-wrap">
+      <!--index-sec2 start-->
+      <div class="index-sec2 w-1200 mar-t0">
+        <div class="index-sec2-content  clearfix">
+          <!--index-sec2-item start-->
+          <div class="index-sec2-item">
+            <div class="bor">
+              <a href="">
+                <div class="img-w"><img src="/images/index22.png"></div>
+              </a>
+              <div class="li-t clearfix">
+                <div class="t fl">三星杯决赛</div>
+                <div class="tag fr">五子棋</div>
+              </div>
+              <div class="li-c clearfix">
+                <div class="li-private fl">
+                  <img src="/images/index22.png">
+                  <div class="name">赛亚</div>
+                </div>
+                <div class="up fr">1589.2万</div>
+              </div>
+            </div>
+          </div>
+          <!--index-sec2-item end-->
+          <!--index-sec2-item start-->
+          <div class="index-sec2-item">
+            <div class="bor">
+              <a href="">
+                <div class="img-w"><img src="/images/index22.png"></div>
+              </a>
+              <div class="li-t clearfix">
+                <div class="t fl">三星杯决赛</div>
+                <div class="tag fr">五子棋</div>
+              </div>
+              <div class="li-c clearfix">
+                <div class="li-private fl">
+                  <img src="/images/index22.png">
+                  <div class="name">赛亚</div>
+                </div>
+                <div class="up fr">1589.2万</div>
+              </div>
+            </div>
+          </div>
+          <!--index-sec2-item end-->
+          <!--index-sec2-item start-->
+          <div class="index-sec2-item">
+            <div class="bor">
+              <a href="">
+                <div class="img-w"><img src="/images/index22.png"></div>
+              </a>
+              <div class="li-t clearfix">
+                <div class="t fl">三星杯决赛</div>
+                <div class="tag fr">五子棋</div>
+              </div>
+              <div class="li-c clearfix">
+                <div class="li-private fl">
+                  <img src="/images/index22.png">
+                  <div class="name">赛亚</div>
+                </div>
+                <div class="up fr">1589.2万</div>
+              </div>
+            </div>
+          </div>
+          <!--index-sec2-item end-->
+          <!--index-sec2-item start-->
+          <div class="index-sec2-item">
+            <div class="bor">
+              <a href="">
+                <div class="img-w"><img src="/images/index22.png"></div>
+              </a>
+              <div class="li-t clearfix">
+                <div class="t fl">三星杯决赛</div>
+                <div class="tag fr">五子棋</div>
+              </div>
+              <div class="li-c clearfix">
+                <div class="li-private fl">
+                  <img src="/images/index22.png">
+                  <div class="name">赛亚</div>
+                </div>
+                <div class="up fr">1589.2万</div>
+              </div>
+            </div>
+          </div>
+          <!--index-sec2-item end-->
+          <!--index-sec2-item start-->
+          <div class="index-sec2-item">
+            <div class="bor">
+              <a href="">
+                <div class="img-w"><img src="/images/index22.png"></div>
+              </a>
+              <div class="li-t clearfix">
+                <div class="t fl">三星杯决赛</div>
+                <div class="tag fr">五子棋</div>
+              </div>
+              <div class="li-c clearfix">
+                <div class="li-private fl">
+                  <img src="/images/index22.png">
+                  <div class="name">赛亚</div>
+                </div>
+                <div class="up fr">1589.2万</div>
+              </div>
+            </div>
+          </div>
+          <!--index-sec2-item end-->
+          <!--index-sec2-item start-->
+          <div class="index-sec2-item">
+            <div class="bor">
+              <a href="">
+                <div class="img-w"><img src="/images/index22.png"></div>
+              </a>
+              <div class="li-t clearfix">
+                <div class="t fl">三星杯决赛</div>
+                <div class="tag fr">五子棋</div>
+              </div>
+              <div class="li-c clearfix">
+                <div class="li-private fl">
+                  <img src="/images/index22.png">
+                  <div class="name">赛亚</div>
+                </div>
+                <div class="up fr">1589.2万</div>
+              </div>
+            </div>
+          </div>
+          <!--index-sec2-item end-->
+          <!--index-sec2-item start-->
+          <div class="index-sec2-item">
+            <div class="bor">
+              <a href="">
+                <div class="img-w"><img src="/images/index22.png"></div>
+              </a>
+              <div class="li-t clearfix">
+                <div class="t fl">三星杯决赛</div>
+                <div class="tag fr">五子棋</div>
+              </div>
+              <div class="li-c clearfix">
+                <div class="li-private fl">
+                  <img src="/images/index22.png">
+                  <div class="name">赛亚</div>
+                </div>
+                <div class="up fr">1589.2万</div>
+              </div>
+            </div>
+          </div>
+          <!--index-sec2-item end-->
+          <!--index-sec2-item start-->
+          <div class="index-sec2-item">
+            <div class="bor">
+              <a href="">
+                <div class="img-w"><img src="/images/index22.png"></div>
+              </a>
+              <div class="li-t clearfix">
+                <div class="t fl">三星杯决赛</div>
+                <div class="tag fr">五子棋</div>
+              </div>
+              <div class="li-c clearfix">
+                <div class="li-private fl">
+                  <img src="/images/index22.png">
+                  <div class="name">赛亚</div>
+                </div>
+                <div class="up fr">1589.2万</div>
+              </div>
+            </div>
+          </div>
+          <!--index-sec2-item end-->
+          <!--index-sec2-item start-->
+          <div class="index-sec2-item">
+            <div class="bor">
+              <a href="">
+                <div class="img-w"><img src="/images/index22.png"></div>
+              </a>
+              <div class="li-t clearfix">
+                <div class="t fl">三星杯决赛</div>
+                <div class="tag fr">五子棋</div>
+              </div>
+              <div class="li-c clearfix">
+                <div class="li-private fl">
+                  <img src="/images/index22.png">
+                  <div class="name">赛亚</div>
+                </div>
+                <div class="up fr">1589.2万</div>
+              </div>
+            </div>
+          </div>
+          <!--index-sec2-item end-->
+        </div>
+        <!--main-pages start-->
+        <div class="main-pages">
+          <a class="pages-a" href="">首页</a>
+          <a class="pages-a" href="">上一页</a>
+          <a class="pages-a" href="">1</a>
+          <a class="pages-a" href="">2</a>
+          <a class="pages-a" href="">3</a>
+          <span class="pages-s">. . .</span>
+          <a class="pages-a" href="">下一页</a>
+          <span class="pages-s">共100页</span>
+          <span class="pages-s">到第</span>
+          <input class="pages-input" type="text" value="12">
+          <span class="pages-s">页</span>
+          <a class="pages-a" href="">尾页</a>
+        </div>
+        <!--main-pages end-->
+      </div>
+      <!--index-sec2 end-->
+    </div>
+  </div>
+  <!--rank-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/live/liveMore.js"></script>
+</body>
+
+</html>

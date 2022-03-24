@@ -11,6 +11,7 @@ new Vue({
       homeShow: false, // 首页是否选中
       helpShow: false, // 帮助中心是否选中
       hallShow: false, // 榜文大厅是否选中
+      liveShow: false, // 直播频道是否选中
       userHeadShow: false, // 个人中心头部
       userCont: '',// 个人信息
     }
@@ -30,10 +31,14 @@ new Vue({
     let url1 = url.substr(0, 8)
     url = url.substr(0, url.length - 5)
     this.userHeadShow = url1 == 'userCont' ? true : false
-    this.homeShow = url == 'index' ? true : false
+    this.homeShow = url == 'index' ? true : false  // 首页是否选中
     this.cooperationShow = url == 'cooperate/index' ? true : url == 'cooperate/cooperateView' ? true : false
     this.helpShow = url == 'help/index' ? true : url == 'help/helpView' ? true : false
-    this.hallShow = url == 'bangwen/index' ? true : url == 'bangwen/hallMore' ? true : url == 'hallList/edithall' ? true : false
+    this.hallShow = url.substr(0, 7) == 'bangwen' ? true : false  // 榜文大厅是否选中
+    this.liveShow = url.substr(0, 4) == 'live' ? true : false  // 直播频道是否选中
+    if (url == '') {
+      this.homeShow = true
+    }
   },
   methods: {
     // 退出

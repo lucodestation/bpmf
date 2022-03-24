@@ -26,6 +26,11 @@
   <script src="/plugins/aliyun-oss-sdk.min.js"></script>
   <script src="/utils/request.js"></script>
   <script src="/utils/util.js"></script>
+  <style>
+    .handle-btn {
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
@@ -96,169 +101,53 @@
                     </div>
                   </td>
                   <td>
-                    <p>象棋</p>
-                    <p>课程直播</p>
-                    <p>密码进入</p>
+                    <p>{{item.name}}</p>
+                    <!-- 1课程直播，2赛事直播 -->
+                    <p v-if="item.type==1">课程直播</p>
+                    <p v-if="item.type==2">赛事直播</p>
+                    <!-- 1申请进入（需要发布者审核），2全网公开，3会员公开，4设置密码 -->
+                    <p v-if="item.join_type==1">申请进入</p>
+                    <p v-if="item.join_type==2">全网公开</p>
+                    <p v-if="item.join_type==3">会员公开</p>
+                    <p v-if="item.join_type==4">密码进入</p>
                   </td>
                   <td>
                     <p>{{item.start_time}}</p>
                     至
                     <p>{{item.end_time}}</p>
                   </td>
-                  <td>预计120分钟</td>
-                  <td>审核中</td>
-                  <td>
-                    <div class="handle text-c">
-                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="center-order-flex">
-                      <img class="center-order-img" src="/images/index12.png">
-                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
-                        用的布局走法，开局战术
-                        ，实战走法！</p>
-                    </div>
-                  </td>
-                  <td>
-                    <p>象棋</p>
-                    <p>课程直播</p>
-                    <p>密码进入</p>
-                  </td>
-                  <td>
-                    <p>2021-10-12 12:00</p>
-                    至
-                    <p>2021-10-12 14:00</p>
-                  </td>
-                  <td>预计120分钟</td>
-                  <td>待开播</td>
-                  <td>
-                    <div class="handle text-c">
-                      <a class="handle-btn m-r-10" href="javascript:void(0);"
-                        onClick="syalert.syopen('alert2')">开始直播</a>
-                      <a class="handle-btn red m-r-10" href="">取消直播</a>
-                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="center-order-flex">
-                      <img class="center-order-img" src="/images/index12.png">
-                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
-                        用的布局走法，开局战术
-                        ，实战走法！</p>
-                    </div>
-                  </td>
-                  <td>
-                    <p>象棋</p>
-                    <p>课程直播</p>
-                    <p>密码进入</p>
-                  </td>
-                  <td>
-                    <p>2021-10-12 12:00</p>
-                    至
-                    <p>2021-10-12 14:00</p>
-                  </td>
-                  <td>预计120分钟</td>
-                  <td>
+                  <td>预计{{item.fen}}分钟</td>
+                  <!-- -2审核未通过，-1审核中，1审核通过，2已开播，3已结束 -->
+                  <td v-if="item.status=='-2'">未通过</td>
+                  <td v-if="item.status=='-1'">审核中</td>
+                  <td v-if="item.status==1">待开播</td>
+                  <td v-if="item.status==2">
                     <p class="color-blue">直播中</p>
                   </td>
-                  <td>
+                  <td v-if="item.status==3">已结束</td>
+                  <td v-if="item.status=='-1'||item.status==3">
                     <div class="handle text-c">
-                      <a class="handle-btn m-r-10" href="">结束直播</a>
-                      <a class="handle-btn blue m-r-10" href="CenterLive-审核.html">审核人员</a>
+                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
+                    </div>
+                  </td>
+                  <td v-if="item.status==1">
+                    <div class="handle text-c">
+                      <div class="handle-btn m-r-10" @click="onBroadcast(item)">开始直播</div>
+                      <div class="handle-btn red m-r-10" @click="onQuery(item)">取消直播</div>
+                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
+                    </div>
+                  </td>
+                  <td v-if="item.status==2">
+                    <div class="handle text-c">
+                      <div class="handle-btn m-r-10" @click="onEndClick(item)">结束直播</div>
+                      <a class="handle-btn blue m-r-10" :href="'./liveCont.html?id='+item.id">审核人员</a>
                       <a class="handle-btn blue" href="4直播频道-4教课课程直播详情页.html">去直播间</a>
                     </div>
                   </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="center-order-flex">
-                      <img class="center-order-img" src="/images/index12.png">
-                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
-                        用的布局走法，开局战术
-                        ，实战走法！</p>
-                    </div>
-                  </td>
-                  <td>
-                    <p>象棋</p>
-                    <p>课程直播</p>
-                    <p>密码进入</p>
-                  </td>
-                  <td>
-                    <p>2021-10-12 12:00</p>
-                    至
-                    <p>2021-10-12 14:00</p>
-                  </td>
-                  <td>预计120分钟</td>
-                  <td>
-                    已结束
-                  </td>
-                  <td>
-                    <div class="handle text-c">
-                      <a class="handle-btn blue" href="">查看详情</a>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="center-order-flex">
-                      <img class="center-order-img" src="/images/index12.png">
-                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
-                        用的布局走法，开局战术
-                        ，实战走法！</p>
-                    </div>
-                  </td>
-                  <td>
-                    <p>象棋</p>
-                    <p>课程直播</p>
-                    <p>密码进入</p>
-                  </td>
-                  <td>
-                    <p>2021-10-12 12:00</p>
-                    至
-                    <p>2021-10-12 14:00</p>
-                  </td>
-                  <td>预计120分钟</td>
-                  <td>
-                    未通过
-                  </td>
-                  <td>
+                  <td v-if="item.status=='-2'">
                     <div class="handle text-c">
                       <a class="handle-btn blue m-r-10" href="CenterLive.html">修改直播</a>
                       <a class="handle-btn red m-r-10" href="">取消直播</a>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="center-order-flex">
-                      <img class="center-order-img" src="/images/index12.png">
-                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
-                        用的布局走法，开局战术
-                        ，实战走法！</p>
-                    </div>
-                  </td>
-                  <td>
-                    <p>象棋</p>
-                    <p>课程直播</p>
-                    <p>密码进入</p>
-                  </td>
-                  <td>
-                    <p>2021-10-12 12:00</p>
-                    至
-                    <p>2021-10-12 14:00</p>
-                  </td>
-                  <td>预计120分钟</td>
-                  <td>
-                    已取消
-                  </td>
-                  <td>
-                    <div class="handle text-c">
-                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
                     </div>
                   </td>
                 </tr>
@@ -269,6 +158,30 @@
           <!--center-inner-content end-->
         </div>
         <!--center-inner end-->
+        <!--开启直播弹出-->
+        <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+          id="liveCont">
+          <div class="bond-content">
+            <div class="bond-close" onClick="syalert.syhide('liveCont')"></div>
+            <div class="bond-tit">开启直播</div>
+            <!--bond-item start-->
+            <div class="bond-item clearfix">
+              <div class="label">推流地址：</div>
+              <div class="item-r">
+                <div class="bor">
+                  <div class="text" id="url" v-text="liveCont.push_url" ref="copytext">{{liveCont.push_url}}</div>
+                  <div class="copy" @click="copyUrl">复制地址</div>
+                </div>
+              </div>
+            </div>
+            <!--bond-item end-->
+            <div class="bond-mtip">请复制地址后到推流平台</div>
+            <div class="bond-mtip">关闭后可到-个人中心-我的直播-重新开启直播</div>
+            <div class="bond-bottom">
+              <button class="bond-btn" @click="onBtnClick">确认</button>
+            </div>
+          </div>
+        </div>
       </div>
       <!--center-content end-->
     </div>
@@ -277,31 +190,6 @@
   <!--center-container end-->
   <!-- 公共底部 -->
   <footer class="public-footer"></footer>
-  <!--开启直播弹出-->
-  <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
-    id="alert2">
-    <div class="bond-content">
-      <div class="bond-close" onClick="syalert.syhide('alert2')"></div>
-      <div class="bond-tit">开启直播</div>
-      <!--bond-item start-->
-      <div class="bond-item clearfix">
-        <div class="label">推流地址：</div>
-        <div class="item-r">
-          <div class="bor">
-            <div class="text">https://modao.cc/app/ebd1f2b12a1e8240c8fc24e414392c6a6
-              9923ee0#screen=skv0dyoplgu0278</div>
-            <div class="copy">复制地址</div>
-          </div>
-        </div>
-      </div>
-      <!--bond-item end-->
-      <div class="bond-mtip">请复制地址后到推流平台</div>
-      <div class="bond-mtip">关闭后可到-个人中心-我的的直播-重新开启直播</div>
-      <div class="bond-bottom">
-        <button class="bond-btn" onclick="location='CenterLive1.html'">确认</button>
-      </div>
-    </div>
-  </div>
   <script src="/js/common.js"></script>
   <script src="/js/userCont/live/myLive.js"></script>
 </body>
