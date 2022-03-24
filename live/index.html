@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>直播频道</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+  <style>
+    .match-tabs div {
+      display: block;
+      float: left;
+      margin: 0 10px;
+      border: 1px solid #ebebeb;
+      line-height: 30px;
+      border-radius: 15px;
+      padding: 0px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .match-tabs .active {
+      border: 1px solid #ff7f17;
+      background: #ff7f17;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <div id="app">
+    <!--live-banner start-->
+    <div class="live-banner w-1200">
+      <div class="banner-content clearfix">
+        <div class="swiper mySwiper2">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="live-banner-img">
+                <img src="/images/live1.png" />
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="live-banner-img">
+                <img src="/images/live1.png" />
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="live-banner-img">
+                <img src="/images/live1.png" />
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="live-banner-img">
+                <img src="/images/live1.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper mySwiper1">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="live-banner-img">
+                <img src="/images/live1.png" />
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="live-banner-img">
+                <img src="/images/live1.png" />
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="live-banner-img">
+                <img src="/images/live1.png" />
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="live-banner-img">
+                <img src="/images/live1.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          var swiper = new Swiper(".mySwiper1", {
+            spaceBetween: 10,
+            slidesPerView: 4,
+            freeMode: true,
+            watchSlidesProgress: true,
+          });
+          var swiper2 = new Swiper(".mySwiper2", {
+            spaceBetween: 10,
+            thumbs: {
+              swiper: swiper,
+            },
+          });
+        </script>
+      </div>
+    </div>
+    <!--live-banner end-->
+    <!--index-sec2 start-->
+    <div class="index-sec2 live-sec w-1200">
+      <div class="index-sec2-title clearfix">
+        <h2 class="t fl">热播赛事</h2>
+        <div class="match-tabs fl">
+          <div v-for="item in navList" :key="item.id" :class="item.id==navId?'active':''">{{item.name}}</div>
+          <!-- <a href="">象棋</a>
+          <a href="">围棋</a>
+          <a href="">五子棋</a>
+          <a href="">国际象棋</a>
+          <a href="">跳棋</a> -->
+        </div>
+        <a class="index-more fr" href="./liveMore.html">点击更多</a>
+      </div>
+      <div class="index-sec2-content  clearfix">
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item" v-for="item in matchList" :key="item.id">
+          <div class="bor">
+            <a href="4直播频道-4教课课程直播详情页.html">
+              <div class="img-w"><img :src="item.image"></div>
+              <div class="li-t clearfix">
+                <div class="t fl">{{item.title}}</div>
+                <div class="tag fr">{{item.cate_name}}</div>
+              </div>
+              <div class="li-c clearfix">
+                <div class="li-private fl">
+                  <img :src="item.avatar">
+                  <div class="name">{{item.name}}</div>
+                </div>
+                <div class="up fr">{{item.see_num}}</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+      </div>
+    </div>
+    <!--index-sec2 end-->
+    <!--index-sec2 start-->
+    <div class="index-sec2 live-sec w-1200">
+      <div class="index-sec2-title clearfix">
+        <h2 class="t fl">热播课程</h2>
+        <div class="match-tabs fl">
+          <a class="active" href="">全部</a>
+          <a href="">象棋</a>
+          <a href="">围棋</a>
+          <a href="">五子棋</a>
+          <a href="">国际象棋</a>
+          <a href="">跳棋</a>
+        </div>
+        <a class="index-more fr" href="">点击更多</a>
+      </div>
+      <div class="index-sec2-content  clearfix">
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item" v-for="item in courseList" :key="item.id">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img :src="item.image"></div>
+              <div class="li-t clearfix">
+                <div class="t fl">{{item.title}}</div>
+                <div class="tag fr">{{item.cate_name}}</div>
+              </div>
+              <div class="li-c clearfix">
+                <div class="li-private fl">
+                  <img :src="item.avatar">
+                  <div class="name">{{item.name}}</div>
+                </div>
+                <div class="up fr">{{item.see_num}}</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+      </div>
+    </div>
+    <!--index-sec2 end-->
+    <!--index-sec2 start-->
+    <div class="index-sec2 live-sec w-1200">
+      <div class="index-sec2-title clearfix">
+        <h2 class="t fl">直播预告</h2>
+        <a class="index-more fr" href="">点击更多</a>
+      </div>
+      <div class="index-sec2-content  clearfix">
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item" v-for="item in waitList" :key="item.id">
+          <div class="bor">
+            <a :href="'./notice.html?id='+item.id">
+              <div class="img-w"><img :src="item.image"></div>
+              <div class="li-t clearfix">
+                <div class="t fl">{{item.title}}</div>
+                <div class="tag fr">{{item.cate_name}}</div>
+              </div>
+              <div class="li-time">
+                <span class="gry"> 直播时间：</span>{{item.start_time}}至</br>
+                {{item.end_time}}
+              </div>
+            </a>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+      </div>
+    </div>
+  </div>
+  <!--index-sec2 end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/live/index.js"></script>
+</body>
+
+</html>

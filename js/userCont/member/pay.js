@@ -102,7 +102,7 @@ new Vue({
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, request({
                                 method: 'POST',
-                                url: '/api/Vip/balanceOnMonth',
+                                url: '/api/Vip/monthBalancePay',
                                 data: { type: this.type, num: this.number, pay_type: this.pay_type }
                             })];
                         case 1:

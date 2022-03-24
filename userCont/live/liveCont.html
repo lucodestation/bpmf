@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>直播详情</title>
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <script src="/plugins/qs.min.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <div class="public-user"></div>
+      <!--center-content start-->
+      <div class="center-content fr" id="app">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit">比赛详情</div>
+          <div class="center-inner-content">
+            <!--center-rank-head start-->
+            <div class="center-rank-head clearfix">
+              <div class="img fl">
+                <img :src="liveCont.image">
+              </div>
+              <div class="txt">
+                <div class="t m-b-10">
+                  {{liveCont.title}}
+                  <div class="state fr color-6">当前状态：<span class="color-orange">英镑结束</span> </div>
+                </div>
+                <div class="tags clearfix">
+                  <span class="tag fl">{{liveCont.cate_name}}</span>
+                  <!-- type  1课程直播，2赛事直播 -->
+                  <span class="tag fl" v-if="liveCont.type==1">课程</span>
+                  <span class="tag fl" v-if="liveCont.type==2">赛事</span>
+                  <!-- join_type   1申请进入（需要发布者审核），2全网公开，3会员公开，4设置密码 -->
+                  <span class="tag fl" v-if="liveCont.join_type==1">申请进入</span>
+                  <span class="tag fl" v-if="liveCont.join_type==2">全网公开</span>
+                  <span class="tag fl" v-if="liveCont.join_type==3">会员公开</span>
+                  <span class="tag fl" v-if="liveCont.join_type==4">设置密码</span>
+                </div>
+                <!--                            <div class="price f-16 m-t-10 m-b-10">酬金：<span class="f-20 color-red">￥15263</span></div>-->
+                <div class="flex flex-between m-t-25 flex-item-end">
+                  <div class="date color-6">
+                    <p>直播时间：{{liveCont.start_time}} 至 {{liveCont.end_time}}</p>
+                    <p>预计时长：{{dateTime}}分</p>
+                  </div>
+                  <a class="handle-btn red fr" href="">结束直播</a>
+                </div>
+              </div>
+            </div>
+            <!--center-rank-head end-->
+            <!--center-rank-head-hd start-->
+            <div class="center-rank-head-hd m-t-35">
+              <div class="f-weight f-16">申请列表</div>
+            </div>
+            <!--center-rank-head-hd end-->
+            <!--center-inner-table-wrap start-->
+            <table class="center-inner-table center-order-table m-t-15">
+              <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>电话</th>
+                <th>申请时间</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+              <tr>
+                <td>
+                  01
+                </td>
+                <td>
+                  周杰
+                </td>
+                <td>
+                  13683801224
+                </td>
+
+                <td>
+                  2021-12-1221:00
+                </td>
+                <td>
+                  待审核
+                </td>
+                <td>
+                  <p class="color-orange">审核通过</p>
+                </td>
+              </tr>
+            </table>
+            <!--center-inner-table-wrap end-->
+          </div>
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/live/liveCont.js"></script>
+</body>
+
+</html>

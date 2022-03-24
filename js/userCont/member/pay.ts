@@ -47,7 +47,7 @@ new Vue({
     async onBtnClick() {
       const res = await request({
         method: 'POST',
-        url: '/api/Vip/balanceOnMonth',
+        url: '/api/Vip/monthBalancePay',
         data: { type: this.type, num: this.number, pay_type: this.pay_type }
       })
     },
