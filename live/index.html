@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+  <script src="/plugins/layui/layui.js"></script>
   <script src="/plugins/jquery.min.js"></script>
   <script src="/plugins/swiper/swiper.min.js"></script>
   <script src="/plugins/syalert/syalert.min.js"></script>
@@ -115,12 +117,9 @@
       <div class="index-sec2-title clearfix">
         <h2 class="t fl">热播赛事</h2>
         <div class="match-tabs fl">
-          <div v-for="item in navList" :key="item.id" :class="item.id==navId?'active':''">{{item.name}}</div>
-          <!-- <a href="">象棋</a>
-          <a href="">围棋</a>
-          <a href="">五子棋</a>
-          <a href="">国际象棋</a>
-          <a href="">跳棋</a> -->
+          <div v-for="item in navList" :key="item.id" :class="item.id==navId?'active':''" @click="onNavClick(item.id)">
+            {{item.name}}
+          </div>
         </div>
         <a class="index-more fr" href="./liveMore.html">点击更多</a>
       </div>
@@ -128,7 +127,7 @@
         <!--index-sec2-item start-->
         <div class="index-sec2-item" v-for="item in matchList" :key="item.id">
           <div class="bor">
-            <a href="4直播频道-4教课课程直播详情页.html">
+            <a :href="'./liveCont.html?id='+item.id">
               <div class="img-w"><img :src="item.image"></div>
               <div class="li-t clearfix">
                 <div class="t fl">{{item.title}}</div>
@@ -137,7 +136,7 @@
               <div class="li-c clearfix">
                 <div class="li-private fl">
                   <img :src="item.avatar">
-                  <div class="name">{{item.name}}</div>
+                  <div class="name">{{item.nickname}}</div>
                 </div>
                 <div class="up fr">{{item.see_num}}</div>
               </div>
@@ -166,7 +165,7 @@
         <!--index-sec2-item start-->
         <div class="index-sec2-item" v-for="item in courseList" :key="item.id">
           <div class="bor">
-            <a href="">
+            <a :href="'./liveCont.html?id='+item.id">
               <div class="img-w"><img :src="item.image"></div>
               <div class="li-t clearfix">
                 <div class="t fl">{{item.title}}</div>
@@ -175,7 +174,7 @@
               <div class="li-c clearfix">
                 <div class="li-private fl">
                   <img :src="item.avatar">
-                  <div class="name">{{item.name}}</div>
+                  <div class="name">{{item.nickname}}</div>
                 </div>
                 <div class="up fr">{{item.see_num}}</div>
               </div>

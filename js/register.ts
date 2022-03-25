@@ -14,6 +14,7 @@ new Vue({
       pwd2: '', // 密码
       codeTxt: '获取验证码',
       second: '60',
+      checknum: 0
     }
   },
   created() {
@@ -40,8 +41,12 @@ new Vue({
         layer.msg(ress.msg)
       }
     },
+    onCheckClick() {
+      this.checknum = (this.checknum == 0) ? 1 : 0
+    },
     // 注册
     async onClick() {
+      if (this.checknum == 0) return layer.msg('请阅读并同意协议')
       if (!this.mobile) return layer.msg('请输入手机号')
       if (this.mobile) {
         var reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/ //11位手机号码正则

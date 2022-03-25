@@ -51,6 +51,7 @@ new Vue({
             pwd2: '',
             codeTxt: '获取验证码',
             second: '60',
+            checknum: 0
         };
     },
     created: function () {
@@ -91,6 +92,9 @@ new Vue({
                 });
             });
         },
+        onCheckClick: function () {
+            this.checknum = (this.checknum == 0) ? 1 : 0;
+        },
         // 注册
         onClick: function () {
             return __awaiter(this, void 0, void 0, function () {
@@ -98,6 +102,8 @@ new Vue({
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
+                            if (this.checknum == 0)
+                                return [2 /*return*/, layer.msg('请阅读并同意协议')];
                             if (!this.mobile)
                                 return [2 /*return*/, layer.msg('请输入手机号')];
                             if (this.mobile) {

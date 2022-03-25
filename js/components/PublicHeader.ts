@@ -166,11 +166,13 @@ new Vue({
   },
   created() {
     // 获取微信二维码
-    request({ url: '/api/Loginwx/getCode', method: 'POST' }).then((res) => {
-      if (res.code == 200) {
-        this.wxImg = res.data
-      }
-    })
+    if (!localStorage.getItem('token')) {
+      request({ url: '/api/Loginwx/getCode', method: 'POST' }).then((res) => {
+        if (res.code == 200) {
+          this.wxImg = res.data
+        }
+      })
+    }
   },
   methods: {
     // 密码登录

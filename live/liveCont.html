@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <title>直播详情</title>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="stylesheet" href="/plugins/animate.min.css">
   <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
   <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
@@ -20,6 +19,11 @@
   <script src="/plugins/vue.min.js"></script>
   <script src="/plugins/axios.min.js"></script>
   <script src="/utils/request.js"></script>
+  <style>
+    .live-like.active {
+      background: url('../images/live12.png') no-repeat 0px center;
+    }
+  </style>
 </head>
 
 <body>
@@ -29,41 +33,53 @@
   <div class="live-container" id="app">
     <!--inner-position start-->
     <div class="inner-position w-1200">
-      <a href="/index.html">首页</a>
+      <a href="">首页</a>
+      <span>&lt;</span>
+      <a href="">直播频道 </a>
       <span>&lt; </span>
-      <a href="./index.html">直播频道 </a>
-      <span>&lt; </span>
-      <span class="current">直播详情</span>
+      <a class="current" href="">直播详情</a>
     </div>
     <!--inner-position end-->
     <!--live-detail start-->
     <div class="live-detail w-1200">
-      <div class="detail-content clearfix">
-        <!--live-detail-fl start-->
-        <div class="live-detail-fl fl">
-          <!--live-detail-hd start-->
-          <div class="live-detail-hd clearfix">
-            <div class="img fl">
-              <img :src="noticeCont.image">
-            </div>
-            <div class="txt">
-              <div class="t">{{noticeCont.title}}<span class="tag">直播</span> </div>
-              <div class="c"><span class="gray">直播时间：</span> {{noticeCont.start_time}}至{{noticeCont.end_time}}</div>
-              <div class="c"><span class="gray">已预约：</span>{{noticeCont.appoint_num}}人 </div>
-              <div class="c"><span class="gray">直播状态：</span> <span class="color-orange">待开播</span> </div>
-              <div class="bot">
-                <a class="live-detail-btn" href="javascript:void(0);" v-if="noticeCont.is_appoint==1">已预约</a>
-                <a class="live-detail-btn" href="javascript:void(0);" @click="onYuyueClick" v-else>预约直播</a>
+      <div class="live-inner clearfix">
+        <!--live-inner-fl start-->
+        <div class="live-inner-fl fl">
+          <!--live-head start-->
+          <div class="live-head">
+            <!--live-head-hd start-->
+            <div class="live-head-hd clearfix">
+              <div class="img fl"><img :src="noticeCont.avatar"></div>
+              <div class="txt fl">
+                <div class="t">{{noticeCont.title}}<span class="tag">{{noticeCont.cate_name}}</span> </div>
+                <div class="c">
+                  主播：{{noticeCont.nickname}}
+                  <span class="fire">{{noticeCont.see_num}}</span>
+                  <span class="people">1.3万</span>
+                </div>
+              </div>
+              <div class="fr">
+                <span @click="onZanClick" v-if="noticeCont.zan==1" class="live-like fl active">点赞</span>
+                <span @click="onZanClick" v-else class="live-like fl">点赞</span>
+                <span class="live-complain fl" onClick="syalert.syopen('tsCont')">投诉</span>
+                <span class="live-share fl">分享</span>
               </div>
             </div>
+            <!--live-head-hd end-->
+            <!--live-video start-->
+            <div class="live-video">
+              <img src="/images/live19.jpg">
+            </div>
+            <!--live-video end-->
+            <!--live-head-bd start-->
+            <!-- <div class="live-head-bd">比赛通告：2021浙江众禾杯象棋公开赛基金华市第37届棋王赛落幕</div> -->
+            <!--live-head-bd end-->
           </div>
-          <!--live-detail-hd end-->
-          <!--live-detail-bd start-->
-          <div class="live-detail-bd">
+          <!--live-head end-->
+          <!--live-inner-box start-->
+          <div class="live-inner-box">
             <div class="live-detail-tit index-sec2-title clearfix">
               <div class="t fl">直播详情</div>
-              <div class="player-share fr">分享</div>
-              <div class="player-complain fr" onClick="syalert.syopen('tsCont')">投诉</div>
             </div>
             <div class="live-detail-article">
               <p v-if="noticeCont.type==1">直播种类：课程直播</p>
@@ -85,28 +101,49 @@
               </p> -->
             </div>
           </div>
-          <!--live-detail-bd end-->
+          <!--live-inner-box end-->
         </div>
-        <!--live-detail-fl end-->
-        <!--live-detail-fr start-->
-        <div class="live-detail-fr fr">
-          <!--match-notice start-->
-          <div class="match-notice">
-            <div class="player-tit">直播描述</div>
-            <div class="con">
-              <p>{{noticeCont.descri}}</p>
+        <!--live-inner-fl end-->
+        <!--live-inner-fr start-->
+        <div class="live-inner-fr fr">
+          <!--live-inner-box start-->
+          <div class="live-inner-box pad-b0">
+            <!--match-notice start-->
+            <div class="match-notice">
+              <div class="player-tit">直播介绍</div>
+              <div class="con">
+                <p>{{noticeCont.descri}}</p>
+              </div>
+            </div>
+            <!--match-notice end-->
+            <!--live-comment start-->
+            <div class="live-comment">
+              <div class="player-tit">直播评论</div>
+              <div class="tip color-orange">系统提示：请文明留言，比赛正在进行中，请赶快和
+                大家一起观看比赛吧！</div>
+              <div class="c">
+                <p v-for="item in plList" :key="item.id"><span
+                    class="color-orange">{{item.nickname}}：</span>{{item.content}}</p>
+              </div>
+            </div>
+            <!--live-comment end-->
+            <div class="live-inner-fa">
+              <div class="live-inner-song">
+                <input type="text" v-model="content" placeholder="请输入评论内容" class="input fl">
+                <button class="btn fr" @click="onPlClick">发送</button>
+              </div>
             </div>
           </div>
-          <!--match-notice end-->
-          <!--match-asd start-->
-          <div class="match-asd">
-            <div class="li" v-for="item in adverList" :key="item.id">
-              <a :href="item.jump_url"><img :src="item.image"></a>
+          <!--live-inner-box end-->
+          <!--live-inner-box start-->
+          <div class="live-inner-box">
+            <div class="live-inner-asd">
+              <a v-for="item in adverList" :key="item.id" :href="item.jump_url"><img :src="item.image"></a>
             </div>
           </div>
-          <!--match-asd end-->
+          <!--live-inner-box end-->
         </div>
-        <!--live-detail-fr end-->
+        <!--live-inner-fr end-->
       </div>
     </div>
     <!--live-detail end-->
@@ -161,7 +198,7 @@
   <!-- 公共底部 -->
   <footer class="public-footer"></footer>
   <script src="/js/common.js"></script>
-  <script src="/js/live/notice.js"></script>
+  <script src="/js/live/liveCont.js"></script>
 </body>
 
 </html>

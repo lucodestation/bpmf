@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>我预约的</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <div class="public-user"></div>
+      <!--center-content start-->
+      <div class="center-content fr">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit">我预约的</div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <!--center-order-state start-->
+            <!-- <div class="center-order-state m-b-20 clearfix">
+              <div class="li active"><a href="">全部直播</a> </div>
+              <div class="li"><a href="">审核中</a> </div>
+              <div class="li"><a href="">待直播</a> </div>
+              <div class="li"><a href="">直播中</a> </div>
+              <div class="li"><a href="">已结束</a> </div>
+              <div class="li"><a href="">未通过</a> </div>
+            </div> -->
+            <!--center-order-state end-->
+            <!--center-inner-form start-->
+            <div class="center-inner-form wallet-search clearfix">
+              <div class="form-bor">
+                <select class="select w130">
+                  <option selected hidden disabled value="">直播类型</option>
+                </select>
+              </div>
+              <div class="form-bor m-l-20">
+                <input type="text" class="input w130 common-date-input" id="dateS" placeholder="开始时间">
+              </div>
+              <div class="form-bor m-l-20">
+                <input type="text" class="input w130 common-date-input" id="dateE" placeholder="结束时间">
+              </div>
+              <button class="form-btn m-l-20">查询</button>
+            </div>
+            <!--center-inner-form end-->
+            <script>
+              jeDate("#dateS", {
+                format: "YYYY-MM-DD"
+              });
+              jeDate("#dateE", {
+                format: "YYYY-MM-DD"
+              });
+            </script>
+            <!--center-inner-table-wrap start-->
+            <div class="center-inner-table-wrap">
+              <table class="center-inner-table center-order-table">
+                <tr>
+                  <th>直播主题</th>
+                  <th>直播类型</th>
+                  <th>开播时间</th>
+                  <th>直播时长</th>
+                  <th>开播状态</th>
+                  <th>操作</th>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>象棋</p>
+                    <p>课程直播</p>
+                    <p>密码进入</p>
+                  </td>
+                  <td>
+                    <p>2021-10-12 12:00</p>
+                    至
+                    <p>2021-10-12 14:00</p>
+                  </td>
+                  <td>预计120分钟</td>
+                  <td>
+                    <p class="color-red">待开播</p>
+                  </td>
+                  <td>
+                    <p class="handle text-c">
+                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
+                    </p>
+                    <p class="m-t-5">进入密码：12345</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>象棋</p>
+                    <p>课程直播</p>
+                    <p>密码进入</p>
+                  </td>
+                  <td>
+                    <p>2021-10-12 12:00</p>
+                    至
+                    <p>2021-10-12 14:00</p>
+                  </td>
+                  <td>预计120分钟</td>
+                  <td>
+                    <p class="color-red">直播已取消</p>
+                  </td>
+                  <td>
+                    <p class="handle text-c">
+                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
+                    </p>
+                    <p class="m-t-5">需要审核后进入</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>象棋</p>
+                    <p>课程直播</p>
+                    <p>密码进入</p>
+                  </td>
+                  <td>
+                    <p>2021-10-12 12:00</p>
+                    至
+                    <p>2021-10-12 14:00</p>
+                  </td>
+                  <td>预计120分钟</td>
+                  <td>
+                    <p class="color-orange">直播中</p>
+                  </td>
+                  <td>
+                    <p class="handle text-c">
+                      <a class="handle-btn blue" href="4直播频道-4教课课程直播详情页.html">去直播间</a>
+                    </p>
+                    <p class="m-t-5">需要开通会员</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>象棋</p>
+                    <p>课程直播</p>
+                    <p>密码进入</p>
+                  </td>
+                  <td>
+                    <p>2021-10-12 12:00</p>
+                    至
+                    <p>2021-10-12 14:00</p>
+                  </td>
+                  <td>预计120分钟</td>
+                  <td>
+                    <p class="color-orange">直播已结束</p>
+                  </td>
+                  <td>
+                    <p class="handle text-c">
+                      <a class="handle-btn blue" href="4直播频道-4教课课程直播详情页.html">去直播间</a>
+                    </p>
+                    <p class="m-t-5">进入密码：12345</p>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!--center-inner-table-wrap end-->
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/live/myOrder.js"></script>
+</body>
+
+</html>

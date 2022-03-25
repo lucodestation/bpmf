@@ -11,6 +11,8 @@ new Vue({
             dateTime: '',
             noticeCont: '',
             adverList: [],
+            content: '',
+            plList: [],
             phone: '',
             tsCont: '',
             isShow: 0, // 是否同意协议
@@ -21,13 +23,25 @@ new Vue({
         var searchParams = Qs.parse(location.search.substr(1));
         this.id = searchParams.id;
         this.onpushList();
+        // 广告图
         request({ url: '/api/Live/adverList', method: 'POST', data: { live_id: this.id } }).then(function (res) {
             if (res.code == 200) {
                 _this.adverList = res.data;
             }
         });
+        this.onjudgeList();
     },
     methods: {
+        // 点赞
+        onZanClick: function () {
+            var _this = this;
+            request({ url: '/api/Live/giveZan', method: 'POST', data: { live_id: this.id } }).then(function (res) {
+                if (res.code == 200) {
+                    _this.onpushList();
+                    // this.adverList = res.data
+                }
+            });
+        },
         onxyClick: function () {
             this.isShow = (this.isShow == 0) ? 1 : 0;
         },
@@ -63,20 +77,7 @@ new Vue({
             this.phone = '';
             syalert.syhide('tsCont');
         },
-        // 点击预约
-        onYuyueClick: function () {
-            var _this = this;
-            request({ url: '/api/Live/appointRefer', method: 'POST', data: { live_id: this.id } }).then(function (res) {
-                if (res.code == 200) {
-                    layer.msg('预约成功');
-                    _this.onpushList();
-                }
-                else {
-                    layer.msg(res.msg);
-                }
-            });
-        },
-        // 数据
+        // 详情数据
         onpushList: function () {
             var _this = this;
             request({ url: '/api/Live/detail', method: 'POST', data: { live_id: this.id } }).then(function (res) {
@@ -98,6 +99,27 @@ new Vue({
                     _this.dateTime = days * 24 * 60 + hours * 60 + minutes;
                     // })
                     _this.noticeCont = res.data;
+                }
+            });
+        },
+        // 评论列表
+        onjudgeList: function () {
+            var _this = this;
+            request({ url: '/api/Live/judgeList', method: 'POST', data: { live_id: this.id } }).then(function (res) {
+                if (res.code == 200) {
+                    _this.plList = res.data.data;
+                }
+            });
+        },
+        // 发布评论
+        onPlClick: function () {
+            var _this = this;
+            if (!this.content)
+                return layer.msg('请输入评论内容');
+            request({ url: 'api/Live/judgeRefer', method: 'POST', data: { live_id: this.id, content: this.content } }).then(function (res) {
+                if (res.code == 200) {
+                    _this.content = '';
+                    layer.msg('评论成功');
                 }
             });
         }

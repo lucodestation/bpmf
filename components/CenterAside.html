@@ -8,7 +8,8 @@
           href="/userCont/live/addLive.html">发起直播</a></div>
       <div class="center-side-li" :class="CenterAside=='userCont/live/myLive'?'active':''"><a
           href="/userCont/live/myLive.html">我的直播</a></div>
-      <div class="center-side-li"><a href="CenterLive-我预约的.html">我预约的</a></div>
+      <div class="center-side-li" :class="CenterAside=='userCont/live/myOrder'?'active':''"><a
+          href="/userCont/live/myOrder.html">我预约的</a></div>
     </div>
     <!--center-side-item end-->
     <!--center-side-item start-->
@@ -53,7 +54,7 @@
     <!--center-side-item start-->
     <div class="center-side-item">
       <div class="center-side-tit">我的钱包</div>
-      <div class="center-side-li"><a href="CenterWallet.html">账户余额</a></div>
+      <div class="center-side-li"><a href="/userCont/wallet/account.html">账户余额</a></div>
       <div class="center-side-li" :class="CenterAside=='userCont/wallet/card'?'active':''"><a
           href="/userCont/wallet/card.html">银行卡管理</a></div>
       <div class="center-side-li" :class="CenterAside=='userCont/wallet/pwd'?'active':''"><a

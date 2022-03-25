@@ -10,6 +10,8 @@ new Vue({
       dateTime: '',// 时间
       noticeCont: '',// 详情
       adverList: [],// 广告
+      content: '',// 评论内容
+      plList: [],// 评论列表
       phone: '',// 投诉联系方式
       tsCont: '',// 投诉内容
       isShow: 0,// 是否同意协议
@@ -19,13 +21,24 @@ new Vue({
     const searchParams = Qs.parse(location.search.substr(1))
     this.id = searchParams.id
     this.onpushList()
+    // 广告图
     request({ url: '/api/Live/adverList', method: 'POST', data: { live_id: this.id } }).then((res) => {
       if (res.code == 200) {
         this.adverList = res.data
       }
     })
+    this.onjudgeList()
   },
   methods: {
+    // 点赞
+    onZanClick() {
+      request({ url: '/api/Live/giveZan', method: 'POST', data: { live_id: this.id } }).then((res) => {
+        if (res.code == 200) {
+          this.onpushList()
+          // this.adverList = res.data
+        }
+      })
+    },
     onxyClick() {
       this.isShow = (this.isShow == 0) ? 1 : 0
     },
@@ -55,22 +68,10 @@ new Vue({
       this.phone = ''
       syalert.syhide('tsCont');
     },
-    // 点击预约
-    onYuyueClick() {
-      request({ url: '/api/Live/appointRefer', method: 'POST', data: { live_id: this.id } }).then((res) => {
-        if (res.code == 200) {
-          layer.msg('预约成功')
-          this.onpushList()
-        } else {
-          layer.msg(res.msg)
-        }
-      })
-    },
-    // 数据
+    // 详情数据
     onpushList() {
       request({ url: '/api/Live/detail', method: 'POST', data: { live_id: this.id } }).then((res) => {
         if (res.code == 200) {
-
           var date1 = new Date((res.data.end_time + ':00').replace(/\-/g, "/"));    //开始时间
           var date2 = new Date(res.data.start_time.replace(/\-/g, "/") + ':00');    //结束时间
           var date3 = date1.getTime() - date2.getTime(); //时间差秒
@@ -88,6 +89,24 @@ new Vue({
           this.dateTime = days * 24 * 60 + hours * 60 + minutes
           // })
           this.noticeCont = res.data
+        }
+      })
+    },
+    // 评论列表
+    onjudgeList() {
+      request({ url: '/api/Live/judgeList', method: 'POST', data: { live_id: this.id } }).then((res) => {
+        if (res.code == 200) {
+          this.plList = res.data.data
+        }
+      })
+    },
+    // 发布评论
+    onPlClick() {
+      if (!this.content) return layer.msg('请输入评论内容')
+      request({ url: 'api/Live/judgeRefer', method: 'POST', data: { live_id: this.id, content: this.content } }).then((res) => {
+        if (res.code == 200) {
+          this.content = ''
+          layer.msg('评论成功')
         }
       })
     }

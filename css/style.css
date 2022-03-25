@@ -33,6 +33,9 @@ i {
 .fl {
   float: left;
 }
+img {
+  object-fit: cover;
+}
 /* == clearfix == */
 .clearfix:after {
   content: '.';
