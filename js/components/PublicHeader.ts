@@ -13,7 +13,7 @@ new Vue({
       hallShow: false, // 榜文大厅是否选中
       liveShow: false, // 直播频道是否选中
       userHeadShow: false, // 个人中心头部
-      userCont: '',// 个人信息
+      userCont: '', // 个人信息
     }
   },
   created() {
@@ -31,11 +31,11 @@ new Vue({
     let url1 = url.substr(0, 8)
     url = url.substr(0, url.length - 5)
     this.userHeadShow = url1 == 'userCont' ? true : false
-    this.homeShow = url == 'index' ? true : false  // 首页是否选中
+    this.homeShow = url == 'index' ? true : false // 首页是否选中
     this.cooperationShow = url == 'cooperate/index' ? true : url == 'cooperate/cooperateView' ? true : false
     this.helpShow = url == 'help/index' ? true : url == 'help/helpView' ? true : false
-    this.hallShow = url.substr(0, 7) == 'bangwen' ? true : false  // 榜文大厅是否选中
-    this.liveShow = url.substr(0, 4) == 'live' ? true : false  // 直播频道是否选中
+    this.hallShow = url.substr(0, 7) == 'bangwen' ? true : false // 榜文大厅是否选中
+    this.liveShow = url.substr(0, 4) == 'live' ? true : false // 直播频道是否选中
     if (url == '') {
       this.homeShow = true
     }
@@ -59,7 +59,7 @@ new Vue({
     codeTxt: '获取验证码',
     second: 60,
   },
-  created() { },
+  created() {},
   methods: {
     // 获取验证码
     async onCode() {
@@ -154,15 +154,15 @@ new Vue({
       syalert.syhide('loginConter')
       setTimeout(() => {
         syalert.syopen('wxConter')
-      }, 500);
-    }
+      }, 500)
+    },
   },
 })
 // 微信登录
 new Vue({
   el: '#wxConter',
   data: {
-    wxImg: ''
+    wxImg: '',
   },
   created() {
     // 获取微信二维码
@@ -180,14 +180,14 @@ new Vue({
       syalert.syhide('wxConter')
       setTimeout(() => {
         syalert.syopen('loginConter')
-      }, 500);
+      }, 500)
     },
     // 短信登录
     ondxClick() {
       syalert.syhide('wxConter')
       setTimeout(() => {
         syalert.syopen('loginConter')
-      }, 500);
-    }
+      }, 500)
+    },
   },
 })

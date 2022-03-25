@@ -29,6 +29,13 @@
   - [https://jquery.cuishifeng.cn/](https://jquery.cuishifeng.cn/)
 - syalert - jQuery 弹框插件
   - 没有官网
+  - 打开弹窗 syalert.syopen(id)
+  - 关闭弹窗 syalert.syhide(id)
+  - 其中id为弹窗自定义的ID
+  - 关于动画请直接在html上定义
+  - 进入动画定义：sy-enter="zoomIn"
+  - 离开动画 sy-leave="zoomOut"
+  - 其中 zoomIn和zoomOut是 animate.css里面的动画名称。可以将动画名称更改为animate.css里面的动画名称。
 
 ## TS 自动转 JS
 
@@ -66,3 +73,16 @@ VSCode 终端 -> 运行任务 -> typescript -> tsc:监视 - tsconfig.json
 - 事件名
   - handleXxxXxx
 
+## 其他
+
+当前标签页打开页面
+window.location.href = 'url'
+新标签页打开页面
+window.open('url')
+返回上一页
+window.history.go(-1)
+
+打开弹框
+syalert.syopen('id')
+关闭弹框
+syalert.syhide('id')

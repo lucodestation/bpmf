@@ -89,6 +89,10 @@ body {
 .color-orange {
   color: #ff7f17 !important;
 }
+.orange-button-bg {
+  background: #ff7f17 !important;
+  border-color: #ff7f17 !important;
+}
 .color-red {
   color: #fd0404;
 }
@@ -1892,6 +1896,7 @@ body {
   padding-left: 24px;
   color: #666;
   margin: 15px 0px;
+  height: 20px;
 }
 .wallet-pop .wallet-con .t {
   font-size: 35px;

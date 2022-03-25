@@ -16,22 +16,28 @@
     <div class="center-side-item">
       <div class="center-side-tit">榜文管理</div>
       <div class="center-side-li" :class="CenterAside=='userCont/bangwen/addCont'?'active':''"><a
-          href="/userCont/bangwen/addCont.html">发布榜文</a> </div>
+          href="/userCont/bangwen/addCont.html">发布榜文</a></div>
       <div class="center-side-li"
         :class="CenterAside=='userCont/bangwen/noticeList'?'active':CenterAside=='userCont/bangwen/noticeView'?'active':''">
         <a href="/userCont/bangwen/noticeList.html">我发布的榜文</a>
       </div>
       <div class="center-side-li"
         :class="CenterAside=='userCont/bangwen/mylist'?'active':CenterAside=='userCont/bangwen/myCont'?'active':''"><a
-          href="/userCont/bangwen/mylist.html">我的应榜</a> </div>
+          href="/userCont/bangwen/mylist.html">我的应榜</a></div>
     </div>
     <!--center-side-item end-->
     <!--center-side-item start-->
     <div class="center-side-item">
       <div class="center-side-tit">赛事管理</div>
-      <div class="center-side-li"><a href="/userCont/competition/releaseCompetition.html">发布赛事</a></div>
-      <div class="center-side-li"><a href="CenterMatch5.html">我发布的赛事</a></div>
-      <div class="center-side-li"><a href="CenterMatch6.html">我参加的赛事</a></div>
+      <div class="center-side-li" :class="CenterAside=='userCont/competition/releaseCompetition'?'active':''">
+        <a href="/userCont/competition/releaseCompetition.html">发布赛事</a>
+      </div>
+      <div class="center-side-li" :class="CenterAside=='userCont/competition/myReleaseCompetition'?'active':''">
+        <a href="/userCont/competition/myReleaseCompetition.html">我发布的赛事</a>
+      </div>
+      <div class="center-side-li">
+        <a href="CenterMatch6.html">我参加的赛事</a>
+      </div>
     </div>
     <!--center-side-item end-->
     <!--center-side-item start-->
