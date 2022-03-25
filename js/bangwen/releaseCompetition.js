@@ -92,7 +92,7 @@ Vue.component('deposit-dialog', {
             alipayPayDialogVisible: false,
             // 微信支付对话框是否显示
             wechatPayDialogVisible: false,
-            // 获取保证金计时器
+            // 获取保证金计时器（用于判断是否支付成功）
             getDepositTimer: '',
         };
     },
@@ -224,6 +224,9 @@ Vue.component('deposit-dialog', {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
+                            if (!this.payPassword)
+                                layer.msg('请输入支付密码');
+                            // 对密码进行加密
                             encrypt.setPublicKey(publiukey);
                             payPassword = encrypt.encrypt(this.payPassword) //需要加密的内容
                             ;
@@ -920,6 +923,7 @@ var releaseCompetitionPersonal = {
             if (this.upperLimitInputShow) {
                 arr.push({ label: '请输入报名人数上限', validate: !this.formData.upper_limit }, { label: '报名人数上限必须是大于 0 的整数', validate: this.formData.upper_limit <= 0 || this.formData.upper_limit % 1 !== 0 });
             }
+            arr.push({ label: '采用队员总分制时团队必须由组织者添加', validate: this.formData.is_total_points === 1 && this.formData.team_where === 2 });
             if (this.teamListShow) {
                 var tempArr = this.teamNameList.filter(function (i) { return i.name; });
                 arr.push({ label: '请输入团队名称', validate: !tempArr.length });

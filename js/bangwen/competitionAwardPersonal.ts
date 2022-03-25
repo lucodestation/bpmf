@@ -10,6 +10,10 @@ var encrypt = new JSEncrypt()
 const publiukey =
   '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----'
 
+// 我的钱包页面（余额不足需要充值跳到这个页面）
+const walletAccountPage = '/userCont/wallet/account.html'
+const myReleaseCompetitionPage = '/userCont/competition/myReleaseCompetition.html'
+
 new Vue({
   el: '#app',
   data() {
@@ -35,14 +39,35 @@ new Vue({
       runnerUpAward: 0,
       // 季军奖金
       thirdWinnerAward: 0,
+
+      // 实际支付金额
+      payAmount: 0,
+      // 支付订单号
+      outTradeNo: '',
+
+      // 钱包支付对话框是否显示
+      walletPayDialogVisible: false,
+      // 支付密码
+      payPassword: '',
+
+      // 支付宝支付对话框是否显示
+      alipayPayDialogVisible: false,
+
+      // 微信支付对话框是否显示
+      wechatPayDialogVisible: false,
+
+      // 获取赛事信息计时器（用于判断是否支付成功）
+      getCompetitionDetailTimer: '',
     }
   },
   created() {
+    // 解析 url 中的查询字符串
     const searchParams = Qs.parse(location.search.substr(1))
     this.competitionId = searchParams.competition_id * 1
     this.formData.competition_id = searchParams.competition_id * 1
   },
   computed: {
+    // 计算属性，为了 watch 时同时监听两个值的变化时处理同一套逻辑
     champion() {
       return { num: this.formData.champion_num, money: this.formData.champion_money }
     },
@@ -54,6 +79,7 @@ new Vue({
     },
   },
   watch: {
+    // 两个值有其中一个值发生变化就会触发 watch
     champion(newValue) {
       if (newValue.num > 0 && newValue.money > 0 && parseInt(newValue.num) === newValue.num && parseInt(newValue.money) === newValue.money) {
         // 都是正整数
@@ -126,6 +152,10 @@ new Vue({
       // 校验数据
       if (!this._validateFormData()) return
 
+      if (this.formData.trusteeship === 2) {
+        this.formData.pay_way = ''
+      }
+
       console.table({ ...this.formData })
 
       // 加载中
@@ -145,8 +175,36 @@ new Vue({
             // 发布成功
             console.log('发布成功')
 
-            // 跳转到个人赛发布赛事成功页面
-            location.href = `/bangwen/releaseCompetitionSuccess.html?competition_id=${this.competitionId}`
+            if (!result.data.pay_check) {
+              // 不需要支付
+              this.$alert('<div style="text-align: center; font-size: 20px;">奖励设置成功</div>', '', {
+                confirmButtonText: '确定',
+                showClose: false,
+                dangerouslyUseHTMLString: true,
+                confirmButtonClass: 'orange-button-bg',
+                callback: () => {
+                  // 跳转到个人赛发布赛事成功页面
+                  location.href = `/bangwen/releaseCompetitionSuccess.html?competition_id=${this.competitionId}`
+                },
+              })
+            } else if (result.data.pay_check && +result.data.pay_way === 1) {
+              // 1=余额，2=支付宝，3=微信
+              this.payAmount = result.data.total_money
+              this.outTradeNo = result.data.out_trade_no
+              this.walletPayDialogVisible = true
+            } else if (result.data.pay_check && +result.data.pay_way === 2) {
+              // 1=余额，2=支付宝，3=微信
+              this.payAmount = result.data.total_money
+              this.outTradeNo = result.data.out_trade_no
+              // 打开支付宝支付对话框
+              this._openAlipayPayDialog()
+            } else if (result.data.pay_check && +result.data.pay_way === 3) {
+              // 1=余额，2=支付宝，3=微信
+              this.payAmount = result.data.total_money
+              this.outTradeNo = result.data.out_trade_no
+              // 打开微信支付对话框
+              this._openWechatPayDialog()
+            }
           } else if (result.code === 201) {
             // 发布次数不足，跳转购买会员页面
             console.log('发布次数不足，跳转购买会员页面')
@@ -182,6 +240,160 @@ new Vue({
           console.log(error)
           layer.close(loadingIndex)
         })
+    },
+    // 关闭钱包支付对话框
+    handleCloseWalletPayDialog() {
+      // 跳转到我发布的赛事页面
+      location.href = myReleaseCompetitionPage
+    },
+    // 确认提交钱包支付
+    async handleSubmitWalletPay() {
+      // /api/pay/pay_by_balance
+      if (!this.payPassword) layer.msg('请输入支付密码')
+
+      // 对密码进行加密
+      encrypt.setPublicKey(publiukey)
+      const payPassword = encrypt.encrypt(this.payPassword) //需要加密的内容
+
+      const payResult = await request({
+        url: '/api/pay/pay_by_balance',
+        method: 'post',
+        data: {
+          out_trade_no: this.outTradeNo,
+          total_money: this.payAmount,
+          pay_pwd: payPassword,
+        },
+      })
+      console.log('payResult', payResult)
+
+      if (+payResult.code === 200) {
+        this.$alert('<div style="text-align: center; font-size: 20px;">奖励设置成功</div>', '', {
+          confirmButtonText: '确定',
+          showClose: false,
+          dangerouslyUseHTMLString: true,
+          confirmButtonClass: 'orange-button-bg',
+          callback: () => {
+            // 跳转到个人赛发布赛事成功页面
+            location.href = `/bangwen/releaseCompetitionSuccess.html?competition_id=${this.competitionId}`
+          },
+        })
+      } else if (+payResult.code === 5) {
+        // 余额不足
+        this.$alert('<div style="text-align: center; font-size: 20px;">余额不足，请充值</div>', '', {
+          confirmButtonText: '确定',
+          showClose: false,
+          dangerouslyUseHTMLString: true,
+          confirmButtonClass: 'orange-button-bg',
+          callback: () => {
+            // 在新窗口中打开页面
+            // 我的钱包页面
+            window.open(walletAccountPage)
+          },
+        })
+      } else {
+        layer.msg(payResult.msg)
+      }
+    },
+
+    // 打开支付宝支付对话框
+    async _openAlipayPayDialog() {
+      // 显示支付宝支付对话框
+      this.alipayPayDialogVisible = true
+
+      // 支付宝支付
+      // 这里不需要接收返回值，因为啥都没返回
+      // 二维码是把请求地址加上参数来生成的
+      await request({
+        url: '/api/pay/pay_by_ali',
+        params: { out_trade_no: this.outTradeNo, total_money: this.payAmount },
+      })
+
+      // 警告：this.alipayPayDialogVisible = true 不能放到这里
+      const alipayPayQrcodeElement = document.getElementById('alipayPayQrcode')
+      alipayPayQrcodeElement.innerHTML = ''
+      // 生成二维码
+      const alipayPayQrcode = new QRCode(alipayPayQrcodeElement, {
+        width: 260,
+        height: 260,
+      })
+      // 生成 query 字符串（不带 ?）
+      const queryString = Qs.stringify({
+        out_trade_no: depositReferResult.data.out_trade_no,
+        token: localStorage.getItem('token'),
+      })
+      const codeUrl = baseURL + '?' + queryString
+      alipayPayQrcode.makeCode(codeUrl)
+
+      // 启动获取赛事信息计时器
+      this._startGetCompetitionDetailTimer()
+    },
+    // 关闭支付宝支付对话框
+    handleCloseAlipayPayDialog() {
+      // 跳转到我发布的赛事页面
+      location.href = myReleaseCompetitionPage
+    },
+
+    // 打开微信支付对话框
+    _openWechatPayDialog() {
+      // 显示微信支付对话框
+      this.wechatPayDialogVisible = true
+
+      // 微信支付
+      request({
+        url: '/api/pay/pay_by_wx',
+        method: 'post',
+        data: {
+          out_trade_no: this.outTradeNo,
+          total_money: this.payAmount,
+        },
+      }).then((result) => {
+        if (result.code === 200) {
+          // 警告：this.wechatPayDialogVisible = true 不能放到这里
+          const wechatPayQrcodeElement = document.getElementById('wechatPayQrcode')
+          wechatPayQrcodeElement.innerHTML = ''
+          // 生成二维码
+          const wechatPayQrcode = new QRCode(wechatPayQrcodeElement, {
+            width: 260,
+            height: 260,
+          })
+          wechatPayQrcode.makeCode(payResult.data.code_url)
+
+          // 启动获取赛事信息计时器
+          this._startGetCompetitionDetailTimer()
+        }
+      })
+    },
+    // 关闭微信支付对话框
+    handleCloseWechatPayDialog() {
+      // 跳转到我发布的赛事页面
+      location.href = myReleaseCompetitionPage
+    },
+
+    // 启动获取赛事信息计时器（用于判断是否支付成功）
+    _startGetCompetitionDetailTimer() {
+      this.getCompetitionDetailTimer = setInterval(() => {
+        request({
+          url: '/api/competition/competition_detail',
+          params: { competition_id: this.competitionId },
+        }).then((result) => {
+          if (+result.code === 200) {
+            if (+result.data.status === 2) {
+              // 清除计时器
+              clearInterval(this.getCompetitionDetailTimer)
+              this.$alert('<div style="text-align: center; font-size: 20px;">奖励设置成功</div>', '', {
+                confirmButtonText: '确定',
+                showClose: false,
+                dangerouslyUseHTMLString: true,
+                confirmButtonClass: 'orange-button-bg',
+                callback: () => {
+                  // 跳转到个人赛发布赛事成功页面
+                  location.href = `/bangwen/releaseCompetitionSuccess.html?competition_id=${this.competitionId}`
+                },
+              })
+            }
+          }
+        })
+      }, 3000)
     },
   },
 })
