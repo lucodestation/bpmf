@@ -22,6 +22,8 @@
     <script src="/plugins/syalert/syalert.min.js"></script>
     <script src="/plugins/layui/layui.js"></script>
     <script src="/plugins/element-ui/element-ui.min.js"></script>
+    <script src="/plugins/qrcode.min.js"></script>
+    <script src="/plugins/qs.min.js"></script>
 
     <script src="/utils/request.js"></script>
     <script src="/utils/util.js"></script>
@@ -124,16 +126,11 @@
         margin-left: 150px;
       }
 
-      /* 保证金弹框 */
-      .deposit-dialog {
-        padding: 0;
-      }
-      /* 隐藏标题栏 */
-      .deposit-dialog .el-dialog__header {
+      /* 隐藏 element-ui 对话框的标题栏 */
+      .el-dialog .el-dialog__header {
         display: none;
       }
-      /* 去掉组件自带的 padding */
-      .deposit-dialog .el-dialog__body {
+      .el-dialog .el-dialog__body {
         padding: 0;
       }
     </style>
@@ -145,6 +142,8 @@
 
     <!-- 公共容器/页面主要内容 -->
     <div id="app" class="publish-container">
+      <deposit-dialog ref="depositDialog"></deposit-dialog>
+
       <!-- 面包屑导航 -->
       <div class="inner-position w-1200">
         <a href="/">首页</a>
@@ -202,54 +201,6 @@
           <release-competition-team :competition-cate-list="competitionCateList" v-show="competitionType === 1"></release-competition-team>
         </div>
       </div>
-
-      <!-- 保证金弹框 -->
-      <el-dialog custom-class="deposit-dialog" :visible="depositDialogVisible" :show-close="false" width="900px">
-        <div class="bond-content">
-          <div class="bond-close" @click="handleCloseDepositDialog"></div>
-          <div class="bond-tit">保证金</div>
-          <div class="bond-tip">本平台发布任务，需要保证金，才能享有权益 支付后个人中心可查看，随时可退</div>
-          <div class="bond-price">保证金：<span class="color-red">￥1000.00</span></div>
-          <div class="bond-pay">
-            <div class="t">选择支付方式</div>
-            <div class="con clearfix">
-              <label class="li">
-                <input type="radio" class="bond-radio" name="payMethod" value="1" v-model.number="payMethod" />
-                <span class="radio-s"><img src="/images/pub14.png" /></span>
-              </label>
-              <label class="li">
-                <input type="radio" class="bond-radio" name="payMethod" value="2" v-model.number="payMethod" />
-                <span class="radio-s"><img src="/images/pub19.png" /></span>
-              </label>
-              <label class="li">
-                <input type="radio" class="bond-radio" name="payMethod" value="3" v-model.number="payMethod" />
-                <span class="radio-s"><img src="/images/pub13.png" /></span>
-              </label>
-            </div>
-          </div>
-          <div class="last-bottom">
-            <button class="bond-btn" @click="handleConfirmPayDeposit">确认并支付</button>
-          </div>
-        </div>
-      </el-dialog>
-
-      <el-dialog :visible="walletPayDialogVisible" width="850px">
-        <div class="wallet-pop animated">
-          <div class="wallet-con">
-            <div class="wallet-close" onClick="ok('alert1')"></div>
-            <div class="t">钱包支付</div>
-            <div class="wallet-mid">
-              <div class="wallet-label">输入支付密码<a class="wallet-a fr color-gray" href="">忘记密码？</a></div>
-              <div class="wallet-input">
-                <input class="input" type="text" />
-              </div>
-            </div>
-            <div class="wallet-bottom">
-              <button class="wallet-btn">确定</button>
-            </div>
-          </div>
-        </div>
-      </el-dialog>
     </div>
 
     <!-- 发布比赛个人赛 - 组件模板 -->
@@ -1062,6 +1013,101 @@
         <div class="publish-bottom">
           <button class="publish-btn" @click="handleNextStep">下一步</button>
         </div>
+      </div>
+    </div>
+
+    <!-- 保证金对话框（包含保证金对话框、钱包支付对话框、支付宝支付对话框、微信支付对话框 -->
+    <div id="depositDialog" style="position: absolute; width: 0; height: 0; overflow: hidden">
+      <!-- 单个根元素 -->
+      <div>
+        <!-- 保证金对话框 -->
+        <el-dialog custom-class="bond-pop animated" :visible="depositDialogVisible" :show-close="false">
+          <div class="bond-content">
+            <div class="bond-close" @click="handleCloseDepositDialog"></div>
+            <div class="bond-tit">保证金</div>
+            <div class="bond-tip">本平台发布任务，需要保证金，才能享有权益 支付后个人中心可查看，随时可退</div>
+            <div class="bond-price">保证金：<span class="color-red">￥{{depositAmount}}</span></div>
+            <div class="bond-pay">
+              <div class="t">选择支付方式</div>
+              <div class="con clearfix">
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payMethod" value="1" v-model.number="payMethod" />
+                  <span class="radio-s"><img src="/images/pub14.png" /></span>
+                </label>
+
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payMethod" value="2" v-model.number="payMethod" />
+                  <span class="radio-s"><img src="/images/pub19.png" /></span>
+                </label>
+
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payMethod" value="3" v-model.number="payMethod" />
+                  <span class="radio-s"><img src="/images/pub13.png" /></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="last-bottom">
+              <button class="bond-btn" @click="confirmPayDeposit">确认并支付</button>
+            </div>
+          </div>
+        </el-dialog>
+
+        <!--钱包支付弹窗-->
+        <el-dialog custom-class="wallet-pop w850 animated" :visible="walletPayDialogVisible" :show-close="false">
+          <div class="wallet-con">
+            <div class="wallet-close" @click="handleCloseWalletPayDialog"></div>
+            <div class="t">钱包支付</div>
+            <div class="wallet-mid">
+              <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+              <div class="wallet-label">输入支付密码<a class="wallet-a fr color-gray" href="/userCont/wallet/pwd.html" target="_blank">忘记密码？</a></div>
+              <div class="wallet-input">
+                <input class="input" type="password" v-model.trim="payPassword" />
+              </div>
+            </div>
+            <div class="wallet-bottom">
+              <button class="wallet-btn" @click="handleSubmitWalletPay">确定</button>
+            </div>
+          </div>
+        </el-dialog>
+
+        <!--支付宝支付弹窗-->
+        <el-dialog custom-class="wallet-pop animated" :visible="alipayPayDialogVisible" :show-close="false" width="600px">
+          <div class="wallet-con">
+            <div class="wallet-close" @click="handleCloseAlipayPayDialog"></div>
+            <div class="t">支付宝支付</div>
+            <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+            <div class="con clearfix">
+              <div class="wx-g">
+                <!-- <img :src="alipayPayQrcode" /> -->
+                <div id="alipayPayQrcode"></div>
+                <div class="tip">请使用支付宝“扫一扫”,扫描二维码支付</div>
+              </div>
+              <div class="wx-i">
+                <img src="/images/pub-alipay.png" />
+              </div>
+            </div>
+          </div>
+        </el-dialog>
+
+        <!--微信支付对话框-->
+        <el-dialog custom-class="wallet-pop animated" :visible="wechatPayDialogVisible" :show-close="false" width="600px">
+          <div class="wallet-con">
+            <div class="wallet-close" @click="handleCloseWechatPayDialog"></div>
+            <div class="t">微信支付</div>
+            <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+            <div class="con clearfix">
+              <div class="wx-g">
+                <!-- <img :src="wechatPayQrcode" /> -->
+                <div id="wechatPayQrcode"></div>
+                <div class="tip">请使用微信“扫一扫”,扫描二维码支付</div>
+              </div>
+              <div class="wx-i">
+                <img src="/images/pub1.jpg" />
+              </div>
+            </div>
+          </div>
+        </el-dialog>
       </div>
     </div>
 

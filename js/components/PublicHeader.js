@@ -242,14 +242,14 @@ new Vue({
             setTimeout(function () {
                 syalert.syopen('wxConter');
             }, 500);
-        }
+        },
     },
 });
 // 微信登录
 new Vue({
     el: '#wxConter',
     data: {
-        wxImg: ''
+        wxImg: '',
     },
     created: function () {
         var _this = this;
@@ -274,6 +274,6 @@ new Vue({
             setTimeout(function () {
                 syalert.syopen('loginConter');
             }, 500);
-        }
+        },
     },
 });
