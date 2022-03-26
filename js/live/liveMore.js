@@ -18,6 +18,10 @@ new Vue({
     },
     mounted: function () {
         var _this = this;
+        var searchParams = Qs.parse(location.search.substr(1));
+        if (searchParams.status) {
+            this.status = searchParams.status;
+        }
         request({ url: '/api/Live/liveCates', method: 'post' }).then(function (res) {
             if (res.code == 200) {
                 _this.cateList = res.data;

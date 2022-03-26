@@ -58,7 +58,7 @@
                 <div class="label">身份证号：</div>
                 <div class="item-r">
                   <div class="set-bor w548">
-                    <input class="input" type="text" v-model="formData.idcard" placeholder="请输入银行卡号">
+                    <input class="input" type="text" v-model="formData.idcard" placeholder="请输入身份证号">
                   </div>
                 </div>
               </div>
@@ -160,7 +160,7 @@
             <div class="center-set">
               <div class="center-set-fail">
                 <span>审核失败，请重新认证</span>
-                <button class="set-fail-btn m-l-40" @click="userCont.check_status='-2'">重新上传</button>
+                <button class="set-fail-btn m-l-40" @click="onuserCont">重新上传</button>
               </div>
               <div class="center-profile">
                 <div class="profile-li">姓名：{{userCont.name}}</div>

@@ -189,6 +189,18 @@ new Vue({
                 }
             });
         },
+        // 点击重新上传按钮
+        onuserCont: function () {
+            this.userCont.check_status = '-2';
+            this.formData = {
+                name: this.userCont.name,
+                idcard: this.userCont.idcard,
+                front_image: '',
+                back_image: '',
+                hand_image: '',
+                check_id: this.userCont.idcard, // 修改是必选，审核数据的id复
+            };
+        },
         // 提交数据
         onBtnClick: function () {
             return __awaiter(this, void 0, void 0, function () {
@@ -206,6 +218,12 @@ new Vue({
                                 if (!reg_tel.test(this.formData.idcard))
                                     return [2 /*return*/, layer.msg('请输入正确的身份证号')];
                             }
+                            if (!this.coverImage.url)
+                                return [2 /*return*/, layer.msg('请上传身份证正面')];
+                            if (!this.sfzImage.url)
+                                return [2 /*return*/, layer.msg('请上传身份证反面')];
+                            if (!this.scImage.url)
+                                return [2 /*return*/, layer.msg('请上传手持身份证')];
                             _a = this.formData;
                             return [4 /*yield*/, util
                                     .uploadFile({

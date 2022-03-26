@@ -140,6 +140,18 @@ new Vue({
         }
       })
     },
+    // 点击重新上传按钮
+    onuserCont() {
+      this.userCont.check_status = '-2'
+      this.formData = {
+        name: this.userCont.name,// 姓名
+        idcard: this.userCont.idcard,// 身份证号
+        front_image: '',// 身份证正面
+        back_image: '',// 身份证反面
+        hand_image: '',// 手持身份证
+        check_id: this.userCont.idcard,// 修改是必选，审核数据的id复
+      }
+    },
     // 提交数据
     async onBtnClick() {
       if (!this.formData.name) return layer.msg('请输入姓名')
@@ -148,6 +160,9 @@ new Vue({
         var reg_tel = /^([1-6][1-9]|50)\d{4}(18|19|20)\d{2}((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
         if (!reg_tel.test(this.formData.idcard)) return layer.msg('请输入正确的身份证号')
       }
+      if (!this.coverImage.url) return layer.msg('请上传身份证正面')
+      if (!this.sfzImage.url) return layer.msg('请上传身份证反面')
+      if (!this.scImage.url) return layer.msg('请上传手持身份证')
       this.formData.front_image = await util
         .uploadFile({
           file: this.coverImage.file,

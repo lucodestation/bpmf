@@ -16,10 +16,7 @@ new Vue({
     },
     mounted: function () {
         var _this = this;
-        var searchParams = Qs.parse(location.search.substr(1));
-        this.id = searchParams.id;
-        this.ondetail();
-        request({ url: '/api/Live/userList', method: 'POST', data: { live_id: this.id, page: 1, pagenum: 10 } }).then(function (res) {
+        request({ url: '/api/Mine/pushBangwenOrder', method: 'POST', data: { page: 1, pagenum: 10 } }).then(function (res) {
             if (res.code == 200) {
                 _this.userList = res.data.data;
             }
