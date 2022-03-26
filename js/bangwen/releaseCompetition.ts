@@ -5,10 +5,7 @@ $('.public-header').load('/components/PublicHeader.html')
 // 引入底部
 $('.public-footer').load('/components/PublicFooter.html')
 
-var encrypt = new JSEncrypt()
-//公钥.
-const publiukey =
-  '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----'
+const encrypt = new JSEncrypt()
 
 // 支付密码页面
 const walletPwdPage = '/userCont/wallet/pwd.html'
@@ -200,7 +197,7 @@ Vue.component('deposit-dialog', {
 
         // 缴纳保证金--支付宝支付
         // 这里不需要接收返回值，因为啥都没返回
-        // 二维码是把请求地址加上参数来生成的
+        // 二维码是把请求域名加上请求路径再加上请求参数来生成的
         await request({
           url: '/api/Deposit/aliPay',
           params: { out_trade_no: depositReferResult.data.out_trade_no },
@@ -219,13 +216,14 @@ Vue.component('deposit-dialog', {
           out_trade_no: depositReferResult.data.out_trade_no,
           token: localStorage.getItem('token'),
         })
-        const codeUrl = baseURL + '?' + queryString
+        const codeUrl = baseURL + '/api/Deposit/aliPay?' + queryString
+        console.log('codeUrl', codeUrl)
         alipayPayQrcode.makeCode(codeUrl)
 
         // 启动获取保证金金额的计时器
         this._startGetDepositTimer('alipay')
       } else {
-        layer.msg(payResult.msg)
+        layer.msg(depositReferResult.msg)
       }
     },
     // 关闭支付宝支付对话框
@@ -1650,57 +1648,6 @@ new Vue({
         this.competitionCateList = result.data
       }
     })
-
-    // // 判断是否实名认证
-    // request({
-    //   url: '/api/Mine/realInfo',
-    // }).then((result) => {
-    //   if (+result.code === 200) {
-    //     if (+result.data.check_status === -2) {
-    //       layer.confirm(
-    //         '无法发布赛事。您还未实名认证，请实名认证',
-    //         {
-    //           btn: ['立即认证'], //按钮
-    //           title: false,
-    //           closeBtn: 0,
-    //         },
-    //         function (index) {
-    //           location.href = '/userCont/setup/realName.html'
-    //         }
-    //       )
-    //     } else if (+result.data.check_status === -1) {
-    //       layer.confirm(
-    //         '无法发布赛事。实名认证信息审核失败，请重新上传',
-    //         {
-    //           btn: ['重新上传'], //按钮
-    //           title: false,
-    //           closeBtn: 0,
-    //         },
-    //         function (index) {
-    //           location.href = '/userCont/setup/realName.html'
-    //         }
-    //       )
-    //     } else if (+result.data.check_status === 0) {
-    //       layer.confirm(
-    //         '无法发布赛事。实名认证信息审核中...',
-    //         {
-    //           btn: ['返回'], //按钮
-    //           title: false,
-    //           closeBtn: 0,
-    //         },
-    //         function (index) {
-    //           // location.href = '/'
-    //           history.go(-1)
-    //         }
-    //       )
-    //     }
-    //   }
-    // })
-
-    // // 判断是否缴纳保证金
-    // request({
-    //   url: '/api/Mine/info'
-    // })
   },
   async mounted() {
     // 1. 判断是否实名认证
@@ -1771,7 +1718,7 @@ new Vue({
     })
     if (+vipInfo.code === 200) {
       if (+vipInfo.data.match_num === 0) {
-        this.$alert('<div style="text-align: center; font-size: 20px;">请先开通会员</div>', '', {
+        this.$alert('<div style="text-align: center; font-size: 20px;">赛事发布次数不足，请购买次数</div>', '', {
           confirmButtonText: '确定',
           showClose: false,
           dangerouslyUseHTMLString: true,

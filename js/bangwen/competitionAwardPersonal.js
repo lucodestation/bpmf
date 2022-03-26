@@ -52,11 +52,9 @@ $('.public-header').load('/components/PublicHeader.html');
 // 引入底部
 $('.public-footer').load('/components/PublicFooter.html');
 var encrypt = new JSEncrypt();
-//公钥.
-var publiukey = '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----';
 // 我的钱包页面（余额不足需要充值跳到这个页面）
 var walletAccountPage = '/userCont/wallet/account.html';
-var myReleaseCompetitionPage = '/userCont/competition/myReleaseCompetition.html';
+var myReleasedCompetitionPage = '/userCont/competition/myReleasedCompetition.html';
 new Vue({
     el: '#app',
     data: function () {
@@ -273,7 +271,7 @@ new Vue({
         // 关闭钱包支付对话框
         handleCloseWalletPayDialog: function () {
             // 跳转到我发布的赛事页面
-            location.href = myReleaseCompetitionPage;
+            location.href = myReleasedCompetitionPage;
         },
         // 确认提交钱包支付
         handleSubmitWalletPay: function () {
@@ -347,7 +345,7 @@ new Vue({
                             this.alipayPayDialogVisible = true;
                             // 支付宝支付
                             // 这里不需要接收返回值，因为啥都没返回
-                            // 二维码是把请求地址加上参数来生成的
+                            // 二维码是把请求域名加上请求路径再加上请求参数来生成的
                             return [4 /*yield*/, request({
                                     url: '/api/pay/pay_by_ali',
                                     params: { out_trade_no: this.outTradeNo, total_money: this.payAmount },
@@ -357,7 +355,7 @@ new Vue({
                         case 1:
                             // 支付宝支付
                             // 这里不需要接收返回值，因为啥都没返回
-                            // 二维码是把请求地址加上参数来生成的
+                            // 二维码是把请求域名加上请求路径再加上请求参数来生成的
                             _a.sent();
                             alipayPayQrcodeElement = document.getElementById('alipayPayQrcode');
                             alipayPayQrcodeElement.innerHTML = '';
@@ -366,10 +364,10 @@ new Vue({
                                 height: 260,
                             });
                             queryString = Qs.stringify({
-                                out_trade_no: depositReferResult.data.out_trade_no,
+                                out_trade_no: this.outTradeNo,
                                 token: localStorage.getItem('token'),
                             });
-                            codeUrl = baseURL + '?' + queryString;
+                            codeUrl = baseURL + '/api/pay/pay_by_ali?' + queryString;
                             alipayPayQrcode.makeCode(codeUrl);
                             // 启动获取赛事信息计时器
                             this._startGetCompetitionDetailTimer();
@@ -381,7 +379,7 @@ new Vue({
         // 关闭支付宝支付对话框
         handleCloseAlipayPayDialog: function () {
             // 跳转到我发布的赛事页面
-            location.href = myReleaseCompetitionPage;
+            location.href = myReleasedCompetitionPage;
         },
         // 打开微信支付对话框
         _openWechatPayDialog: function () {
@@ -406,7 +404,7 @@ new Vue({
                         width: 260,
                         height: 260,
                     });
-                    wechatPayQrcode.makeCode(payResult.data.code_url);
+                    wechatPayQrcode.makeCode(result.data.code_url);
                     // 启动获取赛事信息计时器
                     _this._startGetCompetitionDetailTimer();
                 }
@@ -415,7 +413,7 @@ new Vue({
         // 关闭微信支付对话框
         handleCloseWechatPayDialog: function () {
             // 跳转到我发布的赛事页面
-            location.href = myReleaseCompetitionPage;
+            location.href = myReleasedCompetitionPage;
         },
         // 启动获取赛事信息计时器（用于判断是否支付成功）
         _startGetCompetitionDetailTimer: function () {
