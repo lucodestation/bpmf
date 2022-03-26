@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<!-- 个人中心 我发布的赛事 -->
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>我发布的赛事 - 玻坡摸佛</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+    <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/plugins/vue.min.js"></script>
+    <script src="/plugins/qs.min.js"></script>
+    <script src="/plugins/axios.min.js"></script>
+    <script src="/plugins/jsencrypt.js"></script>
+    <script src="/plugins/aliyun-oss-sdk.min.js"></script>
+    <script src="/plugins/jquery.min.js"></script>
+    <script src="/plugins/syalert/syalert.min.js"></script>
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/element-ui/element-ui.min.js"></script>
+    <script src="/plugins/qrcode.min.js"></script>
+
+    <script src="/utils/request.js"></script>
+    <script src="/utils/util.js"></script>
+
+    <style>
+      /* 隐藏 element-ui 对话框的标题栏 */
+      .el-dialog .el-dialog__header {
+        display: none;
+      }
+      .el-dialog .el-dialog__body {
+        padding: 0;
+      }
+
+      /* select 未选择状态 */
+      .select.grey {
+        color: #999;
+      }
+      .select.grey option:not(.placeholder) {
+        color: #333;
+      }
+      /* select 选择状态 */
+      .select option.placeholder {
+        color: #999;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 公共头部 -->
+    <header class="public-header"></header>
+
+    <!--center-container start-->
+    <div id="app" class="center-container">
+      <!--main-center start-->
+      <div class="main-center w-1200 clearfix">
+        <!-- 公共侧边栏 -->
+        <aside class="public-user"></aside>
+
+        <!--center-content start-->
+        <div class="center-content fr">
+          <!--center-inner start-->
+          <div class="center-inner">
+            <div class="center-inner-tit clearfix">
+              <a class="li-a fl m-r-40" :class="{ active: competitionType === 0 }" href="javascript:" @click="handleChangeCompetitionType(0)">个人赛</a>
+              <a class="li-a fl m-r-40" :class="{ active: competitionType === 1 }" href="javascript:" @click="handleChangeCompetitionType(1)">团体赛</a>
+            </div>
+
+            <!-- 我发布的赛事 个人赛 -->
+            <my-released-competition-personal :competition-cate-list="competitionCateList" v-show="competitionType === 0"></my-released-competition-personal>
+            <!-- 我发布的赛事 团队赛 -->
+            <my-released-competition-team :competition-cate-list="competitionCateList" v-show="competitionType === 1"></my-released-competition-team>
+          </div>
+          <!--center-inner end-->
+        </div>
+        <!--center-content end-->
+      </div>
+      <!--main-center end-->
+    </div>
+    <!--center-container end-->
+
+    <!-- 我发布的赛事个人赛 - 组件模板 -->
+    <div id="myReleasedCompetitionPersonal" style="position: absolute; width: 0; height: 0; overflow: hidden">
+      <div class="center-inner-content">
+        <!--center-order-state start-->
+        <div class="center-order-state m-b-20 clearfix">
+          <div class="li active"><a href="">全部赛事</a></div>
+          <div class="li"><a href="">审核中</a></div>
+          <div class="li"><a href="">报名中</a></div>
+          <div class="li"><a href="">比赛中</a></div>
+          <div class="li"><a href="">已结束</a></div>
+          <div class="li"><a href="">未通过</a></div>
+        </div>
+        <!--center-order-state end-->
+        <!--center-inner-form start-->
+        <div class="center-inner-form wallet-search clearfix">
+          <div class="form-bor">
+            <select class="select w130" :class="{grey: currentCompetitionCate === ''}" @change="handleChangeCompetitionCate">
+              <option class="placeholder" value="">赛事类型</option>
+              <option v-for="(item, index) in competitionCateList" :key="item.id" :value="item.id">{{item.category_name}}</option>
+            </select>
+          </div>
+          <div class="form-bor m-l-20">
+            <input type="text" class="input common-date-input w130" placeholder="开始时间" />
+          </div>
+          <div class="form-bor m-l-20">
+            <input type="text" class="input common-date-input w130" placeholder="结束时间" />
+          </div>
+          <button class="form-btn m-l-20">查询</button>
+        </div>
+        <!--center-inner-form end-->
+        <script>
+          // jeDate('#dateS', {
+          //   format: 'MM-DD-YYYY',
+          // })
+          // jeDate('#dateE', {
+          //   format: 'MM-DD-YYYY',
+          // })
+        </script>
+        <!--center-inner-table-wrap start-->
+        <div class="center-inner-table-wrap">
+          <table class="center-inner-table center-order-table">
+            <tr>
+              <th>赛事标题</th>
+              <th>比赛类型</th>
+              <th>报名时间</th>
+              <th>人数</th>
+              <th>比赛时间</th>
+              <th>比赛阶段</th>
+              <th>赛事状态</th>
+              <th>操作</th>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>报名阶段</td>
+              <td>
+                <p class="color-orange">审核中</p>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <p><a class="handle-btn blue m-t-5" href="">修改赛事</a></p>
+                  <p><a class="handle-btn red m-t-5" href="">删除赛事</a></p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>报名阶段</td>
+              <td>
+                <p class="color-orange">报名中</p>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <a class="handle-btn m-t-5" href="CenterMatch6.html">报名管理</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>报名阶段</td>
+              <td>
+                <p class="color-orange">报名结束</p>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <a class="handle-btn m-t-5" href="CenterMatch6.html">报名管理</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>报名阶段</td>
+              <td>
+                <p class="color-orange">比赛中</p>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <a class="handle-btn m-t-5" href="">赛事管理</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>报名阶段</td>
+              <td>已结束</td>
+              <td>
+                <div class="handle text-c">
+                  <a class="handle-btn m-t-5" href="">赛事管理</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>--</td>
+              <td>
+                <p class="color-red">未通过</p>
+                <a class="color-blue" href="javascript:void(0)" onClick="syalert.syopen('alert3')">查看原因</a>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <p><a class="handle-btn blue m-t-5" href="CenterMatch.html">去修改</a></p>
+                  <p><a class="handle-btn m-t-5" href="javascript:void(0)" onClick="syalert.syopen('alert2')">终止比赛</a></p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>--</td>
+              <td>
+                <p class="color-red">比赛终止</p>
+                <a class="color-blue" href="javascript:void(0)" onClick="syalert.syopen('alert3')">查看原因</a>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <a class="handle-btn blue m-t-5" href="">查看详情</a>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!--center-inner-table-wrap end-->
+      </div>
+    </div>
+
+    <!-- 我发布的赛事团队赛 - 组件模板 -->
+    <div id="myReleasedCompetitionTeam" style="position: absolute; width: 0; height: 0; overflow: hidden">
+      <div class="center-inner-content">
+        <!--center-order-state start-->
+        <div class="center-order-state m-b-20 clearfix">
+          <div class="li active"><a href="">所有赛事</a></div>
+          <div class="li"><a href="">报名中</a></div>
+          <div class="li"><a href="">激战中</a></div>
+          <div class="li"><a href="">已结束</a></div>
+          <div class="li"><a href="">已取消</a></div>
+        </div>
+        <!--center-order-state end-->
+        <!--center-inner-form start-->
+        <div class="center-inner-form wallet-search clearfix">
+          <button class="form-btn m-l-20">查询</button>
+        </div>
+        <!--center-inner-form end-->
+        <script>
+          // jeDate('#dateS', {
+          //   format: 'MM-DD-YYYY',
+          // })
+          // jeDate('#dateE', {
+          //   format: 'MM-DD-YYYY',
+          // })
+        </script>
+        <!--center-inner-table-wrap start-->
+        <div class="center-inner-table-wrap">
+          <table class="center-inner-table center-order-table">
+            <tr>
+              <th>赛事标题</th>
+              <th>比赛类型</th>
+              <th>报名时间</th>
+              <th>人数</th>
+              <th>比赛时间</th>
+              <th>比赛阶段</th>
+              <th>赛事状态</th>
+              <th>操作</th>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>报名阶段</td>
+              <td>
+                <p class="color-orange">审核中</p>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <p><a class="handle-btn blue m-t-5" href="">修改赛事</a></p>
+                  <p><a class="handle-btn red m-t-5" href="">删除赛事</a></p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>报名阶段</td>
+              <td>
+                <p class="color-orange">报名中</p>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <a class="handle-btn m-t-5" href="CenterMatch6.html">报名管理</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>报名阶段</td>
+              <td>
+                <p class="color-orange">报名结束</p>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <a class="handle-btn m-t-5" href="CenterMatch6.html">报名管理</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>报名阶段</td>
+              <td>
+                <p class="color-orange">比赛中</p>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <a class="handle-btn m-t-5" href="">赛事管理</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>报名阶段</td>
+              <td>已结束</td>
+              <td>
+                <div class="handle text-c">
+                  <a class="handle-btn m-t-5" href="">赛事管理</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>--</td>
+              <td>
+                <p class="color-red">未通过</p>
+                <a class="color-blue" href="javascript:void(0)" onClick="syalert.syopen('alert3')">查看原因</a>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <p><a class="handle-btn blue m-t-5" href="CenterMatch.html">去修改</a></p>
+                  <p><a class="handle-btn m-t-5" href="javascript:void(0)" onClick="syalert.syopen('alert2')">终止比赛</a></p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img class="center-order-img" src="/images/index12.png" />
+                <p>三星杯荣耀决战赛</p>
+              </td>
+              <td>
+                <p>象棋</p>
+                <p>个人赛</p>
+                <p>线下场地</p>
+              </td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                至
+                <p>2021-10-12 14:00</p>
+              </td>
+              <td>参赛人数 500</td>
+              <td>
+                <p>2021-10-12 12:00</p>
+                <p>至</p>
+                <p>2021-10-14 14:00</p>
+              </td>
+              <td>--</td>
+              <td>
+                <p class="color-red">比赛终止</p>
+                <a class="color-blue" href="javascript:void(0)" onClick="syalert.syopen('alert3')">查看原因</a>
+              </td>
+              <td>
+                <div class="handle text-c">
+                  <a class="handle-btn blue m-t-5" href="">查看详情</a>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!--center-inner-table-wrap end-->
+      </div>
+    </div>
+
+    <!--查看原因弹出-->
+    <div class="sy-alert bond-pop animated" style="width: 500px" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert3">
+      <div class="bond-content">
+        <div class="bond-close" onClick="ok('alert3')"></div>
+        <div class="bond-tit">未通过原因</div>
+        <div class="text-c m-t-40">
+          <div class="f-16">请重新修改赛事阶段相关信息</div>
+        </div>
+        <div class="last-bottom text-c">
+          <button class="bond-btn mar-auto" onClick="ok('alert3')">确定</button>
+        </div>
+      </div>
+    </div>
+    <!--终止比赛弹出-->
+    <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert2">
+      <div class="bond-content">
+        <div class="bond-close" onClick="ok('alert2')"></div>
+        <div class="bond-tit">终止比赛</div>
+        <div class="pay-item f-20 clearfix">比赛终止后将无法进行，相关费用将退回余额，确定要终止比赛吗？</div>
+        <div class="pay-item f-20 clearfix">
+          <div class="label w150">报名费用退还：</div>
+          <div class="item-r m-l-150">
+            <div class="pay-item-radio fl m-r-40">
+              <input class="radio" type="radio" value="1" name="agree" checked />
+              <span>不退还</span>
+            </div>
+            <div class="pay-item-radio fl">
+              <input class="radio" type="radio" value="2" name="agree" />
+              <span>退还</span>
+            </div>
+          </div>
+        </div>
+        <div class="pay-item">
+          <div class="pay-item-text bor">
+            <textarea class="text f-16" placeholder="请输入终止的原因" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="last-bottom text-c">
+          <button class="bond-btn mar-auto">提交</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 公共底部 -->
+    <footer class="public-footer"></footer>
+
+    <script src="/js/userCont/competition/myReleasedCompetition.js"></script>
+  </body>
+</html>
