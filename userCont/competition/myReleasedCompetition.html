@@ -29,12 +29,12 @@
     <script src="/utils/util.js"></script>
 
     <style>
-      /* 隐藏 element-ui 对话框的标题栏 */
-      .el-dialog .el-dialog__header {
-        display: none;
-      }
-      .el-dialog .el-dialog__body {
-        padding: 0;
+      /* 临时 */
+      /* 改变 layer 弹出层样式 */
+      .layui-layer.layui-layer-page {
+        background: rgba(255, 255, 255, 0.7);
+        color: red;
+        line-height: 2;
       }
 
       /* select 未选择状态 */
@@ -47,6 +47,38 @@
       /* select 选择状态 */
       .select option.placeholder {
         color: #999;
+      }
+
+      /* 隐藏时间选择控件不需要的分、秒 */
+      /* 隐藏分 */
+      .laydate-time-list > li:nth-child(2) ol li {
+        display: none;
+      }
+      /* 显示 00 分和 30 分*/
+      .laydate-time-list > li:nth-child(2) ol li:nth-child(1),
+      .laydate-time-list > li:nth-child(2) ol li:nth-child(31) {
+        display: list-item;
+      }
+      /* 隐藏秒 */
+      .laydate-time-list > li:nth-child(3) ol li {
+        display: none;
+      }
+
+      /* 未选择日期时的样式 */
+      span.input.common-date-input {
+        display: flex;
+        align-items: center;
+      }
+      span.input.common-date-input.grey {
+        color: #999;
+      }
+
+      /* 隐藏 element-ui 对话框的标题栏 */
+      .el-dialog .el-dialog__header {
+        display: none;
+      }
+      .el-dialog .el-dialog__body {
+        padding: 0;
       }
     </style>
   </head>
@@ -67,7 +99,7 @@
           <div class="center-inner">
             <div class="center-inner-tit clearfix">
               <a class="li-a fl m-r-40" :class="{ active: competitionType === 0 }" href="javascript:" @click="handleChangeCompetitionType(0)">个人赛</a>
-              <a class="li-a fl m-r-40" :class="{ active: competitionType === 1 }" href="javascript:" @click="handleChangeCompetitionType(1)">团体赛</a>
+              <a class="li-a fl m-r-40" :class="{ active: competitionType === 1 }" href="javascript:" @click="handleChangeCompetitionType(1)">团队赛</a>
             </div>
 
             <!-- 我发布的赛事 个人赛 -->
@@ -86,42 +118,43 @@
     <!-- 我发布的赛事个人赛 - 组件模板 -->
     <div id="myReleasedCompetitionPersonal" style="position: absolute; width: 0; height: 0; overflow: hidden">
       <div class="center-inner-content">
-        <!--center-order-state start-->
-        <div class="center-order-state m-b-20 clearfix">
-          <div class="li active"><a href="">全部赛事</a></div>
-          <div class="li"><a href="">审核中</a></div>
-          <div class="li"><a href="">报名中</a></div>
-          <div class="li"><a href="">比赛中</a></div>
-          <div class="li"><a href="">已结束</a></div>
-          <div class="li"><a href="">未通过</a></div>
+        <!-- 临时 -->
+        <div id="personalCompetitionTemp">
+          <div>{{searchOption}}</div>
         </div>
-        <!--center-order-state end-->
-        <!--center-inner-form start-->
+
+        <!-- 状态 tabs -->
+        <div class="center-order-state m-b-20 clearfix">
+          <div class="li" :class="{active: searchOption.status === item.value}" v-for="(item, index) in statusList" :key="index" @click="handleChangeStatus(item.value)">
+            <a href="javascript:">{{item.label}}</a>
+          </div>
+        </div>
+
+        <!-- 筛选选项 -->
         <div class="center-inner-form wallet-search clearfix">
+          <!-- 赛事类型 -->
           <div class="form-bor">
-            <select class="select w130" :class="{grey: currentCompetitionCate === ''}" @change="handleChangeCompetitionCate">
+            <select class="select w130" :class="{grey: searchOption.category_id === ''}" v-model="searchOption.category_id">
               <option class="placeholder" value="">赛事类型</option>
               <option v-for="(item, index) in competitionCateList" :key="item.id" :value="item.id">{{item.category_name}}</option>
             </select>
           </div>
-          <div class="form-bor m-l-20">
-            <input type="text" class="input common-date-input w130" placeholder="开始时间" />
+
+          <!-- 开始时间 -->
+          <div ref="startDate" class="form-bor m-l-20">
+            <!-- <input class="input common-date-input w130" type="text" placeholder="开始时间" disabled /> -->
+            <span class="input common-date-input w130" :class="{grey:!startDate}">{{startDate?startDate:'开始时间'}}</span>
           </div>
-          <div class="form-bor m-l-20">
-            <input type="text" class="input common-date-input w130" placeholder="结束时间" />
+          <!-- 结束时间 -->
+          <div ref="endDate" class="form-bor m-l-20">
+            <!-- <input type="text" class="input common-date-input w130" placeholder="结束时间" /> -->
+            <span class="input common-date-input w130" :class="{grey:!endDate}">{{endDate?endDate:'结束时间'}}</span>
           </div>
-          <button class="form-btn m-l-20">查询</button>
+
+          <button class="form-btn m-l-20" @click="handleSearch">查询</button>
         </div>
-        <!--center-inner-form end-->
-        <script>
-          // jeDate('#dateS', {
-          //   format: 'MM-DD-YYYY',
-          // })
-          // jeDate('#dateE', {
-          //   format: 'MM-DD-YYYY',
-          // })
-        </script>
-        <!--center-inner-table-wrap start-->
+
+        <!-- 赛事列表表格 -->
         <div class="center-inner-table-wrap">
           <table class="center-inner-table center-order-table">
             <tr>
@@ -134,39 +167,139 @@
               <th>赛事状态</th>
               <th>操作</th>
             </tr>
-            <tr>
+            <tr v-for="(item, index) in competitionList" :key="item.id">
+              <!-- 赛事标题 -->
               <td>
-                <img class="center-order-img" src="/images/index12.png" />
-                <p>三星杯荣耀决战赛</p>
+                <img class="center-order-img" :src="item.cover_picture" />
+                <p>{{item.competition_name}}</p>
               </td>
+
+              <!-- 比赛类型 -->
               <td>
-                <p>象棋</p>
+                <p v-if="item.category_id === 1">围棋</p>
+                <p v-if="item.category_id === 2">象棋</p>
+                <p v-if="item.category_id === 3">五子棋</p>
+                <p v-if="item.category_id === 4">国际象棋</p>
+                <p v-if="item.category_id === 5">其他</p>
                 <p>个人赛</p>
-                <p>线下场地</p>
+                <p v-if="item.way === 0">线下场地</p>
+                <p v-if="item.way === 1">线上游戏平台</p>
               </td>
+
+              <!-- 报名时间 -->
               <td>
-                <p>2021-10-12 12:00</p>
+                <p>{{ item.a_b_t | timestampToDate }}</p>
                 至
-                <p>2021-10-12 14:00</p>
+                <p>{{ item.a_e_t | timestampToDate }}</p>
               </td>
-              <td>参赛人数 500</td>
+
+              <!-- 人数 -->
               <td>
-                <p>2021-10-12 12:00</p>
+                <!-- 发布信息不完整、待支付、审核中、审核不通过 -->
+                <p v-if="[0, 1, 2, 3].includes(item.status)">——</p>
+
+                <!-- 报名中、报名结束 -->
+                <p v-if="[4, 5].includes(item.status)">报名人数</p>
+                <p v-if="[4, 5].includes(item.status)">{{item.apply_number}}</p>
+
+                <!-- 比赛中、已结束 -->
+                <p v-if="[6, 7].includes(item.status)">参赛人数</p>
+                <p v-if="[6, 7].includes(item.status)">{{item.join_number}}</p>
+              </td>
+
+              <!-- 比赛时间 -->
+              <td>
+                <p>{{ item.c_b_t | timestampToDate }}</p>
                 <p>至</p>
-                <p>2021-10-14 14:00</p>
+                <p>{{ item.c_e_t | timestampToDate }}</p>
               </td>
-              <td>报名阶段</td>
+
+              <!-- 比赛阶段 -->
               <td>
-                <p class="color-orange">审核中</p>
+                <!-- 信息不完整/没有发布完 -->
+                <p v-if="item.status === 0">——</p>
+
+                <p v-if="item.status === 1">待支付</p>
+                <p v-if="item.status === 2">审核中</p>
+
+                <!-- 审核通过/报名中 -->
+                <p v-if="item.status === 4">报名阶段</p>
+                <p v-if="item.status === 5">报名结束</p>
+
+                <!-- 比赛中 -->
+                <p v-if="item.status === 6">第{{item.stage_ing}}/{{item.stage}}阶段</p>
+
+                <!-- 未通过 -->
+                <p v-if="item.status === 3">——</p>
+                <!-- 已结束 -->
+                <p v-if="item.status === 7">——</p>
+                <!-- 比赛中止 -->
+                <!-- <p>——</p> -->
               </td>
+
+              <!-- 赛事状态 -->
+              <td>
+                <!-- 信息不完整/没有发布完 -->
+                <p v-if="item.status === 0">——</p>
+
+                <p class="color-orange" v-if="item.status === 1">待支付</p>
+                <p class="color-orange" v-if="item.status === 2">审核中</p>
+
+                <p class="color-red" v-if="item.status === 3">未通过</p>
+                <a class="color-blue" href="javascript:" v-if="item.status === 3" @click="handleOpenCheckReasonDialog(item)">查看原因</a>
+
+                <p class="color-orange" v-if="item.status === 4">报名中</p>
+                <p class="color-orange" v-if="item.status === 5">报名结束</p>
+                <p class="color-orange" v-if="item.status === 6">比赛中</p>
+                <p v-if="item.status === 7">已结束</p>
+
+                <!-- <p class="color-red">比赛终止</p> -->
+                <!-- <a class="color-blue" href="javascript:">查看原因</a> -->
+              </td>
+
+              <!-- 操作 -->
               <td>
                 <div class="handle text-c">
-                  <p><a class="handle-btn blue m-t-5" href="">修改赛事</a></p>
-                  <p><a class="handle-btn red m-t-5" href="">删除赛事</a></p>
+                  <!-- 信息不完整/没有发布完 -->
+                  <p v-if="item.status === 0">
+                    <a class="handle-btn blue m-t-5" href="javascript:" @click="continueReleaseCompetition(item)">继续发布</a>
+                  </p>
+
+                  <!-- 待支付 -->
+                  <p v-if="item.status === 1">
+                    <a class="handle-btn blue m-t-5" href="javascript:">立即支付</a>
+                  </p>
+                  <p v-if="item.status === 0 || item.status === 1">
+                    <a class="handle-btn red m-t-5" href="javascript:" @click="handleDeleteCompetition(item)">删除比赛</a>
+                  </p>
+
+                  <!-- 审核中 -->
+                  <p v-if="item.status === 2">——</p>
+
+                  <!-- 未通过 -->
+                  <p v-if="item.status === 3">
+                    <a class="handle-btn blue m-t-5" href="javascript:">修改赛事</a>
+                  </p>
+                  <p v-if="item.status === 3">
+                    <a class="handle-btn m-t-5" href="javascript:" @click="handleOpenEndCompetitionDialog(item)">终止比赛</a>
+                  </p>
+
+                  <!-- 报名中或报名结束 -->
+                  <p v-if="item.status === 4 || item.status === 5">
+                    <a class="handle-btn m-t-5" href="javascript:">报名管理</a>
+                  </p>
+
+                  <!-- 比赛中或已结束 -->
+                  <p v-if="item.status === 6 || item.status === 7">
+                    <a class="handle-btn m-t-5" href="javascript:">赛事管理</a>
+                  </p>
+
+                  <!-- 比赛终止 -->
+                  <!-- <p><a class="handle-btn blue m-t-5" href="javascript:">查看详情</a></p> -->
                 </div>
               </td>
             </tr>
-            <tr>
+            <!-- <tr>
               <td>
                 <img class="center-order-img" src="/images/index12.png" />
                 <p>三星杯荣耀决战赛</p>
@@ -352,10 +485,53 @@
                   <a class="handle-btn blue m-t-5" href="">查看详情</a>
                 </div>
               </td>
-            </tr>
+            </tr> -->
           </table>
         </div>
-        <!--center-inner-table-wrap end-->
+
+        <!-- 原因对话框 -->
+        <el-dialog custom-class="bond-pop animated" :visible="reasonDialogVisible" :show-close="false" width="500px">
+          <div class="bond-content">
+            <div class="bond-close" @click="handleCloseCheckReasonDialog"></div>
+            <div class="bond-tit">未通过原因</div>
+            <div class="text-c m-t-40">
+              <div class="f-16">{{reasonContent}}</div>
+            </div>
+            <div class="last-bottom text-c">
+              <button class="bond-btn mar-auto" @click="handleCloseCheckReasonDialog">确定</button>
+            </div>
+          </div>
+        </el-dialog>
+
+        <!-- 终止比赛对话框 -->
+        <el-dialog custom-class="bond-pop animated" :visible="endCompetitionDialogVisible" :show-close="false">
+          <div class="bond-content">
+            <div class="bond-close" @click="handleCloseEndCompetitionDialog"></div>
+            <div class="bond-tit">终止比赛</div>
+            <div class="pay-item f-20 clearfix">比赛终止后将无法进行，相关费用将退回余额，确定要终止比赛吗？</div>
+            <div class="pay-item f-20 clearfix">
+              <div class="label w150">报名费用退还：</div>
+              <div class="item-r m-l-150">
+                <label class="pay-item-radio fl m-r-40">
+                  <input class="radio" type="radio" value="1" name="feeReturn" v-model.number="endCompetitionData.feeReturn" />
+                  <span>不退还</span>
+                </label>
+                <label class="pay-item-radio fl">
+                  <input class="radio" type="radio" value="2" name="feeReturn" v-model.number="endCompetitionData.feeReturn" />
+                  <span>退还</span>
+                </label>
+              </div>
+            </div>
+            <div class="pay-item">
+              <div class="pay-item-text bor">
+                <textarea class="text f-16" placeholder="请输入终止的原因" rows="3" v-model="endCompetitionData.reasonContent"></textarea>
+              </div>
+            </div>
+            <div class="last-bottom text-c">
+              <button class="bond-btn mar-auto" @click="handleSubmitEndCompetition">提交</button>
+            </div>
+          </div>
+        </el-dialog>
       </div>
     </div>
 
