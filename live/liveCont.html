@@ -193,6 +193,58 @@
         </div>
       </div>
     </div>
+    <!--会员提示弹出-->
+    <div class="live-pop bond-pop" id="userVipCont" v-if="userVipCont">
+      <div class="live-pop-box">
+        <div class="live-pop-content">
+          <div class="bond-close" @click="onVipQuery"></div>
+          <div class="live-pop-tit">直播提示</div>
+          <div class="tip">本直播间，开播人已设置会员进入，您还不是平台会员<br>
+            是否开通平会员？</div>
+          <div class="bot">
+            <a class="bond-btn" href="/userCont/member/member.html">开通会员</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--审核进入弹出-->
+    <!-- <div class="live-pop bond-pop">
+      <div class="live-pop-box">
+        <div class="live-pop-content">
+          <div class="bond-close"></div>
+          <div class="live-pop-tit">直播提示</div>
+          <div class="tip">本直播间，开播人已设置审核进入，审核通过后进入</div>
+          <div class="bor clearfix">
+            <div class="w50 fl">
+              <input type="text" class="input" placeholder="姓名">
+            </div>
+            <div class="w50 fl">
+              <input type="text" class="input" placeholder="电话">
+            </div>
+          </div>
+          <div class="bot">
+            <a class="bond-btn" href="">提交</a>
+          </div>
+        </div>
+      </div>
+
+    </div> -->
+    <!--输入密码弹出-->
+    <div class="live-pop bond-pop" v-if="pwdShow">
+      <div class="live-pop-box">
+        <div class="live-pop-content">
+          <div class="bond-close" @click="onVipQuery"></div>
+          <div class="live-pop-tit">直播提示</div>
+          <div class="tip">本直播间，开播人已设置审核进入，审核通过后进入</div>
+          <div class="bor clearfix">
+            <input type="password" class="input text-c" v-model="pwd" placeholder="请输入6位数字密码">
+          </div>
+          <div class="bot">
+            <div class="bond-btn" @click="onPwdClick">提交</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <!--live-container end-->
   <!-- 公共底部 -->

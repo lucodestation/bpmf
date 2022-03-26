@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>发布直播-成功</title>
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/qs.min.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+  <script src="/utils/util.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--publish-container start-->
+  <div class="publish-container">
+    <!--inner-position start-->
+    <div class="inner-position w-1200">
+      <a href="/index.html">首页</a>
+      <span>&lt;</span>
+      <a class="current" href="./release.html"> 发布直播</a>
+    </div>
+    <!--inner-position end-->
+    <!--publish-head start-->
+    <div class="publish-head w-1200">
+      <div class="content clearfix">
+        <div class="head-li li1">
+          <div class="t">1.发起直播</div>
+          <div class="icon"></div>
+        </div>
+        <div class="head-line"></div>
+        <div class="head-li li2">
+          <div class="t">2.直播审核</div>
+          <div class="icon"></div>
+        </div>
+        <div class="head-line"></div>
+        <div class="head-li li3">
+          <div class="t">3复制推流地址</div>
+          <div class="icon"></div>
+        </div>
+        <div class="head-line"></div>
+        <div class="head-li li4">
+          <div class="t">4.粘贴地址开播</div>
+          <div class="icon"></div>
+        </div>
+      </div>
+    </div>
+    <!--publish-head end-->
+    <!--publish-main start-->
+    <div class="publish-main w-1200">
+      <h1 class="publish-tit">提交成功</h1>
+      <!--publish-content start-->
+      <div class="publish-content">
+        <div class="publish-submit">
+          <div class="submit-success">
+            <img src="/images/icon-sucess.png">
+            <div class="t">提交成功，等待审核中</div>
+            <a class="success-a" href="/userCont/live/myLive.html">查看我的直播</a>
+          </div>
+        </div>
+      </div>
+      <!--publish-content end-->
+    </div>
+    <!--publish-main end-->
+  </div>
+  <!--publish-container end-->
+  <!--开启直播弹出-->
+  <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
+    id="liveCont">
+    <div class="bond-content">
+      <div class="bond-close" onClick="syalert.syhide('liveCont')"></div>
+      <div class="bond-tit">开启直播</div>
+      <!--bond-item start-->
+      <div class="bond-item clearfix">
+        <div class="label">推流地址：</div>
+        <div class="item-r">
+          <div class="bor">
+            <div class="text" id="url" v-text="push_url" ref="copytext">{{push_url}}</div>
+            <div class="copy" @click="copyUrl">复制地址</div>
+          </div>
+        </div>
+      </div>
+      <!--bond-item end-->
+      <div class="bond-mtip">请复制地址后到推流平台</div>
+      <div class="bond-mtip">关闭后可到-个人中心-我的直播-重新开启直播</div>
+      <div class="bond-bottom">
+        <button class="bond-btn" @click="onBtnClick">确认</button>
+      </div>
+    </div>
+  </div>
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/live/liveSuccess.js"></script>
+</body>
+
+</html>

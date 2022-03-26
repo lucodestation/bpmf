@@ -30,7 +30,7 @@
     <div class="main-center w-1200 clearfix">
       <div class="public-user"></div>
       <!--center-content start-->
-      <div class="center-content fr">
+      <div class="center-content fr" id="app">
         <!--center-inner start-->
         <div class="center-inner">
           <div class="center-inner-tit">我预约的</div>
@@ -49,27 +49,21 @@
             <!--center-inner-form start-->
             <div class="center-inner-form wallet-search clearfix">
               <div class="form-bor">
-                <select class="select w130">
-                  <option selected hidden disabled value="">直播类型</option>
+                <select class="select w130" v-model="type">
+                  <option :value="item.id" v-for="item in navList">{{item.title}}</option>
                 </select>
               </div>
               <div class="form-bor m-l-20">
-                <input type="text" class="input w130 common-date-input" id="dateS" placeholder="开始时间">
+                <input id="signUpStartDate" type="text" :value="start_time" class="input common-date-input w130"
+                  placeholder="开始时间" />
               </div>
               <div class="form-bor m-l-20">
-                <input type="text" class="input w130 common-date-input" id="dateE" placeholder="结束时间">
+                <input type="text" class="input common-date-input w130" :value="end_time" id="signUpEndDate"
+                  placeholder="结束时间" />
               </div>
-              <button class="form-btn m-l-20">查询</button>
+              <button class="form-btn m-l-20" @click="onClick">查询</button>
             </div>
             <!--center-inner-form end-->
-            <script>
-              jeDate("#dateS", {
-                format: "YYYY-MM-DD"
-              });
-              jeDate("#dateE", {
-                format: "YYYY-MM-DD"
-              });
-            </script>
             <!--center-inner-table-wrap start-->
             <div class="center-inner-table-wrap">
               <table class="center-inner-table center-order-table">
@@ -81,124 +75,46 @@
                   <th>开播状态</th>
                   <th>操作</th>
                 </tr>
-                <tr>
+                <tr v-for="item in orderList" :key="item.id">
                   <td>
                     <div class="center-order-flex">
-                      <img class="center-order-img" src="/images/index12.png">
-                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
-                        用的布局走法，开局战术
-                        ，实战走法！</p>
+                      <img class="center-order-img" :src="item.image">
+                      <p class="center-order-txt m-l-10">{{item.title}}</p>
                     </div>
                   </td>
                   <td>
-                    <p>象棋</p>
-                    <p>课程直播</p>
-                    <p>密码进入</p>
+                    <p>{{item.cate_name}}</p>
+                    <p v-if="item.type==1">课程直播</p>
+                    <p v-if="item.type==2">赛事直播</p>
+                    <p v-if="item.join_type==1">申请进入</p>
+                    <p v-if="item.join_type==2">全网公开</p>
+                    <p v-if="item.join_type==3">会员公开</p>
+                    <p v-if="item.join_type==4">密码进入</p>
                   </td>
                   <td>
-                    <p>2021-10-12 12:00</p>
+                    <p>{{item.start_time}}</p>
                     至
-                    <p>2021-10-12 14:00</p>
+                    <p>{{item.end_time}}</p>
                   </td>
-                  <td>预计120分钟</td>
+                  <td>预计{{item.fen}}分钟</td>
                   <td>
-                    <p class="color-red">待开播</p>
-                  </td>
-                  <td>
-                    <p class="handle text-c">
-                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
-                    </p>
-                    <p class="m-t-5">进入密码：12345</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="center-order-flex">
-                      <img class="center-order-img" src="/images/index12.png">
-                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
-                        用的布局走法，开局战术
-                        ，实战走法！</p>
-                    </div>
+                    <!-- status  -2未通过，-1审核中，1审核通过，2已开播，3已结束 -->
+                    <p class="color-red" v-if="item.status==1">待开播</p>
+                    <p class="color-orange" v-if="item.status==2">直播中</p>
+                    <p class="color-orange" v-if="item.status==3">直播已结束</p>
+                    <p class="color-red" v-if="item.status=='-1'">审核中</p>
+                    <p class="color-red" v-if="item.status=='-2'">未通过</p>
                   </td>
                   <td>
-                    <p>象棋</p>
-                    <p>课程直播</p>
-                    <p>密码进入</p>
-                  </td>
-                  <td>
-                    <p>2021-10-12 12:00</p>
-                    至
-                    <p>2021-10-12 14:00</p>
-                  </td>
-                  <td>预计120分钟</td>
-                  <td>
-                    <p class="color-red">直播已取消</p>
-                  </td>
-                  <td>
-                    <p class="handle text-c">
-                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
-                    </p>
-                    <p class="m-t-5">需要审核后进入</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="center-order-flex">
-                      <img class="center-order-img" src="/images/index12.png">
-                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
-                        用的布局走法，开局战术
-                        ，实战走法！</p>
-                    </div>
-                  </td>
-                  <td>
-                    <p>象棋</p>
-                    <p>课程直播</p>
-                    <p>密码进入</p>
-                  </td>
-                  <td>
-                    <p>2021-10-12 12:00</p>
-                    至
-                    <p>2021-10-12 14:00</p>
-                  </td>
-                  <td>预计120分钟</td>
-                  <td>
-                    <p class="color-orange">直播中</p>
-                  </td>
-                  <td>
-                    <p class="handle text-c">
+                    <p class="handle text-c" v-if="item.status==2">
                       <a class="handle-btn blue" href="4直播频道-4教课课程直播详情页.html">去直播间</a>
                     </p>
-                    <p class="m-t-5">需要开通会员</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="center-order-flex">
-                      <img class="center-order-img" src="/images/index12.png">
-                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
-                        用的布局走法，开局战术
-                        ，实战走法！</p>
-                    </div>
-                  </td>
-                  <td>
-                    <p>象棋</p>
-                    <p>课程直播</p>
-                    <p>密码进入</p>
-                  </td>
-                  <td>
-                    <p>2021-10-12 12:00</p>
-                    至
-                    <p>2021-10-12 14:00</p>
-                  </td>
-                  <td>预计120分钟</td>
-                  <td>
-                    <p class="color-orange">直播已结束</p>
-                  </td>
-                  <td>
-                    <p class="handle text-c">
-                      <a class="handle-btn blue" href="4直播频道-4教课课程直播详情页.html">去直播间</a>
+                    <p class="handle text-c" v-else>
+                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
                     </p>
-                    <p class="m-t-5">进入密码：12345</p>
+                    <p class="m-t-5" v-if="item.join_type==1">需要审核后进入</p>
+                    <p class="m-t-5" v-if="item.join_type==3">需要开通会员</p>
+                    <p class="m-t-5" v-if="item.join_type==4">进入密码：{{item.password}}</p>
                   </td>
                 </tr>
               </table>

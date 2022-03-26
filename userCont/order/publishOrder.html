@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>发榜订单</title>
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <div class="public-user"></div>
+      <!--center-content start-->
+      <div class="center-content fr">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit">发榜订单</div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <!--center-inner-form start-->
+            <div class="center-inner-form clearfix">
+              <div class="form-item">
+                <div class="label">订单类型：</div>
+                <div class="form-bor">
+                  <select class="select w100">
+                    <option>111</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-item m-l-40">
+                <div class="label">订单类型：</div>
+                <div class="form-bor">
+                  <input type="text" class="input jeinput w100 text-c" id="dateS" placeholder="开始时间">
+                  <span class="line">至</span>
+                  <input type="text" class="input jeinput w100 text-c" id="dateE" placeholder="结束时间">
+                </div>
+                <div class="form-bor m-l-20">
+                  <input type="text" class="input w160" placeholder="订单号">
+                </div>
+                <button class="form-btn m-l-20">查询</button>
+              </div>
+            </div>
+            <!--center-inner-form end-->
+            <script>
+              jeDate("#dateS", {
+                format: "MM-DD-YYYY"
+              });
+              jeDate("#dateE", {
+                format: "MM-DD-YYYY"
+              });
+            </script>
+            <!--center-order-state start-->
+            <div class="center-order-state m-t-15 clearfix">
+              <div class="li active"><a href="">全部订单</a> </div>
+              <div class="li"><a href="">待支付</a> </div>
+              <div class="li"><a href="">已支付</a> </div>
+              <!-- <div class="li"><a href="">已取消</a> </div> -->
+            </div>
+            <!--center-order-state end-->
+            <!--center-inner-table-wrap start-->
+            <div class="center-inner-table-wrap">
+              <table class="center-inner-table center-order-table">
+                <tr>
+                  <th>榜文标题</th>
+                  <th>订单信息</th>
+                  <th>榜文类型</th>
+                  <th>应榜人</th>
+                  <th>支付状态</th>
+                  <th>支付时间</th>
+                  <th>操作</th>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>2020125621</p>
+                    <p class="color-red m-t-10">金额126.00</p>
+                  </td>
+                  <td>
+                    <p>教课</p>
+                    <p>托管</p>
+                    <p>一次付清</p>
+                  </td>
+                  <td>李茜茜</td>
+                  <td>
+                    <p class="color-orange">待对方支付</p>
+                  </td>
+                  <td>--</td>
+                  <td>
+                    <div class="handle text-c">
+                      <p><a class="handle-btn blue" href="">查看详情</a></p>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>2020125621</p>
+                    <p class="color-red m-t-10">金额126.00</p>
+                  </td>
+                  <td>
+                    <p>教课</p>
+                    <p>托管</p>
+                    <p>一次付清</p>
+                  </td>
+                  <td>李茜茜</td>
+                  <td>对方已支付</td>
+                  <td>--</td>
+                  <td>
+                    <div class="handle text-c">
+                      <p><a class="handle-btn blue" href="">查看详情</a></p>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="center-order-flex">
+                      <img class="center-order-img" src="/images/index12.png">
+                      <p class="center-order-txt m-l-10">下象棋学会牛头滚，很实
+                        用的布局走法，开局战术
+                        ，实战走法！</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p>2020125621</p>
+                    <p class="color-red m-t-10">金额126.00</p>
+                  </td>
+                  <td>
+                    <p>教课</p>
+                    <p>托管</p>
+                    <p>一次付清</p>
+                  </td>
+                  <td>李茜茜</td>
+                  <td>
+                    <p class="color-red">待方支付</p>
+                  </td>
+                  <td>--</td>
+                  <td>
+                    <div class="handle text-c">
+                      <p class="m-b-10"><a class="handle-btn red" href="">支付</a></p>
+                      <p><a class="handle-btn blue" href="">查看详情</a></p>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!--center-inner-table-wrap end-->
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/order/publishOrder.js"></script>
+</body>
+
+</html>

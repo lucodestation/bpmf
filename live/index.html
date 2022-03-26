@@ -32,7 +32,8 @@
       cursor: pointer;
     }
 
-    .match-tabs .active {
+    .match-tabs .active,
+    .match-tabs div:hover {
       border: 1px solid #ff7f17;
       background: #ff7f17;
       color: #fff;
@@ -152,12 +153,9 @@
       <div class="index-sec2-title clearfix">
         <h2 class="t fl">热播课程</h2>
         <div class="match-tabs fl">
-          <a class="active" href="">全部</a>
-          <a href="">象棋</a>
-          <a href="">围棋</a>
-          <a href="">五子棋</a>
-          <a href="">国际象棋</a>
-          <a href="">跳棋</a>
+          <div v-for="item in navsList" :key="item.id" :class="item.id==navsId?'active':''" @click="onClick(item.id)">
+            {{item.name}}
+          </div>
         </div>
         <a class="index-more fr" href="">点击更多</a>
       </div>
@@ -189,7 +187,7 @@
     <div class="index-sec2 live-sec w-1200">
       <div class="index-sec2-title clearfix">
         <h2 class="t fl">直播预告</h2>
-        <a class="index-more fr" href="">点击更多</a>
+        <a class="index-more fr" href="./liveMore.html?status=1">点击更多</a>
       </div>
       <div class="index-sec2-content  clearfix">
         <!--index-sec2-item start-->

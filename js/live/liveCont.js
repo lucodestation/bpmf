@@ -15,7 +15,10 @@ new Vue({
             plList: [],
             phone: '',
             tsCont: '',
-            isShow: 0, // 是否同意协议
+            isShow: 0,
+            userVipCont: false,
+            pwdShow: false,
+            pwd: '', // 密码
         };
     },
     mounted: function () {
@@ -27,6 +30,19 @@ new Vue({
         request({ url: '/api/Live/adverList', method: 'POST', data: { live_id: this.id } }).then(function (res) {
             if (res.code == 200) {
                 _this.adverList = res.data;
+            }
+        });
+        request({ url: '/api/Live/joinLive', method: 'POST', data: { live_id: this.id } }).then(function (res) {
+            if (res.code == 200) {
+                // this.adverList = res.data
+            }
+            else if (res.code == 209) {
+                // 是否开通会员
+                _this.userVipCont = true;
+            }
+            else if (res.code == 202) {
+                // 直播间密码
+                _this.pwdShow = true;
             }
         });
         this.onjudgeList();
@@ -77,6 +93,28 @@ new Vue({
             this.phone = '';
             syalert.syhide('tsCont');
         },
+        // 输入密码进入
+        onPwdClick: function () {
+            var _this = this;
+            if (!this.pwd)
+                return layer.msg('请输入密码');
+            request({ url: '/api/Live/joinLive', method: 'POST', data: { live_id: this.id, pwd: this.pwd } }).then(function (res) {
+                if (res.code == 200) {
+                    _this.pwdShow = false;
+                }
+                else if (res.code == 209) {
+                    // 是否开通会员
+                    _this.userVipCont = true;
+                }
+                else if (res.code == 202) {
+                    // 直播间密码
+                    _this.pwdShow = true;
+                }
+                else {
+                    layer.msg(res.msg);
+                }
+            });
+        },
         // 详情数据
         onpushList: function () {
             var _this = this;
@@ -122,6 +160,10 @@ new Vue({
                     layer.msg('评论成功');
                 }
             });
+        },
+        // 会员关闭弹框
+        onVipQuery: function () {
+            window.history.go(-1);
         }
     }
 });

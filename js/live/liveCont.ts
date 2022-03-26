@@ -15,6 +15,9 @@ new Vue({
       phone: '',// 投诉联系方式
       tsCont: '',// 投诉内容
       isShow: 0,// 是否同意协议
+      userVipCont: false,//  开通会员弹框
+      pwdShow: false,// 直播间密码
+      pwd: '',// 密码
     }
   },
   mounted() {
@@ -25,6 +28,17 @@ new Vue({
     request({ url: '/api/Live/adverList', method: 'POST', data: { live_id: this.id } }).then((res) => {
       if (res.code == 200) {
         this.adverList = res.data
+      }
+    })
+    request({ url: '/api/Live/joinLive', method: 'POST', data: { live_id: this.id } }).then((res) => {
+      if (res.code == 200) {
+        // this.adverList = res.data
+      } else if (res.code == 209) {
+        // 是否开通会员
+        this.userVipCont = true
+      } else if (res.code == 202) {
+        // 直播间密码
+        this.pwdShow = true
       }
     })
     this.onjudgeList()
@@ -68,6 +82,23 @@ new Vue({
       this.phone = ''
       syalert.syhide('tsCont');
     },
+    // 输入密码进入
+    onPwdClick() {
+      if (!this.pwd) return layer.msg('请输入密码')
+      request({ url: '/api/Live/joinLive', method: 'POST', data: { live_id: this.id, pwd: this.pwd } }).then((res) => {
+        if (res.code == 200) {
+          this.pwdShow = false
+        } else if (res.code == 209) {
+          // 是否开通会员
+          this.userVipCont = true
+        } else if (res.code == 202) {
+          // 直播间密码
+          this.pwdShow = true
+        } else {
+          layer.msg(res.msg)
+        }
+      })
+    },
     // 详情数据
     onpushList() {
       request({ url: '/api/Live/detail', method: 'POST', data: { live_id: this.id } }).then((res) => {
@@ -109,6 +140,10 @@ new Vue({
           layer.msg('评论成功')
         }
       })
+    },
+    // 会员关闭弹框
+    onVipQuery() {
+      window.history.go(-1)
     }
   }
 })

@@ -8,7 +8,8 @@
   <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
   <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/plugins/date/jedate.css"><link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
   <script src="/plugins/layui/layui.js"></script>
   <script src="/plugins/qs.min.js"></script>
   <script src="/plugins/jquery.min.js"></script>
@@ -81,25 +82,16 @@
                 <th>状态</th>
                 <th>操作</th>
               </tr>
-              <tr>
+              <tr v-for="item,k in userList" :key="k">
+                <td>{{k+1}}</td>
+                <td>{{item.nickname}}</td>
+                <td>{{item.mobile}}</td>
+                <td>{{item.addtime}}</td>
+                <td v-if="item.status==0">待审核</td>
+                <td v-if="item.status==1">通过</td>
                 <td>
-                  01
-                </td>
-                <td>
-                  周杰
-                </td>
-                <td>
-                  13683801224
-                </td>
-
-                <td>
-                  2021-12-1221:00
-                </td>
-                <td>
-                  待审核
-                </td>
-                <td>
-                  <p class="color-orange">审核通过</p>
+                  <p class="color-orange" v-if="item.status==0">审核通过</p>
+                  <p class="color-orange" v-if="item.status==1">取消通过</p>
                 </td>
               </tr>
             </table>

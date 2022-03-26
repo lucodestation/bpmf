@@ -14,10 +14,8 @@ new Vue({
     }
   },
   mounted() {
-    const searchParams = Qs.parse(location.search.substr(1))
-    this.id = searchParams.id
-    this.ondetail()
-    request({ url: '/api/Live/userList', method: 'POST', data: { live_id: this.id, page: 1, pagenum: 10 } }).then((res) => {
+
+    request({ url: '/api/Mine/pushBangwenOrder', method: 'POST', data: { page: 1, pagenum: 10 } }).then((res) => {
       if (res.code == 200) {
         this.userList = res.data.data
       }

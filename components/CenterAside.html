@@ -43,7 +43,9 @@
     <!--center-side-item start-->
     <div class="center-side-item">
       <div class="center-side-tit">订单管理</div>
-      <div class="center-side-li"><a href="CenterOrder.html">发榜订单</a></div>
+      <div class="center-side-li" :class="CenterAside=='userCont/order/publishOrder'?'active':''">
+        <a href="/userCont/order/publishOrder.html">发榜订单</a>
+      </div>
       <div class="center-side-li"><a href="CenterOrder2.html">应榜订单</a></div>
       <div class="center-side-li"><a href="CenterOrder3.html">发布赛事订单</a></div>
       <div class="center-side-li"><a href="CenterOrder4.html">报名参赛订单</a></div>
