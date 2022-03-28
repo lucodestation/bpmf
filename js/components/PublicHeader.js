@@ -47,6 +47,7 @@ new Vue({
             homeShow: false,
             helpShow: false,
             hallShow: false,
+            competitionShow: false,
             liveShow: false,
             userHeadShow: false,
             userCont: '', // 个人信息
@@ -72,6 +73,7 @@ new Vue({
         this.cooperationShow = url == 'cooperate/index' ? true : url == 'cooperate/cooperateView' ? true : false;
         this.helpShow = url == 'help/index' ? true : url == 'help/helpView' ? true : false;
         this.hallShow = url.substr(0, 7) == 'bangwen' ? true : false; // 榜文大厅是否选中
+        this.competitionShow = url.substr(0, 11) == 'competition' ? true : false; // 榜文大厅是否选中
         this.liveShow = url.substr(0, 4) == 'live' ? true : false; // 直播频道是否选中
         if (url == '') {
             this.homeShow = true;

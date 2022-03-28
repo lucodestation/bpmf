@@ -11,6 +11,7 @@ new Vue({
       homeShow: false, // 首页是否选中
       helpShow: false, // 帮助中心是否选中
       hallShow: false, // 榜文大厅是否选中
+      competitionShow: false, // 赛事频道是否选中
       liveShow: false, // 直播频道是否选中
       userHeadShow: false, // 个人中心头部
       userCont: '', // 个人信息
@@ -35,6 +36,7 @@ new Vue({
     this.cooperationShow = url == 'cooperate/index' ? true : url == 'cooperate/cooperateView' ? true : false
     this.helpShow = url == 'help/index' ? true : url == 'help/helpView' ? true : false
     this.hallShow = url.substr(0, 7) == 'bangwen' ? true : false // 榜文大厅是否选中
+    this.competitionShow = url.substr(0, 11) == 'competition' ? true : false // 榜文大厅是否选中
     this.liveShow = url.substr(0, 4) == 'live' ? true : false // 直播频道是否选中
     if (url == '') {
       this.homeShow = true
