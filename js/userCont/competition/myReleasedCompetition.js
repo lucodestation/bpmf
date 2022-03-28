@@ -151,37 +151,6 @@ var myReleasedCompetitionPersonal = {
             shade: 0,
             offset: 'rt',
         });
-        // layui.laypage.render({
-        //   // 指向存放分页的容器，值可以是容器ID、DOM对象（是 ID 时不要加 # ）
-        //   elem: this.$refs.pagination,
-        //   // 数据总数
-        //   count: 1000,
-        //   // 每页显示的条数
-        //   limit: 10,
-        //   // 连续出现的页码个数
-        //   groups: 9,
-        //   // 自定义“上一页”的内容
-        //   prev: '上一页',
-        //   // 自定义“下一页”的内容
-        //   next: '下一页',
-        //   // 自定义“首页”的内容
-        //   first: '首页',
-        //   // 自定义“尾页”的内容
-        //   last: '尾页',
-        //   // 自定义排版
-        //   layout: ['prev', 'page', 'next', 'skip', 'count'],
-        //   // 自定义主题
-        //   // theme: '',
-        //   // 切换分页的回调 obj（当前分页的所有选项值）、first（是否首次，一般用于初始加载的判断）
-        //   jump: (obj, first) => {
-        //     console.log('laypage', obj)
-        //     console.log('laypage', first)
-        //     //首次不执行
-        //     if (!first) {
-        //       //do something
-        //     }
-        //   },
-        // })
     },
     methods: {
         // 改变状态（tabs）
@@ -289,6 +258,12 @@ var myReleasedCompetitionPersonal = {
                     }
                 });
             });
+        },
+        // 改变页码
+        handleChangeCurrentPage: function (value) {
+            // console.log(`第${value}页`)
+            // 加载赛事列表
+            this._loadCompetitionList(__assign(__assign({}, this.searchOption), { page: value }));
         },
         // 操作
         // 继续发布赛事
