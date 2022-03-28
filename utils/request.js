@@ -10,8 +10,8 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-// const baseURL = 'http://bpmf.duowencaiwu.com'
-var baseURL = 'http://192.168.0.158';
+var baseURL = 'http://bpmf.duowencaiwu.com';
+// const baseURL = 'http://192.168.0.158'
 var request = axios.create({
     baseURL: baseURL,
     // withCredentials: true, // send cookies when cross-domain requests
