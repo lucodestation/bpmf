@@ -80,6 +80,17 @@
       .el-dialog .el-dialog__body {
         padding: 0;
       }
+
+      /* 赛事名称/赛事标题 */
+      .competition-name {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .competition-name p {
+        margin-top: 8px;
+        width: 96px;
+      }
     </style>
   </head>
   <body>
@@ -156,23 +167,6 @@
 
         <!-- 赛事列表表格 -->
         <div class="center-inner-table-wrap">
-          <div class="main-pages">
-            <a class="pages-a" href="">首页</a>
-            <a class="pages-a" href="">上一页</a>
-            <a class="pages-a" href="">1</a>
-            <a class="pages-a" href="">2</a>
-            <a class="pages-a" href="">3</a>
-            <span class="pages-s">. . .</span>
-            <a class="pages-a" href="">下一页</a>
-            <span class="pages-s">共100页</span>
-            <span class="pages-s">到第</span>
-            <input class="pages-input" type="text" value="12" />
-            <span class="pages-s">页</span>
-            <a class="pages-a" href="">尾页</a>
-          </div>
-
-          <el-pagination layout="prev, pager, next" :total="1000" background> </el-pagination>
-
           <table class="center-inner-table center-order-table">
             <tr>
               <th>赛事标题</th>
@@ -186,9 +180,10 @@
             </tr>
             <tr v-for="(item, index) in competitionList" :key="item.id">
               <!-- 赛事标题 -->
-              <td>
-                <img class="center-order-img" :src="item.cover_picture" />
-                <p>{{item.competition_name}}</p>
+              <td class="competition-name">
+                <img class="center-order-img" style="width: 96px; height: 54px" :src="item.cover_picture" />
+                <!-- <el-image style="width: 96px; height: 54px" :src="item.cover_picture" :preview-src-list="[item.cover_picture]"> </el-image> -->
+                <p class="ell2">赛事标题赛事标题赛事标题赛事标题{{item.competition_name}}</p>
               </td>
 
               <!-- 比赛类型 -->
@@ -504,6 +499,10 @@
               </td>
             </tr> -->
           </table>
+
+          <div class="main-pages" v-if="competitionList.length">
+            <el-pagination layout="prev, pager, next, total, jumper" :total="totalCount" prev-text="上一页" next-text="下一页" @current-change="handleChangeCurrentPage"></el-pagination>
+          </div>
         </div>
 
         <!-- 原因对话框 -->

@@ -79,6 +79,25 @@ body {
   min-width: 1220px;
   overflow-x: hidden;
 }
+
+/*
+  文本溢出显示 ...
+  记得给容器设置宽度属性哦
+*/
+/* 单行 */
+.ell {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* 2 行 */
+.ell2 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 .text-c {
   text-align: center;
 }
