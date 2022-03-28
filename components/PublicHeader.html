@@ -1,5 +1,7 @@
 <script src="/plugins/jquery.min.js"></script>
 <script src="/plugins/jsencrypt.js"></script>
+<script src="/plugins/qs.min.js"></script>
+<script src="/plugins/wxLogin.js"></script>
 <!--main-header start-->
 <div class="main-header" id="Header">
   <!--header-top start-->
@@ -229,7 +231,10 @@
   <div class="login-wx">
     <div class="wx-close" onClick="syalert.syhide('wxConter')"></div>
     <div class="wx-tit">微信扫码登录</div>
-    <div class="wx-img"><img :src="wxImg" /></div>
+    <div class="wx-img">
+      <!-- <img :src="wxImg" /> -->
+      <div id="wechatLoginQrcode"></div>
+    </div>
     <div class="wx-tip">用手机APP扫下方二维码登录，扫码后在手机 上点击“确认授权”即可</div>
     <div class="wx-bot clearfix">
       <div class="wx-btn fl" @click="onPwdClick">密码登录</div>
