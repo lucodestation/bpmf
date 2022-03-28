@@ -12,40 +12,47 @@ new Vue({
       newsList: [], // 平台公告
       articleList: [], // 玻说坡话列表
       partnerList: [], // 合作机构
+      bangwenJkList: [],// 最新榜文-教课
+      bangwenXkList: [],// 最新榜文-学课
     }
   },
-  async created() {
+  created() {
     // 平台公告
-    const res = await request({
-      method: 'POST',
-      url: '/api/Index/noticeList',
-      data: { page: 1, pagenum: 1 },
+    request({ url: '/api/Index/noticeList', method: 'POST', data: { page: 1, pagenum: 1 } }).then((res) => {
+      if (res.code == 200) {
+        this.newsList = res.data.data
+      }
     })
-    if (res) {
-      this.newsList = res.data.data
-    }
     // 18展位图
-    const ress = await request({
-      method: 'POST',
-      url: '/api/Index/eighteen',
+    request({ url: '/api/Index/eighteen', method: 'POST' }).then((res) => {
+      if (res.code == 200) {
+        // this.newsList = res.data.data
+      }
+    })
+    // 最新榜文-教课
+    request({ url: '/api/Bangwen/list', method: 'POST', data: { page: 1, pagenum: 7, type: 1, sort: 1 } }).then((res) => {
+      if (res.code == 200) {
+        this.bangwenJkList = res.data.data
+      }
+    })
+    // 最新榜文-学课
+    request({ url: '/api/Bangwen/list', method: 'POST', data: { page: 1, pagenum: 7, type: 2, sort: 1 } }).then((res) => {
+      if (res.code == 200) {
+        this.bangwenXkList = res.data.data
+      }
     })
     // 玻说坡话列表
-    const articleList = await request({
-      method: 'POST',
-      url: '/api/Index/articleList',
-      data: { page: 1, pagenum: 4 },
+    request({ url: '/api/Index/articleList', method: 'POST', data: { page: 1, pagenum: 4 } }).then((res) => {
+      if (res.code == 200) {
+        this.articleList = res.data.data
+      }
     })
-    if (articleList) {
-      this.articleList = articleList.data.data
-    }
     // 合作机构
-    const partnerList = await request({
-      method: 'POST',
-      url: '/api/Index/partner',
+    request({ url: '/api/Index/partner', method: 'POST' }).then((res) => {
+      if (res.code == 200) {
+        this.partnerList = res.data
+      }
     })
-    if (partnerList) {
-      this.partnerList = partnerList.data
-    }
 
     new Swiper('.mySwiper', {
       pagination: {

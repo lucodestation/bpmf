@@ -1,810 +1,759 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="description"
-      property="og:description"
-      content="玻坡摸佛网，专业的的体育运动电子商务平台，集专业的赛事组织、赛事直播、在线课程以及需求发布于一身，纳教、学、赛于一体。致力于 “专业、高效的体育运动在线生态系统”。"
-    />
-    <meta name="keywords" content="直播，在线课程，围棋，象棋，五子棋，国际象棋，体育赛事，赛事组织，招生，艺术，智力。" />
-    <title>玻坡摸佛</title>
 
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" property="og:description"
+    content="玻坡摸佛网，专业的的体育运动电子商务平台，集专业的赛事组织、赛事直播、在线课程以及需求发布于一身，纳教、学、赛于一体。致力于 “专业、高效的体育运动在线生态系统”。" />
+  <meta name="keywords" content="直播，在线课程，围棋，象棋，五子棋，国际象棋，体育赛事，赛事组织，招生，艺术，智力。" />
+  <title>玻坡摸佛</title>
 
-    <link rel="stylesheet" href="/plugins/animate.min.css" />
-    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
-    <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
-    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
-    <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
-    <script src="/plugins/babel-polyfill.min.js"></script>
-    <script src="/plugins/layui/layui.js"></script>
-    <script src="/plugins/jsencrypt.js"></script>
-    <script src="/plugins/jquery.min.js"></script>
-    <script src="/plugins/swiper/swiper.min.js"></script>
-    <script src="/plugins/syalert/syalert.min.js"></script>
-    <script src="/plugins/vue.min.js"></script>
+  <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+  <link rel="stylesheet" href="/css/style.css" />
 
-    <script src="/plugins/axios.min.js"></script>
-    <script src="/utils/request.js"></script>
-  </head>
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jsencrypt.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/vue.min.js"></script>
 
-  <body>
-    <h1 style="width: 0; height: 0; overflow: hidden">玻坡摸佛</h1>
-    <!-- 公共头部 -->
-    <header class="public-header"></header>
-    <div id="app">
-      <!--index-banner start-->
-      <div class="index-banner">
-        <div class="swiper mySwiper" ref="mySwiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <div class="index-banner-li" style="background-image: url(images/banner.png)"></div>
-            </div>
-            <div class="swiper-slide">
-              <div class="index-banner-li" style="background-image: url(images/banner.png)"></div>
-            </div>
-            <div class="swiper-slide">
-              <div class="index-banner-li" style="background-image: url(images/banner.png)"></div>
-            </div>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <h1 style="width: 0; height: 0; overflow: hidden">玻坡摸佛</h1>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <div id="app">
+    <!--index-banner start-->
+    <div class="index-banner">
+      <div class="swiper mySwiper" ref="mySwiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="index-banner-li" style="background-image: url(images/banner.png)"></div>
           </div>
-          <div class="swiper-pagination" ref="swiperPagination"></div>
-        </div>
-        <!--index-side start-->
-        <div class="index-side">
-          <div class="index-side-box">
-            <div class="index-side-item">
-              <div class="t"><a href="">比赛信息</a></div>
-              <div class="c clearfix">
-                <a href="">五子棋</a>
-                <a href="">象棋</a>
-                <a href="">国际象棋</a>
-                <a href="">国际跳棋</a>
-                <a href="">围棋</a>
-                <a href="3赛事频道-更多比赛.html">更多赛事</a>
-              </div>
-            </div>
-            <div class="index-side-item">
-              <div class="t"><a href="">榜文信息</a></div>
-              <div class="c clearfix">
-                <a href="">五子棋</a>
-                <a href="">象棋</a>
-                <a href="">国际象棋</a>
-                <a href="">国际跳棋</a>
-                <a href="">围棋</a>
-                <a href="">其他</a>
-                <a href="榜文大厅-学棋更多.html">更多赛事</a>
-              </div>
-            </div>
-            <div class="index-side-item">
-              <div class="t"><a href="">玻坡摸佛直播</a></div>
-              <div class="c clearfix">
-                <a href="">五子棋</a>
-                <a href="">象棋</a>
-                <a href="">国际象棋</a>
-                <a href="">国际跳棋</a>
-                <a href="">围棋</a>
-                <a href="">其他</a>
-                <a href="4直播频道-2更多直播.html">更多赛事</a>
-              </div>
-            </div>
+          <div class="swiper-slide">
+            <div class="index-banner-li" style="background-image: url(images/banner.png)"></div>
+          </div>
+          <div class="swiper-slide">
+            <div class="index-banner-li" style="background-image: url(images/banner.png)"></div>
           </div>
         </div>
-        <!--index-side end-->
+        <div class="swiper-pagination" ref="swiperPagination"></div>
       </div>
-      <!--index-banner end-->
-      <!--index-notice start-->
-      <div class="index-notice w-1200 clearfix">
-        <div class="icon fl"></div>
-        <div class="t fl" v-for="item in newsList" :key="item.id">
-          <a :href="'/news/newsView.html?id='+item.id">{{item.title}}</a>
-        </div>
-        <a class="index-more fr" href="/news/index.html">点击更多</a>
-      </div>
-      <!--index-notice end-->
-      <!--index-sec1 start-->
-      <div class="index-sec1">
-        <div class="w-1200 clearfix">
-          <div class="w280 fl">
-            <div class="block1">
-              <a href=""><img src="images/index3.png" /></a>
-            </div>
-            <div class="block2 clearfix">
-              <div class="lay1 fl">
-                <a href=""><img src="images/index4.png" /></a>
-              </div>
-              <div class="lay2 fr">
-                <div class="inn1">
-                  <a href=""><img src="images/index5.png" /></a>
-                </div>
-                <div class="inn2">
-                  <a href=""><img src="images/index6.png" /></a>
-                </div>
-              </div>
-            </div>
-            <div class="block3">
-              <a href=""><img src="images/index7.png" /></a>
+      <!--index-side start-->
+      <div class="index-side">
+        <div class="index-side-box">
+          <div class="index-side-item">
+            <div class="t"><a href="">比赛信息</a></div>
+            <div class="c clearfix">
+              <a href="">五子棋</a>
+              <a href="">象棋</a>
+              <a href="">国际象棋</a>
+              <a href="">国际跳棋</a>
+              <a href="">围棋</a>
+              <a href="3赛事频道-更多比赛.html">更多赛事</a>
             </div>
           </div>
-          <div class="w640 fl">
-            <div class="block4 clearfix">
-              <div class="lay1 fl">
-                <div class="inn1">
-                  <a href=""><img src="images/index8.png" /></a>
-                </div>
-                <div class="inn2">
-                  <a href=""><img src="images/index9.png" /></a>
-                </div>
-              </div>
-              <div class="lay2 fl">
-                <div class="inn1">
-                  <a href=""><img src="images/index10.png" /></a>
-                </div>
-                <div class="inn2">
-                  <a href=""><img src="images/index11.png" /></a>
-                </div>
-                <div class="inn3">
-                  <a href=""><img src="images/index13.png" /></a>
-                </div>
-              </div>
-              <div class="lay2 fl">
-                <div class="inn4">
-                  <a href=""><img src="images/index12.png" /></a>
-                </div>
-                <div class="inn5">
-                  <a href=""><img src="images/index14.png" /></a>
-                </div>
-                <div class="inn6">
-                  <a href=""><img src="images/index15.png" /></a>
-                </div>
-              </div>
-            </div>
-            <div class="block5">
-              <a href=""><img src="images/index16.png" /></a>
+          <div class="index-side-item">
+            <div class="t"><a href="">榜文信息</a></div>
+            <div class="c clearfix">
+              <a href="">五子棋</a>
+              <a href="">象棋</a>
+              <a href="">国际象棋</a>
+              <a href="">国际跳棋</a>
+              <a href="">围棋</a>
+              <a href="">其他</a>
+              <a href="榜文大厅-学棋更多.html">更多赛事</a>
             </div>
           </div>
-          <div class="w240 fl">
-            <div class="block6">
-              <a href=""><img src="images/index17.png" /></a>
-            </div>
-            <div class="block7">
-              <a href=""><img src="images/index18.png" /></a>
-            </div>
-            <div class="block8">
-              <a href=""><img src="images/index19.png" /></a>
-            </div>
-            <div class="block9">
-              <a href=""><img src="images/index20.png" /></a>
+          <div class="index-side-item">
+            <div class="t"><a href="">玻坡摸佛直播</a></div>
+            <div class="c clearfix">
+              <a href="">五子棋</a>
+              <a href="">象棋</a>
+              <a href="">国际象棋</a>
+              <a href="">国际跳棋</a>
+              <a href="">围棋</a>
+              <a href="">其他</a>
+              <a href="4直播频道-2更多直播.html">更多赛事</a>
             </div>
           </div>
         </div>
       </div>
-      <!--index-sec1 end-->
-      <!--index-sec2 start-->
-      <div class="index-sec2 w-1200">
-        <div class="index-sec2-content clearfix">
-          <!--index-sec2-asd start-->
-          <div class="index-sec2-asd">
-            <div class="con">
-              <h2 class="t">热门赛事</h2>
-              <div class="c">棋局江湖，棋局平天下， 华山论剑</div>
-              <a class="more" href="">查看更多 ></a>
-            </div>
-          </div>
-          <!--index-sec2-asd end-->
-          <!--index-sec2-item start-->
-          <div class="index-sec2-item">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img src="images/index22.png" /></div>
-              </a>
-              <div class="li-t clearfix">
-                <div class="t fl">三星杯决赛</div>
-                <div class="tag fr">五子棋</div>
-              </div>
-              <div class="li-c clearfix">
-                <div class="li-private fl">
-                  <img src="images/index22.png" />
-                  <div class="name">赛亚</div>
-                </div>
-                <div class="fr">个人赛</div>
-              </div>
-            </div>
-          </div>
-          <!--index-sec2-item end-->
-          <!--index-sec2-item start-->
-          <div class="index-sec2-item">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img src="images/index22.png" /></div>
-              </a>
-              <div class="li-t clearfix">
-                <div class="t fl">三星杯决赛</div>
-                <div class="tag fr">国际象棋</div>
-              </div>
-              <div class="li-c clearfix">
-                <div class="li-private fl">
-                  <img src="images/index22.png" />
-                  <div class="name">赛亚</div>
-                </div>
-                <div class="fr">个人赛</div>
-              </div>
-            </div>
-          </div>
-          <!--index-sec2-item end-->
-          <!--index-sec2-item start-->
-          <div class="index-sec2-item">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img src="images/index22.png" /></div>
-              </a>
-              <div class="li-t clearfix">
-                <div class="t fl">三星杯决赛</div>
-                <div class="tag fr">五子棋</div>
-              </div>
-              <div class="li-c clearfix">
-                <div class="li-private fl">
-                  <img src="images/index22.png" />
-                  <div class="name">赛亚</div>
-                </div>
-                <div class="fr">个人赛</div>
-              </div>
-            </div>
-          </div>
-          <!--index-sec2-item end-->
-          <!--index-sec2-item start-->
-          <div class="index-sec2-item">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img src="images/index22.png" /></div>
-              </a>
-              <div class="li-t clearfix">
-                <div class="t fl">三星杯决赛</div>
-                <div class="tag fr">五子棋</div>
-              </div>
-              <div class="li-c clearfix">
-                <div class="li-private fl">
-                  <img src="images/index22.png" />
-                  <div class="name">赛亚</div>
-                </div>
-                <div class="fr">个人赛</div>
-              </div>
-            </div>
-          </div>
-          <!--index-sec2-item end-->
-          <!--index-sec2-item start-->
-          <div class="index-sec2-item">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img src="images/index22.png" /></div>
-              </a>
-              <div class="li-t clearfix">
-                <div class="t fl">三星杯决赛</div>
-                <div class="tag fr">五子棋</div>
-              </div>
-              <div class="li-c clearfix">
-                <div class="li-private fl">
-                  <img src="images/index22.png" />
-                  <div class="name">赛亚</div>
-                </div>
-                <div class="fr">个人赛</div>
-              </div>
-            </div>
-          </div>
-          <!--index-sec2-item end-->
-          <!--index-sec2-item start-->
-          <div class="index-sec2-item">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img src="images/index22.png" /></div>
-              </a>
-              <div class="li-t clearfix">
-                <div class="t fl">三星杯决赛</div>
-                <div class="tag fr">五子棋</div>
-              </div>
-              <div class="li-c clearfix">
-                <div class="li-private fl">
-                  <img src="images/index22.png" />
-                  <div class="name">赛亚</div>
-                </div>
-                <div class="fr">个人赛</div>
-              </div>
-            </div>
-          </div>
-          <!--index-sec2-item end-->
-          <!--index-sec2-item start-->
-          <div class="index-sec2-item">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img src="images/index22.png" /></div>
-              </a>
-              <div class="li-t clearfix">
-                <div class="t fl">三星杯决赛</div>
-                <div class="tag fr">五子棋</div>
-              </div>
-              <div class="li-c clearfix">
-                <div class="li-private fl">
-                  <img src="images/index22.png" />
-                  <div class="name">赛亚</div>
-                </div>
-                <div class="fr">个人赛</div>
-              </div>
-            </div>
-          </div>
-          <!--index-sec2-item end-->
-        </div>
-      </div>
-      <!--index-sec2 end-->
-      <!--index-sec2 start-->
-      <div class="index-sec2 w-1200">
-        <div class="index-sec2-title clearfix">
-          <h2 class="t fl">火热报名中</h2>
-          <a class="index-more fr" href="">点击更多</a>
-        </div>
-        <div class="index-sec2-content clearfix">
-          <!--index-sec2-item start-->
-          <div class="index-sec2-item">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img src="images/index41.png" /></div>
-              </a>
-              <div class="li-t clearfix">
-                <div class="t fl">三星杯决赛</div>
-                <div class="tag fr">五子棋</div>
-              </div>
-              <div class="li-org">组织者：三星公司</div>
-              <div class="li-cha">冠军奖：<span class="color-red">100万元</span></div>
-              <div class="li-end">已参赛：15/100人</div>
-              <a class="index-sec2-btn" href="">立即报名</a>
-            </div>
-          </div>
-          <!--index-sec2-item end-->
-          <!--index-sec2-item start-->
-          <div class="index-sec2-item">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img src="images/index41.png" /></div>
-              </a>
-              <div class="li-t clearfix">
-                <div class="t fl">三星杯决赛</div>
-                <div class="tag fr">五子棋</div>
-              </div>
-              <div class="li-org">组织者：三星公司</div>
-              <div class="li-cha">冠军奖：<span class="color-red">100万元</span></div>
-              <div class="li-end">已参赛：15/100人</div>
-              <a class="index-sec2-btn" href="">立即报名</a>
-            </div>
-          </div>
-          <!--index-sec2-item end-->
-          <!--index-sec2-item start-->
-          <div class="index-sec2-item">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img src="images/index41.png" /></div>
-              </a>
-              <div class="li-t clearfix">
-                <div class="t fl">三星杯决赛</div>
-                <div class="tag fr">五子棋</div>
-              </div>
-              <div class="li-org">组织者：三星公司</div>
-              <div class="li-cha">冠军奖：<span class="color-red">100万元</span></div>
-              <div class="li-end">已参赛：15/100人</div>
-              <a class="index-sec2-btn" href="">立即报名</a>
-            </div>
-          </div>
-          <!--index-sec2-item end-->
-          <!--index-sec2-item start-->
-          <div class="index-sec2-item">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img src="images/index41.png" /></div>
-              </a>
-              <div class="li-t clearfix">
-                <div class="t fl">三星杯决赛</div>
-                <div class="tag fr">五子棋</div>
-              </div>
-              <div class="li-org">组织者：三星公司</div>
-              <div class="li-cha">冠军奖：<span class="color-red">100万元</span></div>
-              <div class="li-end">已参赛：15/100人</div>
-              <a class="index-sec2-btn" href="">立即报名</a>
-            </div>
-          </div>
-          <!--index-sec2-item end-->
-        </div>
-      </div>
-      <!--index-sec2 end-->
-      <!--index-asd start-->
-      <div class="index-asd w-1200 clearfix">
-        <div class="index-asd-li fl">
-          <a href=""><img src="images/index42.png" /></a>
-        </div>
-        <div class="index-asd-li fr">
-          <a href=""><img src="images/index43.png" /></a>
-        </div>
-      </div>
-      <!--index-asd end-->
-      <!--index-sec2 start-->
-      <div class="index-sec2 w-1200">
-        <div class="index-sec2-content clearfix">
-          <!--index-sec2-asd start-->
-          <div class="index-sec2-asd h472">
-            <div class="con">
-              <h2 class="t">最新榜文</h2>
-              <div class="c">棋局江湖，棋局平天下， 华山论剑</div>
-            </div>
-          </div>
-          <!--index-sec2-asd end-->
-          <!--index-sec2-tab start-->
-          <div class="index-sec2-tab">
-            <ul class="index-tab-hd clearfix">
-              <li class="hd-li on">我要学</li>
-              <li class="hd-li">我要教</li>
-              <a class="index-more fr" href="">点击更多</a>
-            </ul>
-            <div class="index-tab-bd">
-              <div class="bd-box" style="display: block">
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index41.png" /></div>
-                    </a>
-                    <div class="li-h clearfix">
-                      <span class="hs">五子棋</span>
-                      <div class="ht">五子棋潜龙棋局怎么破解</div>
-                    </div>
-                    <div class="li-tags">
-                      <span class="gs">一次付清</span>
-                      <span class="gs">单人中榜</span>
-                      <span class="gs">不托管</span>
-                    </div>
-                    <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
-                    <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
-                    <div class="li-price">酬金：<span class="price">￥15263</span></div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="last fr">学棋</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index41.png" /></div>
-                    </a>
-                    <div class="li-h clearfix">
-                      <span class="hs">五子棋</span>
-                      <div class="ht">五子棋潜龙棋局怎么破解</div>
-                    </div>
-                    <div class="li-tags">
-                      <span class="gs">一次付清</span>
-                      <span class="gs">单人中榜</span>
-                      <span class="gs">不托管</span>
-                    </div>
-                    <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
-                    <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
-                    <div class="li-price">酬金：<span class="price">￥15263</span></div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="last fr">学棋</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index41.png" /></div>
-                    </a>
-                    <div class="li-h clearfix">
-                      <span class="hs">五子棋</span>
-                      <div class="ht">五子棋潜龙棋局怎么破解</div>
-                    </div>
-                    <div class="li-tags">
-                      <span class="gs">一次付清</span>
-                      <span class="gs">单人中榜</span>
-                      <span class="gs">不托管</span>
-                    </div>
-                    <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
-                    <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
-                    <div class="li-price">酬金：<span class="price">￥15263</span></div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="last fr">学棋</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-              </div>
-              <div class="bd-box">
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index41.png" /></div>
-                    </a>
-                    <div class="li-h clearfix">
-                      <span class="hs">五子棋</span>
-                      <div class="ht">五子棋潜龙棋局怎么破解</div>
-                    </div>
-                    <div class="li-tags">
-                      <span class="gs">一次付清</span>
-                      <span class="gs">单人中榜</span>
-                      <span class="gs">不托管</span>
-                    </div>
-                    <div class="li-date">任务周期：<span>2021-04-26至2021-04-29</span></div>
-                    <div class="li-date">报名截止日期：<span>2021-04-26</span></div>
-                    <div class="li-price">酬金：<span class="price">￥15263</span></div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="last fr">学棋</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-              </div>
-            </div>
-          </div>
-          <!--index-sec2-tab end-->
-        </div>
-      </div>
-      <!--index-sec2 end-->
-      <!--index-asd start-->
-      <div class="index-asd w-1200 clearfix">
-        <div class="index-asd-li fl">
-          <a href=""><img src="images/index44.png" /></a>
-        </div>
-        <div class="index-asd-li fr">
-          <a href=""><img src="images/index45.png" /></a>
-        </div>
-      </div>
-      <!--index-asd end-->
-      <!--index-sec2 start-->
-      <div class="index-sec2 w-1200">
-        <div class="index-sec2-content clearfix">
-          <!--index-sec2-asd start-->
-          <div class="index-sec2-asd h330">
-            <div class="con">
-              <h2 class="t">热门赛事</h2>
-              <div class="c">棋局江湖，棋局平天下， 华山论剑</div>
-              <a class="more" href="">查看更多 ></a>
-            </div>
-          </div>
-          <!--index-sec2-asd end-->
-          <!--index-sec2-tab start-->
-          <div class="index-sec2-tab">
-            <ul class="index-tab-hd clearfix">
-              <li class="hd-li on">直播推荐</li>
-              <li class="hd-li">赛事直播</li>
-              <a class="index-more fr" href="">点击更多</a>
-            </ul>
-            <div class="index-tab-bd">
-              <div class="bd-box" style="display: block">
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index22.png" /></div>
-                    </a>
-                    <div class="li-t clearfix">
-                      <div class="t fl">三星杯决赛</div>
-                      <div class="tag fr">五子棋</div>
-                    </div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="up fr">1589.2万</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index22.png" /></div>
-                    </a>
-                    <div class="li-t clearfix">
-                      <div class="t fl">三星杯决赛</div>
-                      <div class="tag fr">五子棋</div>
-                    </div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="up fr">1589.2万</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index22.png" /></div>
-                    </a>
-                    <div class="li-t clearfix">
-                      <div class="t fl">三星杯决赛</div>
-                      <div class="tag fr">五子棋</div>
-                    </div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="up fr">1589.2万</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index22.png" /></div>
-                    </a>
-                    <div class="li-t clearfix">
-                      <div class="t fl">三星杯决赛</div>
-                      <div class="tag fr">五子棋</div>
-                    </div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="up fr">1589.2万</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index22.png" /></div>
-                    </a>
-                    <div class="li-t clearfix">
-                      <div class="t fl">三星杯决赛</div>
-                      <div class="tag fr">五子棋</div>
-                    </div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="up fr">1589.2万</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index22.png" /></div>
-                    </a>
-                    <div class="li-t clearfix">
-                      <div class="t fl">三星杯决赛</div>
-                      <div class="tag fr">五子棋</div>
-                    </div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="up fr">1589.2万</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index22.png" /></div>
-                    </a>
-                    <div class="li-t clearfix">
-                      <div class="t fl">三星杯决赛</div>
-                      <div class="tag fr">五子棋</div>
-                    </div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="up fr">1589.2万</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-              </div>
-              <div class="bd-box">
-                <!--index-sec2-item start-->
-                <div class="index-sec2-item">
-                  <div class="bor">
-                    <a href="">
-                      <div class="img-w"><img src="images/index22.png" /></div>
-                    </a>
-                    <div class="li-t clearfix">
-                      <div class="t fl">三星杯决赛</div>
-                      <div class="tag fr">五子棋</div>
-                    </div>
-                    <div class="li-c clearfix">
-                      <div class="li-private fl">
-                        <img src="images/index22.png" />
-                        <div class="name">赛亚</div>
-                      </div>
-                      <div class="up fr">1589.2万</div>
-                    </div>
-                  </div>
-                </div>
-                <!--index-sec2-item end-->
-              </div>
-            </div>
-          </div>
-          <!--index-sec2-tab end-->
-        </div>
-      </div>
-      <!--index-sec2 end-->
-      <!--index-sec3 start-->
-      <div class="index-sec3 w-1200">
-        <div class="index-sec2-title clearfix">
-          <h2 class="tt fl">玻说坡话</h2>
-          <a class="index-more fr" href="/boPoList/index.html">点击更多</a>
-        </div>
-        <div class="index-sec3-content clearfix">
-          <div class="index-sec3-dl" v-for="item in articleList" :key="item.id">
-            <div class="dt">
-              <a :href="'/boPoList/bopoView.html?id='+item.id"><img :src="item.image" /></a>
-            </div>
-            <div class="dd">
-              <div class="dd-t"><a :href="'/boPoList/bopoView.html?id='+item.id">{{item.title}}</a></div>
-              <div class="dd-c">{{item.descri}}</div>
-              <div class="dd-d">发布时间：{{item.addtime}}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--index-sec3 end-->
-      <!--index-sec3 start-->
-      <div class="index-sec3 w-1200">
-        <div class="index-sec2-title clearfix">
-          <h2 class="tt fl">合作机构</h2>
-          <!-- <a class="index-more fr" href="">点击更多</a> -->
-        </div>
-        <ul class="index-sec3-ul clearfix">
-          <li v-for="item in partnerList" :key="item.id">
-            <!-- <a href=""> -->
-            <img :src="item.image" />
-            <!-- </a> -->
-          </li>
-        </ul>
-      </div>
-      <!--index-sec3 end-->
+      <!--index-side end-->
     </div>
-    <!-- 公共底部 -->
-    <footer class="public-footer"></footer>
+    <!--index-banner end-->
+    <!--index-notice start-->
+    <div class="index-notice w-1200 clearfix">
+      <div class="icon fl"></div>
+      <div class="t fl" v-for="item in newsList" :key="item.id">
+        <a :href="'/news/newsView.html?id='+item.id">{{item.title}}</a>
+      </div>
+      <a class="index-more fr" href="/news/index.html">点击更多</a>
+    </div>
+    <!--index-notice end-->
+    <!--index-sec1 start-->
+    <div class="index-sec1">
+      <div class="w-1200 clearfix">
+        <div class="w280 fl">
+          <div class="block1">
+            <a href=""><img src="images/index3.png" /></a>
+          </div>
+          <div class="block2 clearfix">
+            <div class="lay1 fl">
+              <a href=""><img src="images/index4.png" /></a>
+            </div>
+            <div class="lay2 fr">
+              <div class="inn1">
+                <a href=""><img src="images/index5.png" /></a>
+              </div>
+              <div class="inn2">
+                <a href=""><img src="images/index6.png" /></a>
+              </div>
+            </div>
+          </div>
+          <div class="block3">
+            <a href=""><img src="images/index7.png" /></a>
+          </div>
+        </div>
+        <div class="w640 fl">
+          <div class="block4 clearfix">
+            <div class="lay1 fl">
+              <div class="inn1">
+                <a href=""><img src="images/index8.png" /></a>
+              </div>
+              <div class="inn2">
+                <a href=""><img src="images/index9.png" /></a>
+              </div>
+            </div>
+            <div class="lay2 fl">
+              <div class="inn1">
+                <a href=""><img src="images/index10.png" /></a>
+              </div>
+              <div class="inn2">
+                <a href=""><img src="images/index11.png" /></a>
+              </div>
+              <div class="inn3">
+                <a href=""><img src="images/index13.png" /></a>
+              </div>
+            </div>
+            <div class="lay2 fl">
+              <div class="inn4">
+                <a href=""><img src="images/index12.png" /></a>
+              </div>
+              <div class="inn5">
+                <a href=""><img src="images/index14.png" /></a>
+              </div>
+              <div class="inn6">
+                <a href=""><img src="images/index15.png" /></a>
+              </div>
+            </div>
+          </div>
+          <div class="block5">
+            <a href=""><img src="images/index16.png" /></a>
+          </div>
+        </div>
+        <div class="w240 fl">
+          <div class="block6">
+            <a href=""><img src="images/index17.png" /></a>
+          </div>
+          <div class="block7">
+            <a href=""><img src="images/index18.png" /></a>
+          </div>
+          <div class="block8">
+            <a href=""><img src="images/index19.png" /></a>
+          </div>
+          <div class="block9">
+            <a href=""><img src="images/index20.png" /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--index-sec1 end-->
+    <!--index-sec2 start-->
+    <div class="index-sec2 w-1200">
+      <div class="index-sec2-content clearfix">
+        <!--index-sec2-asd start-->
+        <div class="index-sec2-asd">
+          <div class="con">
+            <h2 class="t">热门赛事</h2>
+            <div class="c">棋局江湖，棋局平天下， 华山论剑</div>
+            <a class="more" href="">查看更多 ></a>
+          </div>
+        </div>
+        <!--index-sec2-asd end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="images/index22.png" /></div>
+            </a>
+            <div class="li-t clearfix">
+              <div class="t fl">三星杯决赛</div>
+              <div class="tag fr">五子棋</div>
+            </div>
+            <div class="li-c clearfix">
+              <div class="li-private fl">
+                <img src="images/index22.png" />
+                <div class="name">赛亚</div>
+              </div>
+              <div class="fr">个人赛</div>
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="images/index22.png" /></div>
+            </a>
+            <div class="li-t clearfix">
+              <div class="t fl">三星杯决赛</div>
+              <div class="tag fr">国际象棋</div>
+            </div>
+            <div class="li-c clearfix">
+              <div class="li-private fl">
+                <img src="images/index22.png" />
+                <div class="name">赛亚</div>
+              </div>
+              <div class="fr">个人赛</div>
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="images/index22.png" /></div>
+            </a>
+            <div class="li-t clearfix">
+              <div class="t fl">三星杯决赛</div>
+              <div class="tag fr">五子棋</div>
+            </div>
+            <div class="li-c clearfix">
+              <div class="li-private fl">
+                <img src="images/index22.png" />
+                <div class="name">赛亚</div>
+              </div>
+              <div class="fr">个人赛</div>
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="images/index22.png" /></div>
+            </a>
+            <div class="li-t clearfix">
+              <div class="t fl">三星杯决赛</div>
+              <div class="tag fr">五子棋</div>
+            </div>
+            <div class="li-c clearfix">
+              <div class="li-private fl">
+                <img src="images/index22.png" />
+                <div class="name">赛亚</div>
+              </div>
+              <div class="fr">个人赛</div>
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="images/index22.png" /></div>
+            </a>
+            <div class="li-t clearfix">
+              <div class="t fl">三星杯决赛</div>
+              <div class="tag fr">五子棋</div>
+            </div>
+            <div class="li-c clearfix">
+              <div class="li-private fl">
+                <img src="images/index22.png" />
+                <div class="name">赛亚</div>
+              </div>
+              <div class="fr">个人赛</div>
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="images/index22.png" /></div>
+            </a>
+            <div class="li-t clearfix">
+              <div class="t fl">三星杯决赛</div>
+              <div class="tag fr">五子棋</div>
+            </div>
+            <div class="li-c clearfix">
+              <div class="li-private fl">
+                <img src="images/index22.png" />
+                <div class="name">赛亚</div>
+              </div>
+              <div class="fr">个人赛</div>
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="images/index22.png" /></div>
+            </a>
+            <div class="li-t clearfix">
+              <div class="t fl">三星杯决赛</div>
+              <div class="tag fr">五子棋</div>
+            </div>
+            <div class="li-c clearfix">
+              <div class="li-private fl">
+                <img src="images/index22.png" />
+                <div class="name">赛亚</div>
+              </div>
+              <div class="fr">个人赛</div>
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+      </div>
+    </div>
+    <!--index-sec2 end-->
+    <!--index-sec2 start-->
+    <div class="index-sec2 w-1200">
+      <div class="index-sec2-title clearfix">
+        <h2 class="t fl">火热报名中</h2>
+        <a class="index-more fr" href="">点击更多</a>
+      </div>
+      <div class="index-sec2-content clearfix">
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="images/index41.png" /></div>
+            </a>
+            <div class="li-t clearfix">
+              <div class="t fl">三星杯决赛</div>
+              <div class="tag fr">五子棋</div>
+            </div>
+            <div class="li-org">组织者：三星公司</div>
+            <div class="li-cha">冠军奖：<span class="color-red">100万元</span></div>
+            <div class="li-end">已参赛：15/100人</div>
+            <a class="index-sec2-btn" href="">立即报名</a>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="images/index41.png" /></div>
+            </a>
+            <div class="li-t clearfix">
+              <div class="t fl">三星杯决赛</div>
+              <div class="tag fr">五子棋</div>
+            </div>
+            <div class="li-org">组织者：三星公司</div>
+            <div class="li-cha">冠军奖：<span class="color-red">100万元</span></div>
+            <div class="li-end">已参赛：15/100人</div>
+            <a class="index-sec2-btn" href="">立即报名</a>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="images/index41.png" /></div>
+            </a>
+            <div class="li-t clearfix">
+              <div class="t fl">三星杯决赛</div>
+              <div class="tag fr">五子棋</div>
+            </div>
+            <div class="li-org">组织者：三星公司</div>
+            <div class="li-cha">冠军奖：<span class="color-red">100万元</span></div>
+            <div class="li-end">已参赛：15/100人</div>
+            <a class="index-sec2-btn" href="">立即报名</a>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+        <!--index-sec2-item start-->
+        <div class="index-sec2-item">
+          <div class="bor">
+            <a href="">
+              <div class="img-w"><img src="images/index41.png" /></div>
+            </a>
+            <div class="li-t clearfix">
+              <div class="t fl">三星杯决赛</div>
+              <div class="tag fr">五子棋</div>
+            </div>
+            <div class="li-org">组织者：三星公司</div>
+            <div class="li-cha">冠军奖：<span class="color-red">100万元</span></div>
+            <div class="li-end">已参赛：15/100人</div>
+            <a class="index-sec2-btn" href="">立即报名</a>
+          </div>
+        </div>
+        <!--index-sec2-item end-->
+      </div>
+    </div>
+    <!--index-sec2 end-->
+    <!--index-asd start-->
+    <div class="index-asd w-1200 clearfix">
+      <div class="index-asd-li fl">
+        <a href=""><img src="images/index42.png" /></a>
+      </div>
+      <div class="index-asd-li fr">
+        <a href=""><img src="images/index43.png" /></a>
+      </div>
+    </div>
+    <!--index-asd end-->
+    <!--index-sec2 start-->
+    <div class="index-sec2 w-1200">
+      <div class="index-sec2-content clearfix">
+        <!--index-sec2-asd start-->
+        <div class="index-sec2-asd h472">
+          <div class="con">
+            <h2 class="t">最新榜文</h2>
+            <div class="c">棋局江湖，棋局平天下， 华山论剑</div>
+          </div>
+        </div>
+        <!--index-sec2-asd end-->
+        <!--index-sec2-tab start-->
+        <div class="index-sec2-tab">
+          <ul class="index-tab-hd clearfix">
+            <li class="hd-li on">我要学</li>
+            <li class="hd-li">我要教</li>
+            <a class="index-more fr" href="/bangwen/hallMore.html">点击更多</a>
+          </ul>
+          <div class="index-tab-bd">
+            <div class="bd-box" style="display: block">
+              <!--index-sec2-item start-->
+              <div class="index-sec2-item" v-for="item in bangwenXkList" :key="item.id">
+                <div class="bor">
+                  <a :href="'/bangwen/hallView.html?id='+item.id">
+                    <div class="img-w"><img :src="item.image" /></div>
+                    <div class="li-h clearfix">
+                      <span class="hs">{{item.name}}</span>
+                      <div class="ht">{{item.title}}</div>
+                    </div>
+                    <div class="li-tags">
+                      <span class="gs" v-if="item.pay_num_type==1">一次付清</span>
+                      <span class="gs" v-else>多次付清</span>
+                      <span class="gs" v-if="item.win_type==1">单人中榜</span>
+                      <span class="gs" v-else>多人中榜</span>
+                      <span class="gs" v-if="item.is_trustee==1">托管</span>
+                      <span class="gs" v-else>不托管</span>
+                    </div>
+                    <div class="li-date">任务周期：<span>{{item.task_start_time}}至{{item.task_end_time}}</span></div>
+                    <div class="li-date">报名截止日期：<span>{{item.signup_end_time}}</span></div>
+                    <div class="li-price">酬金：<span class="price">￥{{item.total_money}}</span></div>
+                    <div class="li-c clearfix">
+                      <div class="li-private fl">
+                        <img :src="item.avatar">
+                        <div class="name">{{item.nickname}}</div>
+                      </div>
+                      <div class="last fr">学棋</div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <!--index-sec2-item end-->
+            </div>
+            <div class="bd-box">
+              <!--index-sec2-item start-->
+              <div class="index-sec2-item" v-for="item in bangwenJkList" :key="item.id">
+                <div class="bor">
+                  <a :href="'/bangwen/hallView.html?id='+item.id">
+                    <div class="img-w"><img :src="item.image" /></div>
+                    <div class="li-h clearfix">
+                      <span class="hs">{{item.name}}</span>
+                      <div class="ht">{{item.title}}</div>
+                    </div>
+                    <div class="li-tags">
+                      <span class="gs" v-if="item.pay_num_type==1">一次付清</span>
+                      <span class="gs" v-else>多次付清</span>
+                      <span class="gs" v-if="item.win_type==1">单人中榜</span>
+                      <span class="gs" v-else>多人中榜</span>
+                      <span class="gs" v-if="item.is_trustee==1">托管</span>
+                      <span class="gs" v-else>不托管</span>
+                    </div>
+                    <div class="li-date">任务周期：<span>{{item.task_start_time}}至{{item.task_end_time}}</span></div>
+                    <div class="li-date">报名截止日期：<span>{{item.signup_end_time}}</span></div>
+                    <div class="li-price">酬金：<span class="price">￥{{item.total_money}}</span></div>
+                    <div class="li-c clearfix">
+                      <div class="li-private fl">
+                        <img :src="item.avatar">
+                        <div class="name">{{item.nickname}}</div>
+                      </div>
+                      <div class="last fr">教棋</div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <!--index-sec2-item end-->
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-tab end-->
+      </div>
+    </div>
+    <!--index-sec2 end-->
+    <!--index-asd start-->
+    <div class="index-asd w-1200 clearfix">
+      <div class="index-asd-li fl">
+        <a href=""><img src="images/index44.png" /></a>
+      </div>
+      <div class="index-asd-li fr">
+        <a href=""><img src="images/index45.png" /></a>
+      </div>
+    </div>
+    <!--index-asd end-->
+    <!--index-sec2 start-->
+    <div class="index-sec2 w-1200">
+      <div class="index-sec2-content clearfix">
+        <!--index-sec2-asd start-->
+        <div class="index-sec2-asd h330">
+          <div class="con">
+            <h2 class="t">热门赛事</h2>
+            <div class="c">棋局江湖，棋局平天下， 华山论剑</div>
+            <a class="more" href="">查看更多 ></a>
+          </div>
+        </div>
+        <!--index-sec2-asd end-->
+        <!--index-sec2-tab start-->
+        <div class="index-sec2-tab">
+          <ul class="index-tab-hd clearfix">
+            <li class="hd-li on">直播推荐</li>
+            <li class="hd-li">赛事直播</li>
+            <a class="index-more fr" href="">点击更多</a>
+          </ul>
+          <div class="index-tab-bd">
+            <div class="bd-box" style="display: block">
+              <!--index-sec2-item start-->
+              <div class="index-sec2-item">
+                <div class="bor">
+                  <a href="">
+                    <div class="img-w"><img src="images/index22.png" /></div>
+                  </a>
+                  <div class="li-t clearfix">
+                    <div class="t fl">三星杯决赛</div>
+                    <div class="tag fr">五子棋</div>
+                  </div>
+                  <div class="li-c clearfix">
+                    <div class="li-private fl">
+                      <img src="images/index22.png" />
+                      <div class="name">赛亚</div>
+                    </div>
+                    <div class="up fr">1589.2万</div>
+                  </div>
+                </div>
+              </div>
+              <!--index-sec2-item end-->
+              <!--index-sec2-item start-->
+              <div class="index-sec2-item">
+                <div class="bor">
+                  <a href="">
+                    <div class="img-w"><img src="images/index22.png" /></div>
+                  </a>
+                  <div class="li-t clearfix">
+                    <div class="t fl">三星杯决赛</div>
+                    <div class="tag fr">五子棋</div>
+                  </div>
+                  <div class="li-c clearfix">
+                    <div class="li-private fl">
+                      <img src="images/index22.png" />
+                      <div class="name">赛亚</div>
+                    </div>
+                    <div class="up fr">1589.2万</div>
+                  </div>
+                </div>
+              </div>
+              <!--index-sec2-item end-->
+              <!--index-sec2-item start-->
+              <div class="index-sec2-item">
+                <div class="bor">
+                  <a href="">
+                    <div class="img-w"><img src="images/index22.png" /></div>
+                  </a>
+                  <div class="li-t clearfix">
+                    <div class="t fl">三星杯决赛</div>
+                    <div class="tag fr">五子棋</div>
+                  </div>
+                  <div class="li-c clearfix">
+                    <div class="li-private fl">
+                      <img src="images/index22.png" />
+                      <div class="name">赛亚</div>
+                    </div>
+                    <div class="up fr">1589.2万</div>
+                  </div>
+                </div>
+              </div>
+              <!--index-sec2-item end-->
+              <!--index-sec2-item start-->
+              <div class="index-sec2-item">
+                <div class="bor">
+                  <a href="">
+                    <div class="img-w"><img src="images/index22.png" /></div>
+                  </a>
+                  <div class="li-t clearfix">
+                    <div class="t fl">三星杯决赛</div>
+                    <div class="tag fr">五子棋</div>
+                  </div>
+                  <div class="li-c clearfix">
+                    <div class="li-private fl">
+                      <img src="images/index22.png" />
+                      <div class="name">赛亚</div>
+                    </div>
+                    <div class="up fr">1589.2万</div>
+                  </div>
+                </div>
+              </div>
+              <!--index-sec2-item end-->
+              <!--index-sec2-item start-->
+              <div class="index-sec2-item">
+                <div class="bor">
+                  <a href="">
+                    <div class="img-w"><img src="images/index22.png" /></div>
+                  </a>
+                  <div class="li-t clearfix">
+                    <div class="t fl">三星杯决赛</div>
+                    <div class="tag fr">五子棋</div>
+                  </div>
+                  <div class="li-c clearfix">
+                    <div class="li-private fl">
+                      <img src="images/index22.png" />
+                      <div class="name">赛亚</div>
+                    </div>
+                    <div class="up fr">1589.2万</div>
+                  </div>
+                </div>
+              </div>
+              <!--index-sec2-item end-->
+              <!--index-sec2-item start-->
+              <div class="index-sec2-item">
+                <div class="bor">
+                  <a href="">
+                    <div class="img-w"><img src="images/index22.png" /></div>
+                  </a>
+                  <div class="li-t clearfix">
+                    <div class="t fl">三星杯决赛</div>
+                    <div class="tag fr">五子棋</div>
+                  </div>
+                  <div class="li-c clearfix">
+                    <div class="li-private fl">
+                      <img src="images/index22.png" />
+                      <div class="name">赛亚</div>
+                    </div>
+                    <div class="up fr">1589.2万</div>
+                  </div>
+                </div>
+              </div>
+              <!--index-sec2-item end-->
+              <!--index-sec2-item start-->
+              <div class="index-sec2-item">
+                <div class="bor">
+                  <a href="">
+                    <div class="img-w"><img src="images/index22.png" /></div>
+                  </a>
+                  <div class="li-t clearfix">
+                    <div class="t fl">三星杯决赛</div>
+                    <div class="tag fr">五子棋</div>
+                  </div>
+                  <div class="li-c clearfix">
+                    <div class="li-private fl">
+                      <img src="images/index22.png" />
+                      <div class="name">赛亚</div>
+                    </div>
+                    <div class="up fr">1589.2万</div>
+                  </div>
+                </div>
+              </div>
+              <!--index-sec2-item end-->
+            </div>
+            <div class="bd-box">
+              <!--index-sec2-item start-->
+              <div class="index-sec2-item">
+                <div class="bor">
+                  <a href="">
+                    <div class="img-w"><img src="images/index22.png" /></div>
+                  </a>
+                  <div class="li-t clearfix">
+                    <div class="t fl">三星杯决赛</div>
+                    <div class="tag fr">五子棋</div>
+                  </div>
+                  <div class="li-c clearfix">
+                    <div class="li-private fl">
+                      <img src="images/index22.png" />
+                      <div class="name">赛亚</div>
+                    </div>
+                    <div class="up fr">1589.2万</div>
+                  </div>
+                </div>
+              </div>
+              <!--index-sec2-item end-->
+            </div>
+          </div>
+        </div>
+        <!--index-sec2-tab end-->
+      </div>
+    </div>
+    <!--index-sec2 end-->
+    <!--index-sec3 start-->
+    <div class="index-sec3 w-1200">
+      <div class="index-sec2-title clearfix">
+        <h2 class="tt fl">玻说坡话</h2>
+        <a class="index-more fr" href="/boPoList/index.html">点击更多</a>
+      </div>
+      <div class="index-sec3-content clearfix">
+        <div class="index-sec3-dl" v-for="item in articleList" :key="item.id">
+          <div class="dt">
+            <a :href="'/boPoList/bopoView.html?id='+item.id"><img :src="item.image" /></a>
+          </div>
+          <div class="dd">
+            <div class="dd-t"><a :href="'/boPoList/bopoView.html?id='+item.id">{{item.title}}</a></div>
+            <div class="dd-c">{{item.descri}}</div>
+            <div class="dd-d">发布时间：{{item.addtime}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--index-sec3 end-->
+    <!--index-sec3 start-->
+    <div class="index-sec3 w-1200">
+      <div class="index-sec2-title clearfix">
+        <h2 class="tt fl">合作机构</h2>
+        <!-- <a class="index-more fr" href="">点击更多</a> -->
+      </div>
+      <ul class="index-sec3-ul clearfix">
+        <li v-for="item in partnerList" :key="item.id">
+          <!-- <a href=""> -->
+          <img :src="item.image" />
+          <!-- </a> -->
+        </li>
+      </ul>
+    </div>
+    <!--index-sec3 end-->
+  </div>
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
 
-    <script src="/js/common.js"></script>
-    <script src="/js/index.js"></script>
-  </body>
+  <script src="/js/common.js"></script>
+  <script src="/js/index.js"></script>
+</body>
+
 </html>

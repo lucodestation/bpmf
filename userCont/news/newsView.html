@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>消息详情</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/qs.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+  <script src="/utils/util.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <!--center-side start-->
+      <div class="public-user"></div>
+      <!--center-side end-->
+      <!--center-content start-->
+      <div class="center-content fr" id="app">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit">消息详情</div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <div class="center-news-detail">
+              <div class="detail-tit text-c f-weight">{{newsCont.title}}</div>
+              <div class="detail-date text-c m-b-15 m-t-15">{{newsCont.addtime}}</div>
+              <div class="article" v-html="newsCont.content"> </div>
+            </div>
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/news/newsView.js"></script>
+</body>
+
+</html>
