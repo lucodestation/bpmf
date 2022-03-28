@@ -252,14 +252,44 @@ new Vue({
         wxImg: '',
     },
     created: function () {
-        var _this = this;
-        // 获取微信二维码
         if (!localStorage.getItem('token')) {
-            request({ url: '/api/Loginwx/getCode', method: 'POST' }).then(function (res) {
-                if (res.code == 200) {
-                    _this.wxImg = res.data;
-                }
-            });
+            var searchParams = Qs.parse(location.search.substr(1));
+            console.log(searchParams);
+            if (searchParams.code && searchParams.state) {
+                // 微信登录-根据code和state获取openid和用户信息
+                request({
+                    url: '/api/Loginwx/getOpenid',
+                    method: 'post',
+                    data: {
+                        code: searchParams.code,
+                        state: searchParams.state,
+                    },
+                }).then(function (result) {
+                    console.log('/api/Loginwx/getOpenid', result);
+                    // code: 202
+                    // msg: "授权失败,请重新操作！"
+                });
+            }
+            else {
+                // 微信登录-获取微信登录二维码
+                request({ url: '/api/Loginwx/getCode', method: 'POST' }).then(function (res) {
+                    if (res.code == 200) {
+                        // this.wxImg = res.data
+                        console.log(res.data.substr(res.data.indexOf('?') + 1));
+                        var searchParams_1 = Qs.parse(res.data.substr(res.data.indexOf('?') + 1));
+                        console.log(searchParams_1);
+                        new WxLogin({
+                            self_redirect: false,
+                            // id: this.$refs.wechatLoginQrcode,
+                            id: 'wechatLoginQrcode',
+                            appid: searchParams_1.appid,
+                            scope: searchParams_1.scope,
+                            redirect_uri: searchParams_1.redirect_uri,
+                            state: searchParams_1.state,
+                        });
+                    }
+                });
+            }
         }
     },
     methods: {

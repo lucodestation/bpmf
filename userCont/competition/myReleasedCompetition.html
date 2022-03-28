@@ -156,6 +156,23 @@
 
         <!-- 赛事列表表格 -->
         <div class="center-inner-table-wrap">
+          <div class="main-pages">
+            <a class="pages-a" href="">首页</a>
+            <a class="pages-a" href="">上一页</a>
+            <a class="pages-a" href="">1</a>
+            <a class="pages-a" href="">2</a>
+            <a class="pages-a" href="">3</a>
+            <span class="pages-s">. . .</span>
+            <a class="pages-a" href="">下一页</a>
+            <span class="pages-s">共100页</span>
+            <span class="pages-s">到第</span>
+            <input class="pages-input" type="text" value="12" />
+            <span class="pages-s">页</span>
+            <a class="pages-a" href="">尾页</a>
+          </div>
+
+          <el-pagination layout="prev, pager, next" :total="1000" background> </el-pagination>
+
           <table class="center-inner-table center-order-table">
             <tr>
               <th>赛事标题</th>
