@@ -208,27 +208,26 @@
       </div>
     </div>
     <!--审核进入弹出-->
-    <!-- <div class="live-pop bond-pop">
+    <div class="live-pop bond-pop">
       <div class="live-pop-box">
         <div class="live-pop-content">
-          <div class="bond-close"></div>
+          <div class="bond-close" @click="onVipQuery"></div>
           <div class="live-pop-tit">直播提示</div>
           <div class="tip">本直播间，开播人已设置审核进入，审核通过后进入</div>
-          <div class="bor clearfix">
+          <!-- <div class="bor clearfix">
             <div class="w50 fl">
               <input type="text" class="input" placeholder="姓名">
             </div>
             <div class="w50 fl">
               <input type="text" class="input" placeholder="电话">
             </div>
-          </div>
+          </div> -->
           <div class="bot">
-            <a class="bond-btn" href="">提交</a>
+            <div class="bond-btn" @click=''>提交</div>
           </div>
         </div>
       </div>
-
-    </div> -->
+    </div>
     <!--输入密码弹出-->
     <div class="live-pop bond-pop" v-if="pwdShow">
       <div class="live-pop-box">

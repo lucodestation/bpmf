@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>发布直播-成功</title>
+  <title>直播详情</title>
   <link rel="stylesheet" href="/plugins/animate.min.css">
   <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
   <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
@@ -19,65 +19,69 @@
   <script src="/plugins/vue.min.js"></script>
   <script src="/plugins/axios.min.js"></script>
   <script src="/utils/request.js"></script>
-  <script src="/utils/util.js"></script>
 </head>
 
 <body>
   <!-- 公共头部 -->
   <header class="public-header"></header>
-  <!--publish-container start-->
-  <div class="publish-container" id="app">
-    <!--inner-position start-->
-    <div class="inner-position w-1200">
-      <a href="/index.html">首页</a>
-      <span>&lt;</span>
-      <a class="current" href="./release.html"> 发布直播</a>
-    </div>
-    <!--inner-position end-->
-    <!--publish-head start-->
-    <div class="publish-head w-1200">
-      <div class="content clearfix">
-        <div class="head-li li1">
-          <div class="t">1.发起直播</div>
-          <div class="icon"></div>
-        </div>
-        <div class="head-line"></div>
-        <div class="head-li li2">
-          <div class="t">2.直播审核</div>
-          <div class="icon"></div>
-        </div>
-        <div class="head-line"></div>
-        <div class="head-li li3">
-          <div class="t">3复制推流地址</div>
-          <div class="icon"></div>
-        </div>
-        <div class="head-line"></div>
-        <div class="head-li li4">
-          <div class="t">4.粘贴地址开播</div>
-          <div class="icon"></div>
-        </div>
-      </div>
-    </div>
-    <!--publish-head end-->
-    <!--publish-main start-->
-    <div class="publish-main w-1200">
-      <h1 class="publish-tit">提交成功</h1>
-      <!--publish-content start-->
-      <div class="publish-content">
-        <div class="publish-submit">
-          <div class="submit-success">
-            <img src="/images/icon-sucess.png">
-            <div class="t" v-if="isShow">提交成功，审核通过</div>
-            <div class="t" v-else>提交成功，等待审核中</div>
-            <a class="success-a" href="/userCont/live/myLive.html">查看我的直播</a>
+  <!--center-container start-->
+  <div class="center-container" id="app">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <div class="public-user"></div>
+      <!--center-content start-->
+      <div class="center-content fr" id="app">
+        <!--center-inner start-->
+        <!--inner-position end-->
+        <!--publish-head start-->
+        <div class="publish-head">
+          <div class="content clearfix">
+            <div class="head-li li1">
+              <div class="t">1.发起直播</div>
+              <div class="icon"></div>
+            </div>
+            <div class="head-line"></div>
+            <div class="head-li li2">
+              <div class="t">2.直播审核</div>
+              <div class="icon"></div>
+            </div>
+            <div class="head-line"></div>
+            <div class="head-li li3">
+              <div class="t">3复制推流地址</div>
+              <div class="icon"></div>
+            </div>
+            <div class="head-line"></div>
+            <div class="head-li li4">
+              <div class="t">4.粘贴地址开播</div>
+              <div class="icon"></div>
+            </div>
           </div>
         </div>
+        <!--publish-head end-->
+        <!--publish-main start-->
+        <div class="publish-main">
+          <h1 class="publish-tit">提交成功</h1>
+          <!--publish-content start-->
+          <div class="publish-content">
+            <div class="publish-submit">
+              <div class="submit-success">
+                <img src="/images/icon-sucess.png">
+                <div class="t" v-if="isShow">提交成功，审核通过</div>
+                <div class="t" v-else>提交成功，等待审核中</div>
+                <a class="success-a" href="/userCont/live/myLive.html">查看我的直播</a>
+              </div>
+            </div>
+          </div>
+          <!--publish-content end-->
+        </div>
+        <!--publish-main end-->
+        <!--center-inner end-->
       </div>
-      <!--publish-content end-->
+      <!--center-content end-->
     </div>
-    <!--publish-main end-->
+    <!--main-center end-->
   </div>
-  <!--publish-container end-->
+  <!--center-container end-->
   <!--开启直播弹出-->
   <!-- <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
     id="liveCont">
@@ -103,7 +107,7 @@
   <!-- 公共底部 -->
   <footer class="public-footer"></footer>
   <script src="/js/common.js"></script>
-  <script src="/js/live/liveSuccess.js"></script>
+  <script src="/js/userCont/live/liveSuccess.js"></script>
 </body>
 
 </html>

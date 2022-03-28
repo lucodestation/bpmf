@@ -50,12 +50,9 @@
           <div class="center-inner-content">
             <!--center-order-state start-->
             <div class="center-order-state m-b-20 clearfix">
-              <div class="li active"><a href="">全部直播</a> </div>
-              <div class="li"><a href="">审核中</a> </div>
-              <div class="li"><a href="">待直播</a> </div>
-              <div class="li"><a href="">直播中</a> </div>
-              <div class="li"><a href="">已结束</a> </div>
-              <div class="li"><a href="">未通过</a> </div>
+              <div v-for="item in navList" :key="item.id" class="li" :class="item.id==navId?'active':''">
+                <a href="javascript:void(0);" @click="onNavClick(item.id)">{{item.name}}</a>
+              </div>
             </div>
             <!--center-order-state end-->
             <!--center-inner-form start-->
@@ -127,7 +124,7 @@
                   <td v-if="item.status==3">已结束</td>
                   <td v-if="item.status=='-1'||item.status==3">
                     <div class="handle text-c">
-                      <a class="handle-btn blue" :href="'./liveCont.html?id='+item.id">查看详情</a>
+                      <a class="handle-btn blue" :href="'./notice.html?id='+item.id">查看详情</a>
                     </div>
                   </td>
                   <td v-if="item.status==1">

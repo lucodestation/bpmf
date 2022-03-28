@@ -107,7 +107,7 @@
                   </td>
                   <td>
                     <p class="handle text-c" v-if="item.status==2">
-                      <a class="handle-btn blue" href="4直播频道-4教课课程直播详情页.html">去直播间</a>
+                      <a class="handle-btn blue" :href="'/live/liveCont.html?id='+item.live_id">去直播间</a>
                     </p>
                     <p class="handle text-c" v-else>
                       <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>

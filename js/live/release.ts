@@ -573,20 +573,11 @@ new Vue({
       request({ url: '/api/Live/push', method: 'POST', data: this.formData, }).then((res) => {
         layer.close(loadingIndex)
         if (res.code == 200) {
-          location.href = '/live/liveSuccess.html?push_url=' + res.data.push_url
-          // this.push_url =
-          // this.formData = {
-          //   type: '1',// 1课程直播，2赛事直播
-          //   join_type: '1',// 1申请进入（需要发布者审核），2全网公开，3会员公开，4设置密码
-          //   c_id: '',// 分类
-          //   title: '',// 标题
-          //   start_time: '',// 开始时间
-          //   end_time: '',// 结束时间
-          //   descri: '',// 描述
-          //   image: '',// 封面图
-          //   password: '',// 密码进入，此值必传
-          // }
-          // syalert.syopen('liveCont')
+          if (res.data.status == 1) {
+            location.href = '/live/liveSuccess.html?push_url=' + res.data.push_url
+          } else {
+            location.href = '/live/liveSuccess.html'
+          }
         } else {
           layer.msg(result.msg)
         }

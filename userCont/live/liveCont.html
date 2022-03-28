@@ -90,8 +90,8 @@
                 <td v-if="item.status==0">待审核</td>
                 <td v-if="item.status==1">通过</td>
                 <td>
-                  <p class="color-orange" v-if="item.status==0">审核通过</p>
-                  <p class="color-orange" v-if="item.status==1">取消通过</p>
+                  <p class="color-orange" v-if="item.status==0" @click="onShheClick(item.id,1)">审核通过</p>
+                  <p class="color-orange" v-if="item.status==1" @click="onShheClick(item.id,2)">取消通过</p>
                 </td>
               </tr>
             </table>

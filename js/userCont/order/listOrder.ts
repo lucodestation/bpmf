@@ -14,15 +14,17 @@ new Vue({
     }
   },
   mounted() {
-    const searchParams = Qs.parse(location.search.substr(1))
-    this.id = searchParams.id
-    this.ondetail()
-    this.onuserList()
+
+    request({ url: '/api/Mine/attendBangwenOrder', method: 'POST', data: { page: 1, pagenum: 10 } }).then((res) => {
+      if (res.code == 200) {
+        this.userList = res.data.data
+      }
+    })
   },
   methods: {
     // 列表数据
     ondetail() {
-      request({ url: '/api/Live/detail', method: 'POST', data: { live_id: this.id } }).then((res) => {
+      request({ url: '/api/Mine/attendBangwenOrder', method: 'POST', data: {} }).then((res) => {
         if (res.code == 200) {
           var date1 = new Date((res.data.end_time + ':00').replace(/\-/g, "/"));    //开始时间
           var date2 = new Date(res.data.start_time.replace(/\-/g, "/") + ':00');    //结束时间
@@ -40,28 +42,6 @@ new Vue({
           // var seconds = Math.round(leave3 / 1000)
           this.dateTime = days * 24 * 60 + hours * 60 + minutes
           this.liveCont = res.data
-        }
-      })
-    },
-    onuserList() {
-      request({ url: '/api/Live/userList', method: 'POST', data: { live_id: Number(this.id), page: 1, pagenum: 10 } }).then((res) => {
-        if (res.code == 200) {
-          this.userList = res.data.data
-        }
-      })
-    },
-    // 审核或取消
-    onShheClick(id, k) {
-      request({ url: '/api/Live/checkPass', method: 'POST', data: { check_id: id } }).then((res) => {
-        if (res.code == 200) {
-          if (k == 1) {
-            layer.msg('审核成功')
-          } else {
-            layer.msg('取消通过成功')
-          }
-          this.onuserList()
-        } else {
-          layer.msg(res.msg)
         }
       })
     }

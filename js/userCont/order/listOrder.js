@@ -15,16 +15,18 @@ new Vue({
         };
     },
     mounted: function () {
-        var searchParams = Qs.parse(location.search.substr(1));
-        this.id = searchParams.id;
-        this.ondetail();
-        this.onuserList();
+        var _this = this;
+        request({ url: '/api/Mine/attendBangwenOrder', method: 'POST', data: { page: 1, pagenum: 10 } }).then(function (res) {
+            if (res.code == 200) {
+                _this.userList = res.data.data;
+            }
+        });
     },
     methods: {
         // 列表数据
         ondetail: function () {
             var _this = this;
-            request({ url: '/api/Live/detail', method: 'POST', data: { live_id: this.id } }).then(function (res) {
+            request({ url: '/api/Mine/attendBangwenOrder', method: 'POST', data: {} }).then(function (res) {
                 if (res.code == 200) {
                     var date1 = new Date((res.data.end_time + ':00').replace(/\-/g, "/")); //开始时间
                     var date2 = new Date(res.data.start_time.replace(/\-/g, "/") + ':00'); //结束时间
@@ -42,32 +44,6 @@ new Vue({
                     // var seconds = Math.round(leave3 / 1000)
                     _this.dateTime = days * 24 * 60 + hours * 60 + minutes;
                     _this.liveCont = res.data;
-                }
-            });
-        },
-        onuserList: function () {
-            var _this = this;
-            request({ url: '/api/Live/userList', method: 'POST', data: { live_id: Number(this.id), page: 1, pagenum: 10 } }).then(function (res) {
-                if (res.code == 200) {
-                    _this.userList = res.data.data;
-                }
-            });
-        },
-        // 审核或取消
-        onShheClick: function (id, k) {
-            var _this = this;
-            request({ url: '/api/Live/checkPass', method: 'POST', data: { check_id: id } }).then(function (res) {
-                if (res.code == 200) {
-                    if (k == 1) {
-                        layer.msg('审核成功');
-                    }
-                    else {
-                        layer.msg('取消通过成功');
-                    }
-                    _this.onuserList();
-                }
-                else {
-                    layer.msg(res.msg);
                 }
             });
         }

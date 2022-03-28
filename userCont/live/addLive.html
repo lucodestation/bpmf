@@ -8,6 +8,7 @@
   <script src="/plugins/date/jedate.js"></script>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
   <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
   <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
   <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
@@ -19,8 +20,55 @@
   <script src="/plugins/swiper/swiper.min.js"></script>
   <script src="/plugins/syalert/syalert.min.js"></script>
   <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/qrcode.min.js"></script>
+  <script src="/plugins/qs.min.js"></script>
+  <script src="/plugins/element-ui/element-ui.min.js"></script>
   <script src="/plugins/axios.min.js"></script>
+  <script src="/plugins/aliyun-oss-sdk.min.js"></script>
   <script src="/utils/request.js"></script>
+  <script src="/utils/util.js"></script>
+  <style>
+    /* 隐藏秒 */
+    .laydate-time-list>li:nth-child(3) ol li {
+      display: none;
+    }
+
+    /* 日期时间选择器（触发打开日期时间选择器的元素） */
+    .date-time-picker {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #999;
+    }
+
+    .date-time-picker .date-time {
+      color: #333;
+    }
+
+    /* 上传封面图 */
+    .upload-cover-image .con {
+      display: flex;
+    }
+
+    .upload-cover-image .con .publish-up {
+      margin-top: 0;
+    }
+
+    .publish-up,
+    .publish-up .cover-image {
+      width: 160px;
+      height: 160px;
+    }
+
+    /* 隐藏 element-ui 对话框的标题栏 */
+    .el-dialog .el-dialog__header {
+      display: none;
+    }
+
+    .el-dialog .el-dialog__body {
+      padding: 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -33,6 +81,7 @@
       <div class="public-user"></div>
       <!--center-content start-->
       <div class="center-content fr" id="app">
+        <deposit-dialog ref="depositDialog"></deposit-dialog>
         <!--center-inner start-->
         <div class="center-inner">
           <div class="center-inner-tit">发起直播</div>
@@ -88,8 +137,8 @@
               <div class="label"><span class="color-red">*</span>设置棋类型：</div>
               <div class="con">
                 <div class="live-bor w420">
-                  <select class="select rate-100">
-                    <option>选择棋类型</option>
+                  <select class="select rate-100" v-model="formData.c_id">
+                    <option :value="item.id" v-for="item in cateList">{{item.name}}</option>
                   </select>
                 </div>
               </div>
@@ -110,20 +159,18 @@
               <div class="label"><span class="color-red">*</span>直播讲解时间：</div>
               <div class="con">
                 <div class="bor clearfix">
-                  <input type="text" class="input w285 fl" id="startDate" placeholder="开始时间">
+                  <div ref="signUpStartDate" class="date-time-picker input w285 fl">
+                    <span class="date-time" v-if="signUpStartDate">{{ signUpStartDate }}</span>
+                    <span v-else>{{ '开始时间' }}</span>
+                  </div>
                   <span class="date-mid fl">至</span>
-                  <input type="text" class="input w285 fr" id="endDate" placeholder="结束时间">
+                  <div ref="signUpEndDate" class="date-time-picker input w285 fl">
+                    <span class="date-time" v-if="signUpEndDate">{{ signUpEndDate }}</span>
+                    <span v-else>{{ '结束时间' }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-            <script>
-              jeDate("#startDate", {
-                format: "YYYY-MM-DD"
-              });
-              jeDate("#endDate", {
-                format: "YYYY-MM-DD"
-              });
-            </script>
             <!--publish-item end-->
             <!--publish-item start-->
             <div class="publish-item clearfix">
@@ -148,7 +195,7 @@
               <div class="label"><span class="color-red">*</span>上传直播封面：</div>
               <div class="con">
                 <!--头像start-->
-                <div class="publish-up-head">
+                <!-- <div class="publish-up-head">
                   <div id="drop_area">
                     <div class="preview">
                       <img src="/images/trans.png" class="img-responsive" alt="" title="">
@@ -157,26 +204,31 @@
                         <div class="c">16:9 例如320x180，支持
                           png、jpg格式，不超过2M</div>
                       </div>
-
                     </div>
                   </div>
-                  <script src="/plugins/singleUp.js"></script>
-                  <script type="text/javascript">
-                    var dragImgUpload = new DragImgUpload("#drop_area", {
-                      callback: function (files) {
-                        //回调函数，可以传递给后台等等
-                        var file = files[0];
-                        console.log(file.name);
-                      }
-                    })
-                  </script>
+                </div> -->
+                <div class="publish-up-head">
+                  <label class="publish-up">
+                    <input type="file" accept=".png,.jpg,.jpeg,.bmp" multiple hidden @change="handleCoverFileChange" />
+                    <div id="drop_area" v-if="!this.coverImage.url">
+                      <div class="preview">
+                        <img src="/images/trans.png" class="img-responsive" alt="" title="">
+                        <div class="txt text-c">
+                          <div class="t">上传直播封面</div>
+                          <div class="c">16:9 例如320x180，支持
+                            png、jpg格式，不超过2M</div>
+                        </div>
+                      </div>
+                    </div>
+                    <img class="cover-image" :src="this.coverImage.url" v-else />
+                  </label>
                 </div>
                 <!--头像end-->
               </div>
             </div>
             <!--publish-item end-->
             <div class="publish-check">
-              <div class="check fl">
+              <div class="check fl" @click="onintClick">
                 <input class="check-input" type="checkbox">
                 <span class="check-s"></span>
               </div>
@@ -184,7 +236,7 @@
                 法规，并对本承诺负全责。</span>
             </div>
             <div class="publish-bottom">
-              <button class="publish-btn" onClick="syalert.syopen('alert2')">提交申请</button>
+              <button class="publish-btn" @click="onAddClick">提交申请</button>
             </div>
           </div>
           <!--publish-content end-->
@@ -198,6 +250,101 @@
   <!--center-container end-->
   <!-- 公共底部 -->
   <footer class="public-footer"></footer>
+  <!-- 保证金对话框（包含保证金对话框、钱包支付对话框、支付宝支付对话框、微信支付对话框 -->
+  <div id="depositDialog" style="position: absolute; width: 0; height: 0; overflow: hidden">
+    <!-- 单个根元素 -->
+    <div>
+      <!-- 保证金对话框 -->
+      <el-dialog custom-class="bond-pop animated" :visible="depositDialogVisible" :show-close="false">
+        <div class="bond-content">
+          <div class="bond-close" @click="handleCloseDepositDialog"></div>
+          <div class="bond-tit">保证金</div>
+          <div class="bond-tip">本平台发布任务，需要保证金，才能享有权益 支付后个人中心可查看，随时可退</div>
+          <div class="bond-price">保证金：<span class="color-red">￥{{depositAmount}}</span></div>
+          <div class="bond-pay">
+            <div class="t">选择支付方式</div>
+            <div class="con clearfix">
+              <label class="li">
+                <input type="radio" class="bond-radio" name="payMethod" value="1" v-model.number="payMethod" />
+                <span class="radio-s"><img src="/images/pub14.png" /></span>
+              </label>
+
+              <label class="li">
+                <input type="radio" class="bond-radio" name="payMethod" value="2" v-model.number="payMethod" />
+                <span class="radio-s"><img src="/images/pub19.png" /></span>
+              </label>
+
+              <label class="li">
+                <input type="radio" class="bond-radio" name="payMethod" value="3" v-model.number="payMethod" />
+                <span class="radio-s"><img src="/images/pub13.png" /></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="last-bottom">
+            <button class="bond-btn" @click="confirmPayDeposit">确认并支付</button>
+          </div>
+        </div>
+      </el-dialog>
+
+      <!-- 钱包支付对话框 -->
+      <el-dialog custom-class="wallet-pop w850 animated" :visible="walletPayDialogVisible" :show-close="false">
+        <div class="wallet-con">
+          <div class="wallet-close" @click="handleCloseWalletPayDialog"></div>
+          <div class="t">钱包支付</div>
+          <div class="wallet-mid">
+            <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+            <div class="wallet-label">输入支付密码<a class="wallet-a fr color-gray" href="/userCont/wallet/pwd.html"
+                target="_blank">忘记密码？</a></div>
+            <div class="wallet-input">
+              <input class="input" type="password" v-model.trim="payPassword" />
+            </div>
+          </div>
+          <div class="wallet-bottom">
+            <button class="wallet-btn" @click="handleSubmitWalletPay">确定</button>
+          </div>
+        </div>
+      </el-dialog>
+
+      <!-- 支付宝支付对话框 -->
+      <el-dialog custom-class="wallet-pop animated" :visible="alipayPayDialogVisible" :show-close="false" width="600px">
+        <div class="wallet-con">
+          <div class="wallet-close" @click="handleCloseAlipayPayDialog"></div>
+          <div class="t">支付宝支付</div>
+          <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+          <div class="con clearfix">
+            <div class="wx-g">
+              <!-- <img :src="alipayPayQrcode" /> -->
+              <div id="alipayPayQrcode"></div>
+              <div class="tip">请使用支付宝“扫一扫”,扫描二维码支付</div>
+            </div>
+            <div class="wx-i">
+              <img src="/images/pub-alipay.png" />
+            </div>
+          </div>
+        </div>
+      </el-dialog>
+
+      <!-- 微信支付对话框 -->
+      <el-dialog custom-class="wallet-pop animated" :visible="wechatPayDialogVisible" :show-close="false" width="600px">
+        <div class="wallet-con">
+          <div class="wallet-close" @click="handleCloseWechatPayDialog"></div>
+          <div class="t">微信支付</div>
+          <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+          <div class="con clearfix">
+            <div class="wx-g">
+              <!-- <img :src="wechatPayQrcode" /> -->
+              <div id="wechatPayQrcode"></div>
+              <div class="tip">请使用微信“扫一扫”,扫描二维码支付</div>
+            </div>
+            <div class="wx-i">
+              <img src="/images/pub1.jpg" />
+            </div>
+          </div>
+        </div>
+      </el-dialog>
+    </div>
+  </div>
   <!--开启直播弹出-->
   <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
     id="alert2">

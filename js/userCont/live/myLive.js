@@ -8,6 +8,8 @@ new Vue({
     el: '#app',
     data: function () {
         return {
+            navList: [{ id: '', name: '全部直播' }, { id: 1, name: '审核中' }, { id: 2, name: '待直播' }, { id: 3, name: '直播中' }, { id: 4, name: '已结束' }, { id: 5, name: '未通过' }],
+            navId: '',
             pushList: [],
             liveCont: '', // 点击列表详情
         };
@@ -16,10 +18,14 @@ new Vue({
         this.onpushList();
     },
     methods: {
+        onNavClick: function (id) {
+            this.navId = id;
+            this.onpushList();
+        },
         // 列表数据
         onpushList: function () {
             var _this = this;
-            request({ url: '/api/Live/pushList', method: 'POST', data: { page: 1, pagenum: 10, type: '' } }).then(function (res) {
+            request({ url: '/api/Live/pushList', method: 'POST', data: { page: 1, pagenum: 10, type: this.navId } }).then(function (res) {
                 if (res.code == 200) {
                     res.data.data.map(function (item) {
                         var date1 = new Date((item.end_time + ':00').replace(/\-/g, "/")); //开始时间
