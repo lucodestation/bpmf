@@ -127,14 +127,14 @@
                   <td v-if="item.status==3">已结束</td>
                   <td v-if="item.status=='-1'||item.status==3">
                     <div class="handle text-c">
-                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
+                      <a class="handle-btn blue" :href="'./liveCont.html?id='+item.id">查看详情</a>
                     </div>
                   </td>
                   <td v-if="item.status==1">
                     <div class="handle text-c">
                       <div class="handle-btn m-r-10" @click="onBroadcast(item)">开始直播</div>
                       <div class="handle-btn red m-r-10" @click="onQuery(item)">取消直播</div>
-                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
+                      <a class="handle-btn blue" :href="'./notice.html?id='+item.id">查看详情</a>
                     </div>
                   </td>
                   <td v-if="item.status==2">

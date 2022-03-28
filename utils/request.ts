@@ -1,4 +1,5 @@
-const baseURL = 'http://bpmf.duowencaiwu.com'
+// const baseURL = 'http://bpmf.duowencaiwu.com'
+const baseURL = 'http://192.168.0.158'
 
 const request = axios.create({
   baseURL, // url = base url + request url
