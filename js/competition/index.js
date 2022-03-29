@@ -52,9 +52,41 @@ new Vue({
             competitionCateList: [],
             // 激战中赛事
             fightingCompetition: [],
+            // 激战中赛事分类 id
+            fightingCompetitionCate: '',
             // 火热报名中赛事
             applyingCompetition: [],
+            // 火热报名中赛事分类 id
+            applyingCompetitionCate: '',
         };
+    },
+    // 过滤器
+    filters: {
+        // 观看人数
+        viewersNumber: function (value) {
+            // 例：
+            // 20000 20001 返回 2万
+            // 21000 返回 2.1万
+            // 21500 返回 2.2万
+            // 不大于 9999 返回原值
+            if (value > 9999) {
+                var temp = (value / 10000).toFixed(1);
+                if (temp.slice(-1) === '0') {
+                    return parseInt(temp) + '万';
+                }
+                else {
+                    return temp + '万';
+                }
+            }
+            return value;
+        },
+        // 奖金
+        bonus: function (value) {
+            if (value > 9999 && value % 10000 === 0) {
+                return value / 10000 + '万元';
+            }
+            return value * 1 + '元';
+        },
     },
     created: function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -71,6 +103,11 @@ new Vue({
                 // 加载直播推荐
                 request({
                     url: '/api/Live/recomLive',
+                    method: 'post',
+                    data: {
+                        page: 1,
+                        pagenum: 3,
+                    },
                 }).then(function (result) {
                     if (+result.code === 200) {
                         _this.liveRecommend = result.data.data;
@@ -140,27 +177,47 @@ new Vue({
     },
     methods: {
         // 加载激战中赛事
-        _loadFightingCompetition: function (params) {
+        _loadFightingCompetition: function (data) {
             var _this = this;
             request({
                 url: '/api/Competitionindex/fightingList',
-                params: params,
+                method: 'post',
+                data: data,
             }).then(function (result) {
                 if (+result.code === 200) {
                     _this.fightingCompetition = result.data.data;
                 }
             });
         },
+        // 改变激战中赛事赛事分类
+        handleChangeFightingCompetitionCate: function (id) {
+            console.log(typeof id, id);
+            this.fightingCompetitionCate = id;
+            // 加载激战中赛事
+            this._loadFightingCompetition({
+                category_id: id,
+            });
+        },
         // 加载火热报名中赛事
-        _loadApplyingCompetition: function (params) {
+        _loadApplyingCompetition: function (data) {
             var _this = this;
             request({
                 url: '/api/competition/hot_apply_list',
-                params: params,
+                method: 'post',
+                data: data,
             }).then(function (result) {
                 if (+result.code === 200) {
                     _this.applyingCompetition = result.data;
                 }
+            });
+        },
+        // 改变火热报名中赛事赛事分类
+        handleChangeApplyingCompetitionCate: function (id) {
+            console.log(typeof id, id);
+            this.applyingCompetitionCate = id;
+            // 加载火热报名中赛事
+            this._loadApplyingCompetition({
+                category_id: id,
             });
         },
     },
