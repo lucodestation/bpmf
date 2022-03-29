@@ -178,15 +178,15 @@
                   <img :src="item.image" />
                 </div>
                 <div class="txt fl">
-                  <div class="t">{{item.title}}</div>
+                  <div class="t" :title="item.title">{{item.title}}</div>
                   <div class="c clearfix">
-                    <img class="icon" src="/images/m6.png" />
+                    <img class="icon" :src="item.avatar" />
                     <div class="n">{{item.nickname}}</div>
                   </div>
                 </div>
                 <div class="last fr">
                   <div class="cc color-orange">{{item.cate_name}}</div>
-                  <div class="num fr">{{item.see_num}}</div>
+                  <div class="num fr">{{ item.see_num | viewersNumber }}</div>
                 </div>
               </a>
             </div>
@@ -196,22 +196,25 @@
 
       <!-- 激战中赛事 -->
       <div class="index-sec2 w-1200">
+        <!-- 分类 -->
         <div class="index-sec2-title clearfix">
           <h2 class="t fl">激战中赛事</h2>
           <div class="match-tabs fl">
-            <a class="active" href="javascript:">全部</a>
-            <a href="javascript:" v-for="item in competitionCateList" :key="item.id">{{item.category_name}}</a>
+            <a :class="{active:fightingCompetitionCate === ''}" href="javascript:" @click="handleChangeFightingCompetitionCate('')">全部</a>
+            <a :class="{active:fightingCompetitionCate === item.id}" href="javascript:" v-for="item in competitionCateList" :key="item.id" @click="handleChangeFightingCompetitionCate(item.id)"
+              >{{item.category_name}}</a
+            >
           </div>
-          <a class="index-more fr" href="3赛事频道-更多比赛.html">点击更多</a>
+          <a class="index-more fr" href="/competition/competitionList.html">点击更多</a>
         </div>
+
+        <!-- 赛事列表 -->
         <div class="index-sec2-content clearfix">
           <div class="index-sec2-item" v-for="item in fightingCompetition" :key="item.id">
-            <div class="bor">
-              <a href="">
-                <div class="img-w"><img :src="item.cover_pricture" /></div>
-              </a>
+            <a class="bor" :href="'/competition/competitionDetail.html?competition_id=' + item.id">
+              <div class="img-w"><img :src="item.cover_pricture" /></div>
               <div class="li-t clearfix">
-                <div class="t fl">{{item.competition_name}}</div>
+                <div class="t fl" :title="item.competition_name">{{item.competition_name}}</div>
                 <div class="tag fr">{{item.category_name}}</div>
               </div>
               <div class="li-c clearfix">
@@ -222,39 +225,44 @@
                 <div class="up fr" v-if="+item.competition_type === 0">个人赛</div>
                 <div class="up fr" v-if="+item.competition_type === 1">团队赛</div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>
 
       <!-- 火热报名中 -->
       <div class="index-sec2 w-1200">
+        <!-- 分类 -->
         <div class="index-sec2-title clearfix">
           <h2 class="t fl">火热报名中</h2>
           <div class="match-tabs fl">
-            <a class="active" href="javascript:">全部</a>
-            <a href="javascript:" v-for="item in competitionCateList" :key="item.id">{{item.category_name}}</a>
+            <a :class="{active:applyingCompetitionCate === ''}" href="javascript:" @click="handleChangeApplyingCompetitionCate('')">全部</a>
+            <a :class="{active:applyingCompetitionCate === item.id}" href="javascript:" v-for="item in competitionCateList" :key="item.id" @click="handleChangeApplyingCompetitionCate(item.id)"
+              >{{item.category_name}}</a
+            >
           </div>
-          <a class="index-more fr" href="3赛事频道-更多比赛.html">点击更多</a>
+          <a class="index-more fr" href="/competition/competitionApply.html">点击更多</a>
         </div>
+
+        <!-- 赛事列表 -->
         <div class="index-sec2-content clearfix">
           <div class="index-sec2-item" v-for="item in applyingCompetition" :key="item.id">
             <div class="bor">
-              <a href="">
+              <a :href="'/competition/competitionDetail.html?competition_id=' + item.id">
                 <div class="img-w"><img :src="item.cover_picture" /></div>
                 <div class="li-t clearfix">
-                  <div class="t fl">{{item.competition_name}}</div>
+                  <div class="t fl" :title="item.competition_name">{{item.competition_name}}</div>
                   <div class="tag fr" v-if="item.category_id === 1">围棋</div>
                   <div class="tag fr" v-if="item.category_id === 2">象棋</div>
                   <div class="tag fr" v-if="item.category_id === 3">五子棋</div>
                   <div class="tag fr" v-if="item.category_id === 4">国际象棋</div>
                   <div class="tag fr" v-if="item.category_id === 5">其他</div>
                 </div>
-                <div class="li-org">组织者：{{item.sponsor}}</div>
-                <div class="li-cha">冠军奖：<span class="color-red">{{item.champion_money}}</span></div>
-                <div class="li-end">已参赛：{{item.join_number}}/{{item.upper_limit}}人</div>
-                <div class="index-sec2-btn" v-if="new Date(item.a_e_t * 1000) < new Date()">立即报名</div>
-                <div class="index-sec2-btn gray" v-else>报名截止</div>
+                <div class="li-org">组织者：{{item.nickname}}</div>
+                <div class="li-cha">冠军奖：<span class="color-red">{{ item.champion_money | bonus }}</span></div>
+                <div class="li-end">已参赛：{{item.join_number}}<span>/{{item.upper_limit > 0 ? item.upper_limit : 10000}}</span>人</div>
+                <div class="index-sec2-btn" v-if="item.status === 4">立即报名</div>
+                <div class="index-sec2-btn gray" v-if="item.status === 5">报名截止</div>
               </a>
             </div>
           </div>

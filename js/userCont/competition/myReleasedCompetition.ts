@@ -78,6 +78,7 @@ const myReleasedCompetitionPersonal = {
       },
     }
   },
+  // 过滤器
   filters: {
     // 时间戳转成日期（xxxx-xx-xx xx:xx）
     timestampToDate(value) {
