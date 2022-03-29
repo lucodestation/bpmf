@@ -8,7 +8,7 @@ new Vue({
   data() {
     return {
       nameList: [{ id: '1', title: '教棋榜文' }, { id: '2', title: '学棋榜文' }],
-      type: 1,
+      type: 2,
       navList: [{ id: '', title: '全部榜文' }, { id: '1', title: '待审核' }, { id: '2', title: '应榜中' }, { id: '3', title: '应榜结束' }, { id: '4', title: '工作中' }, { id: '5', title: '任务结束' }, { id: '6', title: '未通过' }],// 分类
       navId: '',
       b_id: '',
@@ -19,15 +19,13 @@ new Vue({
       id: '',// 删除id
     }
   },
-  async created() {
-    const ress = await request({
-      method: 'POST',
-      url: '/api/Bangwen/cate'
+  created() {
+    request({ url: '/api/Bangwen/cate', method: 'post' }).then((res) => {
+      if (res.code == 200) {
+        this.cateList = res.data
+        this.cateList.unshift({ id: '', name: '分类' })
+      }
     })
-    if (ress.code == 200) {
-      this.cateList = ress.data
-      this.cateList.unshift({ id: '', name: '分类' })
-    }
     setTimeout(() => {
       this.onpushList()
     }, 500);

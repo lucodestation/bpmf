@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
   <link rel="stylesheet" href="/plugins/date/jedate.css" />
+  <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
 
   <script src="/plugins/babel-polyfill.min.js"></script>
   <script src="/plugins/date/jedate.js"></script>
@@ -20,6 +21,7 @@
   <script src="/plugins/swiper/swiper.min.js"></script>
   <script src="/plugins/syalert/syalert.min.js"></script>
   <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/element-ui/element-ui.min.js"></script>
   <script src="/plugins/clipboard.min.js"></script>
   <script src="/plugins/httpVueLoader.js"></script>
   <script src="/plugins/axios.min.js"></script>
@@ -29,6 +31,15 @@
   <style>
     .handle-btn {
       cursor: pointer;
+    }
+
+    /* 隐藏 element-ui 对话框的标题栏 */
+    .el-dialog .el-dialog__header {
+      display: none;
+    }
+
+    .el-dialog .el-dialog__body {
+      padding: 0;
     }
   </style>
 </head>
@@ -58,27 +69,21 @@
             <!--center-inner-form start-->
             <div class="center-inner-form wallet-search clearfix">
               <div class="form-bor">
-                <select class="select w130">
-                  <option>111</option>
+                <select class="select w130" v-model="type">
+                  <option :value="item.id" v-for="item in navsList">{{item.title}}</option>
                 </select>
               </div>
               <div class="form-bor m-l-20">
-                <input type="text" class="input jeinput w130" id="dateS" placeholder="开始时间">
+                <input id="signUpStartDate" type="text" :value="start_time" class="input common-date-input w130"
+                  placeholder="开始时间" />
               </div>
               <div class="form-bor m-l-20">
-                <input type="text" class="input jeinput w130" id="dateE" placeholder="结束时间">
+                <input type="text" class="input common-date-input w130" :value="end_time" id="signUpEndDate"
+                  placeholder="结束时间" />
               </div>
-              <button class="form-btn m-l-20">查询</button>
+              <button class="form-btn m-l-20" @click="onClick">查询</button>
             </div>
             <!--center-inner-form end-->
-            <script>
-              jeDate("#dateS", {
-                format: "MM-DD-YYYY"
-              });
-              jeDate("#dateE", {
-                format: "MM-DD-YYYY"
-              });
-            </script>
             <!--center-inner-table-wrap start-->
             <div class="center-inner-table-wrap">
               <table class="center-inner-table center-order-table">
@@ -115,7 +120,8 @@
                   </td>
                   <td>预计{{item.fen}}分钟</td>
                   <!-- -2审核未通过，-1审核中，1审核通过，2已开播，3已结束 -->
-                  <td v-if="item.status=='-2'">未通过</td>
+                  <td v-if="item.status=='-2'">未通过<p class="color-blue" @click="onliveClick(item)">查看原因</p>
+                  </td>
                   <td v-if="item.status=='-1'">审核中</td>
                   <td v-if="item.status==1">待开播</td>
                   <td v-if="item.status==2">
@@ -144,7 +150,7 @@
                   <td v-if="item.status=='-2'">
                     <div class="handle text-c">
                       <a class="handle-btn blue m-r-10" href="CenterLive.html">修改直播</a>
-                      <a class="handle-btn red m-r-10" href="">取消直播</a>
+                      <a class="handle-btn red m-r-10" href="javascript:void(0);" @click="onQuery(item)">取消直播</a>
                     </div>
                   </td>
                 </tr>
@@ -179,6 +185,19 @@
             </div>
           </div>
         </div>
+        <!-- 原因对话框 -->
+        <el-dialog custom-class="bond-pop animated" :visible="reasonDialogVisible" :show-close="false" width="500px">
+          <div class="bond-content">
+            <div class="bond-close" @click="handleCloseCheckReasonDialog"></div>
+            <div class="bond-tit">未通过原因</div>
+            <div class="text-c m-t-40">
+              <div class="f-16">{{reasonContent}}</div>
+            </div>
+            <div class="last-bottom text-c">
+              <button class="bond-btn mar-auto" @click="handleCloseCheckReasonDialog">确定</button>
+            </div>
+          </div>
+        </el-dialog>
       </div>
       <!--center-content end-->
     </div>

@@ -29,7 +29,6 @@
 </head>
 
 <body>
-  <h1 style="width: 0; height: 0; overflow: hidden">玻坡摸佛</h1>
   <!-- 公共头部 -->
   <header class="public-header"></header>
   <div id="app">
@@ -529,180 +528,60 @@
         <!--index-sec2-asd start-->
         <div class="index-sec2-asd h330">
           <div class="con">
-            <h2 class="t">热门赛事</h2>
+            <h2 class="t">直播推荐</h2>
             <div class="c">棋局江湖，棋局平天下， 华山论剑</div>
-            <a class="more" href="">查看更多 ></a>
+            <a class="more" href="/live">查看更多 ></a>
           </div>
         </div>
         <!--index-sec2-asd end-->
         <!--index-sec2-tab start-->
         <div class="index-sec2-tab">
           <ul class="index-tab-hd clearfix">
-            <li class="hd-li on">直播推荐</li>
+            <li class="hd-li on">课程直播</li>
             <li class="hd-li">赛事直播</li>
-            <a class="index-more fr" href="">点击更多</a>
+            <a class="index-more fr" href="/live/liveMore.html">点击更多</a>
           </ul>
           <div class="index-tab-bd">
             <div class="bd-box" style="display: block">
               <!--index-sec2-item start-->
-              <div class="index-sec2-item">
+              <div class="index-sec2-item" v-for="item in liveKcList" :key="item.id">
                 <div class="bor">
-                  <a href="">
-                    <div class="img-w"><img src="images/index22.png" /></div>
-                  </a>
-                  <div class="li-t clearfix">
-                    <div class="t fl">三星杯决赛</div>
-                    <div class="tag fr">五子棋</div>
-                  </div>
-                  <div class="li-c clearfix">
-                    <div class="li-private fl">
-                      <img src="images/index22.png" />
-                      <div class="name">赛亚</div>
+                  <a :href="'/live/liveCont.html?id='+item.id">
+                    <div class="img-w"><img :src="item.image" /></div>
+                    <div class="li-t clearfix">
+                      <div class="t fl">{{item.title}}</div>
+                      <div class="tag fr">{{item.cate_name}}</div>
                     </div>
-                    <div class="up fr">1589.2万</div>
-                  </div>
-                </div>
-              </div>
-              <!--index-sec2-item end-->
-              <!--index-sec2-item start-->
-              <div class="index-sec2-item">
-                <div class="bor">
-                  <a href="">
-                    <div class="img-w"><img src="images/index22.png" /></div>
-                  </a>
-                  <div class="li-t clearfix">
-                    <div class="t fl">三星杯决赛</div>
-                    <div class="tag fr">五子棋</div>
-                  </div>
-                  <div class="li-c clearfix">
-                    <div class="li-private fl">
-                      <img src="images/index22.png" />
-                      <div class="name">赛亚</div>
+                    <div class="li-c clearfix">
+                      <div class="li-private fl">
+                        <img :src="item.avatar">
+                        <div class="name">{{item.nickname}}</div>
+                      </div>
+                      <div class="up fr">{{item.see_num}}</div>
                     </div>
-                    <div class="up fr">1589.2万</div>
-                  </div>
-                </div>
-              </div>
-              <!--index-sec2-item end-->
-              <!--index-sec2-item start-->
-              <div class="index-sec2-item">
-                <div class="bor">
-                  <a href="">
-                    <div class="img-w"><img src="images/index22.png" /></div>
                   </a>
-                  <div class="li-t clearfix">
-                    <div class="t fl">三星杯决赛</div>
-                    <div class="tag fr">五子棋</div>
-                  </div>
-                  <div class="li-c clearfix">
-                    <div class="li-private fl">
-                      <img src="images/index22.png" />
-                      <div class="name">赛亚</div>
-                    </div>
-                    <div class="up fr">1589.2万</div>
-                  </div>
-                </div>
-              </div>
-              <!--index-sec2-item end-->
-              <!--index-sec2-item start-->
-              <div class="index-sec2-item">
-                <div class="bor">
-                  <a href="">
-                    <div class="img-w"><img src="images/index22.png" /></div>
-                  </a>
-                  <div class="li-t clearfix">
-                    <div class="t fl">三星杯决赛</div>
-                    <div class="tag fr">五子棋</div>
-                  </div>
-                  <div class="li-c clearfix">
-                    <div class="li-private fl">
-                      <img src="images/index22.png" />
-                      <div class="name">赛亚</div>
-                    </div>
-                    <div class="up fr">1589.2万</div>
-                  </div>
-                </div>
-              </div>
-              <!--index-sec2-item end-->
-              <!--index-sec2-item start-->
-              <div class="index-sec2-item">
-                <div class="bor">
-                  <a href="">
-                    <div class="img-w"><img src="images/index22.png" /></div>
-                  </a>
-                  <div class="li-t clearfix">
-                    <div class="t fl">三星杯决赛</div>
-                    <div class="tag fr">五子棋</div>
-                  </div>
-                  <div class="li-c clearfix">
-                    <div class="li-private fl">
-                      <img src="images/index22.png" />
-                      <div class="name">赛亚</div>
-                    </div>
-                    <div class="up fr">1589.2万</div>
-                  </div>
-                </div>
-              </div>
-              <!--index-sec2-item end-->
-              <!--index-sec2-item start-->
-              <div class="index-sec2-item">
-                <div class="bor">
-                  <a href="">
-                    <div class="img-w"><img src="images/index22.png" /></div>
-                  </a>
-                  <div class="li-t clearfix">
-                    <div class="t fl">三星杯决赛</div>
-                    <div class="tag fr">五子棋</div>
-                  </div>
-                  <div class="li-c clearfix">
-                    <div class="li-private fl">
-                      <img src="images/index22.png" />
-                      <div class="name">赛亚</div>
-                    </div>
-                    <div class="up fr">1589.2万</div>
-                  </div>
-                </div>
-              </div>
-              <!--index-sec2-item end-->
-              <!--index-sec2-item start-->
-              <div class="index-sec2-item">
-                <div class="bor">
-                  <a href="">
-                    <div class="img-w"><img src="images/index22.png" /></div>
-                  </a>
-                  <div class="li-t clearfix">
-                    <div class="t fl">三星杯决赛</div>
-                    <div class="tag fr">五子棋</div>
-                  </div>
-                  <div class="li-c clearfix">
-                    <div class="li-private fl">
-                      <img src="images/index22.png" />
-                      <div class="name">赛亚</div>
-                    </div>
-                    <div class="up fr">1589.2万</div>
-                  </div>
                 </div>
               </div>
               <!--index-sec2-item end-->
             </div>
             <div class="bd-box">
               <!--index-sec2-item start-->
-              <div class="index-sec2-item">
+              <div class="index-sec2-item" v-for="item in liveSsList" :key="item.id">
                 <div class="bor">
-                  <a href="">
-                    <div class="img-w"><img src="images/index22.png" /></div>
-                  </a>
-                  <div class="li-t clearfix">
-                    <div class="t fl">三星杯决赛</div>
-                    <div class="tag fr">五子棋</div>
-                  </div>
-                  <div class="li-c clearfix">
-                    <div class="li-private fl">
-                      <img src="images/index22.png" />
-                      <div class="name">赛亚</div>
+                  <a :href="'/live/liveCont.html?id='+item.id">
+                    <div class="img-w"><img :src="item.image" /></div>
+                    <div class="li-t clearfix">
+                      <div class="t fl">{{item.title}}</div>
+                      <div class="tag fr">{{item.cate_name}}</div>
                     </div>
-                    <div class="up fr">1589.2万</div>
-                  </div>
+                    <div class="li-c clearfix">
+                      <div class="li-private fl">
+                        <img :src="item.avatar">
+                        <div class="name">{{item.nickname}}</div>
+                      </div>
+                      <div class="up fr">{{item.see_num}}</div>
+                    </div>
+                  </a>
                 </div>
               </div>
               <!--index-sec2-item end-->

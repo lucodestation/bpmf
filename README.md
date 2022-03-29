@@ -59,6 +59,12 @@ VSCode 终端 -> 运行任务 -> typescript -> tsc:监视 - tsconfig.json
 
 > TS 转成 ES5 语法的 JS 只是转换了 箭头函数、解构等语法，但还不支持 promise、includes 等，需再引入 babel-polyfill.js
 
+## 本地启动项目
+```
+npm install -g live-server    安装配置
+live-server --port=80    端口号
+```
+
 ## 命名规范
 
 ### HTML

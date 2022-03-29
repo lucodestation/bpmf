@@ -55,10 +55,18 @@ new Vue({
                 pwd2: ''
             },
             codeTxt: '获取验证码',
-            second: 60
+            second: 60,
+            mobile: ''
         };
     },
     created: function () {
+        var _this = this;
+        request({ url: '/api/Mine/info', method: 'POST' }).then(function (res) {
+            if (res.code == 200) {
+                _this.formData.mobile = res.data.mobile;
+                _this.mobile = res.data.mobile.substr(0, 3) + '****' + res.data.mobile.substr(7);
+            }
+        });
     },
     methods: {
         // 获取验证码

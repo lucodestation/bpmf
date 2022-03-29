@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/plugins/animate.min.css" />
   <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
   <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/plugins/layui/css/layui.css">
   <script src="/plugins/babel-polyfill.min.js"></script>
@@ -21,8 +22,26 @@
   <script src="/plugins/swiper/swiper.min.js"></script>
   <script src="/plugins/syalert/syalert.min.js"></script>
   <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/qrcode.min.js"></script>
+  <script src="/plugins/qs.min.js"></script>
+  <script src="/plugins/element-ui/element-ui.min.js"></script>
   <script src="/plugins/axios.min.js"></script>
   <script src="/utils/request.js"></script>
+  <style>
+    /* 隐藏 element-ui 对话框的标题栏 */
+    .el-dialog .el-dialog__header {
+      display: none;
+    }
+
+    .el-dialog .el-dialog__body {
+      padding: 0;
+      color: #222;
+    }
+
+    .member-pop {
+      width: auto;
+    }
+  </style>
 </head>
 
 <body>
@@ -206,10 +225,9 @@
         </div>
         <!--center-inner end-->
         <!--购买次数弹出start-->
-        <div class="sy-alert member-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true"
-          id="userNumber">
+        <el-dialog class="member-pop animated" :visible="depositDialogVisible" :show-close="false">
           <div class="member-pop-content">
-            <div class="bond-close" onClick="syalert.syhide('userNumber')"></div>
+            <div class="bond-close" @click="onQueryClick"></div>
             <div class="bond-tit">购买次数</div>
             <div class="member-pop-item">开播单价：<span class="color-orange">{{UnitPrice}}元/次</span> </div>
             <div class="member-pop-item clearfix">
@@ -238,20 +256,74 @@
                 </div>
               </div>
             </div>
-            <div class="bond-pay" v-if="pay_type==1">
+            <!-- <div class="bond-pay" v-if="pay_type==1">
               <div class="t">支付密码</div>
               <div class="con clearfix">
                 <div class="input-w m-t-20">
                   <input type="password" class="input" v-model="pwd" placeholder="请输入支付密码">
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="last-bottom">
               <button class="bond-btn" @click="onPayClick">确定</button>
             </div>
           </div>
-        </div>
+        </el-dialog>
         <!--购买次数弹出end-->
+        <!-- 钱包支付对话框 -->
+        <el-dialog custom-class="wallet-pop w850 animated" :visible="walletPayDialogVisible" :show-close="false">
+          <div class="wallet-con">
+            <div class="wallet-close" @click="handleCloseWalletPayDialog"></div>
+            <div class="t">钱包支付</div>
+            <div class="wallet-mid">
+              <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+              <div class="wallet-label">输入支付密码<a class="wallet-a fr color-gray" href="/userCont/wallet/pwd.html"
+                  target="_blank">忘记密码？</a></div>
+              <div class="wallet-input">
+                <input class="input" type="password" v-model.trim="pwd" />
+              </div>
+            </div>
+            <div class="wallet-bottom">
+              <button class="wallet-btn" @click="handleSubmitWalletPay">确定</button>
+            </div>
+          </div>
+        </el-dialog>
+        <!-- 支付宝支付对话框 -->
+        <el-dialog custom-class="wallet-pop animated" :visible="alipayPayDialogVisible" :show-close="false"
+          width="600px">
+          <div class="wallet-con">
+            <div class="wallet-close" @click="handleCloseAlipayPayDialog"></div>
+            <div class="t">支付宝支付</div>
+            <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+            <div class="con clearfix">
+              <div class="wx-g">
+                <div id="alipayPayQrcode"></div>
+                <div class="tip">请使用支付宝“扫一扫”,扫描二维码支付</div>
+              </div>
+              <div class="wx-i">
+                <img src="/images/pub-alipay.png" />
+              </div>
+            </div>
+          </div>
+        </el-dialog>
+        <!-- 微信支付对话框 -->
+        <el-dialog custom-class="wallet-pop animated" :visible="wechatPayDialogVisible" :show-close="false"
+          width="600px">
+          <div class="wallet-con">
+            <div class="wallet-close" @click="handleCloseWechatPayDialog"></div>
+            <div class="t">微信支付</div>
+            <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+            <div class="con clearfix">
+              <div class="wx-g">
+                <div id="wechatPayQrcode"></div>
+                <div class="tip">请使用微信“扫一扫”,扫描二维码支付</div>
+              </div>
+              <div class="wx-i">
+                <img src="/images/pub1.jpg" />
+              </div>
+            </div>
+          </div>
+        </el-dialog>
       </div>
       <!--center-content end-->
     </div>

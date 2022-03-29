@@ -26,20 +26,6 @@
   <script src="/plugins/axios.min.js"></script>
   <script src="/utils/request.js"></script>
   <style>
-    /* 临时 */
-    .temp-pre {
-      position: fixed;
-      top: 0;
-      left: 0;
-      /* bottom: 50px; */
-      background: rgba(255, 192, 203, 0.5);
-      /* overflow: scroll; */
-      /* max-width: 500px; */
-      /* opacity: 0.7; */
-      z-index: 10000;
-      padding: 0 10px;
-    }
-
     /* 隐藏 element-ui 对话框的标题栏 */
     .el-dialog .el-dialog__header {
       display: none;
@@ -63,14 +49,6 @@
       <!--center-side end-->
       <!--center-content start-->
       <div class="center-content fr" id="app">
-        <pre class="temp-pre">
-            <div>{{depositDialogVisible}}</div>
-            <div>{{payMethod}}</div>
-            <div>{{money}}</div>
-            <div>{{alipayPayDialogVisible}}</div>
-            <div>{{payAmount}}</div>
-            <div>{{wechatPayDialogVisible}}</div>
-          </pre>
         <!--center-inner start-->
         <div class="center-inner  m-b-20">
           <div class="center-inner-tit">我的钱包</div>
