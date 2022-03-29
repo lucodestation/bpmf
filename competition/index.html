@@ -20,8 +20,6 @@
     <script src="/plugins/vue.min.js"></script>
     <script src="/plugins/axios.min.js"></script>
 
-    <script src="https://cdn.bootcdn.net/ajax/libs/ali-oss/6.17.1/aliyun-oss-sdk.min.js"></script>
-
     <script src="/utils/request.js"></script>
     <script src="/utils/util.js"></script>
   </head>
@@ -241,14 +239,14 @@
               >{{item.category_name}}</a
             >
           </div>
-          <a class="index-more fr" href="/competition/competitionApply.html">点击更多</a>
+          <a class="index-more fr" href="/competition/applyList.html">点击更多</a>
         </div>
 
         <!-- 赛事列表 -->
         <div class="index-sec2-content clearfix">
           <div class="index-sec2-item" v-for="item in applyingCompetition" :key="item.id">
             <div class="bor">
-              <a :href="'/competition/competitionDetail.html?competition_id=' + item.id">
+              <a :href="'/competition/applyDetail.html?competition_id=' + item.id">
                 <div class="img-w"><img :src="item.cover_picture" /></div>
                 <div class="li-t clearfix">
                   <div class="t fl" :title="item.competition_name">{{item.competition_name}}</div>
