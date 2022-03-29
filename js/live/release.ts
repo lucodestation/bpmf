@@ -2,6 +2,11 @@ $(function () {
   $('.public-header').load('/components/PublicHeader.html')
   $('.public-footer').load('/components/PublicFooter.html')
 })
+var encrypt = new JSEncrypt()
+//公钥.
+const publiukey =
+  '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----'
+
 // 支付密码页面
 const walletPwdPage = '/userCont/wallet/pwd.html'
 // 我的钱包页面（余额不足需要充值跳到这个页面）
@@ -566,7 +571,7 @@ new Vue({
         .catch((error) => {
           console.log('上传直播头像', error)
           layer.close(loadingIndex)
-          layer.msg('上传直播头像')
+          layer.msg('上传直播封面')
         })
       if (!this.formData.image) return
 

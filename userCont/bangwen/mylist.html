@@ -128,7 +128,14 @@
                   <td v-if="item.status==2">工作中</td>
                   <td v-if="item.status==3">任务结束</td>
                   <td v-if="item.status==4">已评价</td>
-                  <td v-if="item.status==0||item.status==1||item.status==4">
+                  <td v-if="item.status==0">
+                    <div class=" handle text-c">
+                      <a class="handle-btn m-t-5" href="javascript:void(0);" @click="onJiaoKeClick(item)">开始教课</a>
+                      <a class="handle-btn blue m-t-5"
+                        :href="'./myCont.html?id='+item.id+'&name='+item.name+'&bangwen_id='+item.bangwen_id">查看详情</a>
+                    </div>
+                  </td>
+                  <td v-if="item.status==1||item.status==4">
                     <div class=" handle text-c">
                       <a class="handle-btn blue m-t-5"
                         :href="'./myCont.html?id='+item.id+'&name='+item.name+'&bangwen_id='+item.bangwen_id">查看详情</a>
@@ -139,11 +146,11 @@
                       <a class="handle-btn m-t-5" href="CenterRank9.html">开始教课</a>
                     </div>
                   </td>
-                  <td v-if="item.status==2">
+                  <!-- <td v-if="item.status==2">
                     <div class="handle text-c">
                       <a class="handle-btn m-t-5" href="CenterRank11.html">查看原因</a>
                     </div>
-                  </td>
+                  </td> -->
                   <td v-if="item.status==3">
                     <div class="handle text-c">
                       <a class="handle-btn m-t-5" href="">我要评价</a>

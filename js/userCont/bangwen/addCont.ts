@@ -3,6 +3,328 @@ $(function () {
   $('.public-footer').load('/components/PublicFooter.html')
   $('.public-user').load('/components/CenterAside.html')
 })
+var encrypt = new JSEncrypt()
+
+//公钥.
+const publiukey =
+  '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----'
+// 支付密码页面
+const walletPwdPage = '/userCont/wallet/pwd.html'
+// 我的钱包页面（余额不足需要充值跳到这个页面）
+const walletAccountPage = '/userCont/wallet/account.html'
+// 实名认证页面
+const setupRealNamePage = '/userCont/setup/realName.html'
+// 开通会员页面
+const memberPage = '/userCont/member/member.html'
+Vue.use(ELEMENT)
+Vue.component('deposit-dialog', {
+  template: '#depositDialog',
+  data: function () {
+    return {
+      // 保证金弹框是否显示
+      depositDialogVisible: false,
+      // 支付方式 1余额支付，2支付宝支付，3微信支付
+      payMethod: 1,
+      // 保证金金额
+      depositAmount: 0,
+
+      // 实际支付金额
+      payAmount: 0,
+
+      // 钱包支付对话框是否显示
+      walletPayDialogVisible: false,
+      // 支付密码
+      payPassword: '',
+
+      // 支付宝支付对话框是否显示
+      alipayPayDialogVisible: false,
+
+      // 微信支付对话框是否显示
+      wechatPayDialogVisible: false,
+
+      // 获取保证金计时器（用于判断是否支付成功）
+      getDepositTimer: '',
+    }
+  },
+  created() {
+    request({
+      url: '/api/Login/setting',
+    }).then((result) => {
+      if (+result.code === 200) {
+        this.depositAmount = result.data.plat_deposit
+      }
+    })
+  },
+  methods: {
+    // 打开保证金对话框
+    handleOpenDepositDialog() {
+      this.depositDialogVisible = true
+    },
+    // 关闭保证金对话框
+    handleCloseDepositDialog() {
+      this.depositDialogVisible = false
+      // 返回上个页面
+      window.history.go(-1)
+    },
+    // 确认支付保证金
+    async confirmPayDeposit() {
+      if (this.payMethod === 1) {
+        // 钱包支付
+        console.log('钱包支付')
+
+        // 判断是否设置了支付密码
+        const userInfoResult = await request({ url: '/api/Mine/info' })
+        if (+userInfoResult.code === 200 && +userInfoResult.data.is_set_paypwd === 0) {
+          // 未设置支付密码
+          this.$alert('<div style="text-align: center; font-size: 20px;">请先设置支付密码</div>', '', {
+            confirmButtonText: '确定',
+            showClose: false,
+            dangerouslyUseHTMLString: true,
+            confirmButtonClass: 'orange-button-bg',
+            callback: () => {
+              // 在新窗口中打开页面
+              // 打开设置支付密码页面
+              window.open(walletPwdPage)
+            },
+          })
+          return
+        }
+
+        this._walletPay()
+      } else if (this.payMethod === 2) {
+        // 支付宝支付
+        console.log('支付宝支付')
+        // 支付宝支付
+        this._alipayPay()
+      } else if (this.payMethod === 3) {
+        // 微信支付
+        console.log('微信支付')
+        this._wechatPay()
+      }
+    },
+
+    // 关闭钱包支付对话框
+    handleCloseWalletPayDialog() {
+      console.log('关闭钱包支付对话框')
+      this.walletPayDialogVisible = false
+      this.payPassword = ''
+
+      // 打开保证金对话框
+      this.depositDialogVisible = true
+    },
+    // 钱包支付
+    async _walletPay() {
+      // 缴纳保证金--提交请求（获取订单号和实际支付金额）
+      const depositReferResult = await request({
+        url: '/api/Deposit/refer',
+        method: 'post',
+        data: { pay_type: 1 },
+      })
+
+      if (+depositReferResult.code === 200) {
+        // 关闭保证金对话框
+        this.depositDialogVisible = false
+        // 实际支付金额
+        this.payAmount = depositReferResult.data.money
+        // 显示钱包支付对话框
+        this.walletPayDialogVisible = true
+      } else if (+depositReferResult.code === 5) {
+        // 余额不足
+        this.$alert('<div style="text-align: center; font-size: 20px;">余额不足，请充值</div>', '', {
+          confirmButtonText: '确定',
+          showClose: false,
+          dangerouslyUseHTMLString: true,
+          confirmButtonClass: 'orange-button-bg',
+          callback: () => {
+            // 在新窗口中打开页面
+            // 我的钱包页面
+            window.open(walletAccountPage)
+          },
+        })
+      } else {
+        layer.msg(depositReferResult.msg)
+      }
+    },
+    // 提交钱包支付（钱包支付对话框点击确定）
+    async handleSubmitWalletPay() {
+      if (!this.payPassword) layer.msg('请输入支付密码')
+
+      // 对密码进行加密
+      encrypt.setPublicKey(publiukey)
+      const payPassword = encrypt.encrypt(this.payPassword) //需要加密的内容
+
+      // 缴纳保证金--钱包支付
+      const payResult = await request({
+        url: '/api/Deposit/balancePay',
+        method: 'post',
+        data: { out_trade_no: depositReferResult.data.out_trade_no, pay_pwd: payPassword },
+      })
+
+      if (+payResult.code === 200) {
+        this.$alert('<div style="text-align: center; font-size: 20px;">保证金缴纳成功</div>', '', {
+          confirmButtonText: '确定',
+          showClose: false,
+          dangerouslyUseHTMLString: true,
+          confirmButtonClass: 'orange-button-bg',
+          callback: () => {
+            // 关闭钱包支付对话框
+            this.walletPayDialogVisible = false
+          },
+        })
+      } else {
+        layer.msg(payResult.msg)
+      }
+    },
+
+    // 支付宝支付
+    async _alipayPay() {
+      // 关闭保证金对话框
+      this.depositDialogVisible = false
+
+      // 缴纳保证金--提交请求（获取订单号和实际支付金额）
+      const depositReferResult = await request({
+        url: '/api/Deposit/refer',
+        method: 'post',
+        data: { pay_type: 2 },
+      })
+
+      if (+depositReferResult.code === 200) {
+        // 实际支付金额
+        this.payAmount = depositReferResult.data.money
+        // 显示支付宝支付对话框
+        this.alipayPayDialogVisible = true
+
+        // 缴纳保证金--支付宝支付
+        // 这里不需要接收返回值，因为啥都没返回
+        // 二维码是把请求域名加上请求路径再加上请求参数来生成的
+        await request({
+          url: '/api/Deposit/aliPay',
+          params: { out_trade_no: depositReferResult.data.out_trade_no },
+        })
+
+        // 警告：this.alipayPayDialogVisible = true 不能放到这里
+        const alipayPayQrcodeElement = document.getElementById('alipayPayQrcode')
+        alipayPayQrcodeElement.innerHTML = ''
+        // 生成二维码
+        const alipayPayQrcode = new QRCode(alipayPayQrcodeElement, {
+          width: 260,
+          height: 260,
+        })
+        // 生成 query 字符串（不带 ?）
+        const queryString = Qs.stringify({
+          out_trade_no: depositReferResult.data.out_trade_no,
+          token: localStorage.getItem('token'),
+        })
+        const codeUrl = baseURL + '/api/Deposit/aliPay?' + queryString
+        console.log('codeUrl', codeUrl)
+        alipayPayQrcode.makeCode(codeUrl)
+
+        // 启动获取保证金金额的计时器
+        this._startGetDepositTimer('alipay')
+      } else {
+        layer.msg(depositReferResult.msg)
+      }
+    },
+    // 关闭支付宝支付对话框
+    handleCloseAlipayPayDialog() {
+      console.log('关闭支付宝支付对话框')
+      this.alipayPayDialogVisible = false
+      // 清除计时器
+      clearInterval(this.getDepositTimer)
+
+      // 打开保证金对话框
+      this.depositDialogVisible = true
+    },
+
+    // 微信支付
+    async _wechatPay() {
+      // 关闭保证金对话框
+      this.depositDialogVisible = false
+
+      // 缴纳保证金--提交请求（获取订单号和实际支付金额）
+      const depositReferResult = await request({
+        url: '/api/Deposit/refer',
+        method: 'post',
+        data: { pay_type: 3 },
+      })
+
+      if (+depositReferResult.code === 200) {
+        // 实际支付金额
+        this.payAmount = depositReferResult.data.money
+        // 显示微信支付对话框
+        this.wechatPayDialogVisible = true
+
+        // 缴纳保证金--微信支付
+        const payResult = await request({
+          url: '/api/Deposit/wxPay',
+          method: 'post',
+          data: { out_trade_no: depositReferResult.data.out_trade_no },
+        })
+
+        if (+payResult.code === 200) {
+          // 警告：this.wechatPayDialogVisible = true 不能放到这里
+          const wechatPayQrcodeElement = document.getElementById('wechatPayQrcode')
+          wechatPayQrcodeElement.innerHTML = ''
+          // 生成二维码
+          const wechatPayQrcode = new QRCode(wechatPayQrcodeElement, {
+            width: 260,
+            height: 260,
+          })
+          wechatPayQrcode.makeCode(payResult.data.code_url)
+
+          // 启动获取保证金金额的计时器
+          this._startGetDepositTimer('wechat')
+        } else {
+          layer.msg(payResult.msg)
+        }
+      } else {
+        layer.msg(payResult.msg)
+      }
+    },
+    // 关闭微信支付对话框
+    handleCloseWechatPayDialog() {
+      console.log('关闭微信支付对话框')
+      this.wechatPayDialogVisible = false
+      // 清除计时器
+      clearInterval(this.getDepositTimer)
+
+      // 打开保证金对话框
+      this.depositDialogVisible = true
+    },
+
+    // 启动获取保证金金额的计时器
+    _startGetDepositTimer(payMethod) {
+      this.getDepositTimer = setInterval(() => {
+        // 获取个人信息（通过个人信息中的保证金金额判断是否缴纳了保证金）
+        request({
+          url: '/api/Mine/info',
+        }).then((result) => {
+          if (+result.code === 200) {
+            if (+result.data.deposit !== 0) {
+              // 清除计时器
+              clearInterval(this.getDepositTimer)
+              this.$alert('<div style="text-align: center; font-size: 20px;">保证金缴纳成功</div>', '', {
+                confirmButtonText: '确定',
+                showClose: false,
+                dangerouslyUseHTMLString: true,
+                confirmButtonClass: 'orange-button-bg',
+                callback: () => {
+                  if (payMethod === 'alipay') {
+                    this.alipayPayDialogVisible = false
+                  } else if (payMethod === 'wechat') {
+                    this.wechatPayDialogVisible = false
+                  }
+                },
+              })
+            } else {
+              console.log('保证金', +result.data.deposit)
+            }
+          }
+        })
+      }, 3000)
+    },
+  },
+})
 new Vue({
   el: '#app',
   data() {
@@ -45,6 +367,7 @@ new Vue({
       id: '',// 榜文id
       coverImage: {},// 封面图
       affixList: [],// 附件列表
+      isShow: false,// 是否同意协议
     }
   },
   watch: {
@@ -270,7 +593,94 @@ new Vue({
     // 初始化选择封面图
     this.initCoverImageFileChange()
   },
+  async mounted() {
+    // 1. 判断是否实名认证
+    const realNameAuthResult = await request({
+      url: '/api/Mine/realInfo',
+    })
+    if (+realNameAuthResult.code === 200) {
+      if (+realNameAuthResult.data.check_status === -2) {
+        // check_status -2未提交，-1审核失败，0待审核，1已通过
+        this.$alert('<div style="text-align: center; font-size: 20px;">请先进行实名认证</div>', '', {
+          confirmButtonText: '确定',
+          showClose: false,
+          dangerouslyUseHTMLString: true,
+          confirmButtonClass: 'orange-button-bg',
+          callback: () => {
+            // 实名认证页面
+            window.location.href = setupRealNamePage
+          },
+        })
+        return
+      } else if (+realNameAuthResult.data.check_status === -1) {
+        // check_status -2未提交，-1审核失败，0待审核，1已通过
+        this.$alert('<div style="text-align: center; font-size: 20px;">实名认证审核失败，请重新上传</div>', '', {
+          confirmButtonText: '确定',
+          showClose: false,
+          dangerouslyUseHTMLString: true,
+          confirmButtonClass: 'orange-button-bg',
+          callback: () => {
+            // 实名认证页面
+            window.location.href = setupRealNamePage
+          },
+        })
+        return
+      } else if (+realNameAuthResult.data.check_status === 0) {
+        // check_status -2未提交，-1审核失败，0待审核，1已通过
+        this.$alert('<div style="text-align: center; font-size: 20px;">实名认证审核中...</div>', '', {
+          confirmButtonText: '确定',
+          showClose: false,
+          dangerouslyUseHTMLString: true,
+          confirmButtonClass: 'orange-button-bg',
+          callback: () => {
+            // 返回上个页面
+            window.history.go(-1)
+          },
+        })
+        return
+      }
+    }
+
+    // 2. 判断是否缴纳保证金
+    // 获取个人信息（通过个人信息中的保证金金额判断是否缴纳了保证金）
+    const userInfoResult = await request({
+      url: '/api/Mine/info',
+    })
+    if (+userInfoResult.code === 200) {
+      if (+userInfoResult.data.deposit === 0) {
+        // 如果保证金为 0
+        // 打开保证金对话框
+        this.$refs.depositDialog.handleOpenDepositDialog()
+        return
+      }
+    }
+
+    // 3. 判断直播发布次数是否不足
+    const vipInfo = await request({
+      // 我的特权接口
+      url: '/api/Vip/mineVip',
+    })
+    if (+vipInfo.code === 200) {
+      if (+vipInfo.data.live_num === 0) {
+        this.$alert('<div style="text-align: center; font-size: 20px;">直播发布次数不足，请购买次数</div>', '', {
+          confirmButtonText: '确定',
+          showClose: false,
+          dangerouslyUseHTMLString: true,
+          confirmButtonClass: 'orange-button-bg',
+          callback: () => {
+            // 开通会员页面
+            window.location.href = memberPage
+          },
+        })
+        return
+      }
+    }
+  },
   methods: {
+    // 点击是否同意协议
+    onXuanzhongClick() {
+      this.isShow = this.isShow == 0 ? 1 : 0
+    },
     // 初始化选择封面图
     initCoverImageFileChange() {
       layui.upload.render({
@@ -404,6 +814,7 @@ new Vue({
       if (!this.formData.title) return layer.msg('请输入标题')
       if (!this.formData.total_money) return layer.msg('请输入金额')
       if (!this.formData.detail) return layer.msg('请输入榜文详情')
+      if (this.isShow == 0) return layer.msg('请阅读并同意协议')
       if (this.formData.mobile) {
         var reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/ //11位手机号码正则
         if (!reg_tel.test(this.formData.mobile)) return layer.msg('请输入正确的手机号')

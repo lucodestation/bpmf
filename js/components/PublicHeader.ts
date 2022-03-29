@@ -61,7 +61,7 @@ new Vue({
     codeTxt: '获取验证码',
     second: 60,
   },
-  created() {},
+  created() { },
   methods: {
     // 获取验证码
     async onCode() {

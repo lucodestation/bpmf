@@ -14,6 +14,8 @@ new Vue({
       partnerList: [], // 合作机构
       bangwenJkList: [],// 最新榜文-教课
       bangwenXkList: [],// 最新榜文-学课
+      liveKcList: [],// 直播推荐-课程直播
+      liveSsList: [],// 直播推荐-赛事直播
     }
   },
   created() {
@@ -39,6 +41,18 @@ new Vue({
     request({ url: '/api/Bangwen/list', method: 'POST', data: { page: 1, pagenum: 7, type: 2, sort: 1 } }).then((res) => {
       if (res.code == 200) {
         this.bangwenXkList = res.data.data
+      }
+    })
+    // 直播推荐-课程直播
+    request({ url: '/api/Live/competitionList', method: 'POST', data: { page: 1, pagenum: 7, type: 1 } }).then((res) => {
+      if (res.code == 200) {
+        this.liveKcList = res.data.data
+      }
+    })
+    // 直播推荐-赛事直播
+    request({ url: '/api/Live/competitionList', method: 'POST', data: { page: 1, pagenum: 7, type: 2 } }).then((res) => {
+      if (res.code == 200) {
+        this.liveSsList = res.data.data
       }
     })
     // 玻说坡话列表

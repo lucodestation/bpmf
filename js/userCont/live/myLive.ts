@@ -3,6 +3,7 @@ $(function () {
   $('.public-footer').load('/components/PublicFooter.html')
   $('.public-user').load('/components/CenterAside.html')
 })
+Vue.use(ELEMENT)
 new Vue({
   el: '#app',
   data() {
@@ -11,19 +12,56 @@ new Vue({
       navId: '',
       pushList: [],// 列表数据
       liveCont: '',// 点击列表详情
+      reasonDialogVisible: false,// 未通过弹框
+      reasonContent: '',// 未通过原因
+      navsList: [{ id: '', title: '直播类型' }, { id: '1', title: '课程直播' }, { id: '2', title: '赛事直播' }],// 分类
+      type: '',
+      start_time: '',
+      end_time: '',
     }
   },
   mounted() {
+    // 起始时间
+    layui.laydate.render({
+      elem: '#signUpStartDate', //指定元素
+      theme: '#FF7F17', // 主题颜色
+      btns: ['clear', 'confirm'], // 显示的按钮
+      done: (value, date) => {
+        this.start_time = value
+      },
+    })
+    // 结束时间
+    layui.laydate.render({
+      elem: '#signUpEndDate', //指定元素
+      theme: '#FF7F17', // 主题颜色
+      btns: ['clear', 'confirm'], // 显示的按钮
+      done: (value, date) => {
+        this.end_time = value
+      },
+    })
     this.onpushList()
   },
   methods: {
+    // 点击查询
+    onClick() {
+      this.onpushList()
+    },
     onNavClick(id) {
       this.navId = id
       this.onpushList()
     },
+    // 点击未通过原因弹框
+    onliveClick(item) {
+      this.reasonContent = item.admin_reason
+      this.reasonDialogVisible = true
+    },
+    // 关闭未通过原因
+    handleCloseCheckReasonDialog() {
+      this.reasonDialogVisible = false
+    },
     // 列表数据
     onpushList() {
-      request({ url: '/api/Live/pushList', method: 'POST', data: { page: 1, pagenum: 10, type: this.navId } }).then((res) => {
+      request({ url: '/api/Live/pushList', method: 'POST', data: { page: 1, pagenum: 10, type: this.navId, push_type: this.type, start_time: this.start_time, end_time: this.end_time } }).then((res) => {
         if (res.code == 200) {
           res.data.data.map(item => {
             var date1 = new Date((item.end_time + ':00').replace(/\-/g, "/"));    //开始时间

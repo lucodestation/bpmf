@@ -86,7 +86,7 @@
               </div>
             </div>
             <!--center-rank-head end-->
-            <div class="date color-red m-t-35">
+            <div class="date color-red m-t-35" v-if="noticeCont.status=='2'">
               <span class="color-gray"> 应榜人数：</span>{{noticeCont.attend_num}}人
               <span class="color-gray" style="margin-left: 40px;">中榜人数：</span>{{noticeCont.select_num}}人
             </div>
@@ -144,7 +144,7 @@
             </div>
             <!--center-inner-table-wrap end-->
             <!--center-rank-head-hd start-->
-            <div class="center-rank-head-hd">
+            <div class="center-rank-head-hd" v-if="noticeCont.status=='2'">
               <div class="hd-t m-t-10 clearfix">
                 <div class="f-weight f-16 fl">应榜人列表</div>
                 <div class="color-6 m-l-30 fl">应榜截止时间：{{noticeCont.signup_end_time}}</div>
@@ -153,7 +153,7 @@
             </div>
             <!--center-rank-head-hd end-->
             <!--center-inner-table-wrap start-->
-            <div class="center-inner-table-wrap">
+            <div class="center-inner-table-wrap" v-if="noticeCont.status=='2'">
               <table class="center-inner-table center-order-table">
                 <tr>
                   <th>应榜号</th>

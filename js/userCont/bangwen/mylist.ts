@@ -8,7 +8,7 @@ new Vue({
   data() {
     return {
       navList: [{ id: 1, name: '教课应榜' }, { id: 2, name: '学课应榜' }],
-      navId: 1,
+      navId: 2,
       myList: [],// 列表
     }
   },
@@ -28,6 +28,16 @@ new Vue({
     onNavClick(id) {
       this.navId = id
       this.onlist()
+    },
+    onJiaoKeClick(item) {
+      request({ url: '/api/Bangwenattend/outBeginTeach', method: 'post', data: { order_id: item.id } }).then((res) => {
+        if (res.code == 200) {
+          layer.msg('操作成功')
+          // this.myList = res.data
+        } else {
+          layer.msg(res.msg)
+        }
+      })
     }
   }
 })
