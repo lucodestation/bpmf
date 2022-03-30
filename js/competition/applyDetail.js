@@ -74,6 +74,8 @@ var applyDetail = new Vue({
     el: '#app',
     data: function () {
         return {
+            // 当前 tab 0=对阵安排 1=赛事详情
+            currentTab: 0,
             // 赛事信息
             competitionInfo: {},
             // 阶段信息
@@ -82,8 +84,12 @@ var applyDetail = new Vue({
             currentStateIndex: 0,
             // 奖励信息
             awardInfo: {},
-            // 当前 tab 0=对阵安排 1=赛事详情
-            currentTab: 0,
+            // 广告位列表
+            adverList: [],
+            // 举报对话框是否显示
+            reportDialogVisible: false,
+            // 举报内容
+            reportContent: '',
             // 角色选择列表
             roleList: [
                 { id: 1, label: '参赛选手' },
@@ -170,6 +176,7 @@ var applyDetail = new Vue({
     filters: {
         // 奖金
         bonus: function (value) {
+            // console.log('过滤器', '奖金')
             if (value > 9999 && value % 10000 === 0) {
                 return value / 10000 + '万';
             }
@@ -177,6 +184,7 @@ var applyDetail = new Vue({
         },
         // 时间戳转成日期（xxxx-xx-xx xx:xx）
         timestampToDate: function (value) {
+            // console.log('过滤器', '时间戳转成日期')
             var dateObj = new Date(value * 1000);
             var year = dateObj.getFullYear();
             var month = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -188,14 +196,24 @@ var applyDetail = new Vue({
         // 破同分规则，1=小分，2=违例，3=加塞，4=抽签，5=直胜，6=胜局，7=并列，8=总局分，9=对手分1型，10=对手分2型，11=净胜局数，12=koya system
         rankingSystem: function (value) {
             var arr = ['', '小分', '违例', '加塞', '抽签', '直胜', '胜局', '并列', '总局分', '对手分1型', '对手分2型', '净胜局数', 'koya system'];
-            console.log(value
-                .split(',')
-                .map(function (item) { return arr[+item]; })
-                .join('、'));
+            // console.log('过滤器', '破同分规则')
+            // console.log(
+            //   value
+            //     .split(',')
+            //     .map((item) => arr[+item])
+            //     .join('、')
+            // )
             return value
                 .split(',')
                 .map(function (item) { return arr[+item]; })
                 .join('、');
+        },
+        // 从url中获取文件名（获取的文件名不包括时间戳和-）
+        affixUrlFileName: function (value) {
+            // console.log('过滤器', '从url中获取文件名')
+            var arr = value.split('/');
+            var fileName = arr[arr.length - 1];
+            return fileName.substr(fileName.indexOf('-') + 1);
         },
     },
     created: function () {
@@ -232,12 +250,45 @@ var applyDetail = new Vue({
                             // 临时
                             // this.handleOpenApplyDialog()
                         }
+                        // 加载赛事广告位
+                        request({
+                            url: '/api/Competitionindex/adverList',
+                            method: 'post',
+                            data: { competition_id: searchParams.competition_id },
+                        }).then(function (result) {
+                            if (+result.code === 200) {
+                                _this.adverList = result.data;
+                            }
+                        });
                         return [2 /*return*/];
                 }
             });
         });
     },
     methods: {
+        // 分享
+        handleShare: function () {
+            var input = document.createElement('input'); // 直接构建input
+            input.value = window.location.href; // 设置内容（要复制到剪贴板的内容）
+            document.body.appendChild(input); // 添加临时实例
+            input.select(); // 选择实例内容
+            document.execCommand('Copy'); // 执行复制
+            document.body.removeChild(input); // 删除临时实例
+            layer.msg('复制成功');
+        },
+        // 关闭举报对话框
+        handleCloseReportDialog: function () {
+            this.reportDialogVisible = false;
+            this.reportContent = '';
+        },
+        // 提交举报
+        handleSubmitReport: function () {
+            if (this.reportContent === '') {
+                layer.msg('请输入举报内容');
+                return;
+            }
+            console.log('举报内容', this.reportContent);
+        },
         // 打开报名对话框
         handleOpenApplyDialog: function () {
             return __awaiter(this, void 0, void 0, function () {

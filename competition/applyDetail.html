@@ -216,7 +216,7 @@
         <span>&lt;</span>
         <a href="/competition/applyList.html">火热报名</a>
         <span>&lt;</span>
-        <span class="current">平台公告</span>
+        <span class="current">详情</span>
       </div>
 
       <div class="match-detail w-1200">
@@ -226,7 +226,7 @@
             <!-- 头部 -->
             <div class="match-detail-hd clearfix">
               <div class="img fl">
-                <img :src="competitionInfo.cover_picture" />
+                <img style="width: 320px; height: 180px" :src="competitionInfo.cover_picture" />
               </div>
               <div class="txt">
                 <div class="t w-auto clearfix">
@@ -257,8 +257,8 @@
               <div class="match-head clearfix">
                 <a class="li-a fl" :class="{on: currentTab === 0}" href="javascript:" @click="currentTab = 0">对阵安排</a>
                 <a class="li-a fl" :class="{on: currentTab === 1}" href="javascript:" @click="currentTab = 1">赛事详情</a>
-                <div class="player-share fr">分享</div>
-                <div class="player-complain fr">投诉</div>
+                <div class="player-share fr" @click="handleShare">分享</div>
+                <div class="player-complain fr" @click="reportDialogVisible = true">举报</div>
               </div>
 
               <!-- 对阵安排 -->
@@ -355,17 +355,16 @@
 
                   <!-- 循环赛才有 -->
                   <div class="li" v-if="stageInfo[currentStateIndex].system === 2 && stageInfo[currentStateIndex].ranking_system">
-                    <span class="gray">评分名次排列：</span>
+                    <span class="gray">平分名次排列：</span>
                     <span>优先级从左到右排列，</span>
-                    <span>{{stageInfo[currentStateIndex].ranking_system | rankingSystem}}</span>
+                    <span>{{ stageInfo[currentStateIndex].ranking_system | rankingSystem }}</span>
                   </div>
                 </div>
               </div>
 
               <!-- 赛事详情 -->
-              <!-- 墨刀交互 https://modao.cc/app/65VMPmAar3ooy4gkTj0Vf9#screen=skwuk75ympu83mg -->
               <div class="match-detail-article" v-show="currentTab === 1">
-                <!-- <div class="bd-article-li clearfix">
+                <div class="bd-article-li clearfix">
                   <div class="label">比赛项目：</div>
                   <div class="c" v-if="competitionInfo.category_id === 1">围棋</div>
                   <div class="c" v-if="competitionInfo.category_id === 2">象棋</div>
@@ -382,7 +381,15 @@
                   <div class="c">{{competitionInfo.sponsor}}</div>
                 </div>
                 <div class="bd-article-li clearfix">
-                  <div class="label">比赛种类：</div>
+                  <div class="label">参赛人数：</div>
+                  <div class="c">{{competitionInfo.upper_limit > 0 ? competitionInfo.upper_limit : 10000}}人</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">报名费用：</div>
+                  <div class="c">{{competitionInfo.fee * 1}}元</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">赛事种类：</div>
                   <div class="c" v-if="competitionInfo.competition_type === 0">个人赛</div>
                   <div class="c" v-if="competitionInfo.competition_type === 1">团队赛</div>
                 </div>
@@ -401,79 +408,74 @@
                 </div>
                 <div class="bd-article-li clearfix">
                   <div class="label">比赛方式：</div>
-                  <div class="c" v-if="competitionInfo.way === 0">线下场地</div>
+                  <div class="c" v-if="competitionInfo.way === 0">线下比赛</div>
                   <div class="c" v-if="competitionInfo.way === 1">线上游戏平台</div>
-                </div> -->
-                <div style="color: red; font-weight: bold">开发中...</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">奖项设置：</div>
+                  <div class="c">
+                    <span>冠军{{ awardInfo.champion_money | bonus }}</span>
+                    <span>亚军{{ awardInfo.runner_up_money | bonus }}</span>
+                    <span>季军{{ awardInfo.third_winner_money | bonus }}</span>
+                  </div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">报名起止日期：</div>
+                  <div class="c">
+                    <span>{{ competitionInfo.a_b_t | timestampToDate }}</span>
+                    <span>至</span>
+                    <span>{{ competitionInfo.a_e_t | timestampToDate }}</span>
+                  </div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">比赛起止日期：</div>
+                  <div class="c">
+                    <span>{{ competitionInfo.c_b_t | timestampToDate }}</span>
+                    <span>至</span>
+                    <span>{{ competitionInfo.c_e_t | timestampToDate }}</span>
+                  </div>
+                </div>
+
+                <div class="bd-article-li clearfix" v-if="competitionInfo.description">
+                  <div class="label">赛事描述：</div>
+                  <div class="c">
+                    <div v-for="(item, index) in competitionInfo.description.split('\n')" :key="index">{{item}}</div>
+                  </div>
+                </div>
+
+                <div class="bd-article-li clearfix" v-if="competitionInfo.affix">
+                  <div class="label">附件下载：</div>
+                  <div class="c">点击下载附件</div>
+                </div>
+                <div class="bd-article-li clearfix" v-if="competitionInfo.affix">
+                  <div class="label"></div>
+                  <div class="c">
+                    <div class="bd-article-c">
+                      <a :href="item" download v-for="(item, index) in competitionInfo.affix.split(',')" :key="index">{{ item | affixUrlFileName }}</a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- 侧边栏 -->
           <div class="match-detail-fr fr">
-            <!--match-notice start-->
+            <!-- 比赛公告 -->
             <div class="match-notice">
               <div class="player-tit">比赛公告</div>
               <div class="con">
-                <p>1.纵横交错的棋盘似未来百变的道路，黑白分明的棋子是历经风雨的人生。</p>
+                <p>开发中...</p>
+                <!-- <p>1.纵横交错的棋盘似未来百变的道路，黑白分明的棋子是历经风雨的人生。</p>
                 <p>2.为了丰富和活跃校园文化生活，提高我校学生的综合素质，</p>
-                <p>3.爱好及特长的同学提供一个展现自我的平台，在棋类的对弈4可以帮助每一名同学锻炼自身的洞察力，培养同学们的大局观和全面思考问题的能力，提高分析问题的能力等。</p>
+                <p>3.爱好及特长的同学提供一个展现自我的平台，在棋类的对弈4可以帮助每一名同学锻炼自身的洞察力，培养同学们的大局观和全面思考问题的能力，提高分析问题的能力等。</p> -->
               </div>
             </div>
-            <!--match-notice end-->
-            <!--match-grade start-->
-            <div class="match-grade">
-              <div class="player-tit">成绩公布</div>
-              <div class="con">
-                <div class="li clearfix">
-                  <div class="l">周杰：</div>
-                  <div class="r">3胜2败1平</div>
-                </div>
-                <div class="li clearfix">
-                  <div class="l">周杰儿：</div>
-                  <div class="r">3胜2败1平</div>
-                </div>
-                <div class="li clearfix">
-                  <div class="l">欧阳杰儿：</div>
-                  <div class="r">3胜2败1平</div>
-                </div>
-                <div class="li clearfix">
-                  <div class="l">周杰：</div>
-                  <div class="r">3胜2败1平</div>
-                </div>
-                <div class="li clearfix">
-                  <div class="l">周杰儿：</div>
-                  <div class="r">3胜2败1平</div>
-                </div>
-                <div class="li clearfix">
-                  <div class="l">欧阳杰儿：</div>
-                  <div class="r">3胜2败1平</div>
-                </div>
-                <div class="li clearfix">
-                  <div class="l">周杰：</div>
-                  <div class="r">3胜2败1平</div>
-                </div>
-                <div class="li clearfix">
-                  <div class="l">周杰儿：</div>
-                  <div class="r">3胜2败1平</div>
-                </div>
-                <div class="li clearfix">
-                  <div class="l">欧阳杰儿：</div>
-                  <div class="r">3胜2败1平</div>
-                </div>
-              </div>
-            </div>
-            <!--match-grade end-->
-            <!--match-asd start-->
+
+            <!-- 广告位 -->
             <div class="match-asd">
-              <div class="li">
-                <a href=""><img src="/images/ma1.png" /></a>
-              </div>
-              <div class="li">
-                <a href=""><img src="/images/ma2.png" /></a>
-              </div>
-              <div class="li">
-                <a href=""><img src="/images/ma3.png" /></a>
+              <div class="li" v-for="item in adverList" :key="item.id">
+                <a :href="item.jump_url"><img :src="item.image" /></a>
               </div>
             </div>
             <!--match-asd end-->
@@ -481,8 +483,29 @@
         </div>
       </div>
 
+      <!-- 举报对话框 -->
+      <el-dialog custom-class="rank-pop animated" :visible="reportDialogVisible" :show-close="false">
+        <!-- <div class="rank-pop-content"> -->
+        <div class="bond-close" @click="handleCloseReportDialog"></div>
+        <div class="tit">举报内容</div>
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label">填写内容：</div>
+          <div class="con">
+            <div class="detail-text">
+              <textarea class="text" rows="5" v-model="reportContent" placeholder=" 请输入"></textarea>
+            </div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <div class="publish-bottom">
+          <button class="publish-btn" @click="handleSubmitReport">立即发布</button>
+        </div>
+        <!-- </div> -->
+      </el-dialog>
+
       <!-- 我要报名对话框 -->
-      <el-dialog custom-class="apply-dialog rank-pop animated" :visible="applyDialogVisible" width="730px">
+      <el-dialog custom-class="apply-dialog rank-pop animated" :visible="applyDialogVisible" :show-close="false" width="730px">
         <div>
           <div class="bond-close" @click="handleCloseApplyDialog"></div>
           <div class="tit">我要报名</div>
