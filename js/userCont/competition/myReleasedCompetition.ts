@@ -1,14 +1,11 @@
 // 个人中心 我发布的赛事
 
-// // 引入头部
-// $('.public-header').load('/components/PublicHeader.html')
-// // 引入底部
-// $('.public-footer').load('/components/PublicFooter.html')
-// // 引入侧边栏
-// $('.public-user').load('/components/CenterAside.html')
 $(function () {
+  // // 引入头部
   $('.public-header').load('/components/PublicHeader.html')
+  // // 引入底部
   $('.public-footer').load('/components/PublicFooter.html')
+  // // 引入侧边栏
   $('.public-user').load('/components/CenterAside.html')
 })
 
@@ -330,9 +327,9 @@ const myReleasedCompetitionTeam = {
 new Vue({
   el: '#app',
   components: {
-    // 发布比赛个人赛
+    // 发布的比赛个人赛
     'my-released-competition-personal': myReleasedCompetitionPersonal,
-    // 发布比赛团队赛
+    // 发布的比赛团队赛
     'my-released-competition-team': myReleasedCompetitionTeam,
   },
   data() {

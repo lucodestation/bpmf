@@ -91,6 +91,12 @@
         margin-top: 8px;
         width: 96px;
       }
+
+      /* 数据为空时显示 */
+      .empty-data {
+        text-align: center;
+        padding: 100px 0;
+      }
     </style>
   </head>
   <body>
@@ -499,6 +505,8 @@
               </td>
             </tr> -->
           </table>
+
+          <div class="empty-data" v-if="!competitionList.length"><img src="/images/empty.png" /></div>
 
           <div class="main-pages" v-if="competitionList.length">
             <el-pagination layout="prev, pager, next, total, jumper" :total="totalCount" prev-text="上一页" next-text="下一页" @current-change="handleChangeCurrentPage"></el-pagination>

@@ -47,15 +47,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-// // 引入头部
-// $('.public-header').load('/components/PublicHeader.html')
-// // 引入底部
-// $('.public-footer').load('/components/PublicFooter.html')
-// // 引入侧边栏
-// $('.public-user').load('/components/CenterAside.html')
 $(function () {
+    // // 引入头部
     $('.public-header').load('/components/PublicHeader.html');
+    // // 引入底部
     $('.public-footer').load('/components/PublicFooter.html');
+    // // 引入侧边栏
     $('.public-user').load('/components/CenterAside.html');
 });
 var encrypt = new JSEncrypt();
@@ -374,9 +371,9 @@ var myReleasedCompetitionTeam = {
 new Vue({
     el: '#app',
     components: {
-        // 发布比赛个人赛
+        // 发布的比赛个人赛
         'my-released-competition-personal': myReleasedCompetitionPersonal,
-        // 发布比赛团队赛
+        // 发布的比赛团队赛
         'my-released-competition-team': myReleasedCompetitionTeam,
     },
     data: function () {

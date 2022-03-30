@@ -216,9 +216,10 @@ const applyDetail = new Vue({
       input.value = window.location.href // 设置内容（要复制到剪贴板的内容）
       document.body.appendChild(input) // 添加临时实例
       input.select() // 选择实例内容
-      document.execCommand('Copy') // 执行复制
+      const copyResult = document.execCommand('Copy') // 执行复制
+      console.log('copyResult', copyResult)
       document.body.removeChild(input) // 删除临时实例
-      layer.msg('复制成功')
+      layer.msg('链接已复制到剪切板')
     },
     // 关闭举报对话框
     handleCloseReportDialog() {
@@ -231,6 +232,8 @@ const applyDetail = new Vue({
         layer.msg('请输入举报内容')
         return
       }
+
+      layer.msg('开发中...')
 
       console.log('举报内容', this.reportContent)
     },
