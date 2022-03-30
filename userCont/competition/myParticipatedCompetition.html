@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- 个人中心 我发布的赛事 -->
+<!-- 个人中心 我参加的赛事 -->
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
@@ -37,48 +37,20 @@
         line-height: 2;
       }
 
-      /* select 未选择状态 */
-      .select.grey {
-        color: #999;
-      }
-      .select.grey option:not(.placeholder) {
-        color: #333;
-      }
-      /* select 选择状态 */
-      .select option.placeholder {
-        color: #999;
-      }
-
-      /* 隐藏时间选择控件不需要的分、秒 */
-      /* 隐藏分 */
-      .laydate-time-list > li:nth-child(2) ol li {
-        display: none;
-      }
-      /* 显示 00 分和 30 分*/
-      .laydate-time-list > li:nth-child(2) ol li:nth-child(1),
-      .laydate-time-list > li:nth-child(2) ol li:nth-child(31) {
-        display: list-item;
-      }
-      /* 隐藏秒 */
-      .laydate-time-list > li:nth-child(3) ol li {
-        display: none;
-      }
-
-      /* 未选择日期时的样式 */
-      span.input.common-date-input {
-        display: flex;
-        align-items: center;
-      }
-      span.input.common-date-input.grey {
-        color: #999;
-      }
-
       /* 隐藏 element-ui 对话框的标题栏 */
       .el-dialog .el-dialog__header {
         display: none;
       }
       .el-dialog .el-dialog__body {
         padding: 0;
+      }
+
+      /* 时间排序 */
+      .time-sort {
+        display: flex;
+        align-items: center;
+        height: 36px;
+        cursor: pointer;
       }
 
       /* 赛事名称/赛事标题 */
@@ -90,12 +62,6 @@
       .competition-name p {
         margin-top: 8px;
         width: 96px;
-      }
-
-      /* 数据为空时显示 */
-      .empty-data {
-        text-align: center;
-        padding: 100px 0;
       }
     </style>
   </head>
@@ -119,10 +85,10 @@
               <a class="li-a fl m-r-40" :class="{ active: competitionType === 1 }" href="javascript:" @click="handleChangeCompetitionType(1)">团队赛</a>
             </div>
 
-            <!-- 我发布的赛事 个人赛 -->
-            <my-released-competition-personal :competition-cate-list="competitionCateList" v-show="competitionType === 0"></my-released-competition-personal>
-            <!-- 我发布的赛事 团队赛 -->
-            <my-released-competition-team :competition-cate-list="competitionCateList" v-show="competitionType === 1"></my-released-competition-team>
+            <!-- 我参加的赛事 个人赛 -->
+            <my-participated-competition-personal v-show="competitionType === 0"></my-participated-competition-personal>
+            <!-- 我参加的赛事 团队赛 -->
+            <my-participated-competition-team v-show="competitionType === 1"></my-participated-competition-team>
           </div>
           <!--center-inner end-->
         </div>
@@ -132,12 +98,14 @@
     </div>
     <!--center-container end-->
 
-    <!-- 我发布的赛事个人赛 - 组件模板 -->
-    <div id="myReleasedCompetitionPersonal" style="position: absolute; width: 0; height: 0; overflow: hidden">
+    <!-- 我参加的赛事个人赛 - 组件模板 -->
+    <div id="myParticipatedCompetitionPersonal" style="position: absolute; width: 0; height: 0; overflow: hidden">
       <div class="center-inner-content">
         <!-- 临时 -->
         <div id="personalCompetitionTemp">
-          <div>{{searchOption}}</div>
+          <div>赛事编号:{{competitionNumber}}</div>
+          <div>赛事名称:{{competitionName}}</div>
+          <div>赛事排序:{{competitionSort}}</div>
         </div>
 
         <!-- 状态 tabs -->
@@ -149,26 +117,24 @@
 
         <!-- 筛选选项 -->
         <div class="center-inner-form wallet-search clearfix">
-          <!-- 赛事类型 -->
+          <!-- 赛事编号 -->
           <div class="form-bor">
-            <select class="select w130" :class="{grey: searchOption.category_id === ''}" v-model="searchOption.category_id">
-              <option class="placeholder" value="">赛事类型</option>
-              <option v-for="(item, index) in competitionCateList" :key="item.id" :value="item.id">{{item.category_name}}</option>
-            </select>
+            <input class="input w130" type="number" placeholder="请输入赛事编号" v-model.trim="competitionNumber" />
           </div>
 
-          <!-- 开始时间 -->
-          <div ref="startDate" class="form-bor m-l-20">
-            <!-- <input class="input common-date-input w130" type="text" placeholder="开始时间" disabled /> -->
-            <span class="input common-date-input w130" :class="{grey:!startDate}">{{startDate?startDate:'开始时间'}}</span>
-          </div>
-          <!-- 结束时间 -->
-          <div ref="endDate" class="form-bor m-l-20">
-            <!-- <input type="text" class="input common-date-input w130" placeholder="结束时间" /> -->
-            <span class="input common-date-input w130" :class="{grey:!endDate}">{{endDate?endDate:'结束时间'}}</span>
+          <!-- 赛事名称 -->
+          <div class="form-bor m-l-20">
+            <input class="input w130" type="search" placeholder="请输入赛事名称" v-model.trim="competitionName" />
           </div>
 
-          <button class="form-btn m-l-20" @click="handleSearch">查询</button>
+          <button class="form-btn fl m-l-20" @click="handleSearch">搜索</button>
+
+          <div class="time-sort fl m-l-40" @click="handleSort">
+            <span>报名时间&nbsp;</span>
+            <img src="/images/sort-default.png" v-if="competitionSort === ''" />
+            <img src="/images/sort-desc.png" v-if="competitionSort === 1" />
+            <img src="/images/sort-asc.png" v-if="competitionSort === 2" />
+          </div>
         </div>
 
         <!-- 赛事列表表格 -->
@@ -506,8 +472,6 @@
             </tr> -->
           </table>
 
-          <div class="empty-data" v-if="!competitionList.length"><img src="/images/empty.png" /></div>
-
           <div class="main-pages" v-if="competitionList.length">
             <el-pagination layout="prev, pager, next, total, jumper" :total="totalCount" prev-text="上一页" next-text="下一页" @current-change="handleChangeCurrentPage"></el-pagination>
           </div>
@@ -559,8 +523,8 @@
       </div>
     </div>
 
-    <!-- 我发布的赛事团队赛 - 组件模板 -->
-    <div id="myReleasedCompetitionTeam" style="position: absolute; width: 0; height: 0; overflow: hidden">
+    <!-- 我参加的赛事团队赛 - 组件模板 -->
+    <div id="myParticipatedCompetitionTeam" style="position: absolute; width: 0; height: 0; overflow: hidden">
       <div class="center-inner-content">
         <!--center-order-state start-->
         <div class="center-order-state m-b-20 clearfix">
@@ -822,52 +786,9 @@
       </div>
     </div>
 
-    <!--查看原因弹出-->
-    <div class="sy-alert bond-pop animated" style="width: 500px" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert3">
-      <div class="bond-content">
-        <div class="bond-close" onClick="ok('alert3')"></div>
-        <div class="bond-tit">未通过原因</div>
-        <div class="text-c m-t-40">
-          <div class="f-16">请重新修改赛事阶段相关信息</div>
-        </div>
-        <div class="last-bottom text-c">
-          <button class="bond-btn mar-auto" onClick="ok('alert3')">确定</button>
-        </div>
-      </div>
-    </div>
-    <!--终止比赛弹出-->
-    <div class="sy-alert bond-pop animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert2">
-      <div class="bond-content">
-        <div class="bond-close" onClick="ok('alert2')"></div>
-        <div class="bond-tit">终止比赛</div>
-        <div class="pay-item f-20 clearfix">比赛终止后将无法进行，相关费用将退回余额，确定要终止比赛吗？</div>
-        <div class="pay-item f-20 clearfix">
-          <div class="label w150">报名费用退还：</div>
-          <div class="item-r m-l-150">
-            <div class="pay-item-radio fl m-r-40">
-              <input class="radio" type="radio" value="1" name="agree" checked />
-              <span>不退还</span>
-            </div>
-            <div class="pay-item-radio fl">
-              <input class="radio" type="radio" value="2" name="agree" />
-              <span>退还</span>
-            </div>
-          </div>
-        </div>
-        <div class="pay-item">
-          <div class="pay-item-text bor">
-            <textarea class="text f-16" placeholder="请输入终止的原因" rows="3"></textarea>
-          </div>
-        </div>
-        <div class="last-bottom text-c">
-          <button class="bond-btn mar-auto">提交</button>
-        </div>
-      </div>
-    </div>
-
     <!-- 公共底部 -->
     <footer class="public-footer"></footer>
 
-    <script src="/js/userCont/competition/myReleasedCompetition.js"></script>
+    <script src="/js/userCont/competition/myParticipatedCompetition.js"></script>
   </body>
 </html>

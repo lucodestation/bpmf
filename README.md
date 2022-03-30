@@ -87,6 +87,8 @@ window.location.href = 'url'
 window.open('url')
 返回上一页
 window.history.go(-1)
+刷新当前页
+window.location.reload()
 
 打开弹框
 syalert.syopen('id')

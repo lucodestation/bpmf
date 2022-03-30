@@ -52,6 +52,7 @@ request.interceptors.response.use(function (response) {
     if (status === 401) {
     }
     else if (status >= 500) {
+        layer.msg('服务器错误');
     }
     else {
     }

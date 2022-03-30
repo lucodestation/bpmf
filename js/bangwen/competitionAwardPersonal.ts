@@ -306,6 +306,8 @@ new Vue({
       })
 
       // 警告：this.alipayPayDialogVisible = true 不能放到这里
+
+      // 清除之前生成的二维码
       const alipayPayQrcodeElement = document.getElementById('alipayPayQrcode')
       alipayPayQrcodeElement.innerHTML = ''
       // 生成二维码

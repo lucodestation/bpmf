@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<!-- 报名详情 -->
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>赛事频道 - 玻坡摸佛</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+    <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+    <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/jsencrypt.js"></script>
+    <script src="/plugins/aliyun-oss-sdk.min.js"></script>
+    <script src="/plugins/jquery.min.js"></script>
+    <script src="/plugins/swiper/swiper.min.js"></script>
+    <script src="/plugins/syalert/syalert.min.js"></script>
+    <script src="/plugins/vue.min.js"></script>
+    <script src="/plugins/axios.min.js"></script>
+    <script src="/plugins/qs.min.js"></script>
+    <script src="/plugins/element-ui/element-ui.min.js"></script>
+    <script src="/plugins/qrcode.min.js"></script>
+
+    <script src="/utils/request.js"></script>
+    <script src="/utils/util.js"></script>
+
+    <style>
+      /* 临时 */
+      .temp-pre {
+        position: fixed;
+        top: 100px;
+        right: 0;
+        bottom: 50px;
+        overflow: scroll;
+        max-width: 500px;
+        /* opacity: 0.7; */
+        z-index: 10000;
+        padding: 10px;
+        color: red;
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      /* 隐藏 element-ui 对话框的标题栏 */
+      .el-dialog .el-dialog__header {
+        display: none;
+      }
+      .el-dialog .el-dialog__body {
+        padding: 0;
+      }
+
+      /* 我要报名对话框 */
+      .apply-dialog .column2-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-top: 50px;
+      }
+      .apply-dialog .column2-container .column2-item {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .apply-dialog .column2-container .column2-item:nth-child(2n) {
+        justify-content: flex-end;
+      }
+      .apply-dialog .column2-container .column2-item .label {
+        width: 110px;
+        font-size: 16px;
+      }
+      .apply-dialog .column2-container .column2-item .label span {
+        color: #ff4143;
+      }
+      .apply-dialog .column2-container .column2-item .content {
+        width: 200px;
+        height: 48px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        background: #fff;
+        border-radius: 4px;
+      }
+      .apply-dialog .column2-container .column2-item .content select,
+      .apply-dialog .column2-container .column2-item .content input {
+        width: 100%;
+        height: 100%;
+        padding: 0 10px;
+        font-size: 16px;
+        box-sizing: border-box;
+        border-radius: 4px;
+      }
+      .apply-dialog select {
+        color: #333;
+      }
+      .apply-dialog select option[value=''] {
+        color: #999;
+      }
+      .apply-dialog select.grey {
+        color: #999;
+      }
+      .apply-dialog select.grey option + option {
+        color: #333;
+      }
+      /* 上传图片 */
+      .apply-dialog .upload-image {
+        /* background: pink; */
+      }
+      .apply-dialog .upload-image .con {
+        display: flex;
+      }
+      .apply-dialog .upload-image label {
+        display: block;
+      }
+      .apply-dialog .upload-image .image-wrap {
+        position: relative;
+        width: 160px;
+        height: 160px;
+        margin-right: 30px;
+      }
+      .apply-dialog .upload-image .image-wrap img {
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        box-shadow: 0 0 0 1px #eee;
+      }
+      .apply-dialog .upload-image .image-wrap i {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        top: -12px;
+        right: -12px;
+        background: url('/images/close-bbb.png');
+        background-size: 24px;
+        display: none;
+      }
+      .apply-dialog .upload-image .image-wrap:hover i {
+        display: block;
+      }
+      /* 文件/附件 */
+      .apply-dialog .affix-list {
+        line-height: 2;
+        display: flex;
+        align-items: center;
+        color: #999;
+      }
+      .apply-dialog .affix-list i {
+        display: block;
+        width: 20px;
+        height: 20px;
+        background: url('/images/pub31.png');
+        background-size: 20px;
+        margin-right: 10px;
+        transform: rotate(45deg);
+      }
+      .apply-dialog .affix-list i:hover {
+        background: url('/images/bank4.png');
+        background-size: 20px;
+      }
+      /* 支付方式 */
+      .apply-dialog .pay-method {
+        display: flex;
+        align-items: center;
+      }
+      .apply-dialog .pay-method .con {
+        margin-left: 0;
+      }
+      .apply-dialog .pay-method .con label {
+        width: 160px;
+        height: 56px;
+        float: left;
+        margin: 15px 10px;
+      }
+      .apply-dialog .pay-method .con label span {
+        display: block;
+        width: 160px;
+        height: 56px;
+        border: 1px solid #ccc;
+      }
+      .apply-dialog .pay-method .con label span img {
+        display: block;
+        width: 126px;
+        height: 44px;
+        margin: 6px auto;
+      }
+      .apply-dialog .pay-method .con label input:checked + span {
+        background: #fed9bb;
+        border: 1px solid #ff7f17;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 公共头部 -->
+    <header class="public-header"></header>
+
+    <div id="app" class="match-container">
+      <!-- 临时 -->
+      <div class="temp-pre">
+        <h2>agreedAgreement</h2>
+        <pre>{{agreedAgreement}}</pre>
+        <h2>applyDialogData</h2>
+        <pre>{{applyDialogData}}</pre>
+        <h2>applyDialogInfo</h2>
+        <pre>{{applyDialogInfo}}</pre>
+        <h2>technicalLevelList</h2>
+        <pre>{{technicalLevelList}}</pre>
+      </div>
+      <!-- 面包屑导航 -->
+      <div class="inner-position w-1200">
+        <a href="/">首页</a>
+        <span>&lt;</span>
+        <a href="/competition/index.html">赛事频道</a>
+        <span>&lt;</span>
+        <a href="/competition/applyList.html">火热报名</a>
+        <span>&lt;</span>
+        <span class="current">详情</span>
+      </div>
+
+      <div class="match-detail w-1200">
+        <div class="detail-content clearfix">
+          <!-- 主要内容 -->
+          <div class="match-detail-fl fl">
+            <!-- 头部 -->
+            <div class="match-detail-hd clearfix">
+              <div class="img fl">
+                <img style="width: 320px; height: 180px" :src="competitionInfo.cover_picture" />
+              </div>
+              <div class="txt">
+                <div class="t w-auto clearfix">
+                  <span class="t-tip" v-if="competitionInfo.category_id === 1">围棋</span>
+                  <span class="t-tip" v-if="competitionInfo.category_id === 2">象棋</span>
+                  <span class="t-tip" v-if="competitionInfo.category_id === 3">五子棋</span>
+                  <span class="t-tip" v-if="competitionInfo.category_id === 4">国际象棋</span>
+                  <span class="t-tip" v-if="competitionInfo.category_id === 5">其他</span>
+                  <div class="tt">{{competitionInfo.competition_name}}</div>
+                </div>
+                <div class="item-li">
+                  <span class="gray"> 奖励设置：</span>冠军{{awardInfo.champion_money | bonus}} 亚军{{awardInfo.runner_up_money | bonus}} 季军{{awardInfo.third_winner_money | bonus}}
+                </div>
+                <div class="item-li"><span class="gray">参赛人数：</span>{{competitionInfo.upper_limit > 0 ? competitionInfo.upper_limit : 10000}}人</div>
+                <div class="item-li">
+                  <span class="gray"> 已报名：</span>{{competitionInfo.apply_number}}人
+                  <span class="orange-s">报名中</span>
+                </div>
+                <div class="li-bot">
+                  <a class="rank-detail-btn" href="javascript:" @click="handleOpenApplyDialog">我要报名</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 主体 -->
+            <div class="match-detail-bd">
+              <!-- tabs -->
+              <div class="match-head clearfix">
+                <a class="li-a fl" :class="{on: currentTab === 0}" href="javascript:" @click="currentTab = 0">对阵安排</a>
+                <a class="li-a fl" :class="{on: currentTab === 1}" href="javascript:" @click="currentTab = 1">赛事详情</a>
+                <div class="player-share fr" @click="handleShare">分享</div>
+                <div class="player-complain fr" @click="reportDialogVisible = true">举报</div>
+              </div>
+
+              <!-- 对阵安排 -->
+              <div v-show="currentTab === 0">
+                <!-- swiper -->
+                <div class="match-scroll">
+                  <div ref="swiper" class="swiper swiper-container swiper-container2">
+                    <div class="swiper-wrapper">
+                      <!-- 每个阶段名称 -->
+                      <div class="swiper-slide" v-for="(item,index) in stageInfo" :key="item.stage" @click="currentStateIndex = index">
+                        <div class="match-scroll-li" :class="{on: currentStateIndex === index}">
+                          <div class="con">
+                            <div class="t">{{item.stage_name}}</div>
+                            <div class="c">{{item.s_b_t | timestampToDate}}</div>
+                            <div class="c">{{item.s_e_t | timestampToDate}}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                  </div>
+                </div>
+
+                <!-- 比赛规则图标 -->
+                <div class="match-switch clearfix">
+                  <div class="switch-li li4 on">
+                    <a href="javascript:">
+                      <div class="img"></div>
+                      <div class="t">比赛规则</div>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- 规则详情 -->
+                <div class="match-rule" v-if="stageInfo[currentStateIndex]">
+                  <div class="li"><span class="gray">阶段名称：</span>{{ stageInfo[currentStateIndex].stage_name }}</div>
+                  <div class="li"><span class="gray">阶段时间：</span>{{stageInfo[currentStateIndex].s_b_t | timestampToDate}} 至 {{stageInfo[currentStateIndex].s_e_t | timestampToDate}}</div>
+
+                  <div class="li">
+                    <span class="gray">比赛制度：</span>
+                    <span v-if="stageInfo[currentStateIndex].system === 1">淘汰赛</span>
+                    <span v-if="stageInfo[currentStateIndex].system === 2">循环赛</span>
+                    <span v-if="stageInfo[currentStateIndex].system === 3">其他赛制</span>
+
+                    <span v-if="stageInfo[currentStateIndex].system === 1 && stageInfo[currentStateIndex].rule === 1">单败淘汰</span>
+                    <span v-if="stageInfo[currentStateIndex].system === 1 && stageInfo[currentStateIndex].rule === 2">双败淘汰</span>
+                    <span v-if="stageInfo[currentStateIndex].system === 2 && stageInfo[currentStateIndex].rule === 1">双循环赛</span>
+                    <span v-if="stageInfo[currentStateIndex].system === 2 && stageInfo[currentStateIndex].rule === 2">双循环赛</span>
+
+                    <span v-if="stageInfo[currentStateIndex].system === 2 && stageInfo[currentStateIndex].arithmetic === 1">贝格尔法</span>
+                    <span v-if="stageInfo[currentStateIndex].system === 2 && stageInfo[currentStateIndex].arithmetic === 2">蛇形编排</span>
+                    <span v-if="stageInfo[currentStateIndex].system === 2 && stageInfo[currentStateIndex].arithmetic === 3">顺时针法</span>
+                    <span v-if="stageInfo[currentStateIndex].system === 2 && stageInfo[currentStateIndex].arithmetic === 4">逆时针法</span>
+
+                    <span v-if="stageInfo[currentStateIndex].system === 3 && stageInfo[currentStateIndex].system_memo">{{stageInfo[currentStateIndex].system_memo}}</span>
+                  </div>
+                  <div class="li"><span class="gray">分组数：</span>{{stageInfo[currentStateIndex].group_num}}</div>
+                  <div class="li">
+                    <span class="gray">每组晋级/淘汰人数：</span>
+                    <span v-if="stageInfo[currentStateIndex].rank_or_week === 1">晋级</span>
+                    <span v-if="stageInfo[currentStateIndex].rank_or_week === 2">淘汰</span>
+                    、{{stageInfo[currentStateIndex].people_num}} 人
+                  </div>
+
+                  <div class="li">
+                    <span class="gray">比赛规则：</span>
+                    <span>
+                      参赛选手<span v-if="stageInfo[currentStateIndex].group_way === 1">按种子分组</span><span v-if="stageInfo[currentStateIndex].group_way === 2">随机分组</span
+                      ><span v-if="stageInfo[currentStateIndex].group_way === 3">同队或同单位限制</span><span v-if="stageInfo[currentStateIndex].group_way === 4">地区分组 </span>
+                    </span>
+                    <span>
+                      、参赛选手参赛号<span v-if="stageInfo[currentStateIndex].competition_num === 1">按等级分</span><span v-if="stageInfo[currentStateIndex].competition_num === 2">按技术水平分</span
+                      ><span v-if="stageInfo[currentStateIndex].competition_num === 3">随机分号 </span>
+                    </span>
+                    <span> </span>
+                    、先后手首轮<span v-if="stageInfo[currentStateIndex].before_after === 1">猜先</span><span v-if="stageInfo[currentStateIndex].before_after === 2">按约定 </span>
+                    <span v-if="stageInfo[currentStateIndex].surplus === 1">、先后手其余轮次<span>按约定</span></span>
+                  </div>
+
+                  <!-- 循环赛或淘汰赛才有 -->
+                  <div class="li" v-if="stageInfo[currentStateIndex].system === 1 || stageInfo[currentStateIndex].system === 2">
+                    <span class="gray">设置计分规则：</span>
+                    <span>每台赛局数{{stageInfo[currentStateIndex].sai_num}}局</span>
+                    <!-- 循环赛才有 -->
+                    <template v-if="stageInfo[currentStateIndex].system === 2">
+                      <span>、胜{{stageInfo[currentStateIndex].win_score * 1}}分</span>
+                      <span>、平{{stageInfo[currentStateIndex].dogfall_score * 1}}分</span>
+                      <span>、负{{stageInfo[currentStateIndex].defeated_score * 1}}分</span>
+                      <span>、弃权{{stageInfo[currentStateIndex].waiver_score * 1}}分</span>
+                      <span>、犯规{{stageInfo[currentStateIndex].illegality_score * 1}}分</span>
+                    </template>
+                  </div>
+
+                  <!-- 循环赛才有 -->
+                  <div class="li" v-if="stageInfo[currentStateIndex].system === 2 && stageInfo[currentStateIndex].ranking_system">
+                    <span class="gray">平分名次排列：</span>
+                    <span>优先级从左到右排列，</span>
+                    <span>{{ stageInfo[currentStateIndex].ranking_system | rankingSystem }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 赛事详情 -->
+              <div class="match-detail-article" v-show="currentTab === 1">
+                <div class="bd-article-li clearfix">
+                  <div class="label">比赛项目：</div>
+                  <div class="c" v-if="competitionInfo.category_id === 1">围棋</div>
+                  <div class="c" v-if="competitionInfo.category_id === 2">象棋</div>
+                  <div class="c" v-if="competitionInfo.category_id === 3">五子棋</div>
+                  <div class="c" v-if="competitionInfo.category_id === 4">国际象棋</div>
+                  <div class="c" v-if="competitionInfo.category_id === 5">其他</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">赛事名称：</div>
+                  <div class="c">{{competitionInfo.competition_name}}</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">赞助方：</div>
+                  <div class="c">{{competitionInfo.sponsor}}</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">参赛人数：</div>
+                  <div class="c">{{competitionInfo.upper_limit > 0 ? competitionInfo.upper_limit : 10000}}人</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">报名费用：</div>
+                  <div class="c">{{competitionInfo.fee * 1}}元</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">赛事种类：</div>
+                  <div class="c" v-if="competitionInfo.competition_type === 0">个人赛</div>
+                  <div class="c" v-if="competitionInfo.competition_type === 1">团队赛</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">参赛方式：</div>
+                  <div class="c" v-if="competitionInfo.join_type === 1">自由参与</div>
+                  <div class="c" v-if="competitionInfo.join_type === 2">批准参与</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">比赛阶段：</div>
+                  <div class="c" v-if="competitionInfo.stage >= 1">第1阶段</div>
+                  <div class="c" v-if="competitionInfo.stage >= 2">、第2阶段</div>
+                  <div class="c" v-if="competitionInfo.stage >= 3">、第3阶段</div>
+                  <div class="c" v-if="competitionInfo.stage >= 4">、第4阶段</div>
+                  <div class="c" v-if="competitionInfo.stage >= 5">、第5阶段</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">比赛方式：</div>
+                  <div class="c" v-if="competitionInfo.way === 0">线下比赛</div>
+                  <div class="c" v-if="competitionInfo.way === 1">线上游戏平台</div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">奖项设置：</div>
+                  <div class="c">
+                    <span>冠军{{ awardInfo.champion_money | bonus }}</span>
+                    <span>亚军{{ awardInfo.runner_up_money | bonus }}</span>
+                    <span>季军{{ awardInfo.third_winner_money | bonus }}</span>
+                  </div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">报名起止日期：</div>
+                  <div class="c">
+                    <span>{{ competitionInfo.a_b_t | timestampToDate }}</span>
+                    <span>至</span>
+                    <span>{{ competitionInfo.a_e_t | timestampToDate }}</span>
+                  </div>
+                </div>
+                <div class="bd-article-li clearfix">
+                  <div class="label">比赛起止日期：</div>
+                  <div class="c">
+                    <span>{{ competitionInfo.c_b_t | timestampToDate }}</span>
+                    <span>至</span>
+                    <span>{{ competitionInfo.c_e_t | timestampToDate }}</span>
+                  </div>
+                </div>
+
+                <div class="bd-article-li clearfix" v-if="competitionInfo.description">
+                  <div class="label">赛事描述：</div>
+                  <div class="c">
+                    <div v-for="(item, index) in competitionInfo.description.split('\n')" :key="index">{{item}}</div>
+                  </div>
+                </div>
+
+                <div class="bd-article-li clearfix" v-if="competitionInfo.affix">
+                  <div class="label">附件下载：</div>
+                  <div class="c">点击下载附件</div>
+                </div>
+                <div class="bd-article-li clearfix" v-if="competitionInfo.affix">
+                  <div class="label"></div>
+                  <div class="c">
+                    <div class="bd-article-c">
+                      <a :href="item" download v-for="(item, index) in competitionInfo.affix.split(',')" :key="index">{{ item | affixUrlFileName }}</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 侧边栏 -->
+          <div class="match-detail-fr fr">
+            <!-- 比赛公告 -->
+            <div class="match-notice">
+              <div class="player-tit">比赛公告</div>
+              <div class="con">
+                <p>开发中...</p>
+                <!-- <p>1.纵横交错的棋盘似未来百变的道路，黑白分明的棋子是历经风雨的人生。</p>
+                <p>2.为了丰富和活跃校园文化生活，提高我校学生的综合素质，</p>
+                <p>3.爱好及特长的同学提供一个展现自我的平台，在棋类的对弈4可以帮助每一名同学锻炼自身的洞察力，培养同学们的大局观和全面思考问题的能力，提高分析问题的能力等。</p> -->
+              </div>
+            </div>
+
+            <!-- 广告位 -->
+            <div class="match-asd">
+              <div class="li" v-for="item in adverList" :key="item.id">
+                <a :href="item.jump_url"><img :src="item.image" /></a>
+              </div>
+            </div>
+            <!--match-asd end-->
+          </div>
+        </div>
+      </div>
+
+      <!-- 举报对话框 -->
+      <el-dialog custom-class="rank-pop animated" :visible="reportDialogVisible" :show-close="false">
+        <!-- <div class="rank-pop-content"> -->
+        <div class="bond-close" @click="handleCloseReportDialog"></div>
+        <div class="tit">举报内容</div>
+        <!--publish-item start-->
+        <div class="publish-item clearfix">
+          <div class="label">填写内容：</div>
+          <div class="con">
+            <div class="detail-text">
+              <textarea class="text" rows="5" v-model="reportContent" placeholder=" 请输入"></textarea>
+            </div>
+          </div>
+        </div>
+        <!--publish-item end-->
+        <div class="publish-bottom">
+          <button class="publish-btn" @click="handleSubmitReport">立即发布</button>
+        </div>
+        <!-- </div> -->
+      </el-dialog>
+
+      <!-- 我要报名对话框 -->
+      <el-dialog custom-class="apply-dialog rank-pop animated" :visible="applyDialogVisible" :show-close="false" width="730px">
+        <div>
+          <div class="bond-close" @click="handleCloseApplyDialog"></div>
+          <div class="tit">我要报名</div>
+          <!-- 两列容器 -->
+          <div class="column2-container">
+            <!-- 两列项目 -->
+            <div class="column2-item">
+              <div class="label"><span>*</span>角色选择：</div>
+              <div class="content">
+                <select class="select" :class="{grey: !applyDialogData.role_id}" v-model="applyDialogData.role_id">
+                  <option value="">请选择角色</option>
+                  <option v-for="item in roleList" :key="item.id" :value="item.id">{{item.label}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="column2-item">
+              <div class="label"><span>*</span>比赛账号：</div>
+              <div class="content">
+                <input class="input" type="text" placeholder="请输入其他平台比赛账号" v-model.trim="applyDialogData.account_number" />
+              </div>
+            </div>
+
+            <div class="column2-item">
+              <div class="label"><span>*</span>姓名：</div>
+              <div class="content">
+                <input class="input" type="text" placeholder="请输入姓名" v-model.trim="applyDialogData.username" />
+              </div>
+            </div>
+
+            <div class="column2-item" v-if="+applyDialogInfo.team_where === 1">
+              <div class="label"><span>*</span>所在团队：</div>
+              <div class="content">
+                <select class="select" :class="{grey: !applyDialogData.team}" v-model="applyDialogData.team">
+                  <option value="">请选择所在团队</option>
+                  <option v-for="item in applyDialogInfo.team_list" :key="item.id" :value="item.team_name">{{item.team_name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="column2-item" v-if="+applyDialogInfo.team_where === 2">
+              <div class="label"><span>*</span>代表队：</div>
+              <div class="content">
+                <input class="input" type="text" placeholder="请输入代表队" v-model.trim="applyDialogData.team" />
+              </div>
+            </div>
+
+            <div class="column2-item">
+              <div class="label">性别：</div>
+              <div class="content">
+                <select class="select" :class="{grey: !applyDialogData.gender}" v-model="applyDialogData.gender">
+                  <option value="">请选择性别</option>
+                  <option value="男">男</option>
+                  <option value="女">女</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="column2-item">
+              <div class="label"><span>*</span>联系电话：</div>
+              <div class="content">
+                <input class="input" type="tel" minlength="11" maxlength="11" placeholder="请输入手机号" v-model.trim="applyDialogData.tel" />
+              </div>
+            </div>
+
+            <div class="column2-item" v-if="applyDialogData.role_id === 1">
+              <div class="label"><span>*</span>技术水平：</div>
+              <div class="content">
+                <select class="select" :class="{grey: !applyDialogData.skill_id}" @change="handleSelectTechnicalLevel">
+                  <option value="">请选择技术水平</option>
+                  <option v-for="item in technicalLevelList" :key="item.id" :value="item.id">{{item.skill_name}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="column2-item" v-if="applyDialogData.role_id === 1">
+              <div class="label"><span>*</span>技术等级：</div>
+              <div class="content">
+                <select class="select" :class="{grey: !applyDialogData.level_id}" @change="handleSelectTechnicalGrade">
+                  <option value="">请选择技术等级</option>
+                  <option v-for="item in technicalGradeList" :key="item.id" :value="item.id">{{item.level}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="column2-item" v-if="applyDialogInfo.contact_info && applyDialogInfo.contact_info.includes(1)">
+              <div class="label">QQ账号：</div>
+              <div class="content">
+                <input class="input" type="text" placeholder="请输入QQ账号" v-model.trim="applyDialogData.qq" />
+              </div>
+            </div>
+
+            <div class="column2-item" v-if="applyDialogInfo.contact_info && applyDialogInfo.contact_info.includes(2)">
+              <div class="label">MSN账号：</div>
+              <div class="content">
+                <input class="input" type="text" placeholder="请输入MSN账号" v-model.trim="applyDialogData.msn" />
+              </div>
+            </div>
+
+            <div class="column2-item" v-if="applyDialogInfo.contact_info && applyDialogInfo.contact_info.includes(3)">
+              <div class="label">SKYPE账号：</div>
+              <div class="content">
+                <input class="input" type="text" placeholder="请输入SKYPE账号" v-model.trim="applyDialogData.skype" />
+              </div>
+            </div>
+
+            <div class="column2-item" v-if="applyDialogInfo.contact_info && applyDialogInfo.contact_info.includes(4)">
+              <div class="label">微信账号：</div>
+              <div class="content">
+                <input class="input" type="text" placeholder="请输入微信账号" v-model.trim="applyDialogData.wx" />
+              </div>
+            </div>
+
+            <div class="column2-item" v-if="applyDialogInfo.apply_info && applyDialogInfo.apply_info.includes(1)">
+              <div class="label">年龄：</div>
+              <div class="content">
+                <input class="input" type="number" placeholder="请输入年龄" v-model.trim.number="applyDialogData.age" />
+              </div>
+            </div>
+          </div>
+
+          <div class="publish-item clearfix">
+            <div class="label"><span class="color-red">*</span>省市区：</div>
+            <div class="con">
+              <div class="input-w">
+                <select class="select w180" :class="{grey: !applyDialogData.province}" @change="handleSelectProvince">
+                  <option value="">选择省份</option>
+                  <option v-for="item in provinceList" :key="item.id" :value="item.id">{{item.name}}</option>
+                </select>
+                <select class="select w180" :class="{grey: !applyDialogData.city}" @change="handleSelectCity">
+                  <option value="">选择城市</option>
+                  <option v-for="item in cityList" :key="item.id" :value="item.id">{{item.name}}</option>
+                </select>
+                <select class="select w180" :class="{grey: !applyDialogData.area}" @change="handleSelectArea">
+                  <option value="">选择县区</option>
+                  <option v-for="item in areaList" :key="item.id" :value="item.id">{{item.name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="publish-item clearfix" v-if="applyDialogInfo.apply_info && applyDialogInfo.apply_info.includes(2)">
+            <div class="label">居住地址：</div>
+            <div class="con">
+              <div class="input-w">
+                <input class="input" type="text" placeholder="请输入详细地址" v-model.trim="applyDialogData.addr" />
+              </div>
+            </div>
+          </div>
+
+          <div class="publish-item clearfix">
+            <div class="label"><span class="color-red">*</span>身份证明：</div>
+            <div class="con">
+              <div class="input-w">
+                <select class="select" v-model.number="applyDialogData.identification">
+                  <option value="1">身份证</option>
+                  <option value="2">军官证</option>
+                  <option value="3">其他</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- 上传图片 -->
+          <div class="publish-item clearfix upload-image">
+            <div class="con">
+              <div class="image-wrap" v-for="(item, index) in personalIDFileList" :key="index">
+                <img :src="item.url" />
+                <i @click="handleDeleteIdentificationFile(index)"></i>
+              </div>
+              <label class="match-detail-up" v-if="personalIDFileList.length < 3">
+                <input type="file" accept=".png,.jpg,.jpeg,.bmp" multiple hidden @change="handleIdentificationFileChange" />
+                <img src="/images/pub.png" />
+                <div class="tt">上传图片</div>
+              </label>
+            </div>
+          </div>
+
+          <div class="publish-item clearfix" v-if="applyDialogInfo.apply_info && applyDialogInfo.apply_info.includes(3)">
+            <div class="label">自我介绍：</div>
+            <div class="con">
+              <div class="detail-text">
+                <textarea class="text" rows="5" placeholder="请介绍自己，方便了解，提高效率" v-model="applyDialogData.introduce"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 上传文件 -->
+          <div class="publish-item clearfix">
+            <div class="label">应榜附件：</div>
+            <div class="con">
+              <label class="pop-up">
+                <input type="file" accept=".pdf,.doc,.docx" multiple hidden @change="handleAffixFileChange" />
+                <span class="up-s">选择文件</span>
+              </label>
+              <div class="pop-up-tip">※上传文件，支持PDF、Word的格式，大小不超过2M</div>
+              <div class="affix-list" v-for="(item, index) in affixFileList" :key="index">
+                <i @click="handleDeleteAffixFile(index)"></i>
+                <span>{{item.name}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="match-pop-price">报名费：<span class="color-red">￥{{applyDialogInfo.fee * 1}}</span></div>
+
+          <!-- 支付方式 -->
+          <div class="publish-item clearfix pay-method" v-if="applyDialogInfo.fee > 0">
+            <div class="label"><span class="color-red">*</span>支付方式：</div>
+            <div class="con clearfix">
+              <label>
+                <input type="radio" hidden name="payWay" value="1" v-model.number="applyDialogData.pay_way" />
+                <span><img src="/images/pub14.png" /></span>
+              </label>
+
+              <label>
+                <input type="radio" hidden name="payWay" value="2" v-model.number="applyDialogData.pay_way" />
+                <span><img src="/images/pub19.png" /></span>
+              </label>
+
+              <label>
+                <input type="radio" hidden name="payWay" value="3" v-model.number="applyDialogData.pay_way" />
+                <span><img src="/images/pub13.png" /></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="publish-check">
+            <label>
+              <div class="check fl">
+                <input class="check-input" type="checkbox" v-model="agreedAgreement" />
+                <span class="check-s"></span>
+              </div>
+              <span>我已阅读并同意</span>
+            </label>
+            <a class="color-orange" href="/rule/bwgz.html" target="_blank">《玻坡摸佛榜文（需求）规则》</a>
+          </div>
+          <div class="publish-bottom">
+            <button class="publish-btn" @click="handleSubmitApply">提交</button>
+          </div>
+        </div>
+      </el-dialog>
+
+      <!-- 报名 - 钱包支付对话框 -->
+      <el-dialog custom-class="wallet-pop w850 animated" :visible="applyWalletPayDialogVisible" :show-close="false">
+        <div class="wallet-con">
+          <div class="wallet-close" @click="handleCloseApplyWalletPayDialog"></div>
+          <div class="t">钱包支付</div>
+          <div class="wallet-mid">
+            <div class="money">支付金额：<span class="price color-red">￥{{applyPayAmount}}</span></div>
+            <div class="wallet-label">输入支付密码<a class="wallet-a fr color-gray" href="/userCont/wallet/pwd.html" target="_blank">忘记密码？</a></div>
+            <div class="wallet-input">
+              <input class="input" type="password" v-model.trim="applyPayPassword" />
+            </div>
+          </div>
+          <div class="wallet-bottom">
+            <button class="wallet-btn" @click="handleSubmitApplyWalletPay">确定</button>
+          </div>
+        </div>
+      </el-dialog>
+
+      <!-- 报名 - 支付宝支付对话框 -->
+      <el-dialog custom-class="wallet-pop animated" :visible="applyAlipayPayDialogVisible" :show-close="false" width="600px">
+        <div class="wallet-con">
+          <div class="wallet-close" @click="handleCloseApplyAlipayPayDialog"></div>
+          <div class="t">支付宝支付</div>
+          <div class="money">支付金额：<span class="price color-red">￥{{applyPayAmount}}</span></div>
+          <div class="con clearfix">
+            <div class="wx-g">
+              <!-- <img :src="alipayPayQrcode" /> -->
+              <div id="applyAlipayPayQrcode"></div>
+              <div class="tip">请使用支付宝“扫一扫”,扫描二维码支付</div>
+            </div>
+            <div class="wx-i">
+              <img src="/images/pub-alipay.png" />
+            </div>
+          </div>
+        </div>
+      </el-dialog>
+
+      <!-- 报名 - 微信支付对话框 -->
+      <el-dialog custom-class="wallet-pop animated" :visible="applyWechatPayDialogVisible" :show-close="false" width="600px">
+        <div class="wallet-con">
+          <div class="wallet-close" @click="handleCloseApplyWechatPayDialog"></div>
+          <div class="t">微信支付</div>
+          <div class="money">支付金额：<span class="price color-red">￥{{applyPayAmount}}</span></div>
+          <div class="con clearfix">
+            <div class="wx-g">
+              <!-- <img :src="wechatPayQrcode" /> -->
+              <div id="applyWechatPayQrcode"></div>
+              <div class="tip">请使用微信“扫一扫”,扫描二维码支付</div>
+            </div>
+            <div class="wx-i">
+              <img src="/images/pub1.jpg" />
+            </div>
+          </div>
+        </div>
+      </el-dialog>
+    </div>
+
+    <!-- 公共底部 -->
+    <footer class="public-footer"></footer>
+
+    <script src="/js/competition/applyDetail.js"></script>
+  </body>
+</html>
