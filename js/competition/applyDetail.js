@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,12 +46,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 // 赛事详情
 // 引入头部
 $('.public-header').load('/components/PublicHeader.html');
 // 引入底部
 $('.public-footer').load('/components/PublicFooter.html');
 Vue.use(ELEMENT);
+var encrypt = new JSEncrypt();
+// 支付密码页面
+var walletPwdPage = '/userCont/wallet/pwd.html';
+// 我的钱包页面（余额不足需要充值跳到这个页面）
+var walletAccountPage = '/userCont/wallet/account.html';
+// 实名认证页面
+var setupRealNamePage = '/userCont/setup/realName.html';
+// 我参加的赛事页面
+var myParticipatedCompetition = '/userCont/competition/myParticipatedCompetition.html';
 var applyDetail = new Vue({
     el: '#app',
     data: function () {
@@ -76,7 +105,7 @@ var applyDetail = new Vue({
                 // 比赛id
                 competition_id: '',
                 // 所报角色id，1=选手，2=裁判，3=主裁判
-                role_id: 1,
+                role_id: '',
                 // 其他平台比赛账号
                 account_number: '',
                 // 技术水平/类型 id，，备注：裁判，主裁判报名时无需传递
@@ -120,9 +149,21 @@ var applyDetail = new Vue({
             // 是否已同意协议
             agreedAgreement: false,
             // 身份证明文件列表
-            personalID: [],
+            personalIDFileList: [],
             // 附件文件列表
-            affixList: [],
+            affixFileList: [],
+            // 报名 - 支付金额
+            applyPayAmount: 0,
+            // 报名 - 支付订单号
+            applyPayOrderNo: '',
+            // 报名 - 钱包对话框是否显示
+            applyWalletPayDialogVisible: false,
+            // 支付密码
+            applyPayPassword: '',
+            // 报名 - 支付宝对话框是否显示
+            applyAlipayPayDialogVisible: false,
+            // 报名 - 微信对话框是否显示
+            applyWechatPayDialogVisible: false,
         };
     },
     // 过滤器
@@ -189,7 +230,7 @@ var applyDetail = new Vue({
                                 });
                             }, 100);
                             // 临时
-                            this.handleOpenApplyDialog();
+                            // this.handleOpenApplyDialog()
                         }
                         return [2 /*return*/];
                 }
@@ -203,9 +244,11 @@ var applyDetail = new Vue({
                 var result, technicalLevelResult, provinceResult;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
-                            this.applyDialogVisible = true;
-                            return [2 /*return*/];
+                        case 0: return [4 /*yield*/, request({
+                                url: '/api/competition/apply',
+                                method: 'post',
+                                data: { competition_id: this.competitionInfo.id },
+                            })];
                         case 1:
                             result = _a.sent();
                             if (!(+result.code === 200)) return [3 /*break*/, 4];
@@ -244,7 +287,7 @@ var applyDetail = new Vue({
                 // 比赛id
                 competition_id: '',
                 // 所报角色id，1=选手，2=裁判，3=主裁判
-                role_id: '',
+                role_id: 1,
                 // 其他平台比赛账号
                 account_number: '',
                 // 技术水平/类型 id，，备注：裁判，主裁判报名时无需传递
@@ -252,7 +295,7 @@ var applyDetail = new Vue({
                 // 技术等级id，，备注：裁判，主裁判报名时无需传递
                 level_id: '',
                 // 身份证明类型：1=身份证，2=军官证，3=其他
-                identification: '',
+                identification: 1,
                 // 身份证明图片url，多个用英文逗号隔开
                 i_image: '',
                 // 联系方式-手机号
@@ -372,6 +415,442 @@ var applyDetail = new Vue({
             var target = event.target || event.srcElement;
             var id = target.value;
             this.applyDialogData.area = id;
+        },
+        // 选择身份证明
+        handleIdentificationFileChange: function (event) {
+            var element = event.target || event.srcElement;
+            // 获取文件对象数组
+            var files = element.files;
+            // 限制文件个数
+            var fileNumber = 3;
+            window.URL = window.URL || window.webkitURL;
+            // 存储符合规定的文件
+            var tempArr = __spreadArray([], this.personalIDFileList, true);
+            // 存储所选文件中不支持的扩展名
+            var errorArr = [];
+            // 存储所选文件中超过指定大小的文件名
+            var errorArr2 = [];
+            for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
+                var item = files_1[_i];
+                // 限制个数 fileNumber 个
+                if (tempArr.length < fileNumber) {
+                    var filesNameList = this.personalIDFileList.length ? this.personalIDFileList.map(function (i) { return i.name; }) : [];
+                    // （如果不存在文件名）禁止添加同名文件
+                    if (!filesNameList.includes(item.name)) {
+                        console.log(item);
+                        if (!['png', 'jpg', 'jpeg', 'bmp'].includes(util.getExtensionName(item.name))) {
+                            // 限制扩展名
+                            if (!errorArr.includes(util.getExtensionName(item.name))) {
+                                errorArr.push(util.getExtensionName(item.name));
+                            }
+                        }
+                        else if (item.size > 1024 * 1024 * 10) {
+                            // 限制大小 10M
+                            if (!errorArr2.includes(item.name)) {
+                                errorArr2.push(item.name);
+                            }
+                        }
+                        else if (tempArr.length < fileNumber) {
+                            console.log('添加文件');
+                            tempArr.push({
+                                // 用于提交数据
+                                file: item,
+                                name: item.name,
+                                // 用于页面展示
+                                url: window.URL.createObjectURL(item),
+                            });
+                            if (this.applyDialogData.i_image) {
+                                // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+                                this.applyDialogData.i_image = '';
+                            }
+                        }
+                    }
+                }
+            }
+            console.log('tempArr', tempArr.length, tempArr);
+            if (tempArr.length < fileNumber && errorArr.length) {
+                console.log('errorArr', errorArr);
+                layer.msg("\u4E0D\u652F\u6301 ".concat(__spreadArray([], errorArr, true), " \u6587\u4EF6"));
+            }
+            else if (errorArr2.length) {
+                console.log('errorArr2', errorArr2);
+                layer.msg("\u8BF7\u9009\u62E9 10M \u4EE5\u5185\u7684\u6587\u4EF6");
+            }
+            this.personalIDFileList = tempArr;
+            element.value = '';
+            console.log(__assign({}, this.personalIDFileList));
+        },
+        // 删除身份证明
+        handleDeleteIdentificationFile: function (index) {
+            this.personalIDFileList.splice(index, 1);
+            if (this.applyDialogData.i_image) {
+                // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+                this.applyDialogData.i_image = '';
+            }
+        },
+        // 选择文件
+        handleAffixFileChange: function (event) {
+            var element = event.target || event.srcElement;
+            // 获取文件对象数组
+            var files = element.files;
+            // 限制文件个数
+            var fileNumber = 6;
+            window.URL = window.URL || window.webkitURL;
+            // 存储符合规定的文件
+            var tempArr = __spreadArray([], this.affixFileList, true);
+            // 存储所选文件中不支持的扩展名
+            var errorArr = [];
+            // 存储所选文件中超过指定大小的文件名
+            var errorArr2 = [];
+            for (var _i = 0, files_2 = files; _i < files_2.length; _i++) {
+                var item = files_2[_i];
+                // 限制个数 fileNumber 个
+                if (tempArr.length < fileNumber) {
+                    var filesNameList = this.affixFileList.length ? this.affixFileList.map(function (i) { return i.name; }) : [];
+                    // （如果不存在文件名）禁止添加同名文件
+                    if (!filesNameList.includes(item.name)) {
+                        console.log(item);
+                        if (!['pdf', 'doc', 'docx'].includes(util.getExtensionName(item.name))) {
+                            // 限制扩展名
+                            if (!errorArr.includes(util.getExtensionName(item.name))) {
+                                errorArr.push(util.getExtensionName(item.name));
+                            }
+                        }
+                        else if (item.size > 1024 * 1024 * 2) {
+                            // 限制大小 2M
+                            if (!errorArr2.includes(item.name)) {
+                                errorArr2.push(item.name);
+                            }
+                        }
+                        else if (tempArr.length < fileNumber) {
+                            console.log('添加文件');
+                            tempArr.push({
+                                // 用于提交数据
+                                file: item,
+                                name: item.name,
+                            });
+                            if (this.applyDialogData.affix) {
+                                // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+                                this.applyDialogData.affix = '';
+                            }
+                        }
+                    }
+                }
+            }
+            console.log('tempArr', tempArr.length, tempArr);
+            if (tempArr.length < fileNumber && errorArr.length) {
+                console.log('errorArr', errorArr);
+                layer.msg("\u4E0D\u652F\u6301 ".concat(__spreadArray([], errorArr, true), " \u6587\u4EF6"));
+            }
+            else if (errorArr2.length) {
+                console.log('errorArr2', errorArr2);
+                layer.msg("\u8BF7\u9009\u62E9 2M \u4EE5\u5185\u7684\u6587\u4EF6");
+            }
+            this.affixFileList = tempArr;
+            element.value = '';
+            console.log(__assign({}, this.affixFileList));
+        },
+        // 删除文件
+        handleDeleteAffixFile: function (index) {
+            this.affixFileList.splice(index, 1);
+            if (this.applyDialogData.affix) {
+                // 如果有 url，说明上传过了，改变附件的时候把 url 删除
+                this.applyDialogData.affix = '';
+            }
+        },
+        // 验证要提交的数据
+        _validateApplyDialogData: function () {
+            var arr = [];
+            arr.push({ label: '请选择角色', validate: !this.applyDialogData.role_id }, { label: '请输入其他平台比赛账号', validate: !this.applyDialogData.account_number }, { label: '请输入姓名', validate: !this.applyDialogData.username });
+            if (+this.applyDialogInfo.team_where === 1) {
+                arr.push({ label: '请选择所在团队', validate: !this.applyDialogData.team });
+            }
+            else if (+this.applyDialogInfo.team_where === 2) {
+                arr.push({ label: '请输入代表队', validate: !this.applyDialogData.team });
+            }
+            arr.push({ label: '请输入手机号', validate: !this.applyDialogData.tel }, { label: '手机号格式不正确', validate: !util.validateMobile(this.applyDialogData.tel) });
+            if (this.applyDialogData.role_id === 1) {
+                arr.push({ label: '请选择技术水平', validate: !this.applyDialogData.skill_id }, { label: '请选择技术等级', validate: !this.applyDialogData.level_id });
+            }
+            arr.push({ label: '请选择省份', validate: !this.applyDialogData.province }, { label: '请选择城市', validate: !this.applyDialogData.city }, { label: '请选择区县', validate: !this.applyDialogData.area }, { label: '请选择身份证明图片', validate: !this.personalIDFileList.length });
+            if (this.applyDialogInfo.fee > 0) {
+                arr.push({ label: '请选择支付方式', validate: !this.applyDialogData.pay_way });
+            }
+            arr.push({ label: '请阅读并同意《玻坡摸佛榜文（需求）规则》', validate: !this.agreedAgreement });
+            var errorArr = arr.filter(function (item) { return item.validate; });
+            if (errorArr.length) {
+                layer.msg(errorArr[0].label);
+            }
+            else {
+                return true;
+            }
+        },
+        // 提交申请报名
+        handleSubmitApply: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var imageUrlArr, affixUrlArr, result, userInfoResult;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!this._validateApplyDialogData())
+                                return [2 /*return*/];
+                            console.table(__assign({}, this.applyDialogData));
+                            // return
+                            this.applyDialogData.competition_id = this.applyDialogInfo.competition_id;
+                            if (!!this.applyDialogData.i_image) return [3 /*break*/, 2];
+                            return [4 /*yield*/, util
+                                    .uploadMultipleFile(this.personalIDFileList.map(function (item) {
+                                    console.log('personalIDFileList item', item);
+                                    return {
+                                        file: item.file,
+                                        fileName: item.name,
+                                    };
+                                }))
+                                    .catch(function (error) {
+                                    console.log('上传图片失败', error);
+                                    layer.msg('上传图片失败');
+                                })];
+                        case 1:
+                            imageUrlArr = _a.sent();
+                            if (!imageUrlArr)
+                                return [2 /*return*/];
+                            this.applyDialogData.i_image = imageUrlArr.toString();
+                            _a.label = 2;
+                        case 2:
+                            if (!!this.applyDialogData.affix) return [3 /*break*/, 4];
+                            return [4 /*yield*/, util
+                                    .uploadMultipleFile(this.affixFileList.map(function (item) {
+                                    console.log('affixFileList item', item);
+                                    return {
+                                        file: item.file,
+                                        fileName: item.name,
+                                    };
+                                }))
+                                    .catch(function (error) {
+                                    console.log('上传图片失败', error);
+                                    layer.msg('上传图片失败');
+                                })];
+                        case 3:
+                            affixUrlArr = _a.sent();
+                            if (!affixUrlArr)
+                                return [2 /*return*/];
+                            this.applyDialogData.affix = affixUrlArr.toString();
+                            _a.label = 4;
+                        case 4: return [4 /*yield*/, request({
+                                url: '/api/competition/apply_submit',
+                                method: 'post',
+                                data: this.applyDialogData,
+                            })];
+                        case 5:
+                            result = _a.sent();
+                            console.log(result);
+                            if (!(+result.code === 200)) return [3 /*break*/, 10];
+                            if (!!result.data.pay_check) return [3 /*break*/, 6];
+                            // 无需付费
+                            this.$alert('<div style="text-align: center; font-size: 20px;">' + result.msg + '</div>', '', {
+                                confirmButtonText: '确定',
+                                showClose: false,
+                                dangerouslyUseHTMLString: true,
+                                confirmButtonClass: 'orange-button-bg',
+                                callback: function () {
+                                    // 刷新当前页
+                                    window.location.reload();
+                                },
+                            });
+                            return [3 /*break*/, 9];
+                        case 6:
+                            // 需要付费
+                            // 支付金额
+                            this.applyPayAmount = result.data.total_money;
+                            // 支付订单号
+                            this.applyPayOrderNo = result.data.out_trade_no;
+                            if (!(+result.data.pay_way === 1)) return [3 /*break*/, 8];
+                            // 钱包支付
+                            console.log('钱包支付');
+                            return [4 /*yield*/, request({ url: '/api/Mine/info' })];
+                        case 7:
+                            userInfoResult = _a.sent();
+                            if (+userInfoResult.code === 200 && +userInfoResult.data.is_set_paypwd === 0) {
+                                // 未设置支付密码
+                                this.$alert('<div style="text-align: center; font-size: 20px;">请先设置支付密码</div>', '', {
+                                    confirmButtonText: '确定',
+                                    showClose: false,
+                                    dangerouslyUseHTMLString: true,
+                                    confirmButtonClass: 'orange-button-bg',
+                                    callback: function () {
+                                        // 在新窗口中打开页面
+                                        // 打开设置支付密码页面
+                                        window.open(walletPwdPage);
+                                    },
+                                });
+                                return [2 /*return*/];
+                            }
+                            // 打开钱包支付对话框
+                            this.applyWalletPayDialogVisible = true;
+                            return [3 /*break*/, 9];
+                        case 8:
+                            if (+result.data.pay_way === 2) {
+                                // 支付宝支付
+                                console.log('支付宝支付');
+                                // 支付宝支付
+                                this._applyAlipayPay();
+                            }
+                            else if (+result.data.pay_way === 3) {
+                                // 微信支付
+                                console.log('微信支付');
+                                this._applyWechatPay();
+                            }
+                            _a.label = 9;
+                        case 9: return [3 /*break*/, 11];
+                        case 10:
+                            layer.msg(result.msg);
+                            _a.label = 11;
+                        case 11: return [2 /*return*/];
+                    }
+                });
+            });
+        },
+        // 关闭报名钱包支付对话框
+        handleCloseApplyWalletPayDialog: function () {
+            // 跳转到我参加的赛事页面
+            window.location.href = myParticipatedCompetition;
+        },
+        // 提交报名钱包支付
+        handleSubmitApplyWalletPay: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var payPassword, payResult;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!this.applyPayPassword)
+                                layer.msg('请输入支付密码');
+                            // 对密码进行加密
+                            encrypt.setPublicKey(publiukey);
+                            payPassword = encrypt.encrypt(this.applyPayPassword) //需要加密的内容
+                            ;
+                            return [4 /*yield*/, request({
+                                    url: '/api/pay/pay_by_balance',
+                                    method: 'post',
+                                    data: {
+                                        out_trade_no: this.applyPayOrderNo,
+                                        total_money: this.applyPayAmount,
+                                        pay_pwd: payPassword,
+                                    },
+                                })];
+                        case 1:
+                            payResult = _a.sent();
+                            console.log('payResult', payResult);
+                            if (+payResult.code === 200) {
+                                this.$alert('<div style="text-align: center; font-size: 20px;">支付成功</div>', '', {
+                                    confirmButtonText: '确定',
+                                    showClose: false,
+                                    dangerouslyUseHTMLString: true,
+                                    confirmButtonClass: 'orange-button-bg',
+                                    callback: function () {
+                                        // 刷新当前页
+                                        window.location.reload();
+                                    },
+                                });
+                            }
+                            else if (+payResult.code === 5) {
+                                // 余额不足
+                                this.$alert('<div style="text-align: center; font-size: 20px;">余额不足，请充值</div>', '', {
+                                    confirmButtonText: '确定',
+                                    showClose: false,
+                                    dangerouslyUseHTMLString: true,
+                                    confirmButtonClass: 'orange-button-bg',
+                                    callback: function () {
+                                        // 在新窗口中打开页面
+                                        // 我的钱包页面
+                                        window.open(walletAccountPage);
+                                    },
+                                });
+                            }
+                            else {
+                                layer.msg(payResult.msg);
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        },
+        // 报名支付宝支付
+        _applyAlipayPay: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var alipayPayQrcodeElement, alipayPayQrcode, queryString, codeUrl;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            this.applyAlipayPayDialogVisible = true;
+                            // 支付宝支付
+                            // 这里不需要接收返回值，因为啥都没返回
+                            // 二维码是把请求域名加上请求路径再加上请求参数来生成的
+                            return [4 /*yield*/, request({
+                                    url: '/api/pay/pay_by_ali',
+                                    params: { out_trade_no: this.applyPayOrderNo, total_money: this.applyPayAmount },
+                                })
+                                // 警告：this.alipayPayDialogVisible = true 不能放到这里
+                            ];
+                        case 1:
+                            // 支付宝支付
+                            // 这里不需要接收返回值，因为啥都没返回
+                            // 二维码是把请求域名加上请求路径再加上请求参数来生成的
+                            _a.sent();
+                            alipayPayQrcodeElement = document.getElementById('applyAlipayPayQrcode');
+                            // 清除之前生成的二维码
+                            alipayPayQrcodeElement.innerHTML = '';
+                            alipayPayQrcode = new QRCode(alipayPayQrcodeElement, {
+                                width: 260,
+                                height: 260,
+                            });
+                            queryString = Qs.stringify({
+                                out_trade_no: this.applyPayOrderNo,
+                                token: localStorage.getItem('token'),
+                            });
+                            codeUrl = baseURL + '/api/pay/pay_by_ali?' + queryString;
+                            alipayPayQrcode.makeCode(codeUrl);
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        },
+        // 关闭报名支付宝支付对话框
+        handleCloseApplyAlipayPayDialog: function () {
+            // 跳转到我参加的赛事页面
+            window.location.href = myParticipatedCompetition;
+        },
+        // 报名微信支付
+        _applyWechatPay: function () {
+            this.applyWechatPayDialogVisible = true;
+            // 微信支付
+            request({
+                url: '/api/pay/pay_by_wx',
+                method: 'post',
+                data: {
+                    out_trade_no: this.applyPayOrderNo,
+                    total_money: this.applyPayAmount,
+                },
+            }).then(function (result) {
+                if (result.code === 200) {
+                    // 警告：this.wechatPayDialogVisible = true 不能放到这里
+                    var wechatPayQrcodeElement = document.getElementById('applyWechatPayQrcode');
+                    // 清除之前生成的二维码
+                    wechatPayQrcodeElement.innerHTML = '';
+                    // 生成二维码
+                    var wechatPayQrcode = new QRCode(wechatPayQrcodeElement, {
+                        width: 260,
+                        height: 260,
+                    });
+                    wechatPayQrcode.makeCode(result.data.code_url);
+                    // 启动获取赛事信息计时器
+                    // this._startGetCompetitionDetailTimer()
+                }
+            });
+        },
+        // 关闭报名微信支付对话框
+        handleCloseApplyWechatPayDialog: function () {
+            // 跳转到我参加的赛事页面
+            window.location.href = myParticipatedCompetition;
         },
     },
 });

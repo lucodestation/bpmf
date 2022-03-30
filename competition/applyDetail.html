@@ -15,6 +15,7 @@
     <script src="/plugins/babel-polyfill.min.js"></script>
     <script src="/plugins/layui/layui.js"></script>
     <script src="/plugins/jsencrypt.js"></script>
+    <script src="/plugins/aliyun-oss-sdk.min.js"></script>
     <script src="/plugins/jquery.min.js"></script>
     <script src="/plugins/swiper/swiper.min.js"></script>
     <script src="/plugins/syalert/syalert.min.js"></script>
@@ -22,6 +23,7 @@
     <script src="/plugins/axios.min.js"></script>
     <script src="/plugins/qs.min.js"></script>
     <script src="/plugins/element-ui/element-ui.min.js"></script>
+    <script src="/plugins/qrcode.min.js"></script>
 
     <script src="/utils/request.js"></script>
     <script src="/utils/util.js"></script>
@@ -101,6 +103,91 @@
       }
       .apply-dialog select.grey option + option {
         color: #333;
+      }
+      /* 上传图片 */
+      .apply-dialog .upload-image {
+        /* background: pink; */
+      }
+      .apply-dialog .upload-image .con {
+        display: flex;
+      }
+      .apply-dialog .upload-image label {
+        display: block;
+      }
+      .apply-dialog .upload-image .image-wrap {
+        position: relative;
+        width: 160px;
+        height: 160px;
+        margin-right: 30px;
+      }
+      .apply-dialog .upload-image .image-wrap img {
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        box-shadow: 0 0 0 1px #eee;
+      }
+      .apply-dialog .upload-image .image-wrap i {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        top: -12px;
+        right: -12px;
+        background: url('/images/close-bbb.png');
+        background-size: 24px;
+        display: none;
+      }
+      .apply-dialog .upload-image .image-wrap:hover i {
+        display: block;
+      }
+      /* 文件/附件 */
+      .apply-dialog .affix-list {
+        line-height: 2;
+        display: flex;
+        align-items: center;
+        color: #999;
+      }
+      .apply-dialog .affix-list i {
+        display: block;
+        width: 20px;
+        height: 20px;
+        background: url('/images/pub31.png');
+        background-size: 20px;
+        margin-right: 10px;
+        transform: rotate(45deg);
+      }
+      .apply-dialog .affix-list i:hover {
+        background: url('/images/bank4.png');
+        background-size: 20px;
+      }
+      /* 支付方式 */
+      .apply-dialog .pay-method {
+        display: flex;
+        align-items: center;
+      }
+      .apply-dialog .pay-method .con {
+        margin-left: 0;
+      }
+      .apply-dialog .pay-method .con label {
+        width: 160px;
+        height: 56px;
+        float: left;
+        margin: 15px 10px;
+      }
+      .apply-dialog .pay-method .con label span {
+        display: block;
+        width: 160px;
+        height: 56px;
+        border: 1px solid #ccc;
+      }
+      .apply-dialog .pay-method .con label span img {
+        display: block;
+        width: 126px;
+        height: 44px;
+        margin: 6px auto;
+      }
+      .apply-dialog .pay-method .con label input:checked + span {
+        background: #fed9bb;
+        border: 1px solid #ff7f17;
       }
     </style>
   </head>
@@ -405,7 +492,8 @@
             <div class="column2-item">
               <div class="label"><span>*</span>角色选择：</div>
               <div class="content">
-                <select class="select" v-model="applyDialogData.role_id">
+                <select class="select" :class="{grey: !applyDialogData.role_id}" v-model="applyDialogData.role_id">
+                  <option value="">请选择角色</option>
                   <option v-for="item in roleList" :key="item.id" :value="item.id">{{item.label}}</option>
                 </select>
               </div>
@@ -425,19 +513,19 @@
               </div>
             </div>
 
-            <div class="column2-item" v-if="+applyDialogInfo.team_where === 2">
-              <div class="label"><span>*</span>代表队：</div>
-              <div class="content">
-                <input class="input" type="text" placeholder="请输入代表队" v-model.trim="applyDialogData.team" />
-              </div>
-            </div>
-            <div class="column2-item" v-else>
+            <div class="column2-item" v-if="+applyDialogInfo.team_where === 1">
               <div class="label"><span>*</span>所在团队：</div>
               <div class="content">
                 <select class="select" :class="{grey: !applyDialogData.team}" v-model="applyDialogData.team">
                   <option value="">请选择所在团队</option>
                   <option v-for="item in applyDialogInfo.team_list" :key="item.id" :value="item.team_name">{{item.team_name}}</option>
                 </select>
+              </div>
+            </div>
+            <div class="column2-item" v-if="+applyDialogInfo.team_where === 2">
+              <div class="label"><span>*</span>代表队：</div>
+              <div class="content">
+                <input class="input" type="text" placeholder="请输入代表队" v-model.trim="applyDialogData.team" />
               </div>
             </div>
 
@@ -455,11 +543,11 @@
             <div class="column2-item">
               <div class="label"><span>*</span>联系电话：</div>
               <div class="content">
-                <input class="input" type="tel" placeholder="请输入手机号" v-model.trim="applyDialogData.tel" />
+                <input class="input" type="tel" minlength="11" maxlength="11" placeholder="请输入手机号" v-model.trim="applyDialogData.tel" />
               </div>
             </div>
 
-            <div class="column2-item">
+            <div class="column2-item" v-if="applyDialogData.role_id === 1">
               <div class="label"><span>*</span>技术水平：</div>
               <div class="content">
                 <select class="select" :class="{grey: !applyDialogData.skill_id}" @change="handleSelectTechnicalLevel">
@@ -469,7 +557,7 @@
               </div>
             </div>
 
-            <div class="column2-item">
+            <div class="column2-item" v-if="applyDialogData.role_id === 1">
               <div class="label"><span>*</span>技术等级：</div>
               <div class="content">
                 <select class="select" :class="{grey: !applyDialogData.level_id}" @change="handleSelectTechnicalGrade">
@@ -482,28 +570,28 @@
             <div class="column2-item" v-if="applyDialogInfo.contact_info && applyDialogInfo.contact_info.includes(1)">
               <div class="label">QQ账号：</div>
               <div class="content">
-                <input class="input" type="number" placeholder="请输入QQ账号" v-model.trim="applyDialogData.qq" />
+                <input class="input" type="text" placeholder="请输入QQ账号" v-model.trim="applyDialogData.qq" />
               </div>
             </div>
 
             <div class="column2-item" v-if="applyDialogInfo.contact_info && applyDialogInfo.contact_info.includes(2)">
               <div class="label">MSN账号：</div>
               <div class="content">
-                <input class="input" type="number" placeholder="请输入MSN账号" v-model.trim="applyDialogData.msn" />
+                <input class="input" type="text" placeholder="请输入MSN账号" v-model.trim="applyDialogData.msn" />
               </div>
             </div>
 
             <div class="column2-item" v-if="applyDialogInfo.contact_info && applyDialogInfo.contact_info.includes(3)">
               <div class="label">SKYPE账号：</div>
               <div class="content">
-                <input class="input" type="number" placeholder="请输入SKYPE账号" v-model.trim="applyDialogData.skype" />
+                <input class="input" type="text" placeholder="请输入SKYPE账号" v-model.trim="applyDialogData.skype" />
               </div>
             </div>
 
             <div class="column2-item" v-if="applyDialogInfo.contact_info && applyDialogInfo.contact_info.includes(4)">
               <div class="label">微信账号：</div>
               <div class="content">
-                <input class="input" type="number" placeholder="请输入微信账号" v-model.trim="applyDialogData.wx" />
+                <input class="input" type="text" placeholder="请输入微信账号" v-model.trim="applyDialogData.wx" />
               </div>
             </div>
 
@@ -516,7 +604,7 @@
           </div>
 
           <div class="publish-item clearfix">
-            <div class="label">居住地址：</div>
+            <div class="label"><span class="color-red">*</span>省市区：</div>
             <div class="con">
               <div class="input-w">
                 <select class="select w180" :class="{grey: !applyDialogData.province}" @change="handleSelectProvince">
@@ -535,11 +623,11 @@
             </div>
           </div>
 
-          <div class="publish-item clearfix">
-            <div class="label">详细地址：</div>
+          <div class="publish-item clearfix" v-if="applyDialogInfo.apply_info && applyDialogInfo.apply_info.includes(2)">
+            <div class="label">居住地址：</div>
             <div class="con">
               <div class="input-w">
-                <input type="text" class="input" placeholder="请输入详细地址" v-model.trim="applyDialogData.addr" />
+                <input class="input" type="text" placeholder="请输入详细地址" v-model.trim="applyDialogData.addr" />
               </div>
             </div>
           </div>
@@ -557,12 +645,18 @@
             </div>
           </div>
 
-          <div class="publish-item clearfix">
+          <!-- 上传图片 -->
+          <div class="publish-item clearfix upload-image">
             <div class="con">
-              <div class="match-detail-up">
+              <div class="image-wrap" v-for="(item, index) in personalIDFileList" :key="index">
+                <img :src="item.url" />
+                <i @click="handleDeleteIdentificationFile(index)"></i>
+              </div>
+              <label class="match-detail-up" v-if="personalIDFileList.length < 3">
+                <input type="file" accept=".png,.jpg,.jpeg,.bmp" multiple hidden @change="handleIdentificationFileChange" />
                 <img src="/images/pub.png" />
                 <div class="tt">上传图片</div>
-              </div>
+              </label>
             </div>
           </div>
 
@@ -575,18 +669,45 @@
             </div>
           </div>
 
+          <!-- 上传文件 -->
           <div class="publish-item clearfix">
             <div class="label">应榜附件：</div>
             <div class="con">
-              <div class="pop-up">
-                <input type="file" class="up-file" />
+              <label class="pop-up">
+                <input type="file" accept=".pdf,.doc,.docx" multiple hidden @change="handleAffixFileChange" />
                 <span class="up-s">选择文件</span>
-              </div>
+              </label>
               <div class="pop-up-tip">※上传文件，支持PDF、Word的格式，大小不超过2M</div>
+              <div class="affix-list" v-for="(item, index) in affixFileList" :key="index">
+                <i @click="handleDeleteAffixFile(index)"></i>
+                <span>{{item.name}}</span>
+              </div>
             </div>
           </div>
 
-          <div class="match-pop-price">报名费：<span class="color-red">￥100</span></div>
+          <div class="match-pop-price">报名费：<span class="color-red">￥{{applyDialogInfo.fee * 1}}</span></div>
+
+          <!-- 支付方式 -->
+          <div class="publish-item clearfix pay-method" v-if="applyDialogInfo.fee > 0">
+            <div class="label"><span class="color-red">*</span>支付方式：</div>
+            <div class="con clearfix">
+              <label>
+                <input type="radio" hidden name="payWay" value="1" v-model.number="applyDialogData.pay_way" />
+                <span><img src="/images/pub14.png" /></span>
+              </label>
+
+              <label>
+                <input type="radio" hidden name="payWay" value="2" v-model.number="applyDialogData.pay_way" />
+                <span><img src="/images/pub19.png" /></span>
+              </label>
+
+              <label>
+                <input type="radio" hidden name="payWay" value="3" v-model.number="applyDialogData.pay_way" />
+                <span><img src="/images/pub13.png" /></span>
+              </label>
+            </div>
+          </div>
+
           <div class="publish-check">
             <label>
               <div class="check fl">
@@ -598,7 +719,63 @@
             <a class="color-orange" href="/rule/bwgz.html" target="_blank">《玻坡摸佛榜文（需求）规则》</a>
           </div>
           <div class="publish-bottom">
-            <button class="publish-btn">提交</button>
+            <button class="publish-btn" @click="handleSubmitApply">提交</button>
+          </div>
+        </div>
+      </el-dialog>
+
+      <!-- 报名 - 钱包支付对话框 -->
+      <el-dialog custom-class="wallet-pop w850 animated" :visible="applyWalletPayDialogVisible" :show-close="false">
+        <div class="wallet-con">
+          <div class="wallet-close" @click="handleCloseApplyWalletPayDialog"></div>
+          <div class="t">钱包支付</div>
+          <div class="wallet-mid">
+            <div class="money">支付金额：<span class="price color-red">￥{{applyPayAmount}}</span></div>
+            <div class="wallet-label">输入支付密码<a class="wallet-a fr color-gray" href="/userCont/wallet/pwd.html" target="_blank">忘记密码？</a></div>
+            <div class="wallet-input">
+              <input class="input" type="password" v-model.trim="applyPayPassword" />
+            </div>
+          </div>
+          <div class="wallet-bottom">
+            <button class="wallet-btn" @click="handleSubmitApplyWalletPay">确定</button>
+          </div>
+        </div>
+      </el-dialog>
+
+      <!-- 报名 - 支付宝支付对话框 -->
+      <el-dialog custom-class="wallet-pop animated" :visible="applyAlipayPayDialogVisible" :show-close="false" width="600px">
+        <div class="wallet-con">
+          <div class="wallet-close" @click="handleCloseApplyAlipayPayDialog"></div>
+          <div class="t">支付宝支付</div>
+          <div class="money">支付金额：<span class="price color-red">￥{{applyPayAmount}}</span></div>
+          <div class="con clearfix">
+            <div class="wx-g">
+              <!-- <img :src="alipayPayQrcode" /> -->
+              <div id="applyAlipayPayQrcode"></div>
+              <div class="tip">请使用支付宝“扫一扫”,扫描二维码支付</div>
+            </div>
+            <div class="wx-i">
+              <img src="/images/pub-alipay.png" />
+            </div>
+          </div>
+        </div>
+      </el-dialog>
+
+      <!-- 报名 - 微信支付对话框 -->
+      <el-dialog custom-class="wallet-pop animated" :visible="applyWechatPayDialogVisible" :show-close="false" width="600px">
+        <div class="wallet-con">
+          <div class="wallet-close" @click="handleCloseApplyWechatPayDialog"></div>
+          <div class="t">微信支付</div>
+          <div class="money">支付金额：<span class="price color-red">￥{{applyPayAmount}}</span></div>
+          <div class="con clearfix">
+            <div class="wx-g">
+              <!-- <img :src="wechatPayQrcode" /> -->
+              <div id="applyWechatPayQrcode"></div>
+              <div class="tip">请使用微信“扫一扫”,扫描二维码支付</div>
+            </div>
+            <div class="wx-i">
+              <img src="/images/pub1.jpg" />
+            </div>
           </div>
         </div>
       </el-dialog>

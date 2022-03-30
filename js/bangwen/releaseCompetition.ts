@@ -18,6 +18,7 @@ const memberPage = '/userCont/member/member.html'
 
 Vue.use(ELEMENT)
 
+// 保证金对话框
 Vue.component('deposit-dialog', {
   template: '#depositDialog',
   data: function () {

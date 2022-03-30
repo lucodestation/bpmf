@@ -4,26 +4,19 @@
     <!--center-side-item start-->
     <div class="center-side-item">
       <div class="center-side-tit">我要直播</div>
-      <div class="center-side-li" :class="CenterAside=='userCont/live/addLive'?'active':''"><a
-          href="/userCont/live/addLive.html">发起直播</a></div>
-      <div class="center-side-li" :class="CenterAside=='userCont/live/myLive'?'active':''"><a
-          href="/userCont/live/myLive.html">我的直播</a></div>
-      <div class="center-side-li" :class="CenterAside=='userCont/live/myOrder'?'active':''"><a
-          href="/userCont/live/myOrder.html">我预约的</a></div>
+      <div class="center-side-li" :class="CenterAside=='userCont/live/addLive'?'active':''"><a href="/userCont/live/addLive.html">发起直播</a></div>
+      <div class="center-side-li" :class="CenterAside=='userCont/live/myLive'?'active':''"><a href="/userCont/live/myLive.html">我的直播</a></div>
+      <div class="center-side-li" :class="CenterAside=='userCont/live/myOrder'?'active':''"><a href="/userCont/live/myOrder.html">我预约的</a></div>
     </div>
     <!--center-side-item end-->
     <!--center-side-item start-->
     <div class="center-side-item">
       <div class="center-side-tit">榜文管理</div>
-      <div class="center-side-li" :class="CenterAside=='userCont/bangwen/addCont'?'active':''"><a
-          href="/userCont/bangwen/addCont.html">发布榜文</a></div>
-      <div class="center-side-li"
-        :class="CenterAside=='userCont/bangwen/noticeList'?'active':CenterAside=='userCont/bangwen/noticeView'?'active':''">
+      <div class="center-side-li" :class="CenterAside=='userCont/bangwen/addCont'?'active':''"><a href="/userCont/bangwen/addCont.html">发布榜文</a></div>
+      <div class="center-side-li" :class="CenterAside=='userCont/bangwen/noticeList'?'active':CenterAside=='userCont/bangwen/noticeView'?'active':''">
         <a href="/userCont/bangwen/noticeList.html">我发布的榜文</a>
       </div>
-      <div class="center-side-li"
-        :class="CenterAside=='userCont/bangwen/mylist'?'active':CenterAside=='userCont/bangwen/myCont'?'active':''"><a
-          href="/userCont/bangwen/mylist.html">我的应榜</a></div>
+      <div class="center-side-li" :class="CenterAside=='userCont/bangwen/mylist'?'active':CenterAside=='userCont/bangwen/myCont'?'active':''"><a href="/userCont/bangwen/mylist.html">我的应榜</a></div>
     </div>
     <!--center-side-item end-->
     <!--center-side-item start-->
@@ -35,8 +28,8 @@
       <div class="center-side-li" :class="CenterAside=='userCont/competition/myReleasedCompetition'?'active':''">
         <a href="/userCont/competition/myReleasedCompetition.html">我发布的赛事</a>
       </div>
-      <div class="center-side-li">
-        <a href="CenterMatch6.html">我参加的赛事</a>
+      <div class="center-side-li" :class="CenterAside=='userCont/competition/myParticipatedCompetition'?'active':''">
+        <a href="/userCont/competition/myParticipatedCompetition.html">我参加的赛事</a>
       </div>
     </div>
     <!--center-side-item end-->
@@ -78,8 +71,7 @@
     <!--center-side-item start-->
     <div class="center-side-item">
       <div class="center-side-tit">会员中心</div>
-      <div class="center-side-li"
-        :class="CenterAside=='userCont/member/member'?'active':CenterAside=='userCont/member/pay'?'active':''">
+      <div class="center-side-li" :class="CenterAside=='userCont/member/member'?'active':CenterAside=='userCont/member/pay'?'active':''">
         <a href="/userCont/member/member.html">开通会员</a>
       </div>
     </div>

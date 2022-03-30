@@ -351,6 +351,7 @@ new Vue({
                                     params: { out_trade_no: this.outTradeNo, total_money: this.payAmount },
                                 })
                                 // 警告：this.alipayPayDialogVisible = true 不能放到这里
+                                // 清除之前生成的二维码
                             ];
                         case 1:
                             // 支付宝支付

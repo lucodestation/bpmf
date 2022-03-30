@@ -1,5 +1,8 @@
 const util = {}
 
+// 验证手机号，验证通过返回 true，否则返回 false
+util.validateMobile = (mobile) => (/^1[3456789]\d{9}$/.test(mobile) ? true : false)
+
 // 获取扩展名，例 aaa.bbb.ccc.png 返回 png，aaa 返回 undefined，.gitignore 返回 gitignore
 util.getExtensionName = (fileName) => {
   const arr = fileName.split('.')
