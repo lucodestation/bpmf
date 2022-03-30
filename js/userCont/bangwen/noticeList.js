@@ -146,6 +146,19 @@ new Vue({
                     layer.msg(res.msg);
                 }
             });
+        },
+        onXxClick: function (item) {
+            var _this = this;
+            request({ url: '/api/Bangwenattend/outBeginTeach', method: 'post', data: { order_id: item.id } }).then(function (res) {
+                if (res.code == 200) {
+                    // layer.msg('删除成功')
+                    // syalert.syhide('noticeDelCont')
+                    _this.onpushList();
+                }
+                else {
+                    layer.msg(res.msg);
+                }
+            });
         }
     }
 });

@@ -57,8 +57,12 @@
     <!--center-side-item start-->
     <div class="center-side-item">
       <div class="center-side-tit">广告中心</div>
-      <div class="center-side-li"><a href="CenterAsd.html">广告购买</a></div>
-      <div class="center-side-li"><a href="AsdOrder.html">广告订单</a></div>
+      <div class="center-side-li" :class="CenterAside=='userCont/advert/purchase'?'active':''">
+        <a href="/userCont/advert/purchase.html">广告购买</a>
+      </div>
+      <div class="center-side-li" :class="CenterAside=='userCont/advert/AsdOrder'?'active':''">
+        <a href="/userCont/advert/AsdOrder.html">广告订单</a>
+      </div>
     </div>
     <!--center-side-item end-->
     <!--center-side-item start-->

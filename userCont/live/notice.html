@@ -48,8 +48,16 @@
               <div class="t">{{noticeCont.title}}<span class="tag">直播</span> </div>
               <div class="c"><span class="gray">直播时间：</span> {{noticeCont.start_time}}至{{noticeCont.end_time}}</div>
               <div class="c"><span class="gray">已预约：</span>{{noticeCont.appoint_num}}人 </div>
-              <div class="c"><span class="gray">直播状态：</span> <span class="color-orange">待开播</span> </div>
-              <div class="bot">
+              <!-- -2审核未通过，-1审核中，1审核通过，2已开播，3已结束 -->
+              <div class="c">
+                <span class="gray">直播状态：</span>
+                <span class="color-orange" v-if="noticeCont.status=='-2'">审核未通过</span>
+                <span class="color-orange" v-if="noticeCont.status=='-1'">审核中</span>
+                <span class="color-orange" v-if="noticeCont.status==1">待开播</span>
+                <span class="color-orange" v-if="noticeCont.status==2">已开播</span>
+                <span class="color-orange" v-if="noticeCont.status==3">已结束</span>
+              </div>
+              <div class="bot" v-if="noticeCont.status==1">
                 <a class="live-detail-btn" href="javascript:void(0);" v-if="noticeCont.is_appoint==1">已预约</a>
                 <a class="live-detail-btn" href="javascript:void(0);" @click="onYuyueClick" v-else>预约直播</a>
               </div>

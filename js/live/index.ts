@@ -13,9 +13,30 @@ new Vue({
       navsId: '',// 热播课程id
       courseList: [],// 热播课程列表
       waitList: [],// 直播预告
+      liveList: [],// 正在进行直播
     }
   },
   mounted() {
+    // 正在进行直播
+    request({ url: '/api/Live/livingList', method: 'POST', data: { page: 1, pagenum: 4 } }).then((res) => {
+      if (res.code == 200) {
+        this.liveList = res.data.data
+        setTimeout(() => {
+          let swiper = new Swiper(".mySwiper1", {
+            spaceBetween: 10,
+            slidesPerView: 4,
+            freeMode: true,
+            watchSlidesProgress: true,
+          });
+          new Swiper(".mySwiper2", {
+            spaceBetween: 10,
+            thumbs: {
+              swiper: swiper,
+            },
+          });
+        }, 500);
+      }
+    })
     // 直播分类
     request({ url: '/api/Live/liveCates', method: 'POST' }).then((res) => {
       if (res.code == 200) {

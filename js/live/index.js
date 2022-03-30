@@ -13,11 +13,32 @@ new Vue({
             navsList: [],
             navsId: '',
             courseList: [],
-            waitList: [], // 直播预告
+            waitList: [],
+            liveList: [], // 正在进行直播
         };
     },
     mounted: function () {
         var _this = this;
+        // 正在进行直播
+        request({ url: '/api/Live/livingList', method: 'POST', data: { page: 1, pagenum: 4 } }).then(function (res) {
+            if (res.code == 200) {
+                _this.liveList = res.data.data;
+                setTimeout(function () {
+                    var swiper = new Swiper(".mySwiper1", {
+                        spaceBetween: 10,
+                        slidesPerView: 4,
+                        freeMode: true,
+                        watchSlidesProgress: true,
+                    });
+                    new Swiper(".mySwiper2", {
+                        spaceBetween: 10,
+                        thumbs: {
+                            swiper: swiper,
+                        },
+                    });
+                }, 500);
+            }
+        });
         // 直播分类
         request({ url: '/api/Live/liveCates', method: 'POST' }).then(function (res) {
             if (res.code == 200) {

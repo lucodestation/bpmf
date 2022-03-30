@@ -110,7 +110,7 @@
                       <a class="handle-btn blue" :href="'/live/liveCont.html?id='+item.live_id">去直播间</a>
                     </p>
                     <p class="handle text-c" v-else>
-                      <a class="handle-btn blue" href="CenterLive2.html">查看详情</a>
+                      <a class="handle-btn blue" :href="'./notice.html?id='+item.live_id">查看详情</a>
                     </p>
                     <p class="m-t-5" v-if="item.join_type==1">需要审核后进入</p>
                     <p class="m-t-5" v-if="item.join_type==3">需要开通会员</p>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>广告购买-玻坡摸佛</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/upload/imgFileupload.js"></script>
+  <script src="/plugins/upload/upload.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <!--center-side start-->
+      <div class="public-user"></div>
+      <!--center-side end-->
+      <!--center-content start-->
+      <div class="center-content fr" id="app">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit">广告购买</div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <!--center-set start-->
+            <div class="center-set">
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">广告位置：</div>
+                <div class="item-r">
+                  <div class="set-bor w548">
+                    <select class="select rate-100" v-model="type">
+                      <option :value="item.id" v-for="item in adverList">{{item.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!--set-item end-->
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">广告序号：</div>
+                <div class="item-r">
+                  <div class="set-bor w548">
+                    <select class="select">
+                      <option>2</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!--set-item end-->
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">展示位置：</div>
+                <div class="item-r">
+                  <div class="center-asd-img">
+                    <img :src="adverCont.posit_image">
+                  </div>
+                </div>
+              </div>
+              <!--set-item end-->
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">广告位介绍：</div>
+                <div class="item-r">
+                  <div class="center-asd-txt">
+                    <div class="asd-detail-c">{{adverCont.posit_descri}}</div>
+                  </div>
+                </div>
+              </div>
+              <!--set-item end-->
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">广告价格：</div>
+                <div class="item-r">
+                  <div class="color-orange f-24">￥{{adverCont.day_money}}元/天</div>
+                </div>
+              </div>
+              <!--set-item end-->
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">上传图片：</div>
+                <div class="item-r">
+                  <div class="cert-up clearfix">
+                    <input type="file" name="" id="" class="imgFiles" style="display: none"
+                      accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" multiple>
+                    <div class="imgAll fl center-asd-up-img ">
+                      <ul></ul>
+                    </div>
+                    <div class="imgClick fl center-asd-up">
+                      <div class="c">上传图片，尺寸大小16:9px</div>
+                    </div>
+                  </div>
+                  <script>
+                    var imgFile = new ImgUploadeFiles('.cert-up', function (e) {
+                      this.init({
+
+                        MH: 5800, //像素限制高度
+                        MW: 5900, //像素限制宽度
+                        callback: function (arr) {
+                          console.log(arr)
+                        }
+                      });
+                    });
+                  </script>
+                </div>
+              </div>
+              <!--set-item end-->
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">跳转页面联系：</div>
+                <div class="item-r">
+                  <div class="set-bor w548">
+                    <select class="select">
+                      <option>2</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!--set-item end-->
+              <!--set-item start-->
+              <div class="set-item clearfix">
+                <div class="label">选择展示时间：</div>
+                <div class="item-r">
+                  <div class="set-bor w220 fl">
+                    <input type="text" class="input" id="startDate">
+                  </div>
+                  <div class="center-asd-line fl m-r-25 m-l-25 m-t-15"></div>
+                  <div class="set-bor w220 fl">
+                    <input type="text" class="input" id="endDate">
+                  </div>
+                </div>
+              </div>
+              <script>
+                jeDate("#startDate", {
+                  isinitVal: true,
+                  format: "YYYY-MM-DD hh:mm"
+                });
+                jeDate("#endDate", {
+                  isinitVal: true,
+                  format: "YYYY-MM-DD hh:mm"
+                });
+              </script>
+              <!--set-item end-->
+              <div class="bond-pay">
+                <div class="t">选择支付方式</div>
+                <div class="con clearfix">
+                  <div class="li">
+                    <input type="radio" class="bond-radio" checked name="money">
+                    <span class="radio-s"><img src="/images/pub14.png"></span>
+                  </div>
+                  <div class="li">
+                    <input type="radio" class="bond-radio" name="money">
+                    <span class="radio-s"><img src="/images/pub13.png"></span>
+                  </div>
+                  <div class="li">
+                    <input type="radio" class="bond-radio" name="money">
+                    <span class="radio-s"><img src="/images/pub19.png"></span>
+                  </div>
+                </div>
+              </div>
+              <!--center-asd-check start-->
+              <div class="center-asd-check">
+                <div class="check-t m-r-10">
+                  <input class="check" type="checkbox">
+                  <span class="check-span"></span>
+                </div>
+                <div class="check-c">
+                  我已阅读并同意
+                  <a class="color-orange" href="">《玻坡摸佛榜文网广告协议》</a>和
+                  <a class="color-orange" href="">《玻坡摸佛网广告规则》</a>
+                </div>
+              </div>
+              <!--center-asd-check end-->
+              <button class="center-set-btn m-t-50" onclick="location='AsdOrder.html'">立即签约</button>
+            </div>
+            <!--center-set end-->
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/advert/purchase.js"></script>
+</body>
+
+</html>

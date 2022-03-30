@@ -144,7 +144,7 @@
             </div>
             <!--center-inner-table-wrap end-->
             <!--center-rank-head-hd start-->
-            <div class="center-rank-head-hd" v-if="noticeCont.status=='2'">
+            <div class="center-rank-head-hd" v-if="noticeCont.status=='2'||noticeCont.status=='3'">
               <div class="hd-t m-t-10 clearfix">
                 <div class="f-weight f-16 fl">应榜人列表</div>
                 <div class="color-6 m-l-30 fl">应榜截止时间：{{noticeCont.signup_end_time}}</div>
@@ -153,7 +153,7 @@
             </div>
             <!--center-rank-head-hd end-->
             <!--center-inner-table-wrap start-->
-            <div class="center-inner-table-wrap" v-if="noticeCont.status=='2'">
+            <div class="center-inner-table-wrap" v-if="noticeCont.status=='2'||noticeCont.status=='3'">
               <table class="center-inner-table center-order-table">
                 <tr>
                   <th>应榜号</th>
@@ -188,6 +188,11 @@
                     <p class="color-orange" style="cursor: pointer;" @click="onZbClick(item)">中榜</p>
                   </td>
                   <td v-if="item.status==1">
+                    <!-- 此处是学棋榜文，不托管 -->
+                    <!-- <p class="color-orange" @click="onStudyClick(item.id)">开始学习</p> -->
+                    <p class="color-gray" @click="onQueryClick(item.id)">取消中榜</p>
+                  </td>
+                  <td v-if="item.status==2">
                     <!-- 此处是学棋榜文，不托管 -->
                     <p class="color-orange" @click="onStudyClick(item.id)">开始学习</p>
                     <p class="color-gray" @click="onQueryClick(item.id)">取消中榜</p>
