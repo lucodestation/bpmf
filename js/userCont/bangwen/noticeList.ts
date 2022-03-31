@@ -3,6 +3,7 @@ $(function () {
   $('.public-footer').load('/components/PublicFooter.html')
   $('.public-user').load('/components/CenterAside.html')
 })
+Vue.use(ELEMENT)
 new Vue({
   el: '#app',
   data() {
@@ -17,6 +18,14 @@ new Vue({
       cateList: [],// 分类列表
       noticeList: [],// 列表
       id: '',// 删除id
+
+      totalPage: 0,  // 总页数
+
+      currentPage: 1, // 当前页
+      // 每页数据条数
+      // limit: 10,
+
+      totalCount: 0,  // 总数据条数
     }
   },
   created() {
@@ -58,7 +67,7 @@ new Vue({
       const res = await request({
         method: 'POST',
         url: '/api/Bangwenpush/pushList',
-        data: { type: this.type, status: this.navId, b_id: this.b_id, start_time: this.start_time, end_time: this.end_time, page: 1, pagenum: 10 }
+        data: { type: this.type, status: this.navId, b_id: this.b_id, start_time: this.start_time, end_time: this.end_time, page: this.currentPage, pagenum: 10 }
       })
       if (res.code == 200) {
         res.data.data.map(item => {
@@ -69,7 +78,19 @@ new Vue({
           }
         })
         this.noticeList = res.data.data
+
+        // this.competitionList = result.data.data
+        this.totalPage = res.data.last_page
+        this.currentPage = res.data.current_page
+        this.totalCount = res.data.total
       }
+    },
+    // 改变页码
+    handleChangeCurrentPage(value) {
+      console.log(`第${value}页`)
+      this.currentPage = value
+      // 加载赛事列表
+      this.onpushList()
     },
     // 点击状态切换
     onNavClick(e) {

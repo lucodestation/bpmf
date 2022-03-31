@@ -12,7 +12,12 @@ new Vue({
             cateList: [],
             noticeCont: '',
             name: '',
-            userList: [], // 应榜人列表
+            userList: [],
+            selectList: [],
+            terminateTaskVisible: false,
+            reason: '',
+            phone: '',
+            order_id: ''
         };
     },
     created: function () {
@@ -24,6 +29,7 @@ new Vue({
             }
         });
         this.onNotice();
+        this.onselectList();
     },
     methods: {
         // 请求页面数据
@@ -124,7 +130,7 @@ new Vue({
         },
         // 此处是学棋榜文，不托管  开始学习
         onStudyClick: function (id) {
-            request({ url: '/api/Bangwenattend/startTeach', method: 'post', data: { detail_id: id } }).then(function (res) {
+            request({ url: '/api/bangwenpush/beginLearnUnmanaged', method: 'post', data: { order_id: id } }).then(function (res) {
                 if (res.code == 200) {
                     // layer.msg('中榜成功')
                     // this.onselectList()
@@ -146,6 +152,26 @@ new Vue({
                     });
                     _this.selectList = res.data;
                     console.log(_this.selectList);
+                }
+            });
+        },
+        // 点击终止任务
+        onterminateTaskClick: function (id) {
+            this.order_id = id;
+            this.terminateTaskVisible = true;
+        },
+        // 点击终止任务关闭按钮
+        onterminateTaskQuery: function () {
+            this.order_id = '';
+            this.terminateTaskVisible = false;
+        },
+        // 点击终止任务请求数据
+        onzzClick: function () {
+            request({ url: '/api/Bangwenpush/pushReferEnd', method: 'POST', data: { order_id: this.order_id, reason: this.reason, phone: this.phone }, }).then(function (res) {
+                if (res.code == 200) {
+                }
+                else {
+                    layer.msg(res.msg);
                 }
             });
         },

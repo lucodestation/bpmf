@@ -12,6 +12,11 @@ new Vue({
       noticeCont: '',// 详情内容
       name: '',// 棋名
       userList: [],// 应榜人列表
+      selectList: [],// 中榜列表
+      terminateTaskVisible: false,// 终止任务弹框是否显示
+      reason: '',// 终止原因
+      phone: '',// 联系方式
+      order_id: ''
     }
   },
   created() {
@@ -22,6 +27,7 @@ new Vue({
       }
     })
     this.onNotice()
+    this.onselectList()
   },
   methods: {
     // 请求页面数据
@@ -116,7 +122,7 @@ new Vue({
     },
     // 此处是学棋榜文，不托管  开始学习
     onStudyClick(id) {
-      request({ url: '/api/Bangwenattend/startTeach', method: 'post', data: { detail_id: id } }).then((res) => {
+      request({ url: '/api/bangwenpush/beginLearnUnmanaged', method: 'post', data: { order_id: id } }).then((res) => {
         if (res.code == 200) {
           // layer.msg('中榜成功')
           // this.onselectList()
@@ -136,6 +142,26 @@ new Vue({
           })
           this.selectList = res.data
           console.log(this.selectList)
+        }
+      })
+    },
+    // 点击终止任务
+    onterminateTaskClick(id) {
+      this.order_id = id
+      this.terminateTaskVisible = true
+    },
+    // 点击终止任务关闭按钮
+    onterminateTaskQuery() {
+      this.order_id = ''
+      this.terminateTaskVisible = false
+    },
+    // 点击终止任务请求数据
+    onzzClick() {
+      request({ url: '/api/Bangwenpush/pushReferEnd', method: 'POST', data: { order_id: this.order_id, reason: this.reason, phone: this.phone }, }).then((res) => {
+        if (res.code == 200) {
+
+        } else {
+          layer.msg(res.msg)
         }
       })
     },

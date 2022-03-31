@@ -82,7 +82,7 @@
               </div>
             </div>
             <!--center-rank-head end-->
-            <div v-if="noticeCont.status=='1'">
+            <div v-if="noticeCont.status=='1'||noticeCont.status=='2'||noticeCont.status=='3'">
               <div v-for="item,k in selectList" :key='k'>
                 <!--center-rank-head-hd start-->
                 <div class="center-rank-head-hd m-t-35">
@@ -93,7 +93,8 @@
                     <div class="price fl m-l-40">报价：{{item.total_money}}元</div>
                     <div class="c fl m-l-40" v-if="item.pay_num_type==1">支付方式：单次支付</div>
                     <div class="c fl m-l-40" v-if="item.pay_num_type==2">支付方式：多次支付</div>
-                    <div class="c fl m-l-15" v-if="item.pay_num_type==2">{{item.pay_num}}次</div>
+                    <div class="c fl m-l-15">{{item.pay_num}}次</div>
+                    <div class="handle-btn red fr" style="cursor: pointer;">终止榜文</div>
                   </div>
                 </div>
                 <!--center-rank-head-hd end-->
@@ -110,6 +111,7 @@
                       <td v-for="e,k in items" :key="k">
                         <!-- 0待总的开始学习，1待开始教课，2已开始教课待阶段完成学习，3完成学习 -->
                         <p v-if="e.de_status==0" class="color-orange">未开始</p>
+                        <p v-if="e.de_status==1" class="color-orange" @click="onBeginTeachClick(item.id)">开始学课</p>
                       </td>
                       <!-- <td>
                         <p class="color-orange">未开始</p>

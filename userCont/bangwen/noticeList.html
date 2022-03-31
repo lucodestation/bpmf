@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/plugins/animate.min.css" />
   <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
   <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
 
@@ -23,6 +24,7 @@
   <script src="/plugins/syalert/syalert.min.js"></script>
   <script src="/plugins/vue.min.js"></script>
 
+  <script src="/plugins/element-ui/element-ui.min.js"></script>
   <script src="/plugins/axios.min.js"></script>
   <script src="/utils/request.js"></script>
   <style>
@@ -33,6 +35,11 @@
 
     .center-order-state .li.active {
       color: #ff7f17;
+    }
+
+    .empty-data {
+      text-align: center;
+      padding: 100px 0;
     }
   </style>
 </head>
@@ -181,6 +188,12 @@
                   </td>
                 </tr>
               </table>
+            </div>
+            <div class="empty-data" v-if="!noticeList.length"><img src="/images/empty.png" /></div>
+
+            <div class="main-pages" v-if="noticeList.length">
+              <el-pagination layout="prev, pager, next, total, jumper" :total="totalCount" prev-text="上一页"
+                next-text="下一页" @current-change="handleChangeCurrentPage"></el-pagination>
             </div>
             <!--center-inner-table-wrap end-->
           </div>

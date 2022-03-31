@@ -40,6 +40,7 @@ $(function () {
     $('.public-footer').load('/components/PublicFooter.html');
     $('.public-user').load('/components/CenterAside.html');
 });
+Vue.use(ELEMENT);
 new Vue({
     el: '#app',
     data: function () {
@@ -53,7 +54,12 @@ new Vue({
             end_time: '',
             cateList: [],
             noticeList: [],
-            id: '', // 删除id
+            id: '',
+            totalPage: 0,
+            currentPage: 1,
+            // 每页数据条数
+            // limit: 10,
+            totalCount: 0, // 总数据条数
         };
     },
     created: function () {
@@ -101,7 +107,7 @@ new Vue({
                         case 0: return [4 /*yield*/, request({
                                 method: 'POST',
                                 url: '/api/Bangwenpush/pushList',
-                                data: { type: this.type, status: this.navId, b_id: this.b_id, start_time: this.start_time, end_time: this.end_time, page: 1, pagenum: 10 }
+                                data: { type: this.type, status: this.navId, b_id: this.b_id, start_time: this.start_time, end_time: this.end_time, page: this.currentPage, pagenum: 10 }
                             })];
                         case 1:
                             res = _a.sent();
@@ -114,11 +120,22 @@ new Vue({
                                     }
                                 });
                                 this.noticeList = res.data.data;
+                                // this.competitionList = result.data.data
+                                this.totalPage = res.data.last_page;
+                                this.currentPage = res.data.current_page;
+                                this.totalCount = res.data.total;
                             }
                             return [2 /*return*/];
                     }
                 });
             });
+        },
+        // 改变页码
+        handleChangeCurrentPage: function (value) {
+            console.log("\u7B2C".concat(value, "\u9875"));
+            this.currentPage = value;
+            // 加载赛事列表
+            this.onpushList();
         },
         // 点击状态切换
         onNavClick: function (e) {

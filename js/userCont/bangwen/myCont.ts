@@ -39,7 +39,6 @@ new Vue({
           })
         })
         this.selectList = res.data
-        console.log(this.selectList)
       }
     })
   },
@@ -53,6 +52,37 @@ new Vue({
       }
       return newArray;
     },
+    // 点击开始学课
+    async onBeginTeachClick(item) {
+      const ress = await request({ method: 'POST', url: '/api/Bangwenattend/outBeginTeach', data: { order_id: item.id }, })
+      if (ress.code == 200) {
+        // this.timeDown()
+        layer.msg('发送成功')
+      } else {
+        layer.msg(ress.msg)
+      }
+    },
+    // onBeginTeachClick(item) {
+    //   request({ url: '/api/Bangwenattend/outBeginTeach', method: 'POST', data: { order_id: item.id }, }).then((res) => {
+    //     if (res.code == 200) {
+    //       // this.noticeCont = res.data
+    //     } else {
+    //       layer.msg(res.msg)
+    //     }
+    //   })
+    //   // request({ url: '/api/Bangwenattend/outBeginTeach', method: 'POST', data: { order_id: item.id } }).then((res) => {
+    //   //   if (res.code == 200) {
+    //   //     // res.data.map(item => {
+    //   //     //   item.detail.map((items, k) => {
+    //   //     //     items.num = k + 1
+    //   //     //     item.blList = this.group(item.detail, 3)
+    //   //     //   })
+    //   //     // })
+    //   //     // this.selectList = res.data
+    //   //     // console.log(this.selectList)
+    //   //   }
+    //   // })
+    // },
     // 获取当前页面url
     GetRequest() {
       let url = location.search; //获取当前页面url
