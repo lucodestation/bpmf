@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!-- 个人中心 我参加的赛事 报名详情 -->
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>我参加的赛事 - 玻坡摸佛</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+    <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/plugins/vue.min.js"></script>
+    <script src="/plugins/qs.min.js"></script>
+    <script src="/plugins/axios.min.js"></script>
+    <script src="/plugins/jsencrypt.js"></script>
+    <script src="/plugins/aliyun-oss-sdk.min.js"></script>
+    <script src="/plugins/jquery.min.js"></script>
+    <script src="/plugins/syalert/syalert.min.js"></script>
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/element-ui/element-ui.min.js"></script>
+    <script src="/plugins/qrcode.min.js"></script>
+
+    <script src="/utils/request.js"></script>
+    <script src="/utils/util.js"></script>
+  </head>
+  <body>
+    <!-- 公共头部 -->
+    <header class="public-header"></header>
+
+    <!--center-container start-->
+    <div id="app" class="center-container">
+      <!--main-center start-->
+      <div class="main-center w-1200 clearfix">
+        <!-- 公共侧边栏 -->
+        <aside class="public-user"></aside>
+
+        <!--center-content start-->
+        <div class="center-content fr">
+          <!--center-inner start-->
+          <div class="center-inner">
+            <div class="center-inner-tit">比赛详情</div>
+            <div class="center-inner-content">
+              <!--center-rank-head start-->
+              <div class="center-rank-head clearfix">
+                <div class="img fl">
+                  <img src="/images/rank16.png" />
+                </div>
+                <div class="txt">
+                  <div class="t m-b-10">
+                    围棋入门级教程解法
+                    <div class="state fr color-6">当前状态：<span class="color-orange">比赛中</span></div>
+                  </div>
+                  <div class="tags clearfix">
+                    <span class="tag fl">围棋</span>
+                    <span class="tag fl">一次付清</span>
+                    <span class="tag fl">单人中榜</span>
+                    <span class="tag fl">不托管</span>
+                  </div>
+                  <div class="flex-between flex flex-item-end">
+                    <div>
+                      <div class="date m-t-5 color-6">参赛人数：500人</div>
+                      <div class="date color-6">报名时间：2021-10-12 12:00 至 2021-10-14 12:00</div>
+                      <div class="date color-6">比赛时间：2021-10-18 12:00 至 2021-10-24 12:00</div>
+                    </div>
+                    <div>
+                      <a class="handle-btn red" href="">终止比赛</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--center-rank-head end-->
+              <!--rade-box start-->
+              <div class="rade-box rade-box-bgn m-t-20">
+                <!--rade-box-hd start-->
+                <div class="rade-box-hd">
+                  <div class="img"><img src="/images/index12.png" /></div>
+                  <div class="txt">
+                    <div class="t f-18">江流儿<span class="color-orange f-16 m-l-30">围棋</span></div>
+                    <div class="c m-t-15">角色：参赛选手</div>
+                  </div>
+                </div>
+                <!--rade-box-hd end-->
+                <!--rade-box-bd start-->
+                <div class="rade-box-bd m-t-10">
+                  <div class="bd-li rate-33">
+                    <span class="label">姓名：</span>
+                    <div class="li-r">江流儿</div>
+                  </div>
+                  <div class="bd-li rate-33">
+                    <span class="label">昵称：</span>
+                    <div class="li-r">江流儿</div>
+                  </div>
+                  <div class="bd-li rate-33">
+                    <span class="label">性别：</span>
+                    <div class="li-r">男</div>
+                  </div>
+                  <div class="bd-li rate-33">
+                    <span class="label">年龄：</span>
+                    <div class="li-r">25</div>
+                  </div>
+                  <div class="bd-li rate-33">
+                    <span class="label">籍贯：</span>
+                    <div class="li-r">中原</div>
+                  </div>
+                  <div class="bd-li rate-33">
+                    <span class="label">角色：</span>
+                    <div class="li-r">参赛选手</div>
+                  </div>
+                  <div class="bd-li rate-33">
+                    <span class="label">技术水平：</span>
+                    <div class="li-r">专业</div>
+                  </div>
+                  <div class="bd-li rate-33">
+                    <span class="label">技术等级：</span>
+                    <div class="li-r">1000积分</div>
+                  </div>
+                  <div class="bd-li rate-100">
+                    <span class="label">居住地址：</span>
+                    <div class="li-r">河南省郑州市中原区电厂路华强广场102号</div>
+                  </div>
+                  <div class="bd-li rate-100">
+                    <span class="label">身份证明：</span>
+                    <div class="li-r">
+                      <p>身份证</p>
+                      <div class="li-r-img">
+                        <img src="/images/set1.png" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bd-li rate-100">
+                    <span class="label">联系电话：</span>
+                    <div class="li-r">15002125626</div>
+                  </div>
+                  <div class="bd-li rate-100">
+                    <span class="label">上传附件：</span>
+                    <div class="li-r"><span class="color-blue">1.png</span> <span class="color-blue">2.png</span></div>
+                  </div>
+                  <div class="bd-li rate-100">
+                    <span class="label">自我介绍：</span>
+                    <div class="li-r">
+                      <p>
+                        江流儿，中国古典神话小说《西游记》中的大唐高僧唐玄奘乳名。小说里的唐僧是虚构的人物，与历史上的真实人物玄奘是有区别的。小说里的唐僧，俗姓陈，小名江流儿，法号玄奘，号三藏，被唐太宗赐姓为唐。为如来佛祖座下二弟子金蝉长老投胎。在书中暗指火属性。他是遗腹子，由于父母凄惨、离奇的经历，自幼在寺庙中出家、长大，在金山寺出家，最终迁移到京城的著名寺院中落户、修行。江流儿，中国古典神话小说《西游记》中的大唐高僧唐玄奘乳名。小说里的唐僧是虚构的人物，与历史上的真实人物玄奘是有区别的。小说里的唐僧，俗姓陈，小名江流儿，法号玄奘，号三藏，被唐太宗赐姓为唐。为如来佛祖座下二弟子金蝉长老投胎。在书中暗指火属性。他是遗腹子，由于父母凄惨、离奇的经历，自幼在寺庙中出家、长大，在金山寺出家，最终迁移到京城的著名寺院中落户、修行。江流儿，中国古典神话小说《西游记》中的大唐高僧唐玄奘乳名。小说里的唐僧是虚构的人物，与历史上的真实人物玄奘是有区别的。小说里的唐僧，俗姓陈，小名江流儿，法号玄奘，号三藏，被唐太宗赐姓为唐。为如来佛祖座下二弟子金蝉长老投胎。在书中暗指火属性。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <!--rade-box-bd end-->
+              </div>
+              <!--rade-box end-->
+            </div>
+          </div>
+          <!--center-inner end-->
+        </div>
+        <!--center-content end-->
+      </div>
+      <!--main-center end-->
+    </div>
+    <!--center-container end-->
+
+    <!-- 公共底部 -->
+    <footer class="public-footer"></footer>
+
+    <!--查看原因弹出-->
+    <div class="sy-alert bond-pop animated" style="width: 500px" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert3">
+      <div class="bond-content">
+        <div class="bond-close" onClick="ok('alert3')"></div>
+        <div class="bond-tit">未通过原因</div>
+        <div class="text-c m-t-40">
+          <div class="f-16">请重新修改赛事阶段相关信息</div>
+        </div>
+        <div class="last-bottom text-c">
+          <button class="bond-btn mar-auto" onClick="ok('alert3')">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/userCont/competition/applyDetail.js"></script>
+  </body>
+</html>

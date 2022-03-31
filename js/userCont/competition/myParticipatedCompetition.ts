@@ -25,24 +25,18 @@ const myParticipatedCompetitionPersonal = {
         { value: 2, label: '已通过' },
         { value: 1, label: '未通过' },
         { value: 3, label: '已退赛' },
+        { value: 4, label: '已禁赛' },
       ],
 
-      // 赛事编号
-      competitionNumber: '',
-      // 赛事名称
-      competitionName: '',
-      // 赛事排序 1报名时间倒序，2报名时间正序
-      competitionSort: '',
-
       searchOption: {
-        // 赛事状态：2=审核中，3=未通过，4=审核通过，报名中，5=报名结束，6=比赛中，7=已结束，不传默认返回全部
-        status: '',
-        // 赛事类型id，筛选时候用
-        category_id: '',
-        // 开始时间，时间戳（秒）
-        begin_time: '',
-        // 结束时间，时间戳（秒）
-        end_time: '',
+        // 赛事编号
+        number: '',
+        // 赛事名称
+        competition_name: '',
+        // 赛事排序 1报名时间倒序，2报名时间正序
+        sort: '',
+        // 审核状态：0=待审核，1=审核不通过，2=审核通过，3=已退赛，4=禁赛
+        apply_status: '',
       },
 
       // 赛事列表
@@ -52,7 +46,7 @@ const myParticipatedCompetitionPersonal = {
       // 当前页
       currentPage: 1,
       // 每页数据条数
-      // limit: 10,
+      limit: 10,
       // 总数据条数
       totalCount: 0,
 
@@ -74,6 +68,23 @@ const myParticipatedCompetitionPersonal = {
       },
     }
   },
+  // 过滤器
+  filters: {
+    // 时间戳转成日期（xxxx-xx-xx xx:xx）
+    timestampToDate(value) {
+      const dateObj = new Date(value * 1000)
+      const year = dateObj.getFullYear()
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+      const date = String(dateObj.getDate()).padStart(2, '0')
+      const hours = String(dateObj.getHours()).padStart(2, '0')
+      const minutes = String(dateObj.getMinutes()).padStart(2, '0')
+      return `${year}-${month}-${date} ${hours}:${minutes}`
+    },
+  },
+  created() {
+    // 搜索
+    this.handleSearch()
+  },
   mounted() {
     // 临时
     layer.open({
@@ -87,17 +98,50 @@ const myParticipatedCompetitionPersonal = {
     })
   },
   methods: {
-    handleChangeStatus() {},
-    handleSearch() {},
+    // 状态 tab 改变
+    handleChangeStatus(value) {
+      if (this.searchOption.apply_status === value) return
+      this.searchOption.apply_status = value
+
+      // 搜索
+      this.handleSearch()
+    },
+    // 搜索
+    handleSearch() {
+      // 加载我参加的赛事列表
+      this._loadCompetitionList({
+        ...this.searchOption,
+        page: 1,
+        pagenum: this.limit,
+      })
+    },
+    // 排序
     handleSort() {
       // 1报名时间倒序，2报名时间正序
-      if (this.competitionSort === '' || this.competitionSort === 2) {
-        this.competitionSort = 1
-      } else if (this.competitionSort === 1) {
-        this.competitionSort = 2
+      if (this.searchOption.sort === '' || this.searchOption.sort === 2) {
+        this.searchOption.sort = 1
+      } else if (this.searchOption.sort === 1) {
+        this.searchOption.sort = 2
       }
+
+      // 搜索
+      this.handleSearch()
     },
-    _loadCompetitionList() {},
+    // 加载我参加的赛事列表
+    _loadCompetitionList(data) {
+      request({
+        url: '/api/Competitionattend/list',
+        method: 'post',
+        data,
+      }).then((result) => {
+        if (+result.code === 200) {
+          this.competitionList = result.data.data
+          this.totalPage = result.data.last_page
+          this.currentPage = result.data.current_page
+          this.totalCount = result.data.total
+        }
+      })
+    },
 
     handleChangeCurrentPage() {},
 

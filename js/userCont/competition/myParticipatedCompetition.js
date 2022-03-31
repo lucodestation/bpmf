@@ -1,5 +1,16 @@
 "use strict";
 // 个人中心 我参加的赛事
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 $(function () {
     // // 引入头部
     $('.public-header').load('/components/PublicHeader.html');
@@ -22,22 +33,17 @@ var myParticipatedCompetitionPersonal = {
                 { value: 2, label: '已通过' },
                 { value: 1, label: '未通过' },
                 { value: 3, label: '已退赛' },
+                { value: 4, label: '已禁赛' },
             ],
-            // 赛事编号
-            competitionNumber: '',
-            // 赛事名称
-            competitionName: '',
-            // 赛事排序 1报名时间倒序，2报名时间正序
-            competitionSort: '',
             searchOption: {
-                // 赛事状态：2=审核中，3=未通过，4=审核通过，报名中，5=报名结束，6=比赛中，7=已结束，不传默认返回全部
-                status: '',
-                // 赛事类型id，筛选时候用
-                category_id: '',
-                // 开始时间，时间戳（秒）
-                begin_time: '',
-                // 结束时间，时间戳（秒）
-                end_time: '',
+                // 赛事编号
+                number: '',
+                // 赛事名称
+                competition_name: '',
+                // 赛事排序 1报名时间倒序，2报名时间正序
+                sort: '',
+                // 审核状态：0=待审核，1=审核不通过，2=审核通过，3=已退赛，4=禁赛
+                apply_status: '',
             },
             // 赛事列表
             competitionList: [],
@@ -46,7 +52,7 @@ var myParticipatedCompetitionPersonal = {
             // 当前页
             currentPage: 1,
             // 每页数据条数
-            // limit: 10,
+            limit: 10,
             // 总数据条数
             totalCount: 0,
             // 原因对话框是否显示
@@ -66,6 +72,23 @@ var myParticipatedCompetitionPersonal = {
             },
         };
     },
+    // 过滤器
+    filters: {
+        // 时间戳转成日期（xxxx-xx-xx xx:xx）
+        timestampToDate: function (value) {
+            var dateObj = new Date(value * 1000);
+            var year = dateObj.getFullYear();
+            var month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            var date = String(dateObj.getDate()).padStart(2, '0');
+            var hours = String(dateObj.getHours()).padStart(2, '0');
+            var minutes = String(dateObj.getMinutes()).padStart(2, '0');
+            return "".concat(year, "-").concat(month, "-").concat(date, " ").concat(hours, ":").concat(minutes);
+        },
+    },
+    created: function () {
+        // 搜索
+        this.handleSearch();
+    },
     mounted: function () {
         // 临时
         layer.open({
@@ -79,18 +102,47 @@ var myParticipatedCompetitionPersonal = {
         });
     },
     methods: {
-        handleChangeStatus: function () { },
-        handleSearch: function () { },
+        // 状态 tab 改变
+        handleChangeStatus: function (value) {
+            if (this.searchOption.apply_status === value)
+                return;
+            this.searchOption.apply_status = value;
+            // 搜索
+            this.handleSearch();
+        },
+        // 搜索
+        handleSearch: function () {
+            // 加载我参加的赛事列表
+            this._loadCompetitionList(__assign(__assign({}, this.searchOption), { page: 1, pagenum: this.limit }));
+        },
+        // 排序
         handleSort: function () {
             // 1报名时间倒序，2报名时间正序
-            if (this.competitionSort === '' || this.competitionSort === 2) {
-                this.competitionSort = 1;
+            if (this.searchOption.sort === '' || this.searchOption.sort === 2) {
+                this.searchOption.sort = 1;
             }
-            else if (this.competitionSort === 1) {
-                this.competitionSort = 2;
+            else if (this.searchOption.sort === 1) {
+                this.searchOption.sort = 2;
             }
+            // 搜索
+            this.handleSearch();
         },
-        _loadCompetitionList: function () { },
+        // 加载我参加的赛事列表
+        _loadCompetitionList: function (data) {
+            var _this = this;
+            request({
+                url: '/api/Competitionattend/list',
+                method: 'post',
+                data: data,
+            }).then(function (result) {
+                if (+result.code === 200) {
+                    _this.competitionList = result.data.data;
+                    _this.totalPage = result.data.last_page;
+                    _this.currentPage = result.data.current_page;
+                    _this.totalCount = result.data.total;
+                }
+            });
+        },
         handleChangeCurrentPage: function () { },
         continueReleaseCompetition: function () { },
         handleDeleteCompetition: function () { },

@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>我发布的赛事 - 玻坡摸佛</title>
+    <title>我参加的赛事 - 玻坡摸佛</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
     <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
@@ -63,6 +63,11 @@
         margin-top: 8px;
         width: 96px;
       }
+
+      table.competition th,
+      table.competition td {
+        padding: 15px 2px;
+      }
     </style>
   </head>
   <body>
@@ -103,14 +108,14 @@
       <div class="center-inner-content">
         <!-- 临时 -->
         <div id="personalCompetitionTemp">
-          <div>赛事编号:{{competitionNumber}}</div>
-          <div>赛事名称:{{competitionName}}</div>
-          <div>赛事排序:{{competitionSort}}</div>
+          <div>赛事编号:{{searchOption.number}}</div>
+          <div>赛事名称:{{searchOption.competition_name}}</div>
+          <div>赛事排序:{{searchOption.sort}}</div>
         </div>
 
         <!-- 状态 tabs -->
         <div class="center-order-state m-b-20 clearfix">
-          <div class="li" :class="{active: searchOption.status === item.value}" v-for="(item, index) in statusList" :key="index" @click="handleChangeStatus(item.value)">
+          <div class="li" :class="{active: searchOption.apply_status === item.value}" v-for="(item, index) in statusList" :key="index" @click="handleChangeStatus(item.value)">
             <a href="javascript:">{{item.label}}</a>
           </div>
         </div>
@@ -119,167 +124,162 @@
         <div class="center-inner-form wallet-search clearfix">
           <!-- 赛事编号 -->
           <div class="form-bor">
-            <input class="input w130" type="number" placeholder="请输入赛事编号" v-model.trim="competitionNumber" />
+            <input class="input w130" type="number" placeholder="请输入赛事编号" v-model.trim="searchOption.number" />
           </div>
 
           <!-- 赛事名称 -->
           <div class="form-bor m-l-20">
-            <input class="input w130" type="search" placeholder="请输入赛事名称" v-model.trim="competitionName" />
+            <input class="input w130" type="search" placeholder="请输入赛事名称" v-model.trim="searchOption.competition_name" />
           </div>
 
           <button class="form-btn fl m-l-20" @click="handleSearch">搜索</button>
 
           <div class="time-sort fl m-l-40" @click="handleSort">
             <span>报名时间&nbsp;</span>
-            <img src="/images/sort-default.png" v-if="competitionSort === ''" />
-            <img src="/images/sort-desc.png" v-if="competitionSort === 1" />
-            <img src="/images/sort-asc.png" v-if="competitionSort === 2" />
+            <img src="/images/sort-default.png" v-if="searchOption.sort === ''" />
+            <img src="/images/sort-desc.png" v-if="searchOption.sort === 1" />
+            <img src="/images/sort-asc.png" v-if="searchOption.sort === 2" />
           </div>
         </div>
 
         <!-- 赛事列表表格 -->
         <div class="center-inner-table-wrap">
-          <table class="center-inner-table center-order-table">
+          <table class="competition center-inner-table center-order-table">
             <tr>
-              <th>赛事标题</th>
+              <th>编号</th>
+              <th>赛事名称</th>
               <th>比赛类型</th>
-              <th>报名时间</th>
+              <th>奖金</th>
+              <th>奖金支付</th>
               <th>人数</th>
-              <th>比赛时间</th>
-              <th>比赛阶段</th>
+              <th>参赛角色</th>
+              <th>报名日期</th>
+              <th>比赛日期</th>
+              <th>阶段/轮次</th>
               <th>赛事状态</th>
+              <th>报名状态</th>
               <th>操作</th>
             </tr>
             <tr v-for="(item, index) in competitionList" :key="item.id">
-              <!-- 赛事标题 -->
-              <td class="competition-name">
-                <img class="center-order-img" style="width: 96px; height: 54px" :src="item.cover_picture" />
-                <!-- <el-image style="width: 96px; height: 54px" :src="item.cover_picture" :preview-src-list="[item.cover_picture]"> </el-image> -->
-                <p class="ell2">赛事标题赛事标题赛事标题赛事标题{{item.competition_name}}</p>
+              <!-- 编号 -->
+              <td>{{item.number}}</td>
+              <!-- 赛事名称 -->
+              <td>
+                <div class="competition-name">
+                  <img class="center-order-img" style="width: 96px; height: 54px" :src="item.cover_picture" />
+                  <!-- <el-image style="width: 96px; height: 54px" :src="item.cover_picture" :preview-src-list="[item.cover_picture]"> </el-image> -->
+                  <p class="ell2">{{item.competition_name}}</p>
+                </div>
               </td>
 
               <!-- 比赛类型 -->
               <td>
-                <p v-if="item.category_id === 1">围棋</p>
-                <p v-if="item.category_id === 2">象棋</p>
-                <p v-if="item.category_id === 3">五子棋</p>
-                <p v-if="item.category_id === 4">国际象棋</p>
-                <p v-if="item.category_id === 5">其他</p>
-                <p>个人赛</p>
+                <p>{{item.category_name}}</p>
+                <p v-if="item.competition_type === 0">个人赛</p>
+                <p v-if="item.competition_type === 1">团队赛</p>
                 <p v-if="item.way === 0">线下场地</p>
                 <p v-if="item.way === 1">线上游戏平台</p>
               </td>
 
-              <!-- 报名时间 -->
+              <!-- 奖金 -->
+              <td>
+                <p>冠军：￥{{item.champion_money * 1}}</p>
+                <p>亚军：￥{{item.runner_up_money * 1}}</p>
+                <p>季军：￥{{item.third_winner_money * 1}}</p>
+              </td>
+
+              <!-- 奖金支付 -->
+              <td>
+                <p v-if="item.trusteeship === 1">通过bpmf网支付</p>
+                <p v-if="item.trusteeship === 2">线下支付或者其他方式支付</p>
+              </td>
+
+              <!-- 人数 -->
+              <td>
+                <p>报名{{item.apply_number}}</p>
+              </td>
+
+              <!-- 参赛角色 -->
+              <td>
+                <p class="color-orange" v-if="item.role_id === 1">参赛选手</p>
+                <p class="color-orange" v-if="item.role_id === 2">裁判</p>
+                <p class="color-orange" v-if="item.role_id === 3">主裁判</p>
+              </td>
+
+              <!-- 报名日期 -->
               <td>
                 <p>{{ item.a_b_t | timestampToDate }}</p>
                 至
                 <p>{{ item.a_e_t | timestampToDate }}</p>
               </td>
 
-              <!-- 人数 -->
-              <td>
-                <!-- 发布信息不完整、待支付、审核中、审核不通过 -->
-                <p v-if="[0, 1, 2, 3].includes(item.status)">——</p>
-
-                <!-- 报名中、报名结束 -->
-                <p v-if="[4, 5].includes(item.status)">报名人数</p>
-                <p v-if="[4, 5].includes(item.status)">{{item.apply_number}}</p>
-
-                <!-- 比赛中、已结束 -->
-                <p v-if="[6, 7].includes(item.status)">参赛人数</p>
-                <p v-if="[6, 7].includes(item.status)">{{item.join_number}}</p>
-              </td>
-
-              <!-- 比赛时间 -->
+              <!-- 比赛日期 -->
               <td>
                 <p>{{ item.c_b_t | timestampToDate }}</p>
                 <p>至</p>
                 <p>{{ item.c_e_t | timestampToDate }}</p>
               </td>
 
-              <!-- 比赛阶段 -->
+              <!-- 阶段/轮次 -->
               <td>
-                <!-- 信息不完整/没有发布完 -->
-                <p v-if="item.status === 0">——</p>
-
-                <p v-if="item.status === 1">待支付</p>
-                <p v-if="item.status === 2">审核中</p>
-
-                <!-- 审核通过/报名中 -->
                 <p v-if="item.status === 4">报名阶段</p>
-                <p v-if="item.status === 5">报名结束</p>
 
-                <!-- 比赛中 -->
-                <p v-if="item.status === 6">第{{item.stage_ing}}/{{item.stage}}阶段</p>
-
-                <!-- 未通过 -->
-                <p v-if="item.status === 3">——</p>
-                <!-- 已结束 -->
-                <p v-if="item.status === 7">——</p>
-                <!-- 比赛中止 -->
-                <!-- <p>——</p> -->
+                <!-- 比赛中或已结束 -->
+                <p v-if="item.status === 6 || item.status === 7">第{{item.stage_ing}}/{{item.stage}}阶段</p>
+                <p v-if="item.status === 6 || item.status === 7">第{{item.wheel}}轮</p>
               </td>
 
               <!-- 赛事状态 -->
               <td>
                 <!-- 信息不完整/没有发布完 -->
-                <p v-if="item.status === 0">——</p>
+                <!-- <p v-if="item.status === 0">——</p> -->
 
-                <p class="color-orange" v-if="item.status === 1">待支付</p>
-                <p class="color-orange" v-if="item.status === 2">审核中</p>
+                <!-- <p class="color-orange" v-if="item.status === 1">待支付</p> -->
+                <!-- <p class="color-orange" v-if="item.status === 2">审核中</p> -->
 
-                <p class="color-red" v-if="item.status === 3">未通过</p>
-                <a class="color-blue" href="javascript:" v-if="item.status === 3" @click="handleOpenCheckReasonDialog(item)">查看原因</a>
+                <!-- <p class="color-red" v-if="item.status === 3">未通过</p> -->
+                <!-- <a class="color-blue" href="javascript:" v-if="item.status === 3">查看原因</a> -->
 
                 <p class="color-orange" v-if="item.status === 4">报名中</p>
-                <p class="color-orange" v-if="item.status === 5">报名结束</p>
-                <p class="color-orange" v-if="item.status === 6">比赛中</p>
-                <p v-if="item.status === 7">已结束</p>
+                <p class="color-orange" v-else-if="item.status === 5">报名结束</p>
+                <p class="color-orange" v-else-if="item.status === 6">比赛中</p>
+                <p v-else-if="item.status === 7">已结束</p>
 
                 <!-- <p class="color-red">比赛终止</p> -->
                 <!-- <a class="color-blue" href="javascript:">查看原因</a> -->
               </td>
 
+              <!-- 报名状态 -->
+              <td>
+                <p class="color-orange" v-if="item.apply_status === 0 && item.pay_status === 0">待支付</p>
+                <p class="color-orange" v-if="item.apply_status === 0 && item.pay_status === 1">审核中</p>
+                <p class="color-orange" v-if="item.apply_status === 1">未通过</p>
+                <p class="color-orange" v-if="item.apply_status === 2">已通过</p>
+                <p class="color-orange" v-if="item.apply_status === 3">已退赛</p>
+                <p class="color-red" v-if="item.apply_status === 4">已禁赛</p>
+              </td>
+
               <!-- 操作 -->
               <td>
                 <div class="handle text-c">
-                  <!-- 信息不完整/没有发布完 -->
-                  <p v-if="item.status === 0">
-                    <a class="handle-btn blue m-t-5" href="javascript:" @click="continueReleaseCompetition(item)">继续发布</a>
-                  </p>
-
-                  <!-- 待支付 -->
-                  <p v-if="item.status === 1">
+                  <!-- 报名中或报名结束且待支付 -->
+                  <p v-if="(item.status === 4 || item.status === 5) && item.apply_status === 0 && item.pay_status === 0">
                     <a class="handle-btn blue m-t-5" href="javascript:">立即支付</a>
                   </p>
-                  <p v-if="item.status === 0 || item.status === 1">
-                    <a class="handle-btn red m-t-5" href="javascript:" @click="handleDeleteCompetition(item)">删除比赛</a>
-                  </p>
-
-                  <!-- 审核中 -->
-                  <p v-if="item.status === 2">——</p>
 
                   <!-- 未通过 -->
-                  <p v-if="item.status === 3">
-                    <a class="handle-btn blue m-t-5" href="javascript:">修改赛事</a>
-                  </p>
-                  <p v-if="item.status === 3">
-                    <a class="handle-btn m-t-5" href="javascript:" @click="handleOpenEndCompetitionDialog(item)">终止比赛</a>
+                  <p class="color-orange" v-if="item.apply_status === 1">
+                    <a class="handle-btn red m-t-5" href="javascript:">重新修改</a>
                   </p>
 
                   <!-- 报名中或报名结束 -->
-                  <p v-if="item.status === 4 || item.status === 5">
-                    <a class="handle-btn m-t-5" href="javascript:">报名管理</a>
+                  <p class="color-orange" v-if="item.status === 4 || item.status === 5">
+                    <a class="handle-btn blue m-t-5" :href="'/userCont/competition/applyDetail.html?apply_id=' + item.id">报名详情</a>
                   </p>
-
                   <!-- 比赛中或已结束 -->
-                  <p v-if="item.status === 6 || item.status === 7">
-                    <a class="handle-btn m-t-5" href="javascript:">赛事管理</a>
+                  <p class="color-orange" v-if="item.status === 6 || item.status === 7">
+                    <a class="handle-btn blue m-t-5" :href="'/userCont/competition/applyDetail.html?apply_id=' + item.id">查看详情</a>
                   </p>
-
-                  <!-- 比赛终止 -->
-                  <!-- <p><a class="handle-btn blue m-t-5" href="javascript:">查看详情</a></p> -->
                 </div>
               </td>
             </tr>
