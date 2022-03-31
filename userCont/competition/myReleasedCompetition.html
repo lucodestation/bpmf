@@ -186,10 +186,12 @@
             </tr>
             <tr v-for="(item, index) in competitionList" :key="item.id">
               <!-- 赛事标题 -->
-              <td class="competition-name">
-                <img class="center-order-img" style="width: 96px; height: 54px" :src="item.cover_picture" />
-                <!-- <el-image style="width: 96px; height: 54px" :src="item.cover_picture" :preview-src-list="[item.cover_picture]"> </el-image> -->
-                <p class="ell2">赛事标题赛事标题赛事标题赛事标题{{item.competition_name}}</p>
+              <td>
+                <div class="competition-name">
+                  <img class="center-order-img" style="width: 96px; height: 54px" :src="item.cover_picture" />
+                  <!-- <el-image style="width: 96px; height: 54px" :src="item.cover_picture" :preview-src-list="[item.cover_picture]"> </el-image> -->
+                  <p class="ell2">{{item.competition_name}}</p>
+                </div>
               </td>
 
               <!-- 比赛类型 -->
