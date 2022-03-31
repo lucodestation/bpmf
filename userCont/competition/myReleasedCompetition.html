@@ -306,12 +306,12 @@
 
                   <!-- 报名中或报名结束 -->
                   <p v-if="item.status === 4 || item.status === 5">
-                    <a class="handle-btn m-t-5" href="javascript:">报名管理</a>
+                    <a class="handle-btn m-t-5" :href="'/userCont/competition/competitionManage.html?competition_id=' + item.id">报名管理</a>
                   </p>
 
                   <!-- 比赛中或已结束 -->
                   <p v-if="item.status === 6 || item.status === 7">
-                    <a class="handle-btn m-t-5" href="javascript:">赛事管理</a>
+                    <a class="handle-btn m-t-5" :href="'/userCont/competition/competitionManage.html?competition_id=' + item.id">赛事管理</a>
                   </p>
 
                   <!-- 比赛终止 -->

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<!-- 个人中心 我发布的赛事 赛事管理 -->
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>我发布的赛事 - 玻坡摸佛</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+    <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <script src="/plugins/babel-polyfill.min.js"></script>
+    <script src="/plugins/vue.min.js"></script>
+    <script src="/plugins/qs.min.js"></script>
+    <script src="/plugins/axios.min.js"></script>
+    <script src="/plugins/jsencrypt.js"></script>
+    <script src="/plugins/aliyun-oss-sdk.min.js"></script>
+    <script src="/plugins/jquery.min.js"></script>
+    <script src="/plugins/syalert/syalert.min.js"></script>
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/plugins/element-ui/element-ui.min.js"></script>
+    <script src="/plugins/qrcode.min.js"></script>
+
+    <script src="/utils/request.js"></script>
+    <script src="/utils/util.js"></script>
+
+    <style>
+      /* 临时 */
+      /* 改变 layer 弹出层样式 */
+      .layui-layer.layui-layer-page {
+        background: rgba(255, 255, 255, 0.7);
+        color: red;
+        line-height: 2;
+      }
+
+      /* 赛事名称 */
+      .competition-name {
+        display: flex;
+        justify-content: space-between;
+      }
+      .competition-name .state {
+        margin-left: 20px;
+        white-space: nowrap;
+      }
+
+      /* 下拉选项样式 */
+      /* 未选择 */
+      select {
+        color: #999;
+      }
+      select option {
+        color: #333;
+      }
+      select option[value=''] {
+        color: #999;
+      }
+      /* 已选择 */
+      select.selected {
+        color: #333;
+      }
+
+      /* 表格复选框 */
+      table td.checkbox-wrap {
+        width: 20px;
+        height: 20px;
+      }
+      table td.checkbox-wrap label {
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 公共头部 -->
+    <header class="public-header"></header>
+
+    <!--center-container start-->
+    <div id="app" class="center-container">
+      <!-- 临时 -->
+      <div id="personalCompetitionTemp">
+        <!-- <pre>{{applyFilterOption}}</pre> -->
+        <pre>{{applySelectedApplyId}}</pre>
+      </div>
+      <!--main-center start-->
+      <div class="main-center w-1200 clearfix">
+        <!-- 公共侧边栏 -->
+        <aside class="public-user"></aside>
+
+        <!--center-content start-->
+        <div class="center-content fr">
+          <!--center-inner start-->
+          <div class="center-inner">
+            <div class="center-inner-tit">我发布的赛事</div>
+            <div class="center-inner-content">
+              <!-- 头部 -->
+              <div class="center-rank-head clearfix">
+                <div class="img fl">
+                  <img :src="competitionDetail.cover_picture" />
+                </div>
+                <div class="txt">
+                  <div class="t m-b-10 competition-name">
+                    <div>{{competitionDetail.competition_name}}</div>
+                    <div class="state color-6">
+                      <span>当前状态：</span>
+                      <span class="color-orange" v-if="competitionDetail.status === 4">报名中</span>
+                      <span class="color-orange" v-if="competitionDetail.status === 5">报名结束</span>
+                      <span class="color-orange" v-if="competitionDetail.status === 6">比赛中</span>
+                      <span class="color-orange" v-if="competitionDetail.status === 7">已结束</span>
+                      <span class="color-orange" v-if="competitionDetail.status === 8">已终止</span>
+                    </div>
+                  </div>
+                  <div class="tags clearfix">
+                    <span class="tag fl">{{competitionDetail.category_name}}</span>
+                    <span class="tag fl" v-if="competitionDetail.competition_type === 0">个人赛</span>
+                    <span class="tag fl" v-if="competitionDetail.competition_type === 1">团队赛</span>
+                  </div>
+                  <div class="flex-between flex flex-item-end">
+                    <div>
+                      <div class="date m-t-5 color-6">参赛人数：{{competitionDetail.join_number}}人</div>
+                      <div class="date color-6">报名时间：{{competitionDetail.a_b_t}} 至 {{competitionDetail.a_e_t}}</div>
+                      <div class="date color-6">比赛时间：{{competitionDetail.c_b_t}} 至 {{competitionDetail.c_e_t}}</div>
+                    </div>
+                    <div>
+                      <a class="handle-btn red" href="javascript:" v-if="competitionDetail.status !== 8">终止比赛</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 主要内容 -->
+              <div class="match-mix m-t-20">
+                <div class="match-mix-tit f-20">赛事管理</div>
+                <!--match-mix-head start-->
+                <div class="match-mix-head">
+                  <!-- 第一行 tabs -->
+                  <div class="head-stage m-t-10 m-b-10">
+                    <div class="stage-li f-16 color-6 active">
+                      <a class="color-6" href="CenterMatch-赛事奖项.html">报名管理</a>
+                    </div>
+                    <div class="stage-li f-16 color-6">
+                      <div class="tip">
+                        <div class="c">1比赛设定：16个人，单循环赛-贝格尔法，分4组，每组晋级2队 ，台次设定-临时定台 ，分组-按地区分组，先后手-猜先</div>
+                      </div>
+                      <div class="down-icon"></div>
+                      <a class="color-6" href="">第1阶段</a>
+                    </div>
+                    <div class="stage-li f-16 color-6">
+                      <div class="tip">
+                        <div class="c">22比赛设定：16个人，单循环赛-贝格尔法，分4组，每组晋级2队 ，台次设定-临时定台 ，分组-按地区分组，先后手-猜先</div>
+                      </div>
+                      <div class="down-icon"></div>
+                      <a class="color-6" href="">第2阶段</a>
+                    </div>
+                    <div class="stage-li f-16 color-6">
+                      <a class="color-6" href="CenterMatch-赛事奖项.html">赛事颁奖</a>
+                    </div>
+                  </div>
+
+                  <!-- <div class="head-class">
+                    <div class="class-li f-16 color-6 active"><a class="color-6" href="CenterMatch-报名管理-选手列表.html">报名管理</a></div>
+                    <div class="class-li f-16 color-6"><a class="color-6" href="CenterMatch-分组管理.html">分组管理</a></div>
+                    <div class="class-li f-16 color-6"><a class="color-6" href="CenterMatch-编排管理.html">编排管理</a></div>
+                    <div class="class-li f-16 color-6"><a class="color-6" href="CenterMatch-成绩录入.html">成绩录入</a></div>
+                    <div class="class-li f-16 color-6"><a class="color-6" href="CenterMatch-晋级名单.html">晋级名单</a></div>
+                    <div class="class-li f-16 color-6"><a class="color-6" href="CenterMatch-申诉列表.html">申诉列表</a></div>
+                    <div class="class-li f-16 color-6"><a class="color-6" href="CenterMatch-退赛列表.html">退赛列表</a></div>
+                  </div> -->
+
+                  <!-- 报名角色 -->
+                  <div class="head-class">
+                    <div class="class-li color-6" :class="{active: applyFilterOption.role_id === item.value}" v-for="item in applyRoleTabList" :key="item.value">
+                      <a class="color-6" href="javascript:" @click="handleChangeApplyRole(item.value)">{{item.label}}</a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 筛选 -->
+                <div class="center-inner-form wallet-search clearfix m-b-20 m-t-15">
+                  <div class="form-bor">
+                    <select class="select w130" :class="{selected: applyFilterOption.status !== ''}" v-model="applyFilterOption.status">
+                      <option value="">状态</option>
+                      <option :value="0">待审核</option>
+                      <option :value="1">未通过</option>
+                      <option :value="2">已通过</option>
+                    </select>
+                  </div>
+
+                  <div class="form-bor m-l-10">
+                    <input type="text" class="input w130" placeholder="名字或参赛账号" v-model.trim="applyFilterOption.keyword" />
+                  </div>
+
+                  <button class="form-btn m-l-10" @click="handleApplySearch">搜索</button>
+
+                  <div class="fr">
+                    <a class="match-mix-btn fl m-l-20" href="javascript:">种子选手设置</a>
+                  </div>
+                </div>
+
+                <!-- 报名管理表格 -->
+                <table class="center-inner-table center-order-table m-t-15">
+                  <tr>
+                    <th></th>
+                    <th>报名序号</th>
+                    <th>姓名</th>
+                    <th>代表队</th>
+                    <th>报名角色</th>
+                    <th>报名时间</th>
+                    <th>技术等级</th>
+                    <th>审核状态</th>
+                    <th>操作</th>
+                  </tr>
+
+                  <tr v-for="item in applyRoleList" :key="item.id">
+                    <td class="checkbox-wrap">
+                      <label class="match-mix-check">
+                        <input class="check" type="checkbox" name="applyCheckbox[]" :checked="applySelectedApplyId.includes(item.id)" @change="handleChangeApplyCheckbox(item.id)" hidden />
+                        <span></span>
+                      </label>
+                    </td>
+                    <td>{{item.id}}</td>
+                    <td>{{item.username}}</td>
+                    <td>
+                      <span v-if="item.team">{{item.team}}</span>
+                      <span v-else>个人</span>
+                    </td>
+                    <td>
+                      <span v-if="item.role_id === 1">参赛选手</span>
+                      <span v-if="item.role_id === 2">裁判</span>
+                      <span v-if="item.role_id === 3">主裁判</span>
+                    </td>
+                    <td>
+                      <span v-if="item.pay_time">{{item.pay_time | timestampToDate}}</span>
+                      <span v-else>——</span>
+                    </td>
+                    <td>{{item.level}}</td>
+                    <td>
+                      <p class="color-orange" v-if="item.status === 0">待审核</p>
+                      <p class="color-red" v-if="item.status === 1">未通过</p>
+                      <p class="color-orange" v-if="item.status === 2">已通过</p>
+                    </td>
+                    <td>
+                      <div class="handle text-c flex-between flex">
+                        <a class="color-blue" href="javascript:" v-if="item.status === 0">同意</a>
+                        <a class="color-gray" href="javascript:" v-if="item.status === 1">同意</a>
+                        <a class="color-blue" href="javascript:" v-if="item.status === 2">已同意</a>
+
+                        <a class="color-red" href="javascript:" v-if="item.status === 0">拒绝</a>
+                        <a class="color-red" href="javascript:" v-if="item.status === 1">已拒绝</a>
+                        <a class="color-gray" href="javascript:" v-if="item.status === 2">拒绝</a>
+
+                        <a class="color-blue" href="javascript:">详情</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 表格底部 -->
+                  <tr v-if="applyRoleList.length">
+                    <td colspan="10">
+                      <div class="flex flex-item-center">
+                        <div class="match-mix-check">
+                          <input class="check" type="checkbox" :checked="applySelectedApplyId.length === applyRoleList.length" @change="handleChangeApplySelectAll" />
+                          <span></span>
+                        </div>
+                        <span class="f-16 m-l-10 m-r-40">全选</span>
+                        <button class="match-mix-btn m-r-20">同意参赛</button>
+                        <button class="match-mix-btn red m-r-20">拒绝参赛</button>
+                        <button class="match-mix-btn blue m-r-20">选手授权</button>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <!--赛事管理复杂部分 end-->
+            </div>
+          </div>
+          <!--center-inner end-->
+        </div>
+        <!--center-content end-->
+      </div>
+      <!--main-center end-->
+    </div>
+    <!--center-container end-->
+
+    <!-- 公共底部 -->
+    <footer class="public-footer"></footer>
+
+    <!--参赛号设置弹出-->
+    <div class="sy-alert animated" style="width: 560px" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert3">
+      <div class="bond-content">
+        <div class="bond-close" onclick="syalert.syhide('alert3')"></div>
+        <div class="bond-tit">参赛号设置</div>
+        <!--center-set start-->
+        <div class="center-set">
+          <!--set-item start-->
+          <div class="set-item clearfix">
+            <div class="label">设置规则：</div>
+            <div class="item-r">
+              <div class="set-radio fl">
+                <input class="radio" type="radio" name="sex" />
+                <span>按等级分</span>
+              </div>
+              <div class="set-radio fl">
+                <input class="radio" type="radio" name="sex" />
+                <span>按技术水平</span>
+              </div>
+              <div class="set-radio fl">
+                <input class="radio" type="radio" name="sex" />
+                <span>随机分配</span>
+              </div>
+              <div class="set-radio fl">
+                <input class="radio" type="radio" name="sex" />
+                <span>比赛成绩</span>
+              </div>
+            </div>
+          </div>
+          <!--set-item end-->
+          <div class="text-c">
+            <button class="center-set-btn mar-auto" onclick="syalert.syhide('alert3')">确认</button>
+          </div>
+        </div>
+        <!--center-set end-->
+      </div>
+    </div>
+    <!--设置分组弹出-->
+    <div class="sy-alert animated" style="width: 560px" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert2">
+      <div class="bond-content">
+        <div class="bond-close" onclick="syalert.syhide('alert2')"></div>
+        <div class="bond-tit">分组设置</div>
+        <!--center-set start-->
+        <div class="center-set">
+          <!--set-item start-->
+          <div class="set-item clearfix">
+            <div class="label">分组数：</div>
+            <div class="item-r">
+              <div class="set-bor">
+                <input class="input" type="text" placeholder="请输入分组数量" />
+              </div>
+            </div>
+          </div>
+          <!--set-item end-->
+          <!--set-item start-->
+          <div class="set-item clearfix">
+            <div class="label">参赛选手分组：</div>
+            <div class="item-r">
+              <div class="set-radio fl">
+                <input class="radio" type="radio" name="sex" />
+                <span>按种子选手分组</span>
+              </div>
+              <div class="set-radio fl">
+                <input class="radio" type="radio" name="sex" />
+                <span>随机分组</span>
+              </div>
+              <div class="set-radio fl">
+                <input class="radio" type="radio" name="sex" />
+                <span>同队或同单位限制</span>
+              </div>
+              <div class="set-radio fl">
+                <input class="radio" type="radio" name="sex" />
+                <span>地区分组</span>
+              </div>
+            </div>
+          </div>
+          <!--set-item end-->
+          <div class="text-c">
+            <button class="center-set-btn mar-auto" onclick="syalert.syhide('alert2')">确认</button>
+          </div>
+        </div>
+        <!--center-set end-->
+      </div>
+    </div>
+
+    <script src="/js/userCont/competition/competitionManage.js"></script>
+  </body>
+</html>

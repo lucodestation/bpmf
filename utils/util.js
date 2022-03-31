@@ -201,3 +201,13 @@ util.uploadMultipleFile = function (option) { return __awaiter(void 0, void 0, v
 }); };
 //公钥.
 var publiukey = '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSjs8JJr/Nyb+nOG77agUDf7uTc+kswdVEXbU8v5EL98brAw7fu4dQc1vkh1KSXqiC9EC7YmJzkkFoXUzTH2pvvDlqUuCwtdmXOsq/b1JWKyEXzQlPIiwdHnAUjGbmHOEMAY3jKEy2dY2I6J+giJqo8B2HNoR+zv3KaEmPSHtooQIDAQAB-----END PUBLIC KEY-----';
+// 过滤掉对象的空字符串属性
+util.objFilterEmptyStrProp = function (obj) {
+    var tempObj = JSON.parse(JSON.stringify(obj));
+    for (var i in tempObj) {
+        if (tempObj[i] === '') {
+            delete tempObj[i];
+        }
+    }
+    return tempObj;
+};
