@@ -10,21 +10,47 @@
 
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="stylesheet" href="/plugins/animate.min.css" />
+  <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
   <link rel="stylesheet" href="/plugins/syalert/syalert.min.css" />
   <link rel="stylesheet" href="/plugins/swiper/swiper.min.css" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
-
   <script src="/plugins/babel-polyfill.min.js"></script>
   <script src="/plugins/layui/layui.js"></script>
   <script src="/plugins/jsencrypt.js"></script>
   <script src="/plugins/jquery.min.js"></script>
   <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/qrcode.min.js"></script>
+  <script src="/plugins/qs.min.js"></script>
   <script src="/plugins/syalert/syalert.min.js"></script>
   <script src="/plugins/vue.min.js"></script>
 
+  <script src="/plugins/element-ui/element-ui.min.js"></script>
   <script src="/plugins/axios.min.js"></script>
   <script src="/utils/request.js"></script>
+  <script src="/utils/util.js"></script>
+  <style>
+    /* 隐藏 element-ui 对话框的标题栏 */
+    .el-dialog .el-dialog__header {
+      display: none;
+    }
+
+    .el-dialog .el-dialog__body {
+      padding: 0;
+    }
+
+    .bond-pop {
+      width: auto;
+    }
+
+    .bond-pop .pay-item {
+      color: #333 !important;
+    }
+
+    .bond-content {
+      color: #333 !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -61,7 +87,7 @@
                     <!-- <span class="color-orange" v-if="noticeCont.status=='-1'">审核失败</span> -->
                     <span class="color-orange" v-if="noticeCont.status=='0'">待审核</span>
                     <span class="color-orange" v-if="noticeCont.status=='1'">已中榜</span>
-                    <span class="color-orange" v-if="noticeCont.status=='2'">已教课</span>
+                    <span class="color-orange" v-if="noticeCont.status=='2'">待开始</span>
                     <span class="color-orange" v-if="noticeCont.status=='3'">工作中</span>
                     <span class="color-orange" v-if="noticeCont.status=='4'">任务结束</span>
                     <!-- <span class="color-orange" v-if="noticeCont.status=='5'">任务结束</span> -->
@@ -83,54 +109,108 @@
             </div>
             <!--center-rank-head end-->
             <div v-if="noticeCont.status=='1'||noticeCont.status=='2'||noticeCont.status=='3'">
-              <div v-for="item,k in selectList" :key='k'>
-                <!--center-rank-head-hd start-->
-                <div class="center-rank-head-hd m-t-35">
-                  <div class="date"><span class="color-gray"> 中榜时间：</span>{{noticeCont.select_time}}</div>
-                  <div class="hd-t m-t-10 clearfix">
-                    <div class="num f-weight f-16 fl">{{k+1}}</div>
-                    <div class="name f-weight f-16 fl m-l-20">{{item.nickname}}</div>
-                    <div class="price fl m-l-40">报价：{{item.total_money}}元</div>
-                    <div class="c fl m-l-40" v-if="item.pay_num_type==1">支付方式：单次支付</div>
-                    <div class="c fl m-l-40" v-if="item.pay_num_type==2">支付方式：多次支付</div>
-                    <div class="c fl m-l-15">{{item.pay_num}}次</div>
-                    <div class="handle-btn red fr" style="cursor: pointer;">终止榜文</div>
-                  </div>
+              <!-- <div v-for="item,k in noticeCont" :key='k'> -->
+              <!--center-rank-head-hd start-->
+              <div class="center-rank-head-hd m-t-35">
+                <div class="date"><span class="color-gray"> 中榜时间：</span>{{noticeCont.select_time}}</div>
+                <div class="hd-t m-t-10 clearfix">
+                  <div class="num f-weight f-16 fl">1</div>
+                  <div class="name f-weight f-16 fl m-l-20">{{noticeCont.nickname}}</div>
+                  <div class="price fl m-l-40">报价：{{noticeCont.total_money}}元</div>
+                  <div class="c fl m-l-40" v-if="noticeCont.pay_num_type==1">支付方式：单次支付</div>
+                  <div class="c fl m-l-40" v-if="noticeCont.pay_num_type==2">支付方式：多次支付</div>
+                  <div class="c fl m-l-15">{{noticeCont.pay_num}}次</div>
+                  <div class="handle-btn red fr" style="cursor: pointer;" v-if="noticeCont.status=='2'">终止榜文</div>
+                  <div class="handle-btn fr m-l-30" v-if="noticeCont.end.length" @click="terminateTaskVisible=true"
+                    style="cursor: pointer;">查看并反馈</div>
+                  <div class="fr color-red" v-if="noticeCont.end.length">对方已终止</div>
                 </div>
-                <!--center-rank-head-hd end-->
-                <!--center-inner-table-wrap start-->
-                <div class="center-inner-table-wrap">
-                  <table class="center-inner-table center-order-table" v-for="items,i in item.blList" :key='i'>
-                    <!-- {{items}} -->
-                    <tr>
-                      <th v-for="e,k in items" :key="k">第{{e.num}}次支付{{e.money}}元</th>
-                      <!-- <th>第2次支付30元</th>
+              </div>
+              <!--center-rank-head-hd end-->
+              <!--center-inner-table-wrap start-->
+              <div class="center-inner-table-wrap">
+                <table class="center-inner-table center-order-table" v-for="item,i in noticeCont.blList" :key='i'>
+                  <!-- {{item}} -->
+                  <tr>
+                    <th v-for="e,k in item" :key="k">第{{e.num}}次支付{{e.money}}元</th>
+                    <!-- <th>第2次支付30元</th>
                       <th>第3次支付20元</th> -->
-                    </tr>
-                    <tr>
-                      <td v-for="e,k in items" :key="k">
-                        <!-- 0待总的开始学习，1待开始教课，2已开始教课待阶段完成学习，3完成学习 -->
-                        <p v-if="e.de_status==0" class="color-orange">未开始</p>
-                        <p v-if="e.de_status==1" class="color-orange" @click="onBeginTeachClick(item.id)">开始学课</p>
-                      </td>
-                      <!-- <td>
+                  </tr>
+                  <tr>
+                    <td v-for="e,k in item" :key="k">
+                      <!-- 0待总的开始学习，1待开始教课，2已开始教课待阶段完成学习，3完成学习 -->
+                      <p v-if="e.de_status==0" class="color-orange">未开始</p>
+                      <p v-if="e.de_status==1" class="color-orange" @click="onBeginTeachClick(item.id)">开始学课</p>
+                    </td>
+                    <!-- <td>
                         <p class="color-orange">未开始</p>
                       </td>
                       <td>
                         <p class="color-orange">未开始</p>
                       </td> -->
-                    </tr>
-                  </table>
+                  </tr>
+                </table>
+              </div>
+              <div class="center-rank-reason m-t-15" v-if="noticeCont.end.length">
+                <div class="t f-16 m-b-5">终止原因</div>
+                <!-- <div class="c"><span class="color-gray">对方反馈：</span> {{noticeCont.end[0].reason}}</div> -->
+              </div>
+              <!-- </div> -->
+            </div>
+            <!--终止原因弹出-->
+            <el-dialog class="bond-pop animated w850" :visible="terminateTaskVisible" :show-close="false" width="700px">
+              <div class="bond-content" v-if="noticeCont.end.length>0">
+                <div class="bond-close" @click="onQueryClick"></div>
+                <div class="bond-tit">终止原因</div>
+                <div class="pay-item f-20 clearfix">
+                  <div class="label f-weight">终止原因：</div>
+                  <div class="item-r">{{noticeCont.end[0].reason}}</div>
+                </div>
+                <div class="pay-item f-20 clearfix">
+                  <div class="label">对方想要：</div>
+                  <div class="item-r">终止任务</div>
+                </div>
+                <div class="pay-item">
+                  <div class="f-20 f-weight m-b-10">您的反馈</div>
+                  <div class="pay-item-text">
+                    <textarea class="text f-16" v-model="check_content" placeholder="请输入您要反馈的内容..." rows="3"></textarea>
+                  </div>
+                </div>
+                <div class="pay-item f-20 clearfix">
+                  <div class="label">您想要：</div>
+                  <div class="item-r">
+                    <div class="pay-item-radio fl m-r-40" @click="status=1">
+                      <input class="radio" type="radio" value="1" name="agree">
+                      <span>同意</span>
+                    </div>
+                    <div class="pay-item-radio fl" @click="status=2">
+                      <input class="radio" type="radio" value="2" name="agree">
+                      <span>不同意，要求平台介入</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="pay-item f-20 clearfix">
+                  <div class="label">联系方式：</div>
+                  <div class="item-r">
+                    <div class="pay-item-input w220">
+                      <input class="input f-18" type="text" v-model="check_phone" placeholder="请输入联系方式">
+                    </div>
+                  </div>
+                </div>
+                <div class="register-check clearfix">
+                  <div class="check-input fl" @click="ondjclick">
+                    <input class="check" type="checkbox">
+                    <span class="span"></span>
+                  </div>
+                  <div class="fl f-16">我已阅读并同意
+                    <a class="color-orange" href="/rule/bwgz.html" target="_brank">《玻玻摸佛网榜文需求规则》</a>
+                  </div>
+                </div>
+                <div class="last-bottom text-c">
+                  <button class="bond-btn mar-auto" @click="onzzyyClick">提交</button>
                 </div>
               </div>
-            </div>
-            <!--center-inner-table-wrap end-->
-            <!--                    &lt;!&ndash;center-rank-reason start&ndash;&gt;-->
-            <!--                    <div class="center-rank-reason m-t-15">-->
-            <!--                        <div class="t f-16 m-b-5">终止原因</div>-->
-            <!--                        <div class="c"><span class="color-gray">对方反馈：</span> 身体原因，无法继续</div>-->
-            <!--                    </div>-->
-            <!--                    &lt;!&ndash;center-rank-reason end&ndash;&gt;-->
+            </el-dialog>
           </div>
         </div>
         <!--center-inner end-->
