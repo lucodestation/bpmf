@@ -7,41 +7,52 @@ new Vue({
   el: '#app',
   data() {
     return {
-      id: '',// id
-      dateTime: '',// 分钟
-      liveCont: '',// 详情内容
-      userList: [],// 申请列表
+      type: '',
+      typeList: [{ id: '1', name: '教课' }, { id: '2', name: '学课' }],
+      navList: [{ id: '', name: '全部订单' }, { id: '0', name: '待支付' }, { id: '1', name: '已支付' }],
+      navId: '',
+      search: '',// 订单编号或应榜人
+      orderList: [],// 申请列表
+      start_time: '',
+      end_time: ''
     }
   },
   mounted() {
-
-    request({ url: '/api/Mine/pushBangwenOrder', method: 'POST', data: { page: 1, pagenum: 10 } }).then((res) => {
-      if (res.code == 200) {
-        this.userList = res.data.data
-      }
+    // 起始时间
+    layui.laydate.render({
+      elem: '#signUpStartDate', //指定元素
+      theme: '#FF7F17', // 主题颜色
+      btns: ['clear', 'confirm'], // 显示的按钮
+      done: (value, date) => {
+        this.start_time = value
+      },
     })
+    // 结束时间
+    layui.laydate.render({
+      elem: '#signUpEndDate', //指定元素
+      theme: '#FF7F17', // 主题颜色
+      btns: ['clear', 'confirm'], // 显示的按钮
+      done: (value, date) => {
+        this.end_time = value
+      },
+    })
+    // 列表数据
+    this.onpushBangwenOrder()
   },
   methods: {
+    // 点击查询
+    onSearchClick() {
+      this.onpushBangwenOrder()
+    },
+    onnavClick(id) {
+      this.navId = id
+      this.onpushBangwenOrder()
+    },
     // 列表数据
-    ondetail() {
-      request({ url: '/api/Live/detail', method: 'POST', data: { live_id: this.id } }).then((res) => {
+    onpushBangwenOrder() {
+      request({ url: '/api/Mine/pushBangwenOrder', method: 'POST', data: { page: 1, pagenum: 10, search: this.search, status: this.navId, type: this.type, start_time: this.start_time, end_time: this.end_time } }).then((res) => {
         if (res.code == 200) {
-          var date1 = new Date((res.data.end_time + ':00').replace(/\-/g, "/"));    //开始时间
-          var date2 = new Date(res.data.start_time.replace(/\-/g, "/") + ':00');    //结束时间
-          var date3 = date1.getTime() - date2.getTime(); //时间差秒
-          //计算出相差天数
-          var days = Math.floor(date3 / (24 * 3600 * 1000))
-          //计算出小时数
-          var leave1 = date3 % (24 * 3600 * 1000)    //计算天数后剩余的毫秒数
-          var hours = Math.floor(leave1 / (3600 * 1000))
-          //计算相差分钟数
-          var leave2 = leave1 % (3600 * 1000)        //计算小时数后剩余的毫秒数
-          var minutes = Math.floor(leave2 / (60 * 1000))
-          //计算相差秒数
-          // var leave3 = leave2 % (60 * 1000)      //计算分钟数后剩余的毫秒数
-          // var seconds = Math.round(leave3 / 1000)
-          this.dateTime = days * 24 * 60 + hours * 60 + minutes
-          this.liveCont = res.data
+          this.orderList = res.data.data
         }
       })
     }

@@ -8,42 +8,54 @@ new Vue({
     el: '#app',
     data: function () {
         return {
-            id: '',
-            dateTime: '',
-            liveCont: '',
-            userList: [], // 申请列表
+            type: '',
+            typeList: [{ id: '1', name: '教课' }, { id: '2', name: '学课' }],
+            navList: [{ id: '', name: '全部订单' }, { id: '0', name: '待支付' }, { id: '1', name: '已支付' }],
+            navId: '',
+            search: '',
+            orderList: [],
+            start_time: '',
+            end_time: ''
         };
     },
     mounted: function () {
         var _this = this;
-        request({ url: '/api/Mine/attendBangwenOrder', method: 'POST', data: { page: 1, pagenum: 10 } }).then(function (res) {
-            if (res.code == 200) {
-                _this.userList = res.data.data;
-            }
+        // 起始时间
+        layui.laydate.render({
+            elem: '#signUpStartDate',
+            theme: '#FF7F17',
+            btns: ['clear', 'confirm'],
+            done: function (value, date) {
+                _this.start_time = value;
+            },
         });
+        // 结束时间
+        layui.laydate.render({
+            elem: '#signUpEndDate',
+            theme: '#FF7F17',
+            btns: ['clear', 'confirm'],
+            done: function (value, date) {
+                _this.end_time = value;
+            },
+        });
+        // 列表数据
+        this.onpushBangwenOrder();
     },
     methods: {
+        // 点击查询
+        onSearchClick: function () {
+            this.onpushBangwenOrder();
+        },
+        onnavClick: function (id) {
+            this.navId = id;
+            this.onpushBangwenOrder();
+        },
         // 列表数据
-        ondetail: function () {
+        onpushBangwenOrder: function () {
             var _this = this;
-            request({ url: '/api/Mine/attendBangwenOrder', method: 'POST', data: {} }).then(function (res) {
+            request({ url: '/api/Mine/attendBangwenOrder', method: 'POST', data: { page: 1, pagenum: 10, search: this.search, status: this.navId, type: this.type, start_time: this.start_time, end_time: this.end_time } }).then(function (res) {
                 if (res.code == 200) {
-                    var date1 = new Date((res.data.end_time + ':00').replace(/\-/g, "/")); //开始时间
-                    var date2 = new Date(res.data.start_time.replace(/\-/g, "/") + ':00'); //结束时间
-                    var date3 = date1.getTime() - date2.getTime(); //时间差秒
-                    //计算出相差天数
-                    var days = Math.floor(date3 / (24 * 3600 * 1000));
-                    //计算出小时数
-                    var leave1 = date3 % (24 * 3600 * 1000); //计算天数后剩余的毫秒数
-                    var hours = Math.floor(leave1 / (3600 * 1000));
-                    //计算相差分钟数
-                    var leave2 = leave1 % (3600 * 1000); //计算小时数后剩余的毫秒数
-                    var minutes = Math.floor(leave2 / (60 * 1000));
-                    //计算相差秒数
-                    // var leave3 = leave2 % (60 * 1000)      //计算分钟数后剩余的毫秒数
-                    // var seconds = Math.round(leave3 / 1000)
-                    _this.dateTime = days * 24 * 60 + hours * 60 + minutes;
-                    _this.liveCont = res.data;
+                    _this.orderList = res.data.data;
                 }
             });
         }

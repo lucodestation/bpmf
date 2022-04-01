@@ -44,6 +44,10 @@
     .bond-pop .pay-item {
       color: #333 !important;
     }
+
+    .bond-content {
+      color: #333 !important;
+    }
   </style>
 </head>
 
@@ -112,11 +116,11 @@
               <span class="color-gray" style="margin-left: 40px;">中榜人数：</span>{{noticeCont.select_num}}人
             </div>
             <!--center-rank-head-hd start-->
-            <div class="m-t-15 m-b-15 clearfix">
+            <div class="m-t-15 m-b-15 clearfix" v-if="noticeCont.status=='3'||noticeCont.status=='4'">
               <div class="f-weight f-16 fl">中榜人列表</div>
 
             </div>
-            <div v-if="noticeCont.status=='4'">
+            <div v-if="noticeCont.status=='3'||noticeCont.status=='4'">
               <div v-for="item,k in selectList" :key="k">
                 <div class="center-rank-head-hd">
                   <!-- <div class="m-b-15 clearfix">
@@ -240,8 +244,13 @@
                     <p class="color-orange" style="cursor: pointer;" @click="onZbClick(item)">中榜</p>
                   </td>
                   <td v-if="item.status==1">
+                    <!-- 此处是学棋榜文，托管 -->
+                    <p class="color-orange" v-if="item.is_trustee==1&&item.pay_status=='-1'"
+                      @click="onStudytgClick(item)">开始学习</p>
+                    <p class="color-orange" v-if="item.is_trustee==1&&item.pay_status==0" @click="onpayClick(item)">开始学习
+                    </p>
                     <!-- 此处是学棋榜文，不托管 -->
-                    <p class="color-orange" @click="onStudyClick(item.id)">开始学习</p>
+                    <p class="color-orange" v-if="item.is_trustee==2" @click="onStudyClick(item.id)">开始学习</p>
                     <p class="color-gray" @click="onQueryClick(item.id)">取消中榜</p>
                   </td>
                   <td v-if="item.status==2">
@@ -311,6 +320,117 @@
             </div>
             <div class="last-bottom text-c">
               <button class="bond-btn mar-auto" @click="onzzClick">提交</button>
+            </div>
+          </div>
+        </el-dialog>
+        <!-- 开始学课对话框 -->
+        <el-dialog custom-class="bond-pop animated" :visible="depositDialogVisible" :show-close="false" width="700px">
+          <div class="bond-content">
+            <div class="bond-close" @click="handleCloseDepositDialog"></div>
+            <div class="bond-tit">开始学课</div>
+            <div class="bond-tip" style="width: 500px;">本课程为托管类型，开始学习时需支付课时费到平台， 之后每次学课完成从托管账户中扣除。</div>
+            <div class="bond-price">课时费：<span class="color-red">￥{{depositAmount}}</span></div>
+            <div class="bond-pay">
+              <div class="t">选择支付方式</div>
+              <div class="con clearfix">
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payMethod" value="1" v-model.number="payMethod" />
+                  <span class="radio-s"><img src="/images/pub14.png" /></span>
+                </label>
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payMethod" value="2" v-model.number="payMethod" />
+                  <span class="radio-s"><img src="/images/pub19.png" /></span>
+                </label>
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payMethod" value="3" v-model.number="payMethod" />
+                  <span class="radio-s"><img src="/images/pub13.png" /></span>
+                </label>
+              </div>
+            </div>
+            <div class="last-bottom">
+              <button class="bond-btn" @click="confirmPayDeposit">确认并支付</button>
+            </div>
+          </div>
+        </el-dialog>
+        <!-- 开始学课对话框 -->
+        <el-dialog custom-class="bond-pop animated" :visible="depositDialogShow" :show-close="false" width="700px">
+          <div class="bond-content">
+            <div class="bond-close" @click="handleCloseDepositDialog"></div>
+            <div class="bond-pay">
+              <div class="t">选择支付方式</div>
+              <div class="con clearfix">
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payMethod" value="1" v-model.number="payMethod" />
+                  <span class="radio-s"><img src="/images/pub14.png" /></span>
+                </label>
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payMethod" value="2" v-model.number="payMethod" />
+                  <span class="radio-s"><img src="/images/pub19.png" /></span>
+                </label>
+                <label class="li">
+                  <input type="radio" class="bond-radio" name="payMethod" value="3" v-model.number="payMethod" />
+                  <span class="radio-s"><img src="/images/pub13.png" /></span>
+                </label>
+              </div>
+            </div>
+            <div class="last-bottom">
+              <button class="bond-btn" @click="confirmPayDeposit">确认并支付</button>
+            </div>
+          </div>
+        </el-dialog>
+        <!-- 钱包支付对话框 -->
+        <el-dialog custom-class="wallet-pop w850 animated" :visible="walletPayDialogVisible" :show-close="false">
+          <div class="wallet-con">
+            <div class="wallet-close" @click="handleCloseWalletPayDialog"></div>
+            <div class="t">钱包支付</div>
+            <div class="wallet-mid">
+              <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+              <div class="wallet-label">输入支付密码<a class="wallet-a fr color-gray" href="/userCont/wallet/pwd.html"
+                  target="_blank">忘记密码？</a></div>
+              <div class="wallet-input">
+                <input class="input" type="password" v-model.trim="payPassword" />
+              </div>
+            </div>
+            <div class="wallet-bottom">
+              <button class="wallet-btn" @click="handleSubmitWalletPay">确定</button>
+            </div>
+          </div>
+        </el-dialog>
+        <!-- 支付宝支付对话框 -->
+        <el-dialog custom-class="wallet-pop animated" :visible="alipayPayDialogVisible" :show-close="false"
+          width="600px">
+          <div class="wallet-con">
+            <div class="wallet-close" @click="handleCloseAlipayPayDialog"></div>
+            <div class="t">支付宝支付</div>
+            <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+            <div class="con clearfix">
+              <div class="wx-g">
+                <!-- <img :src="alipayPayQrcode" /> -->
+                <div id="alipayPayQrcode"></div>
+                <div class="tip">请使用支付宝“扫一扫”,扫描二维码支付</div>
+              </div>
+              <div class="wx-i">
+                <img src="/images/pub-alipay.png" />
+              </div>
+            </div>
+          </div>
+        </el-dialog>
+        <!-- 微信支付对话框 -->
+        <el-dialog custom-class="wallet-pop animated" :visible="wechatPayDialogVisible" :show-close="false"
+          width="600px">
+          <div class="wallet-con">
+            <div class="wallet-close" @click="handleCloseWechatPayDialog"></div>
+            <div class="t">微信支付</div>
+            <div class="money">支付金额：<span class="price color-red">￥{{payAmount}}</span></div>
+            <div class="con clearfix">
+              <div class="wx-g">
+                <!-- <img :src="wechatPayQrcode" /> -->
+                <div id="wechatPayQrcode"></div>
+                <div class="tip">请使用微信“扫一扫”,扫描二维码支付</div>
+              </div>
+              <div class="wx-i">
+                <img src="/images/pub1.jpg" />
+              </div>
             </div>
           </div>
         </el-dialog>
