@@ -31,15 +31,22 @@
       /* 临时 */
       .temp-pre.show {
         position: fixed;
-        top: 100px;
+        top: 40px;
         right: 0;
-        bottom: 50px;
-        background: rgba(255, 192, 203, 0.5);
+        /* bottom: 50px; */
         overflow: scroll;
         max-width: 500px;
-        /* opacity: 0.7; */
+        max-height: 600px;
+        opacity: 0.6;
         z-index: 10000;
-        padding: 10px;
+        border: 2px solid brown;
+      }
+      .temp-pre.show .el-collapse .el-collapse-item__header {
+        font-weight: bold;
+      }
+      .temp-pre.show .el-collapse .el-collapse-item__header,
+      .temp-pre.show .el-collapse .el-collapse-item__content {
+        color: red;
       }
 
       /* 隐藏时间选择控件不需要的分、秒 */
@@ -208,14 +215,18 @@
       <!-- 单个跟元素 -->
       <div>
         <!-- 临时 -->
-        <pre
+        <div
           class="temp-pre"
           :class="{
             show: tempPreShow
           }"
         >
-          <div>{{formData}}</div>
-        </pre>
+          <el-collapse>
+            <el-collapse-item title="formData">
+              <pre>{{formData}}</pre>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
 
         <!-- 赛事类型 -->
         <div class="publish-item clearfix">
@@ -623,15 +634,22 @@
       <!-- 单个根元素 -->
       <div>
         <!-- 临时 -->
-        <pre
+        <div
           class="temp-pre"
           :class="{
             show: tempPreShow
           }"
         >
-          <div>{{ formData }}</div>
-          <div>{{ competitionCateList }}</div>
-        </pre>
+          <el-collapse>
+            <el-collapse-item title="formData">
+              <pre>{{formData}}</pre>
+            </el-collapse-item>
+
+            <el-collapse-item title="competitionCateList">
+              <pre>{{competitionCateList}}</pre>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
 
         <!-- 赛事类型 -->
         <div class="publish-item clearfix">

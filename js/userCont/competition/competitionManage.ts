@@ -9,6 +9,8 @@ $(function () {
   $('.public-user').load('/components/CenterAside.html')
 })
 
+Vue.use(ELEMENT)
+
 new Vue({
   el: '#app',
   data() {

@@ -105,7 +105,7 @@ const myReleasedCompetitionPersonal = {
       title: '临时',
       type: 1,
       // skin: 'layui-layer-rim', //加上边框
-      area: ['300px', '200px'], //宽高
+      area: ['300px', 'auto'], //宽高
       content: $('#personalCompetitionTemp'),
       shade: 0,
       offset: 'rt',

@@ -44,6 +44,7 @@ $(function () {
     // // 引入侧边栏
     $('.public-user').load('/components/CenterAside.html');
 });
+Vue.use(ELEMENT);
 new Vue({
     el: '#app',
     data: function () {
