@@ -74,7 +74,9 @@ new Vue({
             depositAmount: '',
             payMethod: 1,
             payAmount: '',
-            payPassword: '', // 支付密码
+            payPassword: '',
+            order_num: '',
+            out_trade_no: ''
         };
     },
     created: function () {
@@ -239,10 +241,10 @@ new Vue({
             this.order_id = item.id;
         },
         // 点击学棋开始学习按钮托管（生成订单未支付)
-        onpayClick: function () {
+        onpayClick: function (item) {
             this.depositDialogShow = true;
             this.depositAmount = item.total_money;
-            this.order_id = item.id;
+            this.order_num = item.order_num;
         },
         // 关闭学棋开始学习弹框页面
         handleCloseDepositDialog: function () {
@@ -298,24 +300,91 @@ new Vue({
                 });
             });
         },
+        // 开始学课重新生成对话框关闭按钮
+        handleCloseDeposit: function () {
+            this.order_num = '';
+            this.depositDialogShow = false;
+        },
+        // 开始学课重新生成对话框确定按钮
+        PayDeposit: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var userInfoResult;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!(this.payMethod === 1)) return [3 /*break*/, 2];
+                            // 钱包支付
+                            console.log('钱包支付');
+                            return [4 /*yield*/, request({ url: '/api/Mine/info' })];
+                        case 1:
+                            userInfoResult = _a.sent();
+                            if (+userInfoResult.code === 200 && +userInfoResult.data.is_set_paypwd === 0) {
+                                // 未设置支付密码
+                                this.$alert('<div style="text-align: center; font-size: 20px;">请先设置支付密码</div>', '', {
+                                    confirmButtonText: '确定',
+                                    showClose: false,
+                                    dangerouslyUseHTMLString: true,
+                                    confirmButtonClass: 'orange-button-bg',
+                                    callback: function () {
+                                        // 在新窗口中打开页面
+                                        // 打开设置支付密码页面
+                                        window.open(walletPwdPage);
+                                    },
+                                });
+                                return [2 /*return*/];
+                            }
+                            this._walletPay();
+                            return [3 /*break*/, 3];
+                        case 2:
+                            if (this.payMethod === 2) {
+                                // 支付宝支付
+                                console.log('支付宝支付');
+                                // 支付宝支付
+                                this._alipayPay();
+                            }
+                            else if (this.payMethod === 3) {
+                                // 微信支付
+                                console.log('微信支付');
+                                this._wechatPay();
+                            }
+                            _a.label = 3;
+                        case 3: return [2 /*return*/];
+                    }
+                });
+            });
+        },
         // 钱包支付
         _walletPay: function () {
             return __awaiter(this, void 0, void 0, function () {
                 var depositReferResult;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, request({
+                        case 0:
+                            depositReferResult = '';
+                            if (!this.order_num) return [3 /*break*/, 2];
+                            return [4 /*yield*/, request({
+                                    url: '/api/Mine/payNow',
+                                    method: 'post',
+                                    data: { pay_type: 1, order_num: this.order_num },
+                                })];
+                        case 1:
+                            depositReferResult = _a.sent();
+                            return [3 /*break*/, 4];
+                        case 2: return [4 /*yield*/, request({
                                 url: '/api/Bangwenpush/beginLearnManaged',
                                 method: 'post',
                                 data: { pay_type: 1, order_id: this.order_id },
                             })];
-                        case 1:
+                        case 3:
                             depositReferResult = _a.sent();
+                            _a.label = 4;
+                        case 4:
                             if (+depositReferResult.code === 200) {
                                 // 关闭保证金对话框
                                 this.depositDialogVisible = false;
                                 // 实际支付金额
                                 this.payAmount = depositReferResult.data.money;
+                                this.out_trade_no = depositReferResult.data.order_num;
                                 // 显示钱包支付对话框
                                 this.walletPayDialogVisible = true;
                             }
@@ -360,9 +429,9 @@ new Vue({
                             payPassword = encrypt.encrypt(this.payPassword) //需要加密的内容
                             ;
                             return [4 /*yield*/, request({
-                                    url: '/api/Deposit/balancePay',
+                                    url: '/api/Bangwenpush/balancePay',
                                     method: 'post',
-                                    data: { out_trade_no: depositReferResult.data.out_trade_no, pay_pwd: payPassword },
+                                    data: { order_num: this.out_trade_no, pay_pwd: payPassword },
                                 })];
                         case 1:
                             payResult = _a.sent();
@@ -395,14 +464,26 @@ new Vue({
                         case 0:
                             // 关闭保证金对话框
                             this.depositDialogVisible = false;
+                            depositReferResult = '';
+                            if (!this.order_num) return [3 /*break*/, 2];
                             return [4 /*yield*/, request({
-                                    url: '/api/Bangwenpush/beginLearnManaged',
+                                    url: '/api/Mine/payNow',
                                     method: 'post',
-                                    data: { pay_type: 2, order_id: this.order_id },
+                                    data: { pay_type: 2, order_num: this.order_num },
                                 })];
                         case 1:
                             depositReferResult = _a.sent();
-                            if (!(+depositReferResult.code === 200)) return [3 /*break*/, 3];
+                            return [3 /*break*/, 4];
+                        case 2: return [4 /*yield*/, request({
+                                url: '/api/Bangwenpush/beginLearnManaged',
+                                method: 'post',
+                                data: { pay_type: 2, order_id: this.order_id },
+                            })];
+                        case 3:
+                            depositReferResult = _a.sent();
+                            _a.label = 4;
+                        case 4:
+                            if (!(+depositReferResult.code === 200)) return [3 /*break*/, 6];
                             // 实际支付金额
                             this.payAmount = depositReferResult.data.money;
                             // 显示支付宝支付对话框
@@ -416,7 +497,7 @@ new Vue({
                                 })
                                 // 警告：this.alipayPayDialogVisible = true 不能放到这里
                             ];
-                        case 2:
+                        case 5:
                             // 开始学课--支付宝支付
                             // 这里不需要接收返回值，因为啥都没返回
                             // 二维码是把请求域名加上请求路径再加上请求参数来生成的
@@ -428,7 +509,7 @@ new Vue({
                                 height: 260,
                             });
                             queryString = Qs.stringify({
-                                out_trade_no: depositReferResult.data.out_trade_no,
+                                order_num: depositReferResult.data.order_num,
                                 token: localStorage.getItem('token'),
                             });
                             codeUrl = baseURL + '/api/Bangwenpush/aliPay?' + queryString;
@@ -436,11 +517,11 @@ new Vue({
                             alipayPayQrcode.makeCode(codeUrl);
                             // 启动获取保证金金额的计时器
                             this._startGetDepositTimer('alipay');
-                            return [3 /*break*/, 4];
-                        case 3:
+                            return [3 /*break*/, 7];
+                        case 6:
                             layer.msg(depositReferResult.msg);
-                            _a.label = 4;
-                        case 4: return [2 /*return*/];
+                            _a.label = 7;
+                        case 7: return [2 /*return*/];
                     }
                 });
             });
@@ -463,14 +544,26 @@ new Vue({
                         case 0:
                             // 关闭保证金对话框
                             this.depositDialogVisible = false;
+                            depositReferResult = '';
+                            if (!this.order_num) return [3 /*break*/, 2];
                             return [4 /*yield*/, request({
-                                    url: '/api/Bangwenpush/beginLearnManaged',
+                                    url: '/api/Mine/payNow',
                                     method: 'post',
-                                    data: { pay_type: 3, order_id: this.order_id },
+                                    data: { pay_type: 3, order_num: this.order_num },
                                 })];
                         case 1:
                             depositReferResult = _a.sent();
-                            if (!(+depositReferResult.code === 200)) return [3 /*break*/, 3];
+                            return [3 /*break*/, 4];
+                        case 2: return [4 /*yield*/, request({
+                                url: '/api/Bangwenpush/beginLearnManaged',
+                                method: 'post',
+                                data: { pay_type: 3, order_id: this.order_id },
+                            })];
+                        case 3:
+                            depositReferResult = _a.sent();
+                            _a.label = 4;
+                        case 4:
+                            if (!(+depositReferResult.code === 200)) return [3 /*break*/, 6];
                             // 实际支付金额
                             this.payAmount = depositReferResult.data.money;
                             // 显示微信支付对话框
@@ -478,9 +571,9 @@ new Vue({
                             return [4 /*yield*/, request({
                                     url: '/api/Bangwenpush/wxPay',
                                     method: 'post',
-                                    data: { out_trade_no: depositReferResult.data.out_trade_no },
+                                    data: { order_num: depositReferResult.data.order_num },
                                 })];
-                        case 2:
+                        case 5:
                             payResult = _a.sent();
                             if (+payResult.code === 200) {
                                 wechatPayQrcodeElement = document.getElementById('wechatPayQrcode');
@@ -496,11 +589,11 @@ new Vue({
                             else {
                                 layer.msg(payResult.msg);
                             }
-                            return [3 /*break*/, 4];
-                        case 3:
+                            return [3 /*break*/, 7];
+                        case 6:
                             layer.msg(payResult.msg);
-                            _a.label = 4;
-                        case 4: return [2 /*return*/];
+                            _a.label = 7;
+                        case 7: return [2 /*return*/];
                     }
                 });
             });
@@ -526,20 +619,19 @@ new Vue({
                         if (+result.data.deposit !== 0) {
                             // 清除计时器
                             clearInterval(_this.getDepositTimer);
-                            _this.$alert('<div style="text-align: center; font-size: 20px;">保证金缴纳成功</div>', '', {
-                                confirmButtonText: '确定',
-                                showClose: false,
-                                dangerouslyUseHTMLString: true,
-                                confirmButtonClass: 'orange-button-bg',
-                                callback: function () {
-                                    if (payMethod === 'alipay') {
-                                        _this.alipayPayDialogVisible = false;
-                                    }
-                                    else if (payMethod === 'wechat') {
-                                        _this.wechatPayDialogVisible = false;
-                                    }
-                                },
-                            });
+                            // this.$alert('<div style="text-align: center; font-size: 20px;">保证金缴纳成功</div>', '', {
+                            //   confirmButtonText: '确定',
+                            //   showClose: false,
+                            //   dangerouslyUseHTMLString: true,
+                            //   confirmButtonClass: 'orange-button-bg',
+                            //   callback: () => {
+                            //     if (payMethod === 'alipay') {
+                            //       this.alipayPayDialogVisible = false
+                            //     } else if (payMethod === 'wechat') {
+                            //       this.wechatPayDialogVisible = false
+                            //     }
+                            //   },
+                            // })
                         }
                         else {
                             console.log('保证金', +result.data.deposit);
@@ -547,6 +639,17 @@ new Vue({
                     }
                 });
             }, 3000);
+        },
+        // 点击完成教课
+        onfinishTeachClick: function (item) {
+            request({ url: '/api/Bangwenattend/finishTeach', method: 'POST', data: { detail_id: item.detail_id }, }).then(function (res) {
+                if (res.code == 200) {
+                    layer.msg('已完成教课');
+                }
+                else {
+                    layer.msg(res.msg);
+                }
+            });
         },
         // 数组重构
         group: function (array, subGroupLength) {

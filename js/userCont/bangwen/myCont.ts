@@ -62,37 +62,17 @@ new Vue({
       }
       return newArray;
     },
-    // 点击开始学课
-    async onBeginTeachClick(item) {
-      const ress = await request({ method: 'POST', url: '/api/Bangwenattend/outBeginTeach', data: { order_id: item.id }, })
-      if (ress.code == 200) {
-        // this.timeDown()
-        layer.msg('发送成功')
-      } else {
-        layer.msg(ress.msg)
-      }
+    // 点击开始教课
+    onBeginTeachClick(item) {
+      request({ url: '/api/Bangwenattend/startTeach', method: 'POST', data: { detail_id: item.detail_id }, }).then((res) => {
+        if (res.code == 200) {
+          layer.msg('开始教课')
+        } else {
+          layer.msg(res.msg)
+        }
+      })
     },
-    // onBeginTeachClick(item) {
-    //   request({ url: '/api/Bangwenattend/outBeginTeach', method: 'POST', data: { order_id: item.id }, }).then((res) => {
-    //     if (res.code == 200) {
-    //       // this.noticeCont = res.data
-    //     } else {
-    //       layer.msg(res.msg)
-    //     }
-    //   })
-    //   // request({ url: '/api/Bangwenattend/outBeginTeach', method: 'POST', data: { order_id: item.id } }).then((res) => {
-    //   //   if (res.code == 200) {
-    //   //     // res.data.map(item => {
-    //   //     //   item.detail.map((items, k) => {
-    //   //     //     items.num = k + 1
-    //   //     //     item.blList = this.group(item.detail, 3)
-    //   //     //   })
-    //   //     // })
-    //   //     // this.selectList = res.data
-    //   //     // console.log(this.selectList)
-    //   //   }
-    //   // })
-    // },
+
     // 终止原因弹框是否同意协议
     ondjclick() {
       this.checknum = this.checknum == 0 ? 1 : 0
@@ -115,7 +95,7 @@ new Vue({
         var reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/ //11位手机号码正则
         if (!reg_tel.test(this.check_phone)) return layer.msg('请输入正确的手机号')
       }
-      request({ url: '/api/Bangwenpush/checkReferEnd', method: 'POST', data: { check_content: this.check_content, check_phone: this.check_phone, status: this.status }, }).then((res) => {
+      request({ url: '/api/Bangwenpush/checkReferEnd', method: 'POST', data: { order_id: this.id, check_content: this.check_content, check_phone: this.check_phone, status: this.status }, }).then((res) => {
         if (res.code == 200) {
           layer.msg('提交成功')
           this.terminateTaskVisible = false

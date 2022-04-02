@@ -81,16 +81,25 @@
               <div class="txt">
                 <div class="t m-b-10">
                   {{noticeCont.title}}
-                  <div class="state fr color-6">当前状态：
+                  <div class="state fr color-6" v-if="noticeCont.end_status==0">当前状态：
                     <!-- 0待中榜，1已中榜待学习（待教课），2已教课待开始学习，3已开始学习（已教课）即工作中,4已完成（正常完成或者终止任务） -->
-                    <!-- <span class="color-orange" v-if="noticeCont.status=='-2'">整体终止任务</span> -->
-                    <!-- <span class="color-orange" v-if="noticeCont.status=='-1'">审核失败</span> -->
                     <span class="color-orange" v-if="noticeCont.status=='0'">待审核</span>
                     <span class="color-orange" v-if="noticeCont.status=='1'">已中榜</span>
                     <span class="color-orange" v-if="noticeCont.status=='2'">待开始</span>
                     <span class="color-orange" v-if="noticeCont.status=='3'">工作中</span>
                     <span class="color-orange" v-if="noticeCont.status=='4'">任务结束</span>
-                    <!-- <span class="color-orange" v-if="noticeCont.status=='5'">任务结束</span> -->
+                  </div>
+                  <div class="state fr color-6" v-if="noticeCont.end_status==1">当前状态：
+                    <span class="color-orange">终止任务申请中</span>
+                  </div>
+                  <div class="state fr color-6" v-if="noticeCont.end_status==2">当前状态：
+                    <span class="color-orange">已同意终止任务</span>
+                  </div>
+                  <div class="state fr color-6" v-if="noticeCont.end_status==3">当前状态：
+                    <span class="color-orange">未同意终止任务平台介入了</span>
+                  </div>
+                  <div class="state fr color-6" v-if="noticeCont.end_status==4">当前状态：
+                    <span class="color-orange">平台介入后，后台终止任务</span>
                   </div>
                 </div>
                 <div class="tags clearfix">
@@ -120,10 +129,11 @@
                   <div class="c fl m-l-40" v-if="noticeCont.pay_num_type==1">支付方式：单次支付</div>
                   <div class="c fl m-l-40" v-if="noticeCont.pay_num_type==2">支付方式：多次支付</div>
                   <div class="c fl m-l-15">{{noticeCont.pay_num}}次</div>
-                  <div class="handle-btn red fr" style="cursor: pointer;" v-if="noticeCont.status=='2'">终止榜文</div>
-                  <div class="handle-btn fr m-l-30" v-if="noticeCont.end.length" @click="terminateTaskVisible=true"
+                  <div class="handle-btn red fr" style="cursor: pointer;"
+                    v-if="noticeCont.end_status==0&&noticeCont.status=='2'">终止榜文</div>
+                  <div class="handle-btn fr m-l-30" v-if="noticeCont.end_status==1" @click="terminateTaskVisible=true"
                     style="cursor: pointer;">查看并反馈</div>
-                  <div class="fr color-red" v-if="noticeCont.end.length">对方已终止</div>
+                  <div class="fr color-red" v-if="noticeCont.end_status==1">对方已终止</div>
                 </div>
               </div>
               <!--center-rank-head-hd end-->
@@ -136,11 +146,26 @@
                     <!-- <th>第2次支付30元</th>
                       <th>第3次支付20元</th> -->
                   </tr>
-                  <tr>
+                  <tr v-if="noticeCont.end_status==0">
                     <td v-for="e,k in item" :key="k">
                       <!-- 0待总的开始学习，1待开始教课，2已开始教课待阶段完成学习，3完成学习 -->
-                      <p v-if="e.de_status==0" class="color-orange">未开始</p>
-                      <p v-if="e.de_status==1" class="color-orange" @click="onBeginTeachClick(item.id)">开始学课</p>
+                      <p v-if="e.status==0" class="color-orange">未开始</p>
+                      <p v-if="e.status==1" class="color-orange" @click="onBeginTeachClick(e)">开始教课</p>
+                      <p v-if="e.status==2" class="color-orange">完成教课</p>
+                    </td>
+                    <!-- <td>
+                        <p class="color-orange">未开始</p>
+                      </td>
+                      <td>
+                        <p class="color-orange">未开始</p>
+                      </td> -->
+                  </tr>
+                  <tr v-else>
+                    <td v-for="e,k in item" :key="k">
+                      <!-- 0待总的开始学习，1待开始教课，2已开始教课待阶段完成学习，3完成学习 -->
+                      <p v-if="e.status==0" class="color-orange">未开始</p>
+                      <p v-if="e.status==1" class="color-orange">开始教课</p>
+                      <p v-if="e.status==2" class="color-orange">完成教课</p>
                     </td>
                     <!-- <td>
                         <p class="color-orange">未开始</p>

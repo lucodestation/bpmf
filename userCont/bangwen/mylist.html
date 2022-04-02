@@ -143,8 +143,11 @@
                   </td>
                   <td v-if="item.status==2">
                     <div class="handle text-c">
-                      <a class="handle-btn m-t-5"
+                      <a class="handle-btn m-t-5" v-if="item.end_status==0"
                         :href="'./myCont.html?id='+item.id+'&name='+item.name+'&bangwen_id='+item.bangwen_id">开始教课</a>
+                      <!-- <a class="handle-btn m-t-5" href="">我要评价</a> -->
+                      <a v-else class="handle-btn m-t-5"
+                        :href="'./myCont.html?id='+item.id+'&name='+item.name+'&bangwen_id='+item.bangwen_id">查看原因</a>
                     </div>
                   </td>
                   <!-- <td v-if="item.status==2">
@@ -152,11 +155,17 @@
                       <a class="handle-btn m-t-5" href="CenterRank11.html">查看原因</a>
                     </div>
                   </td> -->
+                  <!-- status   0待中榜，1已中榜待学习，2已开始学习即工作中,3已完成（正常完成或者终止任务），4已评价 -->
+                  <!-- end_status   0正常，1终止任务申请中，2已同意终止任务，3未同意终止任务平台介入了 -->
                   <td v-if="item.status==3">
                     <div class="handle text-c">
-                      <a class="handle-btn m-t-5" href="">我要评价</a>
+                      <a v-if="item.end_status==0" class="handle-btn m-t-5"
+                        :href="'./myCont.html?id='+item.id+'&name='+item.name+'&bangwen_id='+item.bangwen_id">我要评价</a>
+                      <a v-else class="handle-btn m-t-5"
+                        :href="'./myCont.html?id='+item.id+'&name='+item.name+'&bangwen_id='+item.bangwen_id">查看原因</a>
                     </div>
                   </td>
+                  <!-- <td>{{item.status}},{{item.end_status}} </td> -->
                 </tr>
               </table>
             </div>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>会员购买订单</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/plugins/animate.min.css">
+  <link rel="stylesheet" href="/plugins/syalert/syalert.min.css">
+  <link rel="stylesheet" href="/plugins/swiper/swiper.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/plugins/date/jedate.css">
+  <link rel="stylesheet" href="/plugins/element-ui/element-ui.min.css" />
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" />
+
+  <script src="/plugins/babel-polyfill.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/jquery.min.js"></script>
+  <script src="/plugins/swiper/swiper.min.js"></script>
+  <script src="/plugins/syalert/syalert.min.js"></script>
+  <script src="/plugins/date/jedate.js"></script>
+  <script src="/plugins/vue.min.js"></script>
+
+  <script src="/plugins/element-ui/element-ui.min.js"></script>
+  <script src="/plugins/axios.min.js"></script>
+  <script src="/utils/request.js"></script>
+</head>
+
+<body>
+  <!-- 公共头部 -->
+  <header class="public-header"></header>
+  <!--center-container start-->
+  <div class="center-container">
+    <!--main-center start-->
+    <div class="main-center w-1200 clearfix">
+      <!--center-side start-->
+      <div class="public-user"></div>
+      <!--center-side end-->
+      <!--center-content start-->
+      <div class="center-content fr" id="app">
+        <!--center-inner start-->
+        <div class="center-inner">
+          <div class="center-inner-tit">会员购买订单</div>
+          <!--center-inner-content start-->
+          <div class="center-inner-content">
+            <!--center-inner-form start-->
+            <div class="center-inner-form clearfix">
+              <div class="form-item">
+                <div class="label">支付时间：</div>
+                <div class="form-bor">
+                  <input type="text" class="input jeinput w100 text-c" id="dateS" placeholder="开始时间">
+                  <span class="line">至</span>
+                  <input type="text" class="input jeinput w100 text-c" id="dateE" placeholder="结束时间">
+                </div>
+                <div class="form-bor m-l-20">
+                  <input type="text" class="input w160" placeholder="订单号">
+                </div>
+                <button class="form-btn m-l-20">查询</button>
+              </div>
+            </div>
+            <!--center-inner-form end-->
+            <script>
+              jeDate("#dateS", {
+                format: "MM-DD-YYYY"
+              });
+              jeDate("#dateE", {
+                format: "MM-DD-YYYY"
+              });
+            </script>
+            <!--center-inner-table-wrap start-->
+            <div class="center-inner-table-wrap">
+              <table class="center-inner-table center-order-table">
+                <tr>
+                  <th>订单号</th>
+                  <th>费用类型</th>
+                  <th>数量</th>
+                  <th>金额</th>
+                  <th>购买者</th>
+                  <th>支付状态</th>
+                  <th>支付时间</th>
+                  <th>操作</th>
+                </tr>
+                <tr v-for="item in orderList" :key="item.id">
+                  <td>{{item.out_trade_no}}</td>
+                  <!-- pay_type 1余额，2支付宝，3微信 -->
+                  <td v-if="item.buy_type==1&&item.type==1">经典VIP会员</td>
+                  <td v-if="item.buy_type==1&&item.type==2">黄金VIP会员</td>
+                  <td v-if="item.buy_type==1&&item.type==3">钻石VIP会员</td>
+                  <td v-if="item.buy_type==2&&item.one_type==1">购买直播次数</td>
+                  <td v-if="item.buy_type==2&&item.one_type==2">购买榜文次数</td>
+                  <td v-if="item.buy_type==2&&item.one_type==3">购买赛事次数</td>
+                  <td v-if="item.buy_type==1">{{item.num}}个月</td>
+                  <td v-if="item.buy_type==2">{{item.num}}次</td>
+                  <td>
+                    <p class="color-red">￥{{item.total_money}}</p>
+                  </td>
+                  <td>李茜茜</td>
+                  <td>已支付</td>
+                  <td>{{item.paytime}}</td>
+                  <td>
+                    <div class="handle text-c">
+                      <p><a class="handle-btn blue" href="">查看详情</a></p>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!--center-inner-table-wrap end-->
+          </div>
+          <!--center-inner-content end-->
+        </div>
+        <!--center-inner end-->
+      </div>
+      <!--center-content end-->
+    </div>
+    <!--main-center end-->
+  </div>
+  <!--center-container end-->
+  <!-- 公共底部 -->
+  <footer class="public-footer"></footer>
+  <script src="/js/common.js"></script>
+  <script src="/js/userCont/order/memberOrder.js"></script>
+</body>
+
+</html>

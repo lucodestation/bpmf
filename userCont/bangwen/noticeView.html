@@ -18,6 +18,8 @@
 
   <script src="/plugins/babel-polyfill.min.js"></script>
   <script src="/plugins/layui/layui.js"></script>
+  <script src="/plugins/qrcode.min.js"></script>
+  <script src="/plugins/qs.min.js"></script>
   <script src="/plugins/jsencrypt.js"></script>
   <script src="/plugins/jquery.min.js"></script>
   <script src="/plugins/swiper/swiper.min.js"></script>
@@ -142,57 +144,27 @@
                 <!--center-inner-table-wrap start-->
                 <div class="center-inner-table-wrap">
                   <table class="center-inner-table center-order-table" v-for="items,i in item.blList" :key='i'>
-                    <!-- {{items}} -->
                     <tr>
                       <th v-for="e,k in items" :key="k">第{{e.num}}次支付{{e.money}}元</th>
-                      <!-- <th>第2次支付30元</th>
-                    <th>第3次支付20元</th> -->
                     </tr>
                     <tr>
                       <!-- 对方状态：中榜后每一个都是0未开始，1开始学习后，教课的人可以点击开始教课，2已开始教课待完成，3支付完成变成完成教课（或者教课者点击完成教课） -->
                       <td v-for="e,k in items" :key="k">
                         <!-- 0待总的开始学习，1待开始教课，2已开始教课待阶段完成学习，3完成学习 -->
-                        <p v-if="e.status==0" class="color-gray">完成学习</p>
-                        <p v-if="e.status==1" class="color-blue">完成学习</p>
-                        <p v-if="e.status==2" class="color-blue">开始教课</p>
+                        <p v-if="e.status==0||e.status==1" class="color-gray">完成学习</p>
+                        <p v-if="e.status==2" class="color-blue" style="cursor: pointer;"
+                          @click="onfinishTeachClick(e)">完成学习</p>
+                        <p v-if="e.status==3" class="color-blue">开始教课</p>
                       </td>
-                      <!-- <td>
-                      <p class="color-orange">未开始</p>
-                    </td>
-                    <td>
-                      <p class="color-orange">未开始</p>
-                    </td> -->
+                    </tr>
+                    <tr>
+                      <!-- 对方状态：中榜后每一个都是0未开始，1开始学习后，教课的人可以点击开始教课，2已开始教课待完成，3支付完成变成完成教课（或者教课者点击完成教课） -->
+                      <td v-for="e,k in items" :key="k">
+                        <!-- 0待总的开始学习，1待开始教课，2已开始教课待阶段完成学习，3完成学习 -->
+                        <p v-if="e.status==3" class="color-blue">完成学习</p>
+                      </td>
                     </tr>
                   </table>
-                  <!-- <table class="center-inner-table center-order-table">
-                    <tr>
-                      <th>第1次支付50元</th>
-                      <th>第2次支付30元</th>
-                      <th>第3次支付20元</th>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p class="color-gray">已完成学课 2021-10-24</p>
-                      </td>
-                      <td>
-                        <p class="color-blue" onClick="syalert.syopen('alert2')">完成教课</p>
-                      </td>
-                      <td>
-                        <p class="color-blue" onClick="syalert.syopen('alert2')">完成教课</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p class="color-gray">已完成学课 2021-10-24</p>
-                      </td>
-                      <td>
-                        <p class="color-blue" onClick="syalert.syopen('alert2')">完成教课</p>
-                      </td>
-                      <td>
-                        <p class="color-blue" onClick="syalert.syopen('alert2')">完成教课</p>
-                      </td>
-                    </tr>
-                  </table> -->
                 </div>
               </div>
             </div>
@@ -352,10 +324,10 @@
             </div>
           </div>
         </el-dialog>
-        <!-- 开始学课对话框 -->
+        <!-- 开始学课重新生成对话框 -->
         <el-dialog custom-class="bond-pop animated" :visible="depositDialogShow" :show-close="false" width="700px">
           <div class="bond-content">
-            <div class="bond-close" @click="handleCloseDepositDialog"></div>
+            <div class="bond-close" @click="handleCloseDeposit"></div>
             <div class="bond-pay">
               <div class="t">选择支付方式</div>
               <div class="con clearfix">
@@ -374,7 +346,7 @@
               </div>
             </div>
             <div class="last-bottom">
-              <button class="bond-btn" @click="confirmPayDeposit">确认并支付</button>
+              <button class="bond-btn" @click="PayDeposit">确认并支付</button>
             </div>
           </div>
         </el-dialog>

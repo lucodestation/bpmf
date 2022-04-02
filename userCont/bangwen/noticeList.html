@@ -171,8 +171,8 @@
                   </td> -->
                   <td v-if="item.status==4">
                     <div class="handle text-c">
-                      <a class="handle-btn m-t-5 m-r-10" href="CenterRank6.html">完成学习</a>
-                      <a class="handle-btn blue m-t-5" href="CenterRank6.html">查看详情</a>
+                      <a class="handle-btn m-t-5 m-r-10" :href="'./noticeView.html?id='+item.id">完成学习</a>
+                      <a class="handle-btn blue m-t-5" :href="'./noticeView.html?id='+item.id">查看详情</a>
                     </div>
                   </td>
                   <td v-if="item.status==5">
