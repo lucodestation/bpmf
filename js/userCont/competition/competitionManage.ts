@@ -56,9 +56,8 @@ new Vue({
 
     // 赛事详情
     const competitionDetailResult = await request({
-      url: '/api/Competitionindex/detail',
-      method: 'post',
-      data: { competition_id: searchParams.competition_id * 1 },
+      url: '/api/competitionindex/detail',
+      params: { competition_id: searchParams.competition_id * 1 },
     })
     if (+competitionDetailResult.code === 200) {
       this.competitionDetail = competitionDetailResult.data

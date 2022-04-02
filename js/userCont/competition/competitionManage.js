@@ -92,9 +92,8 @@ new Vue({
                         searchParams = Qs.parse(location.search.substr(1));
                         this.applyFilterOption.competition_id = searchParams.competition_id * 1;
                         return [4 /*yield*/, request({
-                                url: '/api/Competitionindex/detail',
-                                method: 'post',
-                                data: { competition_id: searchParams.competition_id * 1 },
+                                url: '/api/competitionindex/detail',
+                                params: { competition_id: searchParams.competition_id * 1 },
                             })];
                     case 1:
                         competitionDetailResult = _a.sent();
